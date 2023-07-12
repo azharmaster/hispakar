@@ -43,7 +43,9 @@
                                     </div>
                                     <div class="card-block">
                                    
+                                     <!-- to be fixed -->
                                     include('files.assets.printComponent')
+                                    <!-- /to be fixed -->
 
 
                                             <div class="col-12">

@@ -1,3 +1,6 @@
+@extends('layouts.doctor')
+
+@section('content')
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -660,86 +663,4 @@
         <p>Sorry for the inconvenience!</p>
     </div>
 <![endif]-->
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/jquery/js/jquery.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/jquery-ui/js/jquery-ui.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/popper.js/js/popper.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/bootstrap/js/bootstrap.min-1.js"></script>
-
-<script src="../files/assets/pages/waves/js/waves.min-1.js"></script>
-
-<script type="text/javascript" src="../files/bower_components/jquery-slimscroll/js/jquery.slimscroll-1.js"></script>
-
-<script src="../files/assets/pages/chart/float/jquery.flot-1.js"></script>
-<script src="../files/assets/pages/chart/float/jquery.flot.categories-1.js"></script>
-<script src="../files/assets/pages/chart/float/curvedLines-1.js"></script>
-<script src="../files/assets/pages/chart/float/jquery.flot.tooltip.min-1.js"></script>
-
-<script src="../files/bower_components/chartist/js/chartist-1.js"></script>
-
-<script src="../files/assets/pages/widget/amchart/amcharts-1.js"></script>
-<script src="../files/assets/pages/widget/amchart/serial-1.js"></script>
-<script src="../files/assets/pages/widget/amchart/light-1.js"></script>
-
-<script src="../files/assets/js/pcoded.min-1.js"></script>
-<script src="../files/assets/js/vertical/vertical-layout.min-1.js"></script>
-<script type="text/javascript" src="../files/assets/pages/dashboard/custom-dashboard.min-1.js"></script>
-<script type="text/javascript" src="../files/assets/js/script.min-1.js"></script>
-
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
-
-<script>
-    const ctx = document.getElementById('myChart');
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Neurology', 'Oncology', 'Cardiology', 'Ophtalmology'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    const ctx2 = document.getElementById('myChart2');
-
-    new Chart(ctx2, {
-        type: 'bar',
-        data: {
-            labels: ['January', 'March', 'April', 'May', 'June'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth'
-        });
-        calendar.render();
-    });
-</script>
+@endsection

@@ -1,68 +1,17 @@
-<?php
+@extends('layouts.doctor')
 
-include('../config.php');
-
-if (isset($_POST['submit'])) {
-    $name = $_POST['name'];
-    $gender = $_POST['gender'];
-    $address = $_POST['address'];
-    $mobileno = $_POST['mobileno'];
-  
-    $sql = mysqli_query($con, "INSERT INTO `patient`(`patientname`, `gender`, `address`, `mobileno`) VALUES ('$name','$gender','$address','$mobileno')");
-    
-    if ($sql) {
-        echo "<script type='text/javascript'> alert('Successfully Recorded.'); </script>";
-        echo "<script type='text/javascript'> document.location = 'doctorPage.php?p=patientList'; </script>";
-    } else {
-        echo "<script type='text/javascript'> alert('Sorry!! Unsuccessful.'); </script>";
-    }
-}
-
-if (isset($_GET['del'])) {
-    $patientid = $_GET['patientid'];
-
-    $ssq = mysqli_query($con, "DELETE FROM patient WHERE patientid = '" . $_GET['patientid'] . "'");
-    
-    if ($ssq) {	
-        echo "<script type='text/javascript'> alert('Successfully Deleted.'); </script>";
-        echo "<script type='text/javascript'> document.location = 'doctorPage.php?p=patientList'; </script>";
-    } else {
-        echo "<script type='text/javascript'> alert('Sorry!! Unsuccessful.'); </script>";
-    }
-}
-
-if (isset($_POST['edit'])) {
-    $patientid = $_POST['patientid'];
-    $patientname = $_POST['patientname'];
-    $gender = $_POST['gender'];
-    $address = $_POST['address'];
-    $mobileno = $_POST['mobileno'];
-
-    // Perform the update query using the fetched values
-    $sql = mysqli_query($con, "UPDATE patient SET patientname = '$patientname', gender = '$gender', address = '$address', mobileno = '$mobileno' WHERE patientid = '$patientid'");
-
-    if ($sql) {
-        echo "<script type='text/javascript'> alert('Successfully Updated.'); </script>";
-        echo "<script type='text/javascript'> document.location = 'doctorPage.php?p=patientList'; </script>";
-    } else {
-        echo "<script type='text/javascript'> alert('Sorry, update unsuccessful.'); </script>";
-    }
-}
-
-
-?>
-
+@section('content')
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
         <div class="row align-items-end">
             <div class="col-lg-8">
                 <div class="page-header-title">
-                    <i class="fas fa-regular fa-user bg-c-blue"></i>
+                    <i class="fas fa-regular fa-pills bg-c-blue"></i>
                     <!-- <i class="feather icon-home bg-c-blue"></i> -->
                     <div class="d-inline">
-                        <h5>Patients</h5>
-                        <span>Below is the list of all patients.</span>
+                        <h5>Medicines</h5>
+                        <span>Below is the list of all medicines.</span>
                     </div>
                 </div>
             </div>
@@ -75,14 +24,14 @@ if (isset($_POST['edit'])) {
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="doctor.php">Patients</a>
+                            <a href="doctor.php">Medicines</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-
+    
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
@@ -92,54 +41,55 @@ if (isset($_POST['edit'])) {
                             <!-- Start Table -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>List of Patient</h5>
+                                    <h5>List of Medicines</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
                                     <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
                                         <i class="fas fa-solid fa-plus"></i>
-                                        Adds
+                                            Add
                                     </button>
                                 </div>
                                 <div class="card-block">
-                                    <?php include '../files/assets/printComponent.php'?>
+                               <!-- to be fixed -->
+                               include('files.assets.printComponent')
+                                <!-- /to be fixed -->
                                     <div class="col-12">
-                                        <h2 class="text-center mb-5" id="tableTitle" hidden>
-                                            <b>Patient List</b>
+                                        <h2 class="text-center mb-5"  id="tableTitle" hidden>
+                                            <b>Medicines List</b>
                                         </h2>
                                     </div>
-                                    <div class="dt-responsive table-responsive" style="page-break-before:avoid;">
-                                        <table id="dataTable1" class="table responsive table-bordered">
+                                    <div class="dt-responsive table-responsive">
+                                        <table id="dataTable1" class="table table-bordered">
                                             <thead>
-                                                <tr style="text-align: center;" style="page-break-inside: avoid;">
+                                                <tr style="text-align: center;">
                                                     <th>#</th>
-                                                    <th>Name</th>
-                                                    <th>Contact No</th>
+                                                    <th>ID</th>
+                                                    <th>Med Name</th>
                                                     <th>Description</th>
+                                                    <th>Quantity</th>
                                                     <th style="width: 80px;">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            <?php
-                                                $query=mysqli_query($con,"SELECT * FROM patient");
-                                        
-                                                $i = 1; //count
-                                                while($row=mysqli_fetch_array($query))
-                                                {?>
                                                 <tr style="text-align: center;">
-                                                    <td><?php echo htmlentities($i); ?></td>
-                                                    <td><?php echo htmlentities($row['patientname']); ?></td>
-                                                    <td><?php echo htmlentities($row['mobileno']); ?></td>
-                                                    <td></td>
+                                                    <td>1</td>
+                                                    <td>MED00982</td>
+                                                    <td>Paracetamol</td>
+                                                    <td>Minor Headache</td>
+                                                    <td>120</td>
                                                     <td>
-                                                        <a title="Edit Patient" data-toggle="modal" data-target="#editModal-<?php echo htmlentities($row['patientid']); ?>">
-                                                            <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                        <!-- <button class="btn btn-mat waves-effect waves-light btn-warning" style="width: 50px;" title="View Doctor" data-toggle="modal" data-target="#viewModal">
+                                                            <i class="fas fa-eye"></i>
+                                                        </button> -->
+    
+                                                        <a title="Edit Medicine" href="appointmentReport.php">
+                                                        <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                         </a>
-                                                        <a title="Delete Patient" data-toggle="modal" data-target="#deleteModal-<?php echo htmlentities($row['patientid']); ?>">
+                                                        <a title="Delete Medicine" data-toggle="modal" data-target="#deleteModal">
                                                             <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
                                                         </a>
                                                     </td>
+    
                                                 </tr>
-                                                <?php $i++ ;
-                                                }?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -164,46 +114,50 @@ if (isset($_POST['edit'])) {
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post">
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">ID :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" placeholder="ABC1234">
+                    </div>
+                    <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" placeholder="John Doe">
+                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="John Doe">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width: 150px;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" >
+                        <select class="form-control" style="width: 350px;" name="gender" id="gender">
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                         </select>
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" placeholder="New York">
+                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" placeholder="New York">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="mobileno" placeholder="0134567891">
+                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" placeholder="0134567891">
                     </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Email :</span>
+                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" placeholder="johndoe@gmail.com">
+                    </div>
+                        
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button name="submit" type="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
-
+                <button type="button" class="btn btn-primary waves-effect waves-light">Submit</button>
+                    
             </div>
-            </form>
         </div>
     </div>
 </div>
 <!-- end Add Patient form -->
 
 <!-- Edit Patient form -->
-<?php 
-$query=mysqli_query($con,"SELECT * FROM patient");
-while($row=mysqli_fetch_array($query)){?>
-<div class="modal fade" id="editModal-<?php echo htmlentities($row['patientid']); ?>" tabindex="-1" role="dialog">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -212,49 +166,49 @@ while($row=mysqli_fetch_array($query)){?>
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post">
             <div class="modal-body">
                 <div class="container-fluid">
-                    <input type="text" name="patientid"  value="<?php echo $row['patientid']; ?>" hidden>
-                    
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">ID :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" value="1">
+                    </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="patientname"  value="<?php echo $row['patientname']; ?>">
+                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="John Doe">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width: 150px;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender">
+                        <select class="form-control" style="width: 350px;" name="gender" id="gender" value="Male">
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                         </select>
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" value="<?php echo $row['address']; ?>">
+                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" value="Malaysia">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="mobileno" value="<?php echo $row['mobileno']; ?>">
+                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" value="0199237856">
                     </div>
-
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Email :</span>
+                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" value="john@gmail.com">
+                    </div>
+                        
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button name="edit" type="submit" class="btn btn-success waves-effect waves-light ">Save changes</button>
+                <button type="button" class="btn btn-success waves-effect waves-light ">Save changes</button>
             </div>
-            </form>
         </div>
     </div>
 </div>
-<?php }?>
 <!-- end edit Patient form -->
 
 <!-- delete Patient form -->
-<?php 
-$query=mysqli_query($con,"SELECT * FROM patient");
-while($row=mysqli_fetch_array($query)){?>
-<div class="modal fade" id="deleteModal-<?php echo htmlentities($row['patientid']); ?>" tabindex="-1" role="dialog">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -264,19 +218,18 @@ while($row=mysqli_fetch_array($query)){?>
                 </button>
             </div>
             <div class="modal-body">
-                <p style="font-size: 15px;"> Are you sure want to delete this user?</p>
+                <p style="font-size: 15px;"> Are you sure want to delete this user? </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button onclick="location.href='doctorPage.php?p=patientList&del&patientid=<?php echo htmlentities($row['patientid']); ?>'" type="button" class="btn btn-danger waves-effect waves-light">Delete</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light ">Delete</button>
             </div>
         </div>
     </div>
 </div>
-<?php }?>
 <!-- end delete Patient form -->
 
-<?php include 'includes/dtScripts.php' ?>;
+@include('admin.includes.dtScripts')
 
-
+@endsection
 

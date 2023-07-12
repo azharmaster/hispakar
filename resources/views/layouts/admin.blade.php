@@ -110,6 +110,8 @@
     <script type="text/javascript" src="{{ asset('files/assets/js/script.min-1.js') }}"></script>
 
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+
+    
 </body>
 
 <script>

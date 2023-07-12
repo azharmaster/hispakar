@@ -1,3 +1,6 @@
+@extends('layouts.doctor')
+
+@section('content')
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -46,7 +49,9 @@
                                     </button>
                                 </div>
                                 <div class="card-block">
-                                <?php include '../files/assets/printComponent.php' ?>
+                                <!-- to be fixed -->
+                                include('files.assets.printComponent')
+                                    <!-- /to be fixed -->
                                     <div class="col-12">
                                         <h2 class="text-center mb-5"  id="tableTitle" hidden>
                                             <b>Reports List</b>
@@ -229,5 +234,9 @@
 </div>
 <!-- end delete Patient form -->
 
-<?php include 'includes/dtScripts.php' ?>;
+@include('admin.includes.dtScripts')
+
+@endsection
+
+
 
