@@ -1,6 +1,10 @@
 $(document).ready(loadDataTable());
 
 function loadDataTable(){
+    if ($.fn.DataTable.isDataTable('#dataTable1')) {
+        return;
+    }
+
     var table = $('#dataTable1').DataTable({
     responsive: false,
     scrollX: false,
@@ -31,17 +35,24 @@ function loadDataTable(){
                         $
                         $(win.document.body)
                             .css( 'font-size', '12pt' )
-                            .prepend(
-                                '<img src="https://lh3.googleusercontent.com/pw/AIL4fc8Rd5kzgb2AKiT9owXkoOhEbmyT7EIqK1GzGP_mUU62G0PHOTUYjZsPKfkX1sQtbziuhUIJAEWGeRkIx6EIkffZHTrT9dTBvnrLbRbEX-ic7o4z1uly=w2400" class="mx-auto d-block" width="500px" id="pakar-logo">'
-                            );
+                            .prepend('<div class="row">' +
+                            '<div class="col-3"></div>' +
+                            '<div class="col-6 d-flex justify-content-around">' +
+                            '<img src="https://lh3.googleusercontent.com/pw/AIL4fc8Rd5kzgb2AKiT9owXkoOhEbmyT7EIqK1GzGP_mUU62G0PHOTUYjZsPKfkX1sQtbziuhUIJAEWGeRkIx6EIkffZHTrT9dTBvnrLbRbEX-ic7o4z1uly=w2400" class="mx-auto d-block" width="500px" id="pakar-logo">' +
+                            '</div>' +
+                            '</div>');
      
                         $(win.document.body).find( 'table' )
                             .addClass( 'compact' )
                             .css( 'font-size', 'inherit' );
                         
-                        $(win.document.body).find( 'h1' )
-                        .addClass( 'text-center mb-3' )
-                        .css( 'font-size', '42' );
+                        $(win.document.body).find('h1')
+                        .addClass('text-center')
+                        .css({
+                            'font-size': '42px',
+                            'margin-bottom': '35px'
+                        });
+                        
                     }
                 },
 
@@ -57,15 +68,5 @@ function loadDataTable(){
 }
 
 function hideLogo() {
-var kkmLogo = document.getElementById("kkm-logo");
-var pakarLogo = document.getElementById("pakar-logo");
-var content = document.getElementById("content");
-var tableTitle = document.getElementById("tableTitle");
 
-kkmLogo.hidden = true;
-pakarLogo.hidden = true;
-content.classList.remove("ml-0");
-tableTitle.hidden = true;
-
-$(document).ready(loadDataTable());
 }
