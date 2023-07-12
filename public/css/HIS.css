@@ -1,0 +1,88 @@
+.card-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-line {
+    border: none;
+    border-top: 1px solid #ccc;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.custom-line:last-child {
+    border-bottom: 1px solid #ccc;
+}
+
+.form-control-border-bottom {
+    border: none;
+    border-bottom: 1px solid #ced4da; /* Customize the color if needed */
+    border-radius: 0;
+}
+
+.center{
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+}
+
+.profilepic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #111;
+  margin: 0 auto; /* Center horizontally */
+}
+
+.profilepic:hover .profilepic__content {
+  opacity: 1;
+}
+
+.profilepic:hover .profilepic__image {
+  opacity: .5;
+}
+
+.profilepic__image {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  transition: opacity .2s ease-in-out;
+}
+
+.profilepic__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  opacity: 0;
+  transition: opacity .2s ease-in-out;
+}
+
+.profilepic__icon {
+  color: white;
+  padding-bottom: 8px;
+}
+
+.profilepic__text {
+  text-transform: uppercase;
+  font-size: 12px;
+  text-align: center;
+}
+
+.file-upload {
+  display: none;
+}
