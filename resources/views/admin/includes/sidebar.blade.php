@@ -5,7 +5,7 @@
         <div class="pcoded-navigation-label">Navigation</div>
             <ul class="pcoded-item pcoded-left-item">
                 <li class="">
-                    <a href="/dashboard" class="waves-effect waves-dark">
+                    <a href="/admin/dashboard" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="feather icon-home"></i>
                         </span>
@@ -13,7 +13,7 @@
                     </a>
                 </li>
                 <li class="">
-                    <a href="/doctorList" class="waves-effect waves-dark">
+                    <a href="/admin/doctorList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-solid fa-stethoscope"></i>
                         </span>
@@ -22,7 +22,7 @@
                 </li>
 
                 <li class="">
-                    <a href="/nurseList" class="waves-effect waves-dark">
+                    <a href="/admin/nurseList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                         <i class="fas fa-solid fa-user-nurse"></i>
                         </span>
@@ -31,7 +31,7 @@
                 </li>
 
                 <li class="">
-                    <a href="/patientList" class="waves-effect waves-dark">
+                    <a href="/admin/patientList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-regular fa-hospital-user"></i>
                         </span>
@@ -40,7 +40,7 @@
                 </li>
 
                 <li class="">
-                    <a href="/roomsList" class="waves-effect waves-dark">
+                    <a href="/admin/roomsList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-solid fa-home"></i>
                         </span>
@@ -48,7 +48,7 @@
                     </a>
                 </li>
                 <li class="">
-                    <a href="/appointmentList" class="waves-effect waves-dark">
+                    <a href="/admin/appointmentList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-solid fa-calendar-check"></i>
                         </span>
