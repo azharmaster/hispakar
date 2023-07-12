@@ -1,3 +1,6 @@
+@extends('layouts.admin')
+
+@section('content')
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
                 <div class="row align-items-end">
@@ -39,7 +42,10 @@
                                         </button>
                                     </div>
                                     <div class="card-block">
-                                    <?php include '../files/assets/printComponent.php' ?>
+                                   
+                                    include('files.assets.printComponent')
+
+
                                             <div class="col-12">
                                                 <h2 class="text-center mb-5"  id="tableTitle" hidden>
                                                     <b>List of Doctors</b>
@@ -737,5 +743,6 @@
 </div>
 <!-- end delete Doctor form -->
 
-<?php include 'includes/dtScripts.php' ?>;
+@include('admin.includes.dtScripts')
 
+@endsection

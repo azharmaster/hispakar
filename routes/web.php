@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,9 +19,13 @@ use Illuminate\Support\Facades\Auth;
 //     return view('welcome');
 // });
 
+//Admin
 Route::get('/', function () {
-    return view('admin.index');
+    return view('/admin.index');
 });
+
+Route::get('/admin/index', [AdminController::class, 'index']);
+Route::get('/admin/contents/doctorList', [AdminController::class, 'viewDoctorList']);
 //Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
