@@ -659,6 +659,7 @@
   
     new Chart(ctx2, {
       type: 'bar',
+
       data: {
         labels: ['January', 'March', 'April', 'May', 'June'],
         datasets: [{
