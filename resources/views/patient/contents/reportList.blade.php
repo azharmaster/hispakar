@@ -1,3 +1,6 @@
+@extends('layouts.patient')
+
+@section('content')
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -156,5 +159,6 @@ v>
 </div>
 <!-- end view Appointment form -->
 
-<?php include 'includes/dtScripts.php' ?>;
+@include('patient.includes.dtScripts')
 
+@endsection
