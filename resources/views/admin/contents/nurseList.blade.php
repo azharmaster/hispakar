@@ -219,7 +219,7 @@
 </div>
 <!-- end delete Nurse form -->
 
-@include('admin.includes.dtScripts')
+
 
 @endsection
 

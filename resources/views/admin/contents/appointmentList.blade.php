@@ -235,7 +235,7 @@
 </div>
 <!-- end delete Patient form -->
 
-@include('admin.includes.dtScripts')
+
 
 @endsection
 

@@ -23,7 +23,7 @@ class NurseController extends Controller
 
     public function viewRoomList()
     {
-        return view('nurse.contents.roomList');
+        return view('nurse.contents.roomsList');
     }
 
     public function viewAppointmentList()

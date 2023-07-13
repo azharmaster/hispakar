@@ -20,8 +20,25 @@ class RedirectIfAuthenticated
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+            // if (Auth::guard($guard)->check()) {
+            //     return redirect(RouteServiceProvider::HOME);
+            // }
+
+            if (Auth::guard($guard)->check() && Auth::user()->usertype == 1) 
+            {
+                return redirect()->route('admin.contents.dashboard');
+            } 
+            elseif (Auth::guard($guard)->check() && Auth::user()->usertype == 2) 
+            {
+                return redirect()->route('doctor.contents.dashboard');
+            } 
+            elseif (Auth::guard($guard)->check() && Auth::user()->usertype == 3) 
+            {
+                return redirect()->route('nurse.contents.dashboard');
+            } 
+            elseif (Auth::guard($guard)->check() && Auth::user()->usertype == 4) 
+            {
+                return redirect()->route('patient.contents.dashboard');
             }
         }
 

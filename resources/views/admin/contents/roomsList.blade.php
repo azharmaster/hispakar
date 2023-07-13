@@ -266,6 +266,5 @@
 </div>
 <!-- end delete Room form -->
 
-@include('admin.includes.dtScripts')
 
 @endsection

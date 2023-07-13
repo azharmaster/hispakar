@@ -5,13 +5,13 @@
             <div class="pcoded-navigation-label">Navigation</div>
             <ul class="pcoded-item pcoded-left-item">
                 <li class="">
-                    <a href="/admin/dashboard" class="waves-effect waves-dark">
+                    <a href="/doctor/dashboard" class="waves-effect waves-dark">
                         <span class="pcoded-micon"><i class="feather icon-home"></i></span>
                         <span class="pcoded-mtext">Dashboard</span>
                     </a>
                 </li>
                 <li class="">
-                    <a href="/admin/patientList" class="waves-effect waves-dark">
+                    <a href="/doctor/patientList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-regular fa-hospital-user"></i></span>
                         <span class="pcoded-mtext">Patients</span>
@@ -19,7 +19,7 @@
                 </li>
 
                 <li class="">
-                    <a href="/admin/appointmentList" class="waves-effect waves-dark">
+                    <a href="/doctor/appointmentList" class="waves-effect waves-dark">
                     <span class="pcoded-micon">
                     <i class="fas fa-solid fa-calendar-check"></i>
                     </span>
@@ -28,7 +28,7 @@
                 </li>
 
                 <li class="">
-                    <a href="/admin/medicines" class="waves-effect waves-dark">
+                    <a href="/doctor/medicines" class="waves-effect waves-dark">
                     <span class="pcoded-micon">
                     <i class="fas fa-regular fa-capsules"></i>
                     </span>
@@ -37,7 +37,7 @@
                 </li>
 
                 <li class="">
-                    <a href="/admin/reports" class="waves-effect waves-dark">
+                    <a href="/doctor/reports" class="waves-effect waves-dark">
                     <span class="pcoded-micon">
                     <i class="fas fa-regular fa-file-medical"></i>
                     </span>

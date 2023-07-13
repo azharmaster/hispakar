@@ -734,6 +734,6 @@
 </div>
 <!-- end delete Doctor form -->
 
-@include('admin.includes.dtScripts')
+
 
 @endsection

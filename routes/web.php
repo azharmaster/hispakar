@@ -19,46 +19,57 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('auth.login');
+});
 
 //Admin
-Route::get('/', function () {
-    return view('/admin.index');
+// Route::get('/', function () {
+//     return view('/admin.index');
+// });
+Auth::routes();
+
+Route::group(['prefix'=>'admin', 'middleware'=>['isAdmin', 'auth']], function(){
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.contents.dashboard');
+    Route::get('/doctorList', [AdminController::class, 'viewDoctorList']);
+    Route::get('/nurseList', [AdminController::class, 'viewNurseList']);
+    Route::get('/patientList', [AdminController::class, 'viewPatientList']);
+    Route::get('/roomsList', [AdminController::class, 'viewRoomList']);
+    Route::get('/appointmentList', [AdminController::class, 'viewAppointmentList']);
+
 });
 
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
-Route::get('/admin/doctorList', [AdminController::class, 'viewDoctorList']);
-Route::get('/admin/nurseList', [AdminController::class, 'viewNurseList']);
-Route::get('/admin/patientList', [AdminController::class, 'viewPatientList']);
-Route::get('/admin/roomsList', [AdminController::class, 'viewRoomList']);
-Route::get('/admin/appointmentList', [AdminController::class, 'viewAppointmentList']);
 
 //Doctor
-Route::get('/doctor/dashboard', [DoctorController::class, 'dashboard']);
-Route::get('/doctor/patientList', [DoctorController::class, 'viewPatientList']);
-Route::get('/doctor/appointmentList', [DoctorController::class, 'viewAppointmentList']);
-Route::get('/doctor/medicines', [DoctorController::class, 'viewMedicineList']);
-Route::get('/doctor/reports', [DoctorController::class, 'viewReportList']);
+Route::group(['prefix'=>'doctor', 'middleware'=>['isDoctor', 'auth']], function(){
+    Route::get('/dashboard', [DoctorController::class, 'index'])->name('doctor.contents.dashboard');
+    Route::get('/patientList', [DoctorController::class, 'viewPatientList']);
+    Route::get('/appointmentList', [DoctorController::class, 'viewAppointmentList']);
+    Route::get('/medicines', [DoctorController::class, 'viewMedicineList']);
+    Route::get('/reports', [DoctorController::class, 'viewReportList']);
+});
 
 //Nurse
-Route::get('/nurse/dashboard', function () {
-    return view('nurse.index');
+// Route::get('/nurse/dashboard', function () {
+//     return view('nurse.index');
+// });
+Route::group(['prefix'=>'nurse', 'middleware'=>['isNurse', 'auth']], function(){
+    Route::get('/dashboard', [NurseController::class, 'index'])->name('nurse.contents.dashboard');
+    Route::get('/doctorList', [NurseController::class, 'viewDoctorList']);
+    Route::get('/patientList', [NurseController::class, 'viewPatientList']);
+    Route::get('/roomsList', [NurseController::class, 'viewRoomList']);
+    Route::get('/appointmentList', [NurseController::class, 'viewAppointmentList']);
+    Route::get('/medicineList', [NurseController::class, 'viewMedicineList']);
 });
-Route::get('/nurse/dashboard', [NurseController::class, 'index']);
-Route::get('/nurse/doctorList', [NurseController::class, 'viewDoctorList']);
-Route::get('/nurse/patientList', [NurseController::class, 'viewPatientList']);
-Route::get('/nurse/roomList', [NurseController::class, 'viewRoomList']);
-Route::get('/nurse/appointmentList', [NurseController::class, 'viewAppointmentList']);
-Route::get('/nurse/medicineList', [NurseController::class, 'viewMedicineList']);
 
 //Patient
-Route::get('/Patient/dashboard', function () {
-    return view('Patient.index');
+// Route::get('/Patient/dashboard', function () {
+//     return view('Patient.index');
+// });
+Route::group(['prefix'=>'patient', 'middleware'=>['isPatient', 'auth']], function(){
+    Route::get('/dashboard', [PatientController::class, 'index'])->name('patient.contents.dashboard');
+    Route::get('/appointmentList', [PatientController::class, 'viewAppointmentList']);
+    Route::get('/reportList', [PatientController::class, 'viewMedicineList']);
 });
-Route::get('/Patient/dashboard', [PatientController::class, 'index']);
-Route::get('/Patient/appointmentList', [PatientController::class, 'viewAppointmentList']);
-Route::get('/Patient/reportList', [PatientController::class, 'viewMedicineList']);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('patient.contents.dashboard');

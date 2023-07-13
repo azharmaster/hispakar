@@ -1,4 +1,26 @@
 <nav class="navbar header-navbar pcoded-header">
+
+@guest
+  <!-- Right navbar links -->
+  <ul class="navbar-nav ml-auto">
+    @if (Route::has('login'))
+    <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="{{ route('login') }}">
+            {{ __('Login') }}
+        </a>
+    </li>
+    @endif
+
+    @if (Route::has('register'))
+    <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="{{ route('register') }}">
+            {{ __('Register') }}
+        </a>
+    </li>
+    @endif
+  </ul>
+
+  @else
   <div class="navbar-wrapper">
     <div class="navbar-logo">
       <a href="{{ url('index.php') }}">
@@ -90,7 +112,7 @@
           <div class="dropdown-primary dropdown">
             <div class="dropdown-toggle" data-toggle="dropdown">
               <img src="{{ asset('files/assets/images/avatar-4-1.jpg') }}" class="img-radius" alt="User-Profile-Image">
-              <span>John Doe</span>
+              <span>{{ Auth::user()->name }}</span>
               <i class="feather icon-chevron-down"></i>
             </div>
             <ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
@@ -115,9 +137,13 @@
                 </a>
               </li>
               <li>
-                <a href="auth-sign-in-social.html">
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); 
+                document.getElementById('logout-form').submit();">
                   <i class="feather icon-log-out"></i> Logout
                 </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+              </form>
               </li>
             </ul>
           </div>
@@ -126,3 +152,4 @@
     </div>
   </div>
 </nav>
+@endguest

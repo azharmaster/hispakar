@@ -3,6 +3,37 @@
 
 <head>
     @include('patient.includes.head')
+    <style>
+    .data-label {
+      font-size: 15px;
+    }
+    .data-badge {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 10px;
+    }
+    .weight-badge {
+      background-color: #007bff;
+      color: #fff;
+    }
+    .height-badge {
+      background-color: #28a745;
+      color: #fff;
+    }
+    .blood-badge {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    @media (min-width: 768px) {
+      .table-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
+      }
+    }
+
+
+  </style>
 </head>
 
 <body>
