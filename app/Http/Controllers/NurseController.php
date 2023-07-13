@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\Doctor; 
+
 class NurseController extends Controller
 {
     public function index()
@@ -13,7 +15,9 @@ class NurseController extends Controller
 
     public function viewDoctorList()
     {
-        return view('nurse.contents.doctorList');
+        $doctors = Doctor::all(); // Retrieve all doctors from the database
+
+        return view('nurse.contents.doctorList', compact('doctors'));
     }
 
     public function viewPatientList()
@@ -33,7 +37,7 @@ class NurseController extends Controller
 
     public function viewMedicineList()
     {
-        return view('nurse.contents.medicineList');
+        return view('nurse.contents.medicines');
     }
 
 }

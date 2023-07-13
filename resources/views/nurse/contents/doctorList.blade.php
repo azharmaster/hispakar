@@ -45,24 +45,27 @@
                                         <div class="dt-responsive table-responsive">
                                             <table id="dataTable1" class="table table-striped table-bordered nowrap">
                                                 <thead>
-                                                    <tr style="text-align: center;">
+                                                    <tr style="text-align: left;">
                                                         <th>#</th>
-                                                        <th>ID</th>
                                                         <th>Name</th>
-                                                        <th>Speacialised</th>
-                                                        <th>Contact No</th>
+                                                        <th>Phone</th>
+                                                        <th>Email</th>
+                                                        <th>Specialization</th>
+                                                        <th>Gender</th>
                                                         <th style="width: 80px;">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr style="text-align: center;">
+                                                @foreach ($doctors as $doctor)
+                                                    <tr style="text-align: left;">
                                                         <td>1</td>
-                                                        <td>1911</td>
-                                                        <td>John Doe</td>
-                                                        <td>Heart Surgery</td>
-                                                        <td>0199237856</td>
+                                                        <td>{{ $doctor->doctorname }}</td>
+                                                        <td>{{ $doctor->mobileno }}</td>
+                                                        <td>puteridayu@gmail.com</td>
+                                                        <td>{{ $doctor->departmentid }}</td>
+                                                        <td>girl</td>
                                                         <td>
-                                                            <a title="Edit Doctor" data-toggle="modal" data-target="#editModal">
+                                                            <a title="Edit Doctor" data-toggle="modal" data-target="#editModal-{{ $doctor->id }}">
                                                                 <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                             </a>
                                                             <a title="Delete Doctor" data-toggle="modal" data-target="#deleteModal">
@@ -70,45 +73,7 @@
                                                             </a>
                                                         </td>
                                                     </tr>
-                                                    <tr style="text-align: center;">
-                                                        <td>2</td>
-                                                        <td>1912</td>
-                                                        <td>John</td>
-                                                        <td>Heart Surgery</td>
-                                                        <td>0199237856</td>
-                                                        <td>
-                                                            <!-- <button class="btn btn-mat waves-effect waves-light btn-warning" style="width: 50px;" title="View Doctor" data-toggle="modal" data-target="#viewModal">
-                                                                <i class="fas fa-eye"></i>
-                                                            </button> -->
-                                                            <!-- <button class="btn btn-mat waves-effect waves-light btn-success" style="width: 50px;" title="Edit Doctor" data-toggle="modal" data-target="#editModal">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                            </button>
-                                                            <button class="btn btn-mat waves-effect waves-light btn-danger" style="width: 50px;" title="Delete Doctor" data-toggle="modal" data-target="#deleteModal">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button> -->
-                                                            <a title="Edit Doctor" data-toggle="modal" data-target="#editModal">
-                                                                <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
-                                                            </a>
-                                                            <a title="Delete Doctor" data-toggle="modal" data-target="#deleteModal">
-                                                                <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr style="text-align: center;">
-                                                        <td>3</td>
-                                                        <td>1913</td>
-                                                        <td>Doe</td>
-                                                        <td>Heart Surgery</td>
-                                                        <td>0199237856</td>
-                                                        <td>
-                                                            <a title="Edit Doctor" data-toggle="modal" data-target="#editModal">
-                                                                <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
-                                                            </a>
-                                                            <a title="Delete Doctor" data-toggle="modal" data-target="#deleteModal">
-                                                                <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -175,7 +140,8 @@
 <!-- end Add Doctor form -->
 
 <!-- Edit Doctor form -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+@foreach ($doctors as $doctor)
+<div class="modal fade" id="editModal-{{ $doctor->id }}" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -184,15 +150,17 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form action="" method="POST">
+             @csrf
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" value="1">
+                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" value="{{ $doctor->id }}">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="John Doe">
+                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="{{ $doctor->doctorname }}">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width: 150px; font-weight:bold;">Gender:</span>
@@ -207,7 +175,7 @@
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" value="0199237856">
+                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" value="{{ $doctor->mobileno }}">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Email :</span>
@@ -218,11 +186,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success waves-effect waves-light ">Save changes</button>
+                <button type="submit" name="submit" class="btn btn-success waves-effect waves-light ">Save changes</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
+@endforeach
 <!-- end edit Doctor form -->
 
 <!-- delete Doctor form -->
