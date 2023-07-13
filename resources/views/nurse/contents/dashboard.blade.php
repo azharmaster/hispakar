@@ -1,3 +1,6 @@
+@extends('layouts.nurse')
+
+@section('content')
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -930,3 +933,5 @@ ndif]-->
         calendar.render();
     });
 </script>
+
+@endsection

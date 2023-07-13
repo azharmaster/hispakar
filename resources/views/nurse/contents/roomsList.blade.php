@@ -1,3 +1,6 @@
+@extends('layouts.nurse')
+
+@section('content')
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -32,7 +35,7 @@
                         <div class="col-sm-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>List of Room</h5>
+                                    <h5 id="tableTitle">List of Room</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
                                     <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Room">
                                         <i class="fas fa-solid fa-plus"></i>
@@ -40,12 +43,6 @@
                                     </button>
                                 </div>
                                 <div class="card-block">
-                                    <?php include '../files/assets/printComponent.php' ?>
-                                    <div class="col-12">
-                                        <h2 class="text-center mb-5" id="tableTitle" hidden>
-                                            <b>Rooms List</b>
-                                        </h2>
-                                    </div>
                                     <div class="dt-responsive table-responsive">
                                         <table id="dataTable1" class="table table-hover table-bordered nowrap">
                                             <thead style="text-align: center;">
@@ -261,4 +258,6 @@
 </div>
 <!-- end delete Room form -->
 
-<?php include 'includes/dtScripts.php' ?>;
+@include('nurse.includes.dtScripts')
+
+@endsection

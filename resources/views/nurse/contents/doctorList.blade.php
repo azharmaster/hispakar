@@ -1,3 +1,6 @@
+@extends('layouts.nurse')
+
+@section('content')
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
                 <div class="row align-items-end">
@@ -5,7 +8,7 @@
                         <div class="page-header-title">
                             <i class="fas fa-solid fa-stethoscope bg-c-blue"></i>
                             <div class="d-inline">
-                                <h5>Doctors</h5>
+                                <h5 id="tableTitle">Doctors</h5>
                                 <span>Below is the list of all doctors.</span>
                             </div>
                         </div>
@@ -31,7 +34,7 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>List of Doctor</h5>
+                                        <h5 id="tableTitle">List of Doctor</h5>
                                         <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
                                         <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
                                             <i class="fas fa-solid fa-plus"></i>
@@ -39,12 +42,6 @@
                                         </button>
                                     </div>
                                     <div class="card-block">
-                                    <?php include '../files/assets/printComponent.php' ?>
-                                            <div class="col-12">
-                                                <h2 class="text-center mb-5"  id="tableTitle" hidden>
-                                                    <b>Doctor List</b>
-                                                </h2>
-                                            </div>
                                         <div class="dt-responsive table-responsive">
                                             <table id="dataTable1" class="table table-striped table-bordered nowrap">
                                                 <thead>
@@ -250,5 +247,4 @@
 </div>
 <!-- end delete Doctor form -->
 
-<?php include 'includes/dtScripts.php' ?>;
-
+@endsection
