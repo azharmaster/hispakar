@@ -13,11 +13,10 @@ class Admin extends Model
     protected $table = 'admin';
 
     protected $fillable = [
-        'adminname',
-        'loginid',
+        'name',
+        'email',
         'password',
         'status',
-        'usertype',
     ];
 
     public $timestamps = false;

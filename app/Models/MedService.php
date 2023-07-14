@@ -5,18 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Medicine extends Model
+class MedService extends Model
 {
     use HasFactory;
 
     protected $primaryKey = 'id';
-    protected $table = 'medicine';
+    protected $table = 'medservice';
 
     protected $fillable = [
-        'name',
-        'price',
+        'type',
         'desc',
-        'stock',
+        'charge',
     ];
 
     public $timestamps = false;

@@ -5,18 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Medicine extends Model
+class DocSchedule extends Model
 {
     use HasFactory;
 
     protected $primaryKey = 'id';
-    protected $table = 'medicine';
+    protected $table = 'docschedule';
 
     protected $fillable = [
-        'name',
-        'price',
-        'desc',
-        'stock',
+        'docid',
+        'day',
+        'date',
+        'starttime',
+        'endtime',
+        'status',
+       
     ];
 
     public $timestamps = false;

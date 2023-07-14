@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -14,7 +15,9 @@ class AdminController extends Controller
 
     public function viewDoctorList()
     {
-        return view('admin.contents.doctorList');
+        $doctors = Doctor::all();
+
+        return view('admin.contents.doctorList', compact('doctors'));
     }
 
     public function viewNurseList()

@@ -13,15 +13,12 @@ class Appointments extends Model
     protected $table = 'appointments';
 
     protected $fillable = [
-        'appointmenttype',
         'patientid',
-        'roomid',
-        'departmentid',
-        'appointmentdate',
-        'appointmenttime',
-        'doctorid',
+        'docid',
+        'deptid',
+        'date',
+        'time',
         'status',
-        'app_reason',
     ];
 
     public $timestamps = false;

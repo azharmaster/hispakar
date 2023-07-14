@@ -13,15 +13,14 @@ class Doctor extends Model
     protected $table = 'doctors';
 
     protected $fillable = [
-        'doctorname',
-        'mobileno',
-        'departmentid',
-        'loginid',
+        'name',
+        'email',
         'password',
-        'status',
+        'phoneno',
+        'deptid',
         'education',
         'experience',
-        'consultancy_charge',
+        'status',
     ];
 
     public $timestamps = false;

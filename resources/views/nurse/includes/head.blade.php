@@ -1,4 +1,4 @@
-<title>PAKAR HIS | Admin</title>
+<title>PAKAR HIS | Nurse</title>
 
 
 <!--[if lt IE 10]>
