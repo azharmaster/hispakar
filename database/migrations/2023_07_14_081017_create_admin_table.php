@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Drop existing departments table if it exists
+        // Drop existing admin table if it exists
         if (Schema::hasTable('admin')) {
             Schema::drop('admin');
         }
