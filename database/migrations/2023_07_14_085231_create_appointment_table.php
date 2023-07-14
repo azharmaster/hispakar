@@ -21,17 +21,13 @@ class CreateAppointmentTable extends Migration
 
         Schema::create('appointment', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('patientid')->unsigned();
-            $table->integer('docid')->unsigned();
-            $table->integer('deptid')->unsigned();
+            $table->integer('patientid')->nullable();
+            $table->integer('docid')->nullable();
+            $table->integer('deptid')->nullable();
             $table->date('date')->nullable();
             $table->time('time')->nullable();
             $table->integer('status')->nullable()->comment('0: cancel, 1: confirm');
             $table->timestamps();
-
-            $table->foreign('patientid')->references('id')->on('patient');
-            $table->foreign('docid')->references('id')->on('doctor');
-            $table->foreign('deptid')->references('id')->on('department');
         });
 
         // Insert dummy data
