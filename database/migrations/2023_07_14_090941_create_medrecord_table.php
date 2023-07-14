@@ -19,6 +19,26 @@ class CreateMedrecordTable extends Migration
             Schema::drop('medrecord');
         }
 
+        if (Schema::hasTable('treatments')) {
+            Schema::drop('treatments');
+        }
+
+        if (Schema::hasTable('treatment_records')) {
+            Schema::drop('treatment_records');
+        }
+
+        if (Schema::hasTable('payments')) {
+            Schema::drop('payments');
+        }
+
+        if (Schema::hasTable('orders')) {
+            Schema::drop('orders');
+        }
+
+        if (Schema::hasTable('services')) {
+            Schema::drop('services');
+        }
+
         Schema::create('medrecord', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('aptid')->nullable();
