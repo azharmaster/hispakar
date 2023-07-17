@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Doctor; 
+use App\Models\Medicine; 
 
 class NurseController extends Controller
 {
@@ -37,8 +38,25 @@ class NurseController extends Controller
 
     public function viewMedicineList()
     {
-        return view('nurse.contents.medicines');
+        $medicines = Medicine::all(); // Retrieve all doctors from the database
+
+        return view('nurse.contents.medicineList', compact('medicines'));
     }
+
+    public function AddMedicine(Request $request)
+    {
+        //create new medicine record
+        $medicine = new Medicine();
+        $medicine->name = $request->input('name');
+        $medicine->stock = $request->input('stock');
+        $medicine->price = $request->input('price');
+        $medicine->desc = $request->input('desc');
+        $medicine->save();
+
+        return redirect('/nurse/medicineList')->with('success', 'Successfully added');
+    }
+    
+
 
 }
 

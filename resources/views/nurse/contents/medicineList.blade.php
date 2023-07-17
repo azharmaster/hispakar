@@ -1,6 +1,20 @@
 @extends('layouts.nurse')
 
 @section('content')
+
+<style>
+    td {
+        white-space: normal;
+        word-wrap: break-word;
+    }
+</style>
+
+@if(session()->has('success'))
+    <script>
+        alert("{{ session()->get('success') }}");
+    </script>
+@endif
+
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -41,47 +55,44 @@
                             <!-- Start Table -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 id="tableTitle">List of Medicines</h5>
+                                    <h5 >List of Medicines</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
-                                    <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
+                                    <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#addModal-Medicine" title="Add Doctor">
                                         <i class="fas fa-solid fa-plus"></i>
                                             Add
                                     </button>
                                 </div>
                                 <div class="card-block">
-                                    <div class="dt-responsive table-responsive">
-                                        <table id="dataTable1" class="table table-bordered">
+                                    <div class="dt-responsive table-responsive" style="overflow-x: visible; width:100%">
+                                        <table id="" class="table table-bordered nowrap table-responsive-sm">
                                             <thead>
-                                                <tr style="text-align: center;">
+                                                <tr class="text-left">
                                                     <th>#</th>
-                                                    <th>ID</th>
-                                                    <th>Med Name</th>
+                                                    <th>Name</th>
                                                     <th>Description</th>
-                                                    <th>Quantity</th>
-                                                    <th style="width: 80px;">Action</th>
+                                                    <th class="text-center">Quantity</th>
+                                                    <th>Price/Item</th>
+                                                    <th style="width: 97px; text-align: center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr style="text-align: center;">
-                                                    <td>1</td>
-                                                    <td>MED00982</td>
-                                                    <td>Paracetamol</td>
-                                                    <td>Minor Headache</td>
-                                                    <td>120</td>
+                                            @foreach ($medicines as $medicine)
+                                                <tr class="text-center" >
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td style="white-space: normal; word-wrap: break-word;"class="text-left">{{ $medicine->name }}</td>
+                                                    <td class="text-left">{{ $medicine->desc }}</td>
+                                                    <td style="text-align: center;">{{ $medicine->stock }}</td>
+                                                    <td>RM {{ number_format($medicine->price, 2) }}</td>
                                                     <td>
-                                                        <!-- <button class="btn btn-mat waves-effect waves-light btn-warning" style="width: 50px;" title="View Doctor" data-toggle="modal" data-target="#viewModal">
-                                                            <i class="fas fa-eye"></i>
-                                                        </button> -->
-    
-                                                        <a title="Edit Medicine" href="appointmentReport.php">
-                                                        <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                        <a title="Edit Medicine" href="#" data-toggle="modal" data-target="#editModal">
+                                                            <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                         </a>
                                                         <a title="Delete Medicine" data-toggle="modal" data-target="#deleteModal">
                                                             <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
                                                         </a>
                                                     </td>
-    
                                                 </tr>
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -96,64 +107,56 @@
     </div>
 </div>
 
-<!-- Add Patient form -->
-<div class="modal fade" id="default-Modal" tabindex="-1" role="dialog">
+<!-- Add Medicine form -->
+<div class="modal fade" id="addModal-Medicine" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Patient</h5>
+                <h5 class="modal-title">Add Medicine</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" placeholder="ABC1234">
+            <form method="POST" action="/nurse/medicineList">
+            {{csrf_field()}}
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="form-group input-group">
+                            <span class="input-group-addon" style="width:150px;">Name :</span>
+                            <input type="text" style="width:350px;" class="form-control mt-2" name="name" id="name" placeholder="Name">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon" style="width:150px;">Quantity :</span>
+                            <input type="number" style="width:350px;" class="form-control mt-2" name="stock" id="stock" placeholder="Stock">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon" style="width:150px;">Price per item :</span>
+                            <input type="text" style="width:350px;" class="form-control mt-2" name="price" id="address" placeholder="Price">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon" style="width:150px;">Description :</span>
+                            <textarea rows="5" style="width:350px;" class="form-control mt-2" name="desc" id="desc" placeholder="Enter description.."></textarea>
+                        </div>
+                            
                     </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="John Doe">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" id="gender">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" placeholder="New York">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" placeholder="0134567891">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" placeholder="johndoe@gmail.com">
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+                    <button name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
                         
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light">Submit</button>
-                    
-            </div>
+            </form>
         </div>
     </div>
 </div>
-<!-- end Add Patient form -->
+<!-- end Add Medicine form -->
 
-<!-- Edit Patient form -->
+<!-- Edit Medicine form -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Patient</h5>
+                <h5 class="modal-title">Edit Medicine</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -197,14 +200,14 @@
         </div>
     </div>
 </div>
-<!-- end edit Patient form -->
+<!-- end edit Medicine form -->
 
-<!-- delete Patient form -->
+<!-- delete Medicine form -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete Patient</h5>
+                <h5 class="modal-title">Delete Medicine</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -219,7 +222,7 @@
         </div>
     </div>
 </div>
-<!-- end delete Patient form -->
+<!-- end delete Medicine form -->
 
 @include('nurse.includes.dtScripts')
 

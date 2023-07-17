@@ -65,22 +65,18 @@ Route::group(['prefix'=>'doctor', 'middleware'=>['isDoctor', 'auth']], function(
 });
 
 //Nurse
-// Route::get('/nurse/dashboard', function () {
-//     return view('nurse.index');
-// });
-Route::group(['prefix'=>'nurse', 'middleware'=>['isNurse', 'auth']], function(){
-    Route::get('/dashboard', [NurseController::class, 'index'])->name('nurse.contents.dashboard');
-    Route::get('/doctorList', [NurseController::class, 'viewDoctorList']);
-    Route::get('/patientList', [NurseController::class, 'viewPatientList']);
-    Route::get('/roomsList', [NurseController::class, 'viewRoomList']);
-    Route::get('/appointmentList', [NurseController::class, 'viewAppointmentList']);
-    Route::get('/medicineList', [NurseController::class, 'viewMedicineList']);
+Route::group(['middleware'=>['isNurse', 'auth']], function(){
+    Route::get('/nurse/dashboard', [NurseController::class, 'index'])->name('nurse.contents.dashboard');
+    Route::get('/nurse/doctorList', [NurseController::class, 'viewDoctorList']);
+    Route::get('/nurse/patientList', [NurseController::class, 'viewPatientList']);
+    Route::get('/nurse/roomsList', [NurseController::class, 'viewRoomList']);
+    Route::get('/nurse/appointmentList', [NurseController::class, 'viewAppointmentList']);
+    Route::get('/nurse/medicineList', [NurseController::class, 'viewMedicineList']);
+
+    Route::post('/nurse/medicineList', [NurseController::class, 'AddMedicine']);
 });
 
 //Patient
-// Route::get('/Patient/dashboard', function () {
-//     return view('Patient.index');
-// });
 Route::group(['prefix'=>'patient', 'middleware'=>['isPatient', 'auth']], function(){
     Route::get('/dashboard', [PatientController::class, 'index'])->name('patient.contents.dashboard');
     Route::get('/appointmentList', [PatientController::class, 'viewAppointmentList']);
