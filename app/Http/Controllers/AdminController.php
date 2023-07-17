@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointments;
 use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\Nurse;
@@ -53,7 +54,8 @@ class AdminController extends Controller
 
     public function viewAppointmentList()
     {
-        return view('admin.contents.appointmentList');
+        $appointments = Appointments::all();
+        return view('admin.contents.appointmentList', compact('appointments'));
     }
 
     // Manage Doctor
@@ -292,7 +294,7 @@ class AdminController extends Controller
 
 
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////ROOM//////////////////////////////////////////////////////////////////
 
     public function AddRooms(Request $request)
     {
@@ -335,5 +337,54 @@ class AdminController extends Controller
         return redirect('/admin/roomsList')->with('success', 'Room has been deleted');
     }
 
+
+    /////////////////////////////////Appointment//////////////////////////////////////////////////////////////////
+
+
+    public function AddAppointment(Request $request)
+    {
+     
+        //insert data into nurse table
+        $appointment = new Appointments();
+        $appointment->patientid = $request->patientid;
+        $appointment->docid = $request->docid;
+        $appointment->deptid = $request->deptid;
+        $appointment->date = $request->date;
+        $appointment->time = $request->time;
+        $appointment->status = $request->status;
+        $appointment->save();
+
+        return redirect('/admin/appointmentList')->with('success', 'New Appointment has been successfully added');
+    }
+
+    public function EditAppointment(Request $request, $id)
+    {
+        $appointment = Appointments::find($id);
+        
+        $appointment->patientid = $request->input('patientid');
+        $appointment->docid = $request->input('docid');
+        $appointment->deptid = $request->input('deptid'); 
+        $appointment->date = $request->input('date'); 
+        $appointment->time = $request->input('time'); 
+        $appointment->status = $request->input('status');
+        $appointment->save();
+
+        return redirect('/admin/appointmentList')->with('success', 'Appointment has been updated');
+    }
+
+    
+    public function deleteAppointment($id)
+    {
+        $appointment = Appointments::findOrFail($id);
+
+
+        $appointment->delete();
+
+        DB::statement('SET @counter = 0;');
+        DB::statement('UPDATE appointment SET id = @counter:=@counter+1;');
+
+
+        return redirect('/admin/appointmentList')->with('success', 'Appointment has been deleted');
+    }
 
 }

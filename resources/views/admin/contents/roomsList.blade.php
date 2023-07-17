@@ -163,7 +163,7 @@
             </div>
             <form action="/admin/roomsList/{{ $room->id }}" class="form-horizontal row-fluid" method="POST" >
               {{csrf_field()}}
-
+              <div class="modal-body">
                 <div class="container-fluid">
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Room No :</span>
