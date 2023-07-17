@@ -22,4 +22,14 @@ class Appointments extends Model
     ];
 
     public $timestamps = false;
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patientid','id');
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'docid','id');
+    }
 }

@@ -54,7 +54,12 @@ class AdminController extends Controller
 
     public function viewAppointmentList()
     {
-        $appointments = Appointments::all();
+
+        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name')
+        ->get();
+
         return view('admin.contents.appointmentList', compact('appointments'));
     }
 

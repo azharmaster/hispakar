@@ -78,8 +78,8 @@
                                                         @foreach($appointments as $appointment)
                                                         <tr style="text-align: center;">
                                                             <td>{{ $loop->iteration }}</td>
-                                                            <td>{{ $appointment->docid }}</td>
-                                                            <td>{{ $appointment->patientid }}</td>
+                                                            <td>{{ $appointment->doctor_name }}</td>
+                                                            <td>{{ $appointment->patient_name }}</td>
                                                             <td>{{ $appointment->date }} {{ $appointment->time }}</td>
                                                             <td>{{ $appointment->status }}</td>
                                                              <td>
