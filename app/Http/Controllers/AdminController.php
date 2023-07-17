@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\Nurse;
 use App\Models\Patient;
@@ -22,15 +23,17 @@ class AdminController extends Controller
     public function viewDoctorList()
     {
         $doctors = Doctor::all();
+        $departments = Department::all();
 
-        return view('admin.contents.doctorList', compact('doctors'));
+        return view('admin.contents.doctorList', compact('doctors', 'departments'));
     }
 
     public function viewNurseList()
     {
         $nurses = Nurse::all();
+        $departments = Department::all();
 
-        return view('admin.contents.nurseList', compact('nurses'));
+        return view('admin.contents.nurseList', compact('nurses', 'departments'));
     }
 
     public function viewPatientList()
@@ -90,9 +93,11 @@ class AdminController extends Controller
         $doctor->name = $request->input('name');
         $doctor->gender = $request->input('gender');
         $doctor->dob = $request->input('dob');
-        $doctor->specialization = $request->input('specialization');
+        $doctor->email = $request->input('email');
         $doctor->phoneno = $request->input('phoneno');
-        $doctor->email = $request->input('email');  
+        $doctor->specialization = $request->input('specialization');
+        $doctor->deptid = $request->input('deptid');  
+        
         $doctor->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
         $doctor->save();
@@ -165,8 +170,11 @@ class AdminController extends Controller
         $nurse->staff_id = $request->input('staff_id');
         $nurse->name = $request->input('name');
         $nurse->gender = $request->input('gender');
-        $nurse->phoneno = $request->input('phoneno');
+        $nurse->dob = $request->input('dob');
         $nurse->email = $request->input('email');  
+        $nurse->phoneno = $request->input('phoneno');
+        $nurse->deptid = $request->input('deptid');
+        
         $nurse->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
         $nurse->save();
