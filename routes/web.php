@@ -52,6 +52,11 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::post('/admin/patientList/{id}', [AdminController::class, 'EditPatient']);
     Route::delete('/admin/patientList/{id}', [AdminController::class, 'deletePatient'])->name('deletePatient');
 
+
+    //Manage Room
+    Route::post('/admin/roomsList', [AdminController::class, 'AddRooms']);
+    Route::post('/admin/roomsList/{id}', [AdminController::class, 'EditRooms']);
+    Route::delete('/admin/roomsList/{id}', [AdminController::class, 'deleteRooms'])->name('deleteRooms');
 });
 
 

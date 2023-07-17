@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\Nurse;
 use App\Models\Patient;
+use App\Models\Room;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -45,7 +46,9 @@ class AdminController extends Controller
 
     public function viewRoomList()
     {
-        return view('admin.contents.roomsList');
+
+        $rooms = Room::all();
+        return view('admin.contents.roomsList', compact('rooms'));
     }
 
     public function viewAppointmentList()
@@ -285,6 +288,51 @@ class AdminController extends Controller
         User::where('staff_id', $staffId)->delete();
 
         return redirect('/admin/patientList')->with('success', 'Patient has been deleted');
+    }
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function AddRooms(Request $request)
+    {
+     
+        //insert data into nurse table
+        $room = new Room();
+        $room->name = $request->name;
+        $room->type = $request->type;
+        $room->desc = $request->desc;
+        $room->status = $request->status;
+        $room->save();
+
+        return redirect('/admin/roomsList')->with('success', 'New Rooms has been successfully added');
+    }
+
+    public function EditRooms(Request $request, $id)
+    {
+        $room = Room::find($id);
+        
+        $room->name = $request->input('name');
+        $room->type = $request->input('type');
+        $room->desc = $request->input('desc'); 
+        $room->status = $request->input('status');
+        $room->save();
+
+        return redirect('/admin/roomsList')->with('success', 'Room has been updated');
+    }
+
+    public function deleteRooms($id)
+    {
+        $room = Room::findOrFail($id);
+
+
+        $room->delete();
+
+        DB::statement('SET @counter = 0;');
+        DB::statement('UPDATE room SET id = @counter:=@counter+1;');
+
+
+        return redirect('/admin/roomsList')->with('success', 'Room has been deleted');
     }
 
 
