@@ -29,7 +29,7 @@
                 </li>
 
                 <li class="">
-                    <a href="/nurse/roomsList" class="waves-effect waves-dark">
+                    <a href="/nurse/roomList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-solid fa-stethoscope"></i>
                         </span>

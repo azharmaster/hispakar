@@ -86,9 +86,24 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/nurse/dashboard', [NurseController::class, 'index'])->name('nurse.contents.dashboard');
     Route::get('/nurse/doctorList', [NurseController::class, 'viewDoctorList']);
     Route::get('/nurse/patientList', [NurseController::class, 'viewPatientList']);
-    Route::get('/nurse/roomsList', [NurseController::class, 'viewRoomList']);
+    Route::get('/nurse/roomList', [NurseController::class, 'viewRoomList']);
     Route::get('/nurse/appointmentList', [NurseController::class, 'viewAppointmentList']);
     Route::get('/nurse/medicineList', [NurseController::class, 'viewMedicineList']);
+
+    //Manage doctor in nurse
+    Route::post('/nurse/doctorList', [NurseController::class, 'AddDoctor']);
+    Route::post('/nurse/doctorList/{id}', [NurseController::class, 'EditDoctor']);
+    Route::delete('/nurse/doctorList/{id}', [NurseController::class, 'DeleteDoctor'])->name('DeleteDoctor');
+
+    //Manage patient in nurse
+    Route::post('/nurse/patientList', [NurseController::class, 'AddPatient']);
+    Route::post('/nurse/patientList/{id}', [NurseController::class, 'EditPatient']);
+    Route::delete('/nurse/patientList/{id}', [NurseController::class, 'DeletePatient'])->name('DeletePatient');
+
+    //Manage room in nurse
+    Route::post('/nurse/roomList', [NurseController::class, 'AddRoom']);
+    Route::post('/nurse/roomList/{id}', [NurseController::class, 'EditRoom']);
+    Route::delete('/nurse/roomList/{id}', [NurseController::class, 'DeleteRoom'])->name('DeleteRoom');
 
     //Manage medicine in nurse
     Route::post('/nurse/medicineList', [NurseController::class, 'AddMedicine']);
