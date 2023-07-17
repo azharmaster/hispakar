@@ -1,6 +1,13 @@
 @extends('layouts.admin')
 
 @section('content')
+
+@if(session()->has('success'))
+    <script>
+        alert("{{ session()->get('success') }}");
+    </script>
+@endif
+
 <!-- Start Content -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -9,7 +16,7 @@
                     <div class="page-header-title">
                         <i class="fas fa-solid fa-user-nurse bg-c-blue"></i>
                         <div class="d-inline">
-                            <h5>Nurses</h5>
+                            <h5 id="tableTitle">Nurses</h5>
                             <span>Below is the list of all nurses.</span>
                         </div>
                     </div>
@@ -35,7 +42,7 @@
                         <div class="col-sm-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>List of Nurse</h5>
+                                    <h5 id="tableTitle">List of Nurse</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
                                     <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Nurse">
                                         <i class="fas fa-solid fa-plus"></i>
@@ -43,15 +50,6 @@
                                     </button>
                                 </div>
                                 <div class="card-block">
-                                <!-- to be fixed -->
-                                include('files.assets.printComponent')
-                                <!-- /to be fixed -->
-                                
-                                        <div class="col-12">
-                                            <h2 class="text-center mb-5"  id="tableTitle" hidden>
-                                                <b>Nurse List</b>
-                                            </h2>
-                                        </div>
                                     <div class="dt-responsive table-responsive">
                                         <table id="dataTable1" class="table table-striped table-bordered nowrap">
                                             <thead>
@@ -59,26 +57,33 @@
                                                     <th>#</th>
                                                     <th>Name</th>
                                                     <th>Contact No</th>
-                                                    <th>Specialised</th>
                                                     <th style="width: 80px;">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr style="text-align: center;">
-                                                    <td>1</td>
-                                                    <td>John</td>
-                                                    <td>123</td>
-                                                    <td>Fever</td>
-                                                    <td>
-                                                        <a title="Edit Patient" data-toggle="modal" data-target="#editModal">
-                                                            <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
-                                                        </a>
-                                                        <a title="Delete Patient" data-toggle="modal" data-target="#deleteModal">
-                                                            <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
-                                                        </a>
-                                                    </td>
+                                                @if ( $nurses->isEmpty() )
+                                                    <tr>
+                                                        <td>No data available</td>
+                                                    </tr>
+                                                @else
+                                                    @foreach($nurses as $nurse)
+                                                    <tr style="text-align: center;">
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $nurse->name }}</td>
+                                                        <td>{{ $nurse->phoneno }}</td>
 
-                                                </tr>
+                                                        <td>
+                                                            <a title="Edit Nurse" data-toggle="modal" data-target="#editModal-{{ $nurse->id }}">
+                                                                <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                            </a>
+                                                            <a href="/admin/nurseList/{{ $nurse->id }}" title="Delete Nurse" data-toggle="modal" data-target="#deleteModal-{{ $nurse->id }}">
+                                                                <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
+                                                            </a>
+                                                        </td>
+
+                                                    </tr>
+                                                    @endforeach
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -96,7 +101,7 @@
 
 <!-- Add Nurse form -->
 <div class="modal fade" id="default-Modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Nurse</h5>
@@ -105,49 +110,77 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" placeholder="ABC1234">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="John Doe">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px; font-weight:bold;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" id="gender">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" placeholder="New York">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" placeholder="0134567891">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" placeholder="johndoe@gmail.com">
-                    </div>
+            <form action="/admin/nurseList" class="form-horizontal row-fluid" method="POST" >
+              {{csrf_field()}}
+              <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name" class="input-group-addon" style="font-weight:bold;">Staff ID :</label>
+                            <input type="text" class="form-control" name="staff_id" id="name" placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="input-group-addon" style="font-weight:bold;">IC :</label>
+                            <input type="text" class="form-control" name="ic" id="name" placeholder="550402050449">
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="input-group-addon" style="font-weight:bold;">Name :</label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender" class="input-group-addon" style="font-weight:bold;">Gender:</label>
+                            <select class="form-control" name="gender" id="gender">
+                                <option selected="">Select Gender </option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="input-group-addon" style="font-weight:bold;">Date of Birth :</label>
+                            <input type="date" class="form-control" name="dob" id="name">
+                        </div>
                         
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name" class="input-group-addon" style="font-weight:bold;">Email :</label>
+                            <input type="email" class="form-control" name="email" id="name" placeholder="johndoe@gmail.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="input-group-addon" style="font-weight:bold;">Password :</label>
+                            <input type="text" class="form-control" name="password" id="name" value="1234" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact" class="input-group-addon" style="font-weight:bold;">Contact :</label>
+                            <input type="text" class="form-control" name="phoneno" id="contact" placeholder="0199237856">
+                        </div>  
+                        <div class="form-group">
+                            <label for="gender" class="input-group-addon" style="font-weight:bold;">Department :</label>
+                            <select class="form-control" name="deptid">
+                                <option selected="">Choose </option>
+                                <option value="1">Ortophedic</option>
+                                <option value="2">Surgery</option>
+                            </select>
+                        </div>
+                        <input type="hidden" style="width:350px;" class="form-control" name="usertype" value="3">
+                    </div>
+                </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light">Submit</button>
+                <button name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
                     
             </div>
+            </form>
         </div>
     </div>
 </div>
 <!-- end Add Nurse form -->
 
 <!-- Edit Nurse form -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+@foreach ($nurses as $nurse)
+<div class="modal fade" id="editModal-{{ $nurse->id }}" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -156,49 +189,53 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form action="/admin/nurseList/{{ $nurse->id }}" method="POST">
+             @csrf
             <div class="modal-body">
-                <div class="container-fluid">
+            <div class="container-fluid">
+                    <input type="hidden" style="width:350px;" class="form-control" name="id" id="id" value="{{ $nurse->id }}">
+
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" value="1">
+                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Staff ID :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="staff_id" id="name" value="{{ $nurse->staff_id }}">
                     </div>
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="John Doe">
+                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="{{ $nurse->name }}">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width: 150px; font-weight:bold;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" id="gender" value="Male">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
+                        <select class="form-control" style="width: 350px;" name="gender" id="gender">
+                            <option value="male" {{ $nurse->gender === 'male' ? 'selected' : '' }}>Male</option>
+                            <option value="female" {{ $nurse->gender === 'female' ? 'selected' : '' }}>Female</option>
                         </select>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" value="Malaysia">
-                    </div>
-                    <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" value="0199237856">
+                        <input type="text" style="width:350px;" class="form-control" name="phoneno" id="phoneno" value="{{ $nurse->phoneno }}">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" value="john@gmail.com">
+                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" value="{{ $nurse->email }}">
                     </div>
                         
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success waves-effect waves-light ">Save changes</button>
+                <button name="submit" class="btn btn-success waves-effect waves-light ">Save changes</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
+@endforeach
 <!-- end edit Nurse form -->
 
 <!-- delete Nurse form -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+@foreach ($nurses as $nurse)
+<div class="modal fade" id="deleteModal-{{ $nurse->id }}" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -208,16 +245,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p style="font-size: 15px;"> Are you sure want to delete this user? </p>
+                <p style="font-size: 15px;">Are you sure you want to delete this user?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger waves-effect waves-light ">Delete</button>
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                <form action="/admin/nurseList/{{ $nurse->id }}" method="POST" style="display: inline">
+                    @csrf
+                    @method('DELETE')
+                    <button name="submit" class="btn btn-danger waves-effect waves-light">Delete</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
+@endforeach
 <!-- end delete Nurse form -->
+
 
 
 

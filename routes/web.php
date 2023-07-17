@@ -29,13 +29,28 @@ Route::get('/', function () {
 // });
 Auth::routes();
 
-Route::group(['prefix'=>'admin', 'middleware'=>['isAdmin', 'auth']], function(){
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.contents.dashboard');
-    Route::get('/doctorList', [AdminController::class, 'viewDoctorList']);
-    Route::get('/nurseList', [AdminController::class, 'viewNurseList']);
-    Route::get('/patientList', [AdminController::class, 'viewPatientList']);
-    Route::get('/roomsList', [AdminController::class, 'viewRoomList']);
-    Route::get('/appointmentList', [AdminController::class, 'viewAppointmentList']);
+Route::group(['middleware'=>['isAdmin', 'auth']], function(){
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.contents.dashboard');
+    Route::get('/admin/doctorList', [AdminController::class, 'viewDoctorList']);
+    Route::get('/admin/nurseList', [AdminController::class, 'viewNurseList']);
+    Route::get('/admin/patientList', [AdminController::class, 'viewPatientList']);
+    Route::get('/admin/roomsList', [AdminController::class, 'viewRoomList']);
+    Route::get('/admin/appointmentList', [AdminController::class, 'viewAppointmentList']);
+
+    //Manage Doctor
+    Route::post('/admin/doctorList', [AdminController::class, 'AddDoctor']);
+    Route::post('/admin/doctorList/{id}', [AdminController::class, 'EditDoctor']);
+    Route::delete('/admin/doctorList/{id}', [AdminController::class, 'deleteDoctor'])->name('deleteDoctor');
+
+    //Manage Nurse
+    Route::post('/admin/nurseList', [AdminController::class, 'AddNurse']);
+    Route::post('/admin/nurseList/{id}', [AdminController::class, 'EditNurse']);
+    Route::delete('/admin/nurseList/{id}', [AdminController::class, 'deleteNurse'])->name('deleteNurse');
+
+    //Manage Patient
+    Route::post('/admin/patientList', [AdminController::class, 'AddPatient']);
+    Route::post('/admin/patientList/{id}', [AdminController::class, 'EditPatient']);
+    Route::delete('/admin/patientList/{id}', [AdminController::class, 'deletePatient'])->name('deletePatient');
 
 });
 
