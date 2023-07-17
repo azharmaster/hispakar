@@ -164,9 +164,9 @@
                         <div class="form-group">
                             <label for="gender" class="input-group-addon" style="font-weight:bold;">Department :</label>
                             <select class="form-control" name="deptid">
-                                <option selected="">Choose </option>
-                                <option value="1">Ortophedic</option>
-                                <option value="2">Surgery</option>
+                                @foreach ($departments as $department)
+                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <input type="hidden" style="width:350px;" class="form-control" name="usertype" value="2">
@@ -189,7 +189,7 @@
 <!-- Edit Doctor form -->
 @foreach ($doctors as $doctor)
 <div class="modal fade" id="editModal-{{ $doctor->id }}" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Doctor</h5>
@@ -247,9 +247,9 @@
                             <div class="form-group">
                                 <label for="gender" class="input-group-addon" style="font-weight:bold;">Department :</label>
                                 <select class="form-control" name="deptid">
-                                    <option selected="">Choose </option>
-                                    <option value="1">Ortophedic</option>
-                                    <option value="2">Surgery</option>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <input type="hidden" style="width:350px;" class="form-control" name="usertype" value="2">

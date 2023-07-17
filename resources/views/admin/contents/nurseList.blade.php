@@ -157,9 +157,9 @@
                         <div class="form-group">
                             <label for="gender" class="input-group-addon" style="font-weight:bold;">Department :</label>
                             <select class="form-control" name="deptid">
-                                <option selected="">Choose </option>
-                                <option value="1">Ortophedic</option>
-                                <option value="2">Surgery</option>
+                                @foreach ($departments as $department)
+                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <input type="hidden" style="width:350px;" class="form-control" name="usertype" value="3">
@@ -181,7 +181,7 @@
 <!-- Edit Nurse form -->
 @foreach ($nurses as $nurse)
 <div class="modal fade" id="editModal-{{ $nurse->id }}" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Nurse</h5>
@@ -192,34 +192,54 @@
             <form action="/admin/nurseList/{{ $nurse->id }}" method="POST">
              @csrf
             <div class="modal-body">
-            <div class="container-fluid">
-                    <input type="hidden" style="width:350px;" class="form-control" name="id" id="id" value="{{ $nurse->id }}">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="hidden" style="width:350px;" class="form-control" name="id" id="id" value="{{ $nurse->id }}">
 
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Staff ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="staff_id" id="name" value="{{ $nurse->staff_id }}">
+                            <div class="form-group">
+                                <label for="name" class="input-group-addon" style="font-weight:bold;">Staff ID :</label>
+                                <input type="text" class="form-control" name="staff_id" id="name" placeholder="John Doe" value="{{ $nurse->staff_id }}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="input-group-addon" style="font-weight:bold;">IC :</label>
+                                <input type="text" class="form-control" name="ic" id="name" placeholder="550402050449" value="{{ $nurse->ic }}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="input-group-addon" style="font-weight:bold;">Name :</label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="John Doe" value="{{ $nurse->name }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="gender" class="input-group-addon" style="font-weight:bold;">Gender:</label>
+                                <select class="form-control" name="gender" id="gender">
+                                    <option value="male" {{ $nurse->gender === 'male' ? 'selected' : '' }}>Male</option>
+                                    <option value="female" {{ $nurse->gender === 'female' ? 'selected' : '' }}>Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                             <div class="form-group">
+                                <label for="name" class="input-group-addon" style="font-weight:bold;">Date of Birth :</label>
+                                <input type="date" class="form-control" name="dob" id="name" value="{{ $nurse->dob }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="input-group-addon" style="font-weight:bold;">Email :</label>
+                                <input type="email" class="form-control" name="email" id="name" placeholder="johndoe@gmail.com"  value="{{ $nurse->email }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact" class="input-group-addon" style="font-weight:bold;">Contact :</label>
+                                <input type="text" class="form-control" name="phoneno" id="contact" placeholder="0199237856"  value="{{ $nurse->phoneno }}">
+                            </div>  
+                            <div class="form-group">
+                                <label for="gender" class="input-group-addon" style="font-weight:bold;">Department :</label>
+                                <select class="form-control" name="deptid">
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="{{ $nurse->name }}">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px; font-weight:bold;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" id="gender">
-                            <option value="male" {{ $nurse->gender === 'male' ? 'selected' : '' }}>Male</option>
-                            <option value="female" {{ $nurse->gender === 'female' ? 'selected' : '' }}>Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="phoneno" id="phoneno" value="{{ $nurse->phoneno }}">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" value="{{ $nurse->email }}">
-                    </div>
-                        
                 </div>
             </div>
             <div class="modal-footer">

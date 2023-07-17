@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\Nurse;
 use App\Models\Patient;
+use App\Models\Room;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,15 +24,17 @@ class AdminController extends Controller
     public function viewDoctorList()
     {
         $doctors = Doctor::all();
+        $departments = Department::all();
 
-        return view('admin.contents.doctorList', compact('doctors'));
+        return view('admin.contents.doctorList', compact('doctors', 'departments'));
     }
 
     public function viewNurseList()
     {
         $nurses = Nurse::all();
+        $departments = Department::all();
 
-        return view('admin.contents.nurseList', compact('nurses'));
+        return view('admin.contents.nurseList', compact('nurses', 'departments'));
     }
 
     public function viewPatientList()
@@ -42,7 +46,9 @@ class AdminController extends Controller
 
     public function viewRoomList()
     {
-        return view('admin.contents.roomsList');
+
+        $rooms = Room::all();
+        return view('admin.contents.roomsList', compact('rooms'));
     }
 
     public function viewAppointmentList()
@@ -90,9 +96,11 @@ class AdminController extends Controller
         $doctor->name = $request->input('name');
         $doctor->gender = $request->input('gender');
         $doctor->dob = $request->input('dob');
-        $doctor->specialization = $request->input('specialization');
+        $doctor->email = $request->input('email');
         $doctor->phoneno = $request->input('phoneno');
-        $doctor->email = $request->input('email');  
+        $doctor->specialization = $request->input('specialization');
+        $doctor->deptid = $request->input('deptid');  
+        
         $doctor->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
         $doctor->save();
@@ -165,8 +173,11 @@ class AdminController extends Controller
         $nurse->staff_id = $request->input('staff_id');
         $nurse->name = $request->input('name');
         $nurse->gender = $request->input('gender');
-        $nurse->phoneno = $request->input('phoneno');
+        $nurse->dob = $request->input('dob');
         $nurse->email = $request->input('email');  
+        $nurse->phoneno = $request->input('phoneno');
+        $nurse->deptid = $request->input('deptid');
+        
         $nurse->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
         $nurse->save();
@@ -277,6 +288,51 @@ class AdminController extends Controller
         User::where('staff_id', $staffId)->delete();
 
         return redirect('/admin/patientList')->with('success', 'Patient has been deleted');
+    }
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function AddRooms(Request $request)
+    {
+     
+        //insert data into nurse table
+        $room = new Room();
+        $room->name = $request->name;
+        $room->type = $request->type;
+        $room->desc = $request->desc;
+        $room->status = $request->status;
+        $room->save();
+
+        return redirect('/admin/roomsList')->with('success', 'New Rooms has been successfully added');
+    }
+
+    public function EditRooms(Request $request, $id)
+    {
+        $room = Room::find($id);
+        
+        $room->name = $request->input('name');
+        $room->type = $request->input('type');
+        $room->desc = $request->input('desc'); 
+        $room->status = $request->input('status');
+        $room->save();
+
+        return redirect('/admin/roomsList')->with('success', 'Room has been updated');
+    }
+
+    public function deleteRooms($id)
+    {
+        $room = Room::findOrFail($id);
+
+
+        $room->delete();
+
+        DB::statement('SET @counter = 0;');
+        DB::statement('UPDATE room SET id = @counter:=@counter+1;');
+
+
+        return redirect('/admin/roomsList')->with('success', 'Room has been deleted');
     }
 
 
