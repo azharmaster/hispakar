@@ -2,13 +2,6 @@
 
 @section('content')
 
-<style>
-    td {
-        white-space: normal;
-        word-wrap: break-word;
-    }
-</style>
-
 @if(session()->has('success'))
     <script>
         alert("{{ session()->get('success') }}");
@@ -33,12 +26,12 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="index.html">
+                            <a href="#">
                                 <i class="feather icon-home"></i>
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="doctor.php">Medicines</a>
+                            <a href="#">Medicines</a>
                         </li>
                     </ul>
                 </div>
@@ -55,16 +48,16 @@
                             <!-- Start Table -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 >List of Medicines</h5>
+                                    <h5 id="tableTitle">List of Medicines</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
-                                    <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#addModal-Medicine" title="Add Doctor">
+                                    <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#addModal-Medicine" title="Add Medicine">
                                         <i class="fas fa-solid fa-plus"></i>
                                             Add
                                     </button>
                                 </div>
                                 <div class="card-block">
                                     <div class="dt-responsive table-responsive" style="overflow-x: visible; width:100%">
-                                        <table id="" class="table table-bordered nowrap table-responsive-sm">
+                                        <table id="dataTable1" class="table table-bordered nowrap table-responsive-sm">
                                             <thead>
                                                 <tr class="text-left">
                                                     <th>#</th>
@@ -84,11 +77,11 @@
                                                     <td style="text-align: center;">{{ $medicine->stock }}</td>
                                                     <td>RM {{ number_format($medicine->price, 2) }}</td>
                                                     <td>
-                                                        <a title="Edit Medicine" href="#" data-toggle="modal" data-target="#editModal">
+                                                        <a title="Edit Medicine" data-toggle="modal" data-target="#editModal-{{ $medicine->id }}">
                                                             <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                         </a>
-                                                        <a title="Delete Medicine" data-toggle="modal" data-target="#deleteModal">
-                                                            <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
+                                                        <a href="/nurse/medicineList/{{ $medicine->id }}" title="Delete Medicine" data-target="#deleteModal-{{ $medicine->id }}" data-toggle="modal">
+                                                            <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -123,19 +116,19 @@
                     <div class="container-fluid">
                         <div class="form-group input-group">
                             <span class="input-group-addon" style="width:150px;">Name :</span>
-                            <input type="text" style="width:350px;" class="form-control mt-2" name="name" id="name" placeholder="Name">
+                            <input type="text" style="width:350px;" class="form-control mt-2" name="name" id="name" placeholder="Name" required>
                         </div>
                         <div class="form-group input-group">
                             <span class="input-group-addon" style="width:150px;">Quantity :</span>
-                            <input type="number" style="width:350px;" class="form-control mt-2" name="stock" id="stock" placeholder="Stock">
+                            <input type="number" style="width:350px;" class="form-control mt-2" name="stock" id="stock" placeholder="Stock" required>
                         </div>
                         <div class="form-group input-group">
                             <span class="input-group-addon" style="width:150px;">Price per item :</span>
-                            <input type="text" style="width:350px;" class="form-control mt-2" name="price" id="address" placeholder="Price">
+                            <input type="text" style="width:350px;" class="form-control mt-2" name="price" id="address" placeholder="Price" required>
                         </div>
                         <div class="form-group input-group">
                             <span class="input-group-addon" style="width:150px;">Description :</span>
-                            <textarea rows="5" style="width:350px;" class="form-control mt-2" name="desc" id="desc" placeholder="Enter description.."></textarea>
+                            <textarea rows="5" style="width:350px;" class="form-control mt-2" name="desc" id="desc" placeholder="Enter description.." required></textarea>
                         </div>
                             
                     </div>
@@ -152,76 +145,78 @@
 <!-- end Add Medicine form -->
 
 <!-- Edit Medicine form -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+@foreach ($medicines as $medicine)
+<!-- Add Medicine form -->
+<div class="modal fade" id="editModal-{{ $medicine->id }}" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Medicine</h5>
+                <h5 class="modal-title">Edit Medicines</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form action="/nurse/medicineList/{{ $medicine->id }}" method="POST">
+             @csrf
             <div class="modal-body">
                 <div class="container-fluid">
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" value="1">
-                    </div>
+                    <input type="hidden" style="width:350px;" class="form-control" name="id" id="id" value="{{ $medicine->id }}">
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="John Doe">
+                        <input type="text" style="width:350px;" class="form-control mt-2" name="name" id="name" placeholder="Name" value="{{ $medicine->name }}" required>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" id="gender" value="Male">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
+                        <span class="input-group-addon" style="width:150px;">Quantity :</span>
+                        <input type="number" style="width:350px;" class="form-control mt-2" name="stock" id="stock" placeholder="Stock" value="{{ $medicine->stock }}" required>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" value="Malaysia">
-                    </div>
+                        <span class="input-group-addon" style="width: 150px;">Price per item :</span>
+                        <input type="number" step="0.01" style="width: 350px;" class="form-control mt-2" name="price" id="price" placeholder="Price" value="{{ $medicine->price }}" required>
+                    </div>                                          
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" value="0199237856">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" value="john@gmail.com">
-                    </div>
-                        
+                        <span class="input-group-addon" style="width: 150px;">Description :</span>
+                        <textarea rows="5" style="width: 350px;" class="form-control mt-2" name="desc" id="desc" required>{{ $medicine->desc }}</textarea>
+                    </div>                    
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success waves-effect waves-light ">Save changes</button>
+                <button name="submit" class="btn btn-success waves-effect waves-light ">Save changes</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
+@endforeach
 <!-- end edit Medicine form -->
 
 <!-- delete Medicine form -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Medicine</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p style="font-size: 15px;"> Are you sure want to delete this user? </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger waves-effect waves-light ">Delete</button>
+@foreach ($medicines as $medicine)
+    <div class="modal fade" id="deleteModal-{{ $medicine->id }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete medicine</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="font-size: 15px;">Are you sure you want to delete this medicine?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                    <form action="/nurse/medicineList/{{ $medicine->id }}" method="POST" style="display: inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger waves-effect waves-light">Delete</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+@endforeach
 <!-- end delete Medicine form -->
 
 @include('nurse.includes.dtScripts')
