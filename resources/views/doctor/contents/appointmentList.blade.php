@@ -1,6 +1,13 @@
 @extends('layouts.doctor')
 
 @section('content')
+
+@if(session()->has('success'))
+    <script>
+        alert("{{ session()->get('success') }}");
+    </script>
+@endif
+
 <!-- Start Content -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -41,7 +48,7 @@
                             <!-- Start Table -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>List of Appointments</h5>
+                                    <h5 id="tableTitle">List of Appointments</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
                                     <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
                                         <i class="fas fa-solid fa-plus"></i>
@@ -49,19 +56,12 @@
                                     </button>
                                 </div>
                                 <div class="card-block">
-                                    <!-- to be fixed -->
-                                    include('files.assets.printComponent')
-                                    <!-- /to be fixed -->                                    <div class="col-12">
-                                        <h2 class="text-center mb-5"  id="tableTitle" hidden>
-                                            <b>Appointments List</b>
-                                        </h2>
-                                    </div>
-                                    <div class="dt-responsive table-responsive">
+                                    <div class="dt-responsive table-responsive" style="page-break-before:avoid;">
                                         <table id="dataTable1" class="table table-bordered">
                                             <thead>
                                                 <tr style="text-align: center;">
                                                     <th>#</th>
-                                                    <th>ID</th>
+                                                    <th>IC</th>
                                                     <th>Patient Name</th>
                                                     <th>Date-Time</th>
                                                     <th>Description</th>
@@ -69,31 +69,31 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr style="text-align: center;">
-                                                    <td>1</td>
-                                                    <td>1911</td>
-                                                    <td>John Doe</td>
-                                                    <td>0199237856</td>
-                                                    <td>Heart Disease</td>
-                                                    <td style="text-align: center;">
-                                                    <!-- <button class="btn btn-mat waves-effect waves-light btn-warning" style="width: 50px;" title="View Doctor" data-toggle="modal" data-target="#viewModal">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button> -->
-                                                    <!-- <button class="btn btn-mat waves-effect waves-light btn-success" style="width: 50px;" title="Edit Room" data-toggle="modal" data-target="#editModal">
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                    </button>
-                                                    <button class="btn btn-mat waves-effect waves-light btn-danger" style="width: 50px;" title="Delete Room" data-toggle="modal" data-target="#deleteModal">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button> -->
-                                                    <a title="Edit Room" data-toggle="modal" data-target="#editModal">
-                                                        <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
-                                                    </a>
-                                                    <a title="Delete Room" data-toggle="modal" data-target="#deleteModal">
-                                                        <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
-                                                    </a>
-                                                </td>
-    
-                                                </tr>
+                                                @if ( $appointments->isEmpty() )
+                                                    <tr>
+                                                        <td>No data available</td>
+                                                    </tr>
+                                                @else
+                                                    @foreach($appointments as $appointment)
+                                                        <tr style="text-align: center;">
+                                                            <td>{{ $loop->iteration }}</td>
+                                                            <!-- joined table -->
+                                                            <td>{{ $appointment->patient_ic}}</td>
+                                                            <td>{{ $appointment->patient_name}}</td>
+                                                            <td>{{ $appointment->date}} - {{ $appointment->time}}</td>
+                                                            <td>{{ $appointment->desc}}</td>
+                                                            <td style="text-align: center;">
+                                                                <a title="Edit Room" data-toggle="modal" data-target="#editModal">
+                                                                    <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                </a>
+                                                                <a title="Delete Room" data-toggle="modal" data-target="#deleteModal">
+                                                                    <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
+                                                                </a>
+                                                            </td>
+            
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -234,7 +234,6 @@
 </div>
 <!-- end delete Patient form -->
 
-@include('admin.includes.dtScripts')
 
 @endsection
 

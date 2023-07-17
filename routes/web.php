@@ -61,12 +61,19 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
 
 
 //Doctor
-Route::group(['prefix'=>'doctor', 'middleware'=>['isDoctor', 'auth']], function(){
-    Route::get('/dashboard', [DoctorController::class, 'index'])->name('doctor.contents.dashboard');
-    Route::get('/patientList', [DoctorController::class, 'viewPatientList']);
-    Route::get('/appointmentList', [DoctorController::class, 'viewAppointmentList']);
-    Route::get('/medicines', [DoctorController::class, 'viewMedicineList']);
-    Route::get('/reports', [DoctorController::class, 'viewReportList']);
+Route::group(['middleware'=>['isDoctor', 'auth']], function(){
+    Route::get('/doctor/dashboard', [DoctorController::class, 'index'])->name('doctor.contents.dashboard');
+    Route::get('/doctor/patientList', [DoctorController::class, 'viewPatientList']);
+    Route::get('/doctor/appointmentList', [DoctorController::class, 'viewAppointmentList']);
+    Route::get('/doctor/medicines', [DoctorController::class, 'viewMedicineList']);
+    Route::get('/doctor/reports', [DoctorController::class, 'viewReportList']);
+
+    //Manage Patient
+    Route::post('/doctor/patientList', [DoctorController::class, 'AddPatient']);
+    Route::post('/doctor/patientList/{id}', [DoctorController::class, 'EditPatient']);
+    Route::delete('/doctor/patientList/{id}', [DoctorController::class, 'deletePatient'])->name('deletePatient');
+
+
 });
 
 //Nurse
