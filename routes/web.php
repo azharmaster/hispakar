@@ -36,6 +36,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/patientList', [AdminController::class, 'viewPatientList']);
     Route::get('/admin/roomsList', [AdminController::class, 'viewRoomList']);
     Route::get('/admin/appointmentList', [AdminController::class, 'viewAppointmentList']);
+    Route::get('/admin/departmentList', [AdminController::class, 'viewDepartmentList']);
 
     //Manage Doctor
     Route::post('/admin/doctorList', [AdminController::class, 'AddDoctor']);
@@ -62,6 +63,11 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
      Route::post('/admin/appointmentList', [AdminController::class, 'AddAppointment']);
      Route::post('/admin/appointmentList/{id}', [AdminController::class, 'EditAppointment']);
      Route::delete('/admin/appointmentList/{id}', [AdminController::class, 'deleteAppointment'])->name('deleteAppointment');
+
+    //Manage Appoiment
+    Route::post('/admin/departmentList', [AdminController::class, 'AddDepartment']);
+    Route::post('/admin/departmentList/{id}', [AdminController::class, 'EditDepartment']);
+    Route::delete('/admin/departmentList/{id}', [AdminController::class, 'deleteDepartment'])->name('deleteDepartment'); 
 });
 
 
