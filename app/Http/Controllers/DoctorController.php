@@ -66,6 +66,7 @@ class DoctorController extends Controller
         $patient->name = $request->name;
         $patient->gender = $request->gender;
         $patient->phoneno = $request->phoneno;
+        $patient->age = $request->age;
         $patient->dob = $request->dob;
         $patient->address = $request->address;
         $patient->weight = $request->weight;
@@ -74,6 +75,7 @@ class DoctorController extends Controller
         $patient->email = $request->email;
         $patient->password = Hash::make($request->password);
         $patient->usertype = $request->usertype;
+        $patient->status = $request->status;
         $patient->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
         $patient->save();
@@ -89,6 +91,7 @@ class DoctorController extends Controller
         $patient->gender = $request->input('gender');
         $patient->phoneno = $request->input('phoneno'); 
         $patient->dob = $request->input('dob');
+        $patient->age = $request->input('age'); 
         $patient->address = $request->input('address'); 
         $patient->weight = $request->input('weight');  
         $patient->height = $request->input('height'); 

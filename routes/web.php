@@ -90,11 +90,6 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/nurse/appointmentList', [NurseController::class, 'viewAppointmentList']);
     Route::get('/nurse/medicineList', [NurseController::class, 'viewMedicineList']);
 
-    //Manage doctor in nurse
-    Route::post('/nurse/doctorList', [NurseController::class, 'AddDoctor']);
-    Route::post('/nurse/doctorList/{id}', [NurseController::class, 'EditDoctor']);
-    Route::delete('/nurse/doctorList/{id}', [NurseController::class, 'DeleteDoctor'])->name('DeleteDoctor');
-
     //Manage patient in nurse
     Route::post('/nurse/patientList', [NurseController::class, 'AddPatient']);
     Route::post('/nurse/patientList/{id}', [NurseController::class, 'EditPatient']);

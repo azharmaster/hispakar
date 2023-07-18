@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-use App\Models\Doctor; 
+use App\Models\User;
+use App\Models\Patient; 
+use App\Models\Doctor;  
 use App\Models\Medicine; 
 use App\Models\Room; 
 use App\Models\Department; 
-use App\Models\Patient; 
 
 class NurseController extends Controller
 {
@@ -53,9 +55,8 @@ class NurseController extends Controller
         return view('nurse.contents.medicineList', compact('medicines'));
     }
 
-    //////// DOCTOR ////////// 
-
-    public function AddDoctor(Request $request) // Add doctor
+    /////// PATIENT ////////////////
+    public function AddPatient(Request $request)
     {
         //create new user record
         $user = new User();
@@ -63,49 +64,56 @@ class NurseController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->usertype = $request->usertype;
-        $user->staff_id = $request->staff_id;
+        $user->ic = $request->ic;
         $user->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
         $user->save();
 
-        //insert data into doctor table
-        $doctor = new Doctor();
-        $doctor->staff_id = $request->staff_id;
-        $doctor->ic = $request->ic;
-        $doctor->name = $request->name;
-        $doctor->gender = $request->gender;
-        $doctor->dob = $request->dob;
-        $doctor->email = $request->email;
-        $doctor->password = Hash::make($request->password);
-        $doctor->phoneno = $request->phoneno;
-        $doctor->specialization = $request->specialization;
-        $doctor->deptid = $request->deptid;
-        $doctor->usertype = $request->usertype;
-        $doctor->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+        //insert data into nurse table
+        $patient = new Patient();
+        $patient->ic = $request->ic;
+        $patient->name = $request->name;
+        $patient->gender = $request->gender;
+        $patient->age = $request->age;
+        $patient->phoneno = $request->phoneno;
+        $patient->dob = $request->dob;
+        $patient->address = $request->address;
+        $patient->weight = $request->weight;
+        $patient->height = $request->height;
+        $patient->bloodtype = $request->bloodtype;
+        $patient->email = $request->email;
+        $patient->password = Hash::make($request->password);
+        $patient->usertype = $request->usertype;
+        $patient->status = $request->status;
+        $patient->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
-        $doctor->save();
+        $patient->save();
 
-        return redirect('/admin/doctorList')->with('success', 'New doctor has been successfully added');
+        return redirect('/nurse/patientList')->with('success', 'New patient has been successfully added');
     }
 
-    // Edit doctor
-    public function EditDoctor(Request $request, $id) 
+    // Edit patient
+    public function EditPatient(Request $request, $id)
     {
-        $doctor = Doctor::find($id);
-        $doctor->name = $request->input('name');
-        $doctor->gender = $request->input('gender');
-        $doctor->dob = $request->input('dob');
-        $doctor->email = $request->input('email');
-        $doctor->phoneno = $request->input('phoneno');
-        $doctor->specialization = $request->input('specialization');
-        $doctor->deptid = $request->input('deptid');  
-        
-        $doctor->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+        $patient = Patient::find($id);
+        $patient->ic = $request->input('ic');
+        $patient->name = $request->input('name');
+        $patient->gender = $request->input('gender');
+        $patient->phoneno = $request->input('phoneno'); 
+        $patient->dob = $request->input('dob');
+        $patient->address = $request->input('address'); 
+        $patient->age = $request->input('age'); 
+        $patient->weight = $request->input('weight');  
+        $patient->height = $request->input('height'); 
+        $patient->bloodtype = $request->input('bloodtype'); 
+        $patient->email = $request->input('email'); 
+        $patient->status = $request->input('status'); 
+        $patient->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
-        $doctor->save();
+        $patient->save();
 
         // Update the corresponding user record
-        $user = User::where('staff_id', $doctor->staff_id)->first();
+        $user = User::where('ic', $patient->ic)->first();
         if ($user) {
             $user->name = $request->input('name');
             $user->email = $request->input('email');
@@ -113,25 +121,24 @@ class NurseController extends Controller
             $user->save();
         }
 
-        return redirect('/admin/doctorList')->with('success', 'Doctor has been updated');
+        return redirect('/nurse/patientList')->with('success', 'Patient has been updated');
     }
 
-    // Delete doctor
-    public function DeleteDoctor($id) 
+    // Delete patient
+    public function DeletePatient($id)
     {
-        $doctor = Doctor::findOrFail($id);
-        $staffId = $doctor->staff_id;
+        $patient = Patient::findOrFail($id);
+        $ic = $patient->ic;
 
-        $doctor->delete();
-        
+        $patient->delete();
+
         DB::statement('SET @counter = 0;');
-        DB::statement('UPDATE doctor SET id = @counter:=@counter+1;');
-       
-        // Delete the corresponding user record
-        User::where('staff_id', $staffId)->delete();
-        //return back()->with('success', 'Doctor has been successfully deleted');
+        DB::statement('UPDATE patient SET id = @counter:=@counter+1;');
 
-        return redirect('/admin/doctorList')->with('success', 'Doctor has been deleted');
+        // Delete the corresponding user record
+        User::where('ic', $ic)->delete();
+
+        return redirect('/nurse/patientList')->with('success', 'Patient has been deleted');
     }
 
     /////// MEDICINE ///////////////
