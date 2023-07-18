@@ -227,7 +227,11 @@
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Status :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="status" id="status" value="{{ $appointment->status }}">
+                        
+                        <select style="width:350px;" class="form-control" name="status" id="status">
+                                    <option value="0" {{ $appointment->status === '0' ? 'selected' : '' }}>Not Available</option>
+                                    <option value="1" {{ $appointment->status === '1' ? 'selected' : '' }}>Available</option>
+                                </select>
                     </div>
                         
                 </div>
