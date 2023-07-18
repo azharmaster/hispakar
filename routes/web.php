@@ -34,7 +34,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/doctorList', [AdminController::class, 'viewDoctorList']);
     Route::get('/admin/nurseList', [AdminController::class, 'viewNurseList']);
     Route::get('/admin/patientList', [AdminController::class, 'viewPatientList']);
-    Route::get('/admin/roomsList', [AdminController::class, 'viewRoomList']);
+    Route::get('/admin/roomList', [AdminController::class, 'viewRoomList']);
     Route::get('/admin/appointmentList', [AdminController::class, 'viewAppointmentList']);
     Route::get('/admin/departmentList', [AdminController::class, 'viewDepartmentList']);
 
@@ -55,9 +55,9 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
 
 
     //Manage Room
-    Route::post('/admin/roomsList', [AdminController::class, 'AddRooms']);
-    Route::post('/admin/roomsList/{id}', [AdminController::class, 'EditRooms']);
-    Route::delete('/admin/roomsList/{id}', [AdminController::class, 'deleteRooms'])->name('deleteRooms');
+    Route::post('/admin/roomList', [AdminController::class, 'AddRooms']);
+    Route::post('/admin/roomList/{id}', [AdminController::class, 'EditRooms']);
+    Route::delete('/admin/roomList/{id}', [AdminController::class, 'deleteRooms'])->name('deleteRooms');
 
      //Manage Appoiment
      Route::post('/admin/appointmentList', [AdminController::class, 'AddAppointment']);
