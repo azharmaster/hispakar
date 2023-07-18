@@ -121,7 +121,7 @@
                 </button>
             </div>
             <div class="modal-body">
-            <form action="/admin/roomList" class="form-horizontal row-fluid" method="POST" >
+            <form action="/admin/roomsList" class="form-horizontal row-fluid" method="POST" >
             {{csrf_field()}}
 
                 <div class="container-fluid">
@@ -167,7 +167,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="/admin/roomList/{{ $room->id }}" class="form-horizontal row-fluid" method="POST" >
+            <form action="/admin/roomsList/{{ $room->id }}" class="form-horizontal row-fluid" method="POST" >
             {{csrf_field()}}
             <div class="modal-body">
                 <div class="container-fluid">
@@ -227,7 +227,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
-                    <form action="/admin/roomList/{{ $room->id }}" method="POST" style="display: inline">
+                    <form action="/admin/roomsList/{{ $room->id }}" method="POST" style="display: inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger waves-effect waves-light">Delete</button>
