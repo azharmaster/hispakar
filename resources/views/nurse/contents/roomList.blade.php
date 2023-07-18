@@ -79,7 +79,7 @@
                                                     @if ( $room->status == 1)
                                                         <td>Available</td> <!-- available -->
                                                     @else
-                                                        <td>Occupied</td> <!-- diguna / penuh -->
+                                                        <td>Not available</td>
                                                     @endif
 
                                                     <td>
