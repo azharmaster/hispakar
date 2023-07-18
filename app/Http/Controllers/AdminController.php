@@ -47,8 +47,8 @@ class AdminController extends Controller
 
     public function viewRoomList()
     {
-
         $rooms = Room::all();
+
         return view('admin.contents.roomsList', compact('rooms'));
     }
 
@@ -73,7 +73,7 @@ class AdminController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->usertype = $request->usertype;
-        $user->staff_id = $request->staff_id;
+        $user->ic = $request->ic;
         $user->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
         $user->save();
@@ -102,6 +102,7 @@ class AdminController extends Controller
     {
         $doctor = Doctor::find($id);
         $doctor->name = $request->input('name');
+        $doctor->ic = $request->input('ic');
         $doctor->gender = $request->input('gender');
         $doctor->dob = $request->input('dob');
         $doctor->email = $request->input('email');
@@ -114,7 +115,7 @@ class AdminController extends Controller
         $doctor->save();
 
         // Update the corresponding user record
-        $user = User::where('staff_id', $doctor->staff_id)->first();
+        $user = User::where('ic', $doctor->ic)->first();
         if ($user) {
             $user->name = $request->input('name');
             $user->email = $request->input('email');
@@ -128,7 +129,7 @@ class AdminController extends Controller
     public function deleteDoctor($id)
     {
         $doctor = Doctor::findOrFail($id);
-        $staffId = $doctor->staff_id;
+        $ic = $doctor->ic;
 
         $doctor->delete();
         
@@ -136,7 +137,7 @@ class AdminController extends Controller
         DB::statement('UPDATE doctor SET id = @counter:=@counter+1;');
        
         // Delete the corresponding user record
-        User::where('staff_id', $staffId)->delete();
+        User::where('ic', $ic)->delete();
         //return back()->with('success', 'Doctor has been successfully deleted');
 
         return redirect('/admin/doctorList')->with('success', 'Doctor has been deleted');
@@ -151,7 +152,7 @@ class AdminController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->usertype = $request->usertype;
-        $user->staff_id = $request->staff_id;
+        $user->ic = $request->ic;
         $user->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
         $user->save();
@@ -179,6 +180,7 @@ class AdminController extends Controller
     {
         $nurse = Nurse::find($id);
         $nurse->staff_id = $request->input('staff_id');
+        $nurse->ic = $request->input('ic');
         $nurse->name = $request->input('name');
         $nurse->gender = $request->input('gender');
         $nurse->dob = $request->input('dob');
@@ -191,7 +193,7 @@ class AdminController extends Controller
         $nurse->save();
 
          // Update the corresponding user record
-         $user = User::where('staff_id', $nurse->staff_id)->first();
+         $user = User::where('ic', $nurse->ic)->first();
          if ($user) {
              $user->name = $request->input('name');
              $user->email = $request->input('email');
@@ -205,7 +207,7 @@ class AdminController extends Controller
     public function deleteNurse($id)
     {
         $nurse = Nurse::findOrFail($id);
-        $staffId = $nurse->staff_id;
+        $ic = $nurse->ic;
 
         $nurse->delete();
 
@@ -213,7 +215,7 @@ class AdminController extends Controller
         DB::statement('UPDATE nurse SET id = @counter:=@counter+1;');
 
         // Delete the corresponding user record
-        User::where('staff_id', $staffId)->delete();
+        User::where('ic', $ic)->delete();
 
         return redirect('/admin/nurseList')->with('success', 'Nurse has been deleted');
     }
@@ -227,7 +229,7 @@ class AdminController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->usertype = $request->usertype;
-        $user->staff_id = $request->ic;
+        $user->ic = $request->ic;
         $user->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
         $user->save();
@@ -271,7 +273,7 @@ class AdminController extends Controller
         $patient->save();
 
         // Update the corresponding user record
-        $user = User::where('staff_id', $patient->ic)->first();
+        $user = User::where('ic', $patient->ic)->first();
         if ($user) {
             $user->name = $request->input('name');
             $user->email = $request->input('email');
@@ -285,7 +287,7 @@ class AdminController extends Controller
     public function deletePatient($id)
     {
         $patient = Patient::findOrFail($id);
-        $staffId = $patient->ic;
+        $ic = $patient->ic;
 
         $patient->delete();
 
@@ -293,7 +295,7 @@ class AdminController extends Controller
         DB::statement('UPDATE patient SET id = @counter:=@counter+1;');
 
         // Delete the corresponding user record
-        User::where('staff_id', $staffId)->delete();
+        User::where('ic', $ic)->delete();
 
         return redirect('/admin/patientList')->with('success', 'Patient has been deleted');
     }

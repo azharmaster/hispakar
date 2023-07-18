@@ -16,7 +16,7 @@
                     <div class="page-header-title">
                         <i class="fas fa-solid fa-user-nurse bg-c-blue"></i>
                         <div class="d-inline">
-                            <h5 id="tableTitle">Nurses</h5>
+                            <h5>Nurses</h5>
                             <span>Below is the list of all nurses.</span>
                         </div>
                     </div>

@@ -109,57 +109,76 @@
 </div>
 <!-- end content -->
 
-<!-- Add Patient form -->
-<div class="modal fade" id="default-Modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Patient</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" placeholder="ABC1234">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="John Doe">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" id="gender">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" placeholder="New York">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" placeholder="0134567891">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" placeholder="johndoe@gmail.com">
-                    </div>
-                        
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light">Submit</button>
-                    
-            </div>
+<!-- Add Appointment form -->
+<div class="modal fade" id="viewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">View Appointment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id" class="input-group-addon" style="font-weight:bold;">IC Number :</label>
+                    <input type="text" class="form-control" name="id" id="id" value="490912-05-1856">
+                </div>
+                <div class="form-group">
+                    <label for="name" class="input-group-addon" style="font-weight:bold;">Name :</label>
+                    <input type="text" class="form-control" name="name" id="name" value="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="gender" class="input-group-addon" style="font-weight:bold;">Gender:</label>
+                    <select class="form-control" name="gender" id="gender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="address" class="input-group-addon" style="font-weight:bold;">Address :</label>
+                    <input type="text" class="form-control" name="address" id="address" value="Malaysia">
+                </div>
+                <div class="form-group">
+                    <label for="contact" class="input-group-addon" style="font-weight:bold;">Contact :</label>
+                    <input type="text" class="form-control" name="contact" id="contact" value="0199237856">
+                </div>  
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                    <label for="desc" class="input-group-addon" style="font-weight:bold;">Description :</label>
+                    <input type="text" class="form-control" name="desc" id="desc" value="Fever">
+                </div>
+                <div class="form-group">
+                    <label for="doctor" class="input-group-addon" style="font-weight:bold;">Doctor In-Charge:</label>
+                    <input type="text" class="form-control" name="doctor" id="doctor" value="Dr. Nik Ahmad">
+                </div>
+                <div class="form-group">
+                    <label for="date" class="input-group-addon" style="font-weight:bold;">Appointment Date & Time :</label>
+                    <input type="datetime-local" class="form-control" name="date" id="date">
+                </div>
+                <div class="form-group">
+                    <label for="location" class="input-group-addon" style="font-weight:bold;">Location :</label>
+                    <input type="text" class="form-control" name="location" id="location" value="Room 1">
+                </div>
+                <div class="form-group">
+                    <label for="location" class="input-group-addon" style="font-weight:bold;">Level :</label>
+                    <input type="text" class="form-control" name="location" id="location" value="Level 2">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
-</div>
-<!-- end Add Patient form -->
+  </div>
+  <!-- end add Appointment form -->
 
 <!-- Edit Patient form -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog">

@@ -17,7 +17,7 @@
                     <i class="fas fa-regular fa-user bg-c-blue"></i>
                     <!-- <i class="feather icon-home bg-c-blue"></i> -->
                     <div class="d-inline">
-                        <h5 id="tableTitle">Patients</h5>
+                        <h5>Patients</h5>
                         <span>Below is the list of all patients.</span>
                     </div>
                 </div>
@@ -154,11 +154,11 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Weight :</label>
-                            <input type="float" class="form-control" name="weight" id="contact" placeholder="1.65">
+                            <input type="float" class="form-control" name="weight" id="contact" placeholder="47.5">
                         </div> 
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Height :</label>
-                            <input type="float" class="form-control" name="height" id="contact" placeholder="47.5">
+                            <input type="float" class="form-control" name="height" id="contact" placeholder="1.77">
                         </div> 
 
                         <div class="form-group">
