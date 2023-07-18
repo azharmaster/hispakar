@@ -56,7 +56,7 @@
                         <span class="pcoded-mtext">Department</span>
                     </a>
                 </li>
-
+<br>
                 <li class="">
                     <a href="/admin/appointmentList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
@@ -65,17 +65,9 @@
                         <span class="pcoded-mtext">Appointments</span>
                     </a>
                 </li>
-<<<<<<< Updated upstream
-                <li class="">
-                    <a href="/admin/departmentList" class="waves-effect waves-dark">
-                        <span class="pcoded-micon">
-                            <i class="fas fa-solid fa-calendar-check"></i>
-                        </span>
-                        <span class="pcoded-mtext">Department</span>
-                    </a>
-                </li>
+                
 
-                <br>
+                
 
                 <li class="">
                     <a href="{{ route('logout') }}" class="waves-effect waves-dark" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -88,9 +80,6 @@
                         @csrf
                     </form>
                 </li>  
-=======
-                
->>>>>>> Stashed changes
             </ul>
         </div>
     </div>
