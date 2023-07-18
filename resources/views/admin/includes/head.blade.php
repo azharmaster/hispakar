@@ -45,3 +45,9 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('files/assets/css/pages-1.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('files/assets/css/print.css') }}">
 
+<style>
+    #dataTable1 td {
+        white-space: normal;
+        word-wrap: break-word;
+    }
+</style>
