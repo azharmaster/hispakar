@@ -32,4 +32,9 @@ class Appointments extends Model
     {
         return $this->belongsTo(Doctor::class, 'docid','id');
     }
+
+    // public function department()
+    // {
+    //     return $this->belongsTo(Doctor::class, 'deptid','id');
+    // }
 }

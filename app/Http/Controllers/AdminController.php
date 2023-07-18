@@ -57,7 +57,8 @@ class AdminController extends Controller
 
         $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name')
+        ->join('department', 'appointment.deptid', '=', 'department.id')
+        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
         ->get();
 
         return view('admin.contents.appointmentList', compact('appointments'));

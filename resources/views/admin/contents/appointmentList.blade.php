@@ -64,6 +64,7 @@
                                                     <th>#</th>
                                                     <th>Doctor Name</th>
                                                     <th>Patient Name</th>
+                                                    <th>Dept Name</th>
                                                     <th>Date-Time</th>
                                                     <th>Description</th>
                                                     <th style="width: 80px;">Action</th>
@@ -80,6 +81,7 @@
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $appointment->doctor_name }}</td>
                                                             <td>{{ $appointment->patient_name }}</td>
+                                                            <td>{{ $appointment->dept_name }}</td>
                                                             <td>{{ $appointment->date }} {{ $appointment->time }}</td>
                                                             <td>{{ $appointment->status }}</td>
                                                              <td>
