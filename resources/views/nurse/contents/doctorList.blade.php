@@ -93,6 +93,4 @@
 </div>
     <div id="styleSelector"></div>
 
-@include('nurse.includes.dtScripts')
-
 @endsection

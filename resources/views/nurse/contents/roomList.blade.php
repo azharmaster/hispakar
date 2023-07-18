@@ -113,6 +113,4 @@
 
 @include('dup.roomModal')
 
-@include('nurse.includes.dtScripts')
-
 @endsection

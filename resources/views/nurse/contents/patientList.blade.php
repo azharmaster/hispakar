@@ -113,6 +113,4 @@
 
 @include('dup.patientModal')
 
-@include('nurse.includes.dtScripts')
-
 @endsection

@@ -28,8 +28,8 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Status :</span>
                         <select style="width:350px;" class="form-control" name="status" id="status" required>
-                            <option value="1">Available</option> <!-- available -->
-                            <option value="0">Occupied</option> <!-- diguna / penuh -->
+                            <option value="1">Available</option>
+                            <option value="0">Not available</option> 
                         </select>
                     </div>
                 </div>
@@ -74,12 +74,12 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Status :</span>
                         <select style="width:350px;" class="form-control" name="status" id="status">
-                            <option value="{{ $room->status }}">{{ $room->status == 0 ? 'Not Available' : 'Occupied' }}</option>
+                            <option value="{{ $room->status }}">{{ $room->status }}--{{ $room->status == 0 ? 'Not Available' : 'Not available' }}</option>
 
-                            @if( $room->status == '0')
+                            @if( $room->status == '1')
                                 <option value="1">Available</option> 
                             @else
-                                <option value="0">Occupied</option> <!-- diguna / penuh -->
+                                <option value="0">Not available</option> <!-- diguna / penuh -->
                             @endif
 
                         </select>

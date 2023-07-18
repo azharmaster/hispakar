@@ -108,8 +108,5 @@
 
 @include('dup.medicineModal')
 
-@include('nurse.includes.dtScripts')
-
-
 @endsection
 

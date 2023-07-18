@@ -227,7 +227,5 @@
 </div>
 <!-- end delete Patient form -->
 
-@include('nurse.includes.dtScripts')
-
 @endsection
 
