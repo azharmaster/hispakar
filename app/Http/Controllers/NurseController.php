@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\Doctor; 
 use App\Models\Medicine; 
+use App\Models\Room; 
+use App\Models\Department; 
+use App\Models\Patient; 
 
 class NurseController extends Controller
 {
@@ -18,19 +21,24 @@ class NurseController extends Controller
 
     public function viewDoctorList()
     {
-        $doctors = Doctor::all(); // Retrieve all doctors from the database
+        $doctors = Doctor::all();
+        $departments = Department::all();
 
-        return view('nurse.contents.doctorList', compact('doctors'));
+        return view('nurse.contents.doctorList', compact('doctors', 'departments'));
     }
 
     public function viewPatientList()
     {
-        return view('nurse.contents.patientList');
+        $patients = Patient::all();
+
+        return view('nurse.contents.patientList', compact('patients'));
     }
 
     public function viewRoomList()
     {
-        return view('nurse.contents.roomsList');
+        $rooms = Room::all(); // Retrieve all rooms from the database
+
+        return view('nurse.contents.roomList', compact('rooms'));
     }
 
     public function viewAppointmentList()
@@ -45,9 +53,90 @@ class NurseController extends Controller
         return view('nurse.contents.medicineList', compact('medicines'));
     }
 
-    // Manage medicine functions in nurse
-    // Add medicine
-    public function AddMedicine(Request $request)
+    //////// DOCTOR ////////// 
+
+    public function AddDoctor(Request $request) // Add doctor
+    {
+        //create new user record
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->usertype = $request->usertype;
+        $user->staff_id = $request->staff_id;
+        $user->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+
+        $user->save();
+
+        //insert data into doctor table
+        $doctor = new Doctor();
+        $doctor->staff_id = $request->staff_id;
+        $doctor->ic = $request->ic;
+        $doctor->name = $request->name;
+        $doctor->gender = $request->gender;
+        $doctor->dob = $request->dob;
+        $doctor->email = $request->email;
+        $doctor->password = Hash::make($request->password);
+        $doctor->phoneno = $request->phoneno;
+        $doctor->specialization = $request->specialization;
+        $doctor->deptid = $request->deptid;
+        $doctor->usertype = $request->usertype;
+        $doctor->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+
+        $doctor->save();
+
+        return redirect('/admin/doctorList')->with('success', 'New doctor has been successfully added');
+    }
+
+    // Edit doctor
+    public function EditDoctor(Request $request, $id) 
+    {
+        $doctor = Doctor::find($id);
+        $doctor->name = $request->input('name');
+        $doctor->gender = $request->input('gender');
+        $doctor->dob = $request->input('dob');
+        $doctor->email = $request->input('email');
+        $doctor->phoneno = $request->input('phoneno');
+        $doctor->specialization = $request->input('specialization');
+        $doctor->deptid = $request->input('deptid');  
+        
+        $doctor->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+
+        $doctor->save();
+
+        // Update the corresponding user record
+        $user = User::where('staff_id', $doctor->staff_id)->first();
+        if ($user) {
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            $user->save();
+        }
+
+        return redirect('/admin/doctorList')->with('success', 'Doctor has been updated');
+    }
+
+    // Delete doctor
+    public function DeleteDoctor($id) 
+    {
+        $doctor = Doctor::findOrFail($id);
+        $staffId = $doctor->staff_id;
+
+        $doctor->delete();
+        
+        DB::statement('SET @counter = 0;');
+        DB::statement('UPDATE doctor SET id = @counter:=@counter+1;');
+       
+        // Delete the corresponding user record
+        User::where('staff_id', $staffId)->delete();
+        //return back()->with('success', 'Doctor has been successfully deleted');
+
+        return redirect('/admin/doctorList')->with('success', 'Doctor has been deleted');
+    }
+
+    /////// MEDICINE ///////////////
+    
+    public function AddMedicine(Request $request) // Add medicine
     {
         //create new medicine record
         $medicine = new Medicine();
@@ -85,7 +174,51 @@ class NurseController extends Controller
 
         return redirect('/nurse/medicineList')->with('success', 'Medicine has been deleted');
     }
-    // End manage medicine
+    
+    /////// ROOM ///////////////
+
+    public function AddRoom(Request $request) // Add room
+    {
+     
+        //insert data into room table
+        $room = new Room();
+        $room->name = $request->name;
+        $room->type = $request->type;
+        $room->desc = $request->desc;
+        $room->status = $request->status;
+        $room->save();
+
+        return redirect('/nurse/roomList')->with('success', 'New Rooms has been successfully added');
+    }
+
+    // Edit room
+    public function EditRoom(Request $request, $id)
+    {
+        $room = Room::find($id);
+        
+        $room->name = $request->input('name');
+        $room->type = $request->input('type');
+        $room->desc = $request->input('desc'); 
+        $room->status = $request->input('status');
+        $room->save();
+
+        return redirect('/nurse/roomList')->with('success', 'Room has been updated');
+    }
+
+    // Delete room
+    public function DeleteRoom($id)
+    {
+        $room = Room::findOrFail($id);
+
+
+        $room->delete();
+
+        DB::statement('SET @counter = 0;');
+        DB::statement('UPDATE room SET id = @counter:=@counter+1;');
+
+
+        return redirect('/nurse/roomList')->with('success', 'Room has been deleted');
+    }
     
 
 
