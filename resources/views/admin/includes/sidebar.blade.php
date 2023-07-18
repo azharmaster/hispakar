@@ -40,7 +40,7 @@
                 </li>
 
                 <li class="">
-                    <a href="/admin/roomsList" class="waves-effect waves-dark">
+                    <a href="/admin/roomList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-solid fa-home"></i>
                         </span>

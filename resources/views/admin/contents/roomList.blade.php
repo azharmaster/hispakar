@@ -26,7 +26,7 @@
                         <li class="breadcrumb-item">
                             <a href="../admin/index.php"><i class="feather icon-home"></i></a>
                         </li>
-                        <li class="breadcrumb-item"><a href="../admin/roomsList.php">Rooms</a> </li>
+                        <li class="breadcrumb-item"><a href="../admin/roomList.php">Rooms</a> </li>
                     </ul>
                 </div>
             </div>

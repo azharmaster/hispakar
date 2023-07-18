@@ -56,7 +56,7 @@ class AdminController extends Controller
     {
         $rooms = Room::all();
 
-        return view('admin.contents.roomsList', compact('rooms'));
+        return view('admin.contents.roomList', compact('rooms'));
     }
 
     public function viewAppointmentList()
@@ -326,7 +326,7 @@ class AdminController extends Controller
         $room->status = $request->status;
         $room->save();
 
-        return redirect('/admin/roomsList')->with('success', 'New Rooms has been successfully added');
+        return redirect('/admin/roomList')->with('success', 'New Rooms has been successfully added');
     }
 
     public function EditRooms(Request $request, $id)
@@ -339,7 +339,7 @@ class AdminController extends Controller
         $room->status = $request->input('status');
         $room->save();
 
-        return redirect('/admin/roomsList')->with('success', 'Room has been updated');
+        return redirect('/admin/roomList')->with('success', 'Room has been updated');
     }
 
     public function deleteRooms($id)
@@ -353,7 +353,7 @@ class AdminController extends Controller
         DB::statement('UPDATE room SET id = @counter:=@counter+1;');
 
 
-        return redirect('/admin/roomsList')->with('success', 'Room has been deleted');
+        return redirect('/admin/roomList')->with('success', 'Room has been deleted');
     }
 
 
