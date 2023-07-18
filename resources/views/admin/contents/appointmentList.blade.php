@@ -66,7 +66,7 @@
                                                     <th>Patient Name</th>
                                                     <th>Dept Name</th>
                                                     <th>Date-Time</th>
-                                                    <th>Description</th>
+                                                    <th>Status</th>
                                                     <th style="width: 80px;">Action</th>
                                                 </tr>
                                             </thead>
@@ -83,12 +83,14 @@
                                                             <td>{{ $appointment->patient_name }}</td>
                                                             <td>{{ $appointment->dept_name }}</td>
                                                             <td>{{ $appointment->date }} {{ $appointment->time }}</td>
-                                                            <td>{{ $appointment->status }}</td>
+                                                            <td>
+                                                            @if ($appointment->status === 0) Cancel @else Confirm @endif
+                                                            </td>
                                                              <td>
                                                              <a title="Edit Appointment" data-toggle="modal" data-target="#editModal-{{ $appointment->id }}">
                                                                     <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                 </a>
-                                                                <a href="/admin/appointmentList/{{ $appointment->id }}" title="Delete Room" data-target="#deleteModal-{{ $appointment->id }}" data-toggle="modal">
+                                                                <a href="/admin/appointmentList/{{ $appointment->id }}" title="Delete Appointment" data-target="#deleteModal-{{ $appointment->id }}" data-toggle="modal">
                                                                     <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>
                                                                 </a>
                                                             </td>
@@ -167,8 +169,8 @@
                         <span class="input-group-addon" style="width:150px;">Status :</span>
                         <select style="width:350px;" class="form-control" name="status" id="status">
                             <option value="">Status</option>
-                            <option value="0">Not Available</option>
-                            <option value="1">Available</option>
+                            <option value="0">Cancel</option>
+                            <option value="1">Confirm</option>
                         </select>
                         
                     </div>
@@ -207,15 +209,32 @@
 
                 <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Patient ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="patientid" id="patientid" value="{{ $appointment->patientid }}">
+                        <select style="width:350px;" class="form-control" name="patientid">
+                        <option>Select Patient</option>
+                        @foreach ($patients as $patient)
+                            <option value="{{ $patient->id }}" {{ ( $patient->id == $appointment->patientid) ? 'selected' : '' }}> {{ $patient->name }} </option>
+                        @endforeach   
+                     </select>
+                        
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Doctor ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="docid" id="docid" value="{{ $appointment->docid }}">
+                        <select style="width:350px;" class="form-control" name="docid">
+                        <option>Select Doctor</option>
+                        @foreach ($doctors as $doctor)
+                            <option value="{{ $doctor->id }}" {{ ( $doctor->id == $appointment->docid) ? 'selected' : '' }}> {{ $doctor->name }} </option>
+                        @endforeach   
+                     </select>
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Department ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="deptid" id="deptid" value="{{ $appointment->deptid }}">
+                       
+                        <select style="width:350px;" class="form-control" name="deptid">
+                        <option>Select Department</option>
+                        @foreach ($departments as $department)
+                            <option value="{{ $department->id }}" {{ ( $department->id == $appointment->deptid) ? 'selected' : '' }}> {{ $department->name }} </option>
+                        @endforeach   
+                     </select>
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Date :</span>
@@ -227,11 +246,11 @@
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Status :</span>
-                        
-                        <select style="width:350px;" class="form-control" name="status" id="status">
-                                    <option value="0" {{ $appointment->status === '0' ? 'selected' : '' }}>Not Available</option>
-                                    <option value="1" {{ $appointment->status === '1' ? 'selected' : '' }}>Available</option>
-                                </select>
+                         <select style="width:350px;" class="form-control" name="status">
+                            <option value="{{ $appointment->status }}" selected> @if ($appointment->status == 0) Cancel @else Confirm @endif </option>
+                            <option value="0">Cancel</option>
+                            <option value="1">Confirm</option>
+                        </select>
                     </div>
                         
                 </div>
