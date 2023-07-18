@@ -1,3 +1,18 @@
+@php
+    $user = '';
+    $userType = Auth::user()->usertype;
+
+    if ($userType == 1) {
+        $user = 'admin';
+    } elseif ($userType == 2) {
+        $user = 'doctor';
+    } elseif ($userType == 3) {
+        $user = 'nurse';
+    } elseif ($userType == 4) {
+        $user = 'patient';
+    }
+@endphp
+
 <!-- Add Patient Modal -->
 <div class="modal fade" id="addModal-patient" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -9,7 +24,7 @@
                 </button>
             </div>
 
-            <form action="/nurse/patientList" class="form-horizontal row-fluid" method="POST" >
+            <form action="/{{ $user }}/patientList" class="form-horizontal row-fluid" method="POST" >
               {{csrf_field()}}
             <div class="modal-body">
             <div class="container-fluid">
@@ -109,7 +124,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="/nurse/patientList/{{ $patient->id }}" method="POST">
+            <form action="/{{ $user }}/patientList/{{ $patient->id }}" method="POST">
              @csrf
             <div class="modal-body">
                 <div class="container-fluid">
@@ -206,7 +221,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <form action="/nurse/patientList/{{ $patient->id }}" method="POST" style="display: inline">
+                <form action="/{{ $user }}/patientList/{{ $patient->id }}" method="POST" style="display: inline">
                     @csrf
                     @method('DELETE')
                     <button name="submit" class="btn btn-danger waves-effect waves-light">Delete</button>
