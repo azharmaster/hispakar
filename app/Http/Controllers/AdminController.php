@@ -22,6 +22,13 @@ class AdminController extends Controller
         return view('admin.contents.dashboard');
     }
 
+    public function viewDepartmentList()
+    {
+        $departments = Department::all();
+
+        return view('admin.contents.departmentList', compact('departments'));
+    }
+
     public function viewDoctorList()
     {
         $doctors = Doctor::all();
@@ -61,7 +68,11 @@ class AdminController extends Controller
         ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
         ->get();
 
-        return view('admin.contents.appointmentList', compact('appointments'));
+        $doctors = Doctor::all();
+        $patients = Patient::all();
+        $departments = Department::all();
+
+        return view('admin.contents.appointmentList', compact('appointments','doctors','patients','departments'));
     }
 
     // Manage Doctor
@@ -394,5 +405,44 @@ class AdminController extends Controller
 
         return redirect('/admin/appointmentList')->with('success', 'Appointment has been deleted');
     }
+
+      /////////////////////////////////DEPARTMENT//////////////////////////////////////////////////////////////////
+
+      public function AddDepartment(Request $request)
+      {
+       
+          //insert data into nurse table
+          $dept = new Department();
+          $dept->name = $request->name;
+          $dept->desc = $request->desc;
+          $dept->save();
+  
+          return redirect('/admin/departmentList')->with('success', 'New department has been successfully added');
+      }
+  
+      public function EditDepartment(Request $request, $id)
+      {
+          $dept = Department::find($id);
+          
+          $dept->name = $request->input('name');
+          $dept->desc = $request->input('desc'); 
+          $dept->save();
+  
+          return redirect('/admin/departmentList')->with('success', 'Department has been updated');
+      }
+  
+      public function deleteDepartment($id)
+      {
+          $dept = Department::findOrFail($id);
+  
+  
+          $dept->delete();
+  
+          DB::statement('SET @counter = 0;');
+          DB::statement('UPDATE department SET id = @counter:=@counter+1;');
+  
+  
+          return redirect('/admin/departmentList')->with('success', 'Department has been deleted');
+      }
 
 }

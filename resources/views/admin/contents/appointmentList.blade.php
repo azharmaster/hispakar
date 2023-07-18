@@ -128,16 +128,32 @@
                 <div class="container-fluid">
                    
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Patient ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="patientid" id="patientid" placeholder="">
+                        <span class="input-group-addon" style="width:150px;">Patient :</span>
+                        <select class="form-control" style="width:350px;" name="patientid">
+                        <option value="">Choose Patient</option>
+                                @foreach ($patients as $patient)
+                                    <option value="{{ $patient->id }}">{{ $patient->name }}</option>
+                                @endforeach
+                            </select>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Doctor ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="docid" id="docid" placeholder="">
+                        <span class="input-group-addon" style="width:150px;">Doctor :</span>
+                        <select class="form-control" style="width:350px;" name="docid">
+                        <option value="">Choose Doctor</option>
+                                @foreach ($doctors as $doctor)
+                                    <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                @endforeach
+                            </select>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Department ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="deptid" id="deptid" placeholder="">
+                        <span class="input-group-addon" style="width:150px;">Department :</span>
+                       
+                        <select class="form-control" style="width:350px;" name="deptid">
+                            <option value="">Choose Department</option>
+                                @foreach ($departments as $department)
+                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                @endforeach
+                            </select>
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Date :</span>
@@ -149,7 +165,12 @@
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Status :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="status" id="status" placeholder="">
+                        <select style="width:350px;" class="form-control" name="status" id="status">
+                            <option value="">Status</option>
+                            <option value="0">Not Available</option>
+                            <option value="1">Available</option>
+                        </select>
+                        
                     </div>
                     
                         
