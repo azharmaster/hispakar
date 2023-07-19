@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\NurseController;
 use App\Http\Controllers\PatientController;
+use App\Models\Patient;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -64,7 +65,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
      Route::post('/admin/appointmentList/{id}', [AdminController::class, 'EditAppointment']);
      Route::delete('/admin/appointmentList/{id}', [AdminController::class, 'deleteAppointment'])->name('deleteAppointment');
 
-    //Manage Appoiment
+    //Manage Department
     Route::post('/admin/departmentList', [AdminController::class, 'AddDepartment']);
     Route::post('/admin/departmentList/{id}', [AdminController::class, 'EditDepartment']);
     Route::delete('/admin/departmentList/{id}', [AdminController::class, 'deleteDepartment'])->name('deleteDepartment'); 
@@ -112,11 +113,17 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::delete('/nurse/medicineList/{id}', [NurseController::class, 'DeleteMedicine'])->name('DeleteMedicine');
 });
 
-//Patient
-Route::group(['prefix'=>'patient', 'middleware'=>['isPatient', 'auth']], function(){
-    Route::get('/dashboard', [PatientController::class, 'index'])->name('patient.contents.dashboard');
-    Route::get('/appointmentList', [PatientController::class, 'viewAppointmentList']);
-    Route::get('/reportList', [PatientController::class, 'viewMedicineList']);
+    //Patient
+    Route::group(['middleware'=>['isPatient', 'auth']], function(){
+    Route::get('patient/dashboard', [PatientController::class, 'index'])->name('patient.contents.dashboard');
+    Route::get('patient/appointmentList', [PatientController::class, 'viewAppointmentList']);
+    Route::get('patient/reportList', [PatientController::class, 'viewMedicineList']);
+
+    //Manage Appoiment
+    Route::post('/patient/appointmentList', [PatientController::class, 'AddAppointment']);
+    Route::post('/patient/appointmentList/{id}', [PatientController::class, 'EditAppointment']);
+    Route::delete('/patient/appointmentList/{id}', [PatientController::class, 'deleteAppointment'])->name('deleteAppointment');
+    
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('patient.contents.dashboard');
