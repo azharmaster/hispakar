@@ -62,7 +62,7 @@ class PatientController extends Controller
         $appointment->deptid = $request->deptid;
         $appointment->date = $request->date;
         $appointment->time = $request->time;
-        $appointment->status = $request->status;
+        $appointment->status = 0;
         $appointment->save();
 
         return redirect('/patient/appointmentList')->with('success', 'New Appointment has been successfully added');

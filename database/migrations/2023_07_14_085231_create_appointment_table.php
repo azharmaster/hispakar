@@ -26,7 +26,7 @@ class CreateAppointmentTable extends Migration
             $table->integer('deptid')->nullable();
             $table->date('date')->nullable();
             $table->time('time')->nullable();
-            $table->integer('status')->nullable()->comment('0: cancel, 1: confirm');
+            $table->integer('status')->nullable()->comment('0: pending, 1: confirm, 2: cancel' );
             $table->timestamps();
         });
 

@@ -84,7 +84,11 @@
                                                             <td>{{ $appointment->dept_name }}</td>
                                                             <td>{{ $appointment->date }} {{ $appointment->time }}</td>
                                                             <td>
-                                                            @if ($appointment->status === 0) Cancel @else Confirm @endif
+                                                            @if ($appointment->status === 0) Pending
+                                                            @elseif ($appointment->status === 1) Confirm
+                                                            @elseif ($appointment->status === 2) Reject
+                                                            @else cancel  
+                                                            @endif
                                                             </td>
                                                              <td>
                                                              <a title="Edit Appointment" data-toggle="modal" data-target="#editModal-{{ $appointment->id }}">
@@ -159,15 +163,7 @@
                         <span class="input-group-addon" style="width:150px;">Time :</span>
                         <input type="time" style="width:350px;" class="form-control" name="time" id="time" placeholder="">
                     </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Status :</span>
-                        <select style="width:350px;" class="form-control" name="status" id="status">
-                            <option value="">Status</option>
-                            <option value="0">Cancel</option>
-                            <option value="1">Confirm</option>
-                        </select>
-                        
-                    </div>
+                    
                     
                         
                 </div>
@@ -268,7 +264,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p style="font-size: 15px;">Are you sure you want to delete this room?</p>
+                    <p style="font-size: 15px;">Are you sure you want to delete this appointment?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
