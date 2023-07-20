@@ -18,9 +18,9 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="index.html"><i class="feather icon-home"></i></a>
+                            <a href="/doctor/dashboard"><i class="feather icon-home"></i></a>
                         </li>
-                        <li class="breadcrumb-item"><a href="#!">Dashboard</a> </li>
+                        <li class="breadcrumb-item"><a href="/doctor/dashboard">Dashboard</a> </li>
                     </ul>
                 </div>
             </div>

@@ -27,12 +27,12 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="index.html">
+                            <a href="/doctor/dashboard">
                                 <i class="feather icon-home"></i>
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="doctor.php">Medicines</a>
+                            <a href="/doctor/medicines">Medicines</a>
                         </li>
                     </ul>
                 </div>

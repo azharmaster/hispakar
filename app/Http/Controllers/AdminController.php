@@ -250,6 +250,7 @@ class AdminController extends Controller
         $patient->ic = $request->ic;
         $patient->name = $request->name;
         $patient->gender = $request->gender;
+        $patient->age = $request->age;
         $patient->phoneno = $request->phoneno;
         $patient->dob = $request->dob;
         $patient->address = $request->address;
@@ -274,6 +275,7 @@ class AdminController extends Controller
         $patient->gender = $request->input('gender');
         $patient->phoneno = $request->input('phoneno'); 
         $patient->dob = $request->input('dob');
+        $patient->age = $request->input('age'); 
         $patient->address = $request->input('address'); 
         $patient->weight = $request->input('weight');  
         $patient->height = $request->input('height'); 

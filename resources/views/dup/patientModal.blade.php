@@ -63,7 +63,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Age :</label>
-                            <input type="float" class="form-control" name="age" id="contact" placeholder="47.5">
+                            <input type="float" class="form-control" name="age" id="contact" placeholder="20">
                         </div> 
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Weight :</label>

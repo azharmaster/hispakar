@@ -96,6 +96,10 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::post('/doctor/medicines/{id}', [DoctorController::class, 'EditMedicine']);
     Route::delete('/doctor/medicines/{id}', [DoctorController::class, 'DeleteMedicine'])->name('DeleteMedicine');
 
+    //appointment record
+    Route::post('/doctor/appointmentReport/{id}', [DoctorController::class, 'AddAppointmentRecord'])->name('doctor.addAppointmentRecord');
+
+
 });
 
 //Nurse
