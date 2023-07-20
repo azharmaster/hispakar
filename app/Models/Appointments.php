@@ -37,4 +37,14 @@ class Appointments extends Model
     // {
     //     return $this->belongsTo(Doctor::class, 'deptid','id');
     // }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'deptid');
+    }
+
+    public function medrecord()
+    {
+        return $this->hasMany(MedRecord::class, 'aptid');
+    }
 }

@@ -77,6 +77,7 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::get('/doctor/dashboard', [DoctorController::class, 'index'])->name('doctor.contents.dashboard');
     Route::get('/doctor/patientList', [DoctorController::class, 'viewPatientList']);
     Route::get('/doctor/appointmentList', [DoctorController::class, 'viewAppointmentList']);
+    Route::get('/doctor/appointmentReport/{id}', [DoctorController::class, 'viewAppointmentReport']);
     Route::get('/doctor/medicines', [DoctorController::class, 'viewMedicineList']);
     Route::get('/doctor/reports', [DoctorController::class, 'viewReportList']);
 
@@ -85,6 +86,15 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::post('/doctor/patientList/{id}', [DoctorController::class, 'EditPatient']);
     Route::delete('/doctor/patientList/{id}', [DoctorController::class, 'deletePatient'])->name('deletePatient');
 
+    //Manage Appointment
+    Route::post('/doctor/appointmentList', [DoctorController::class, 'AddAppointment']);
+    Route::post('/doctor/appointmentList/{id}', [DoctorController::class, 'EditAppointment']);
+    Route::delete('/doctor/appointmentList/{id}', [DoctorController::class, 'deleteAppointment'])->name('deleteAppointment');
+
+    //Manage medicine
+    Route::post('/doctor/medicines', [DoctorController::class, 'AddMedicine']);
+    Route::post('/doctor/medicines/{id}', [DoctorController::class, 'EditMedicine']);
+    Route::delete('/doctor/medicines/{id}', [DoctorController::class, 'DeleteMedicine'])->name('DeleteMedicine');
 
 });
 
