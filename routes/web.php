@@ -117,7 +117,7 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::group(['middleware'=>['isPatient', 'auth']], function(){
     Route::get('patient/dashboard', [PatientController::class, 'index'])->name('patient.contents.dashboard');
     Route::get('patient/appointmentList', [PatientController::class, 'viewAppointmentList']);
-    Route::get('patient/reportList', [PatientController::class, 'viewMedicineList']);
+    Route::get('patient/reportList', [PatientController::class, 'viewReportList']);
 
     //Manage Appoiment
     Route::post('/patient/appointmentList', [PatientController::class, 'AddAppointment']);

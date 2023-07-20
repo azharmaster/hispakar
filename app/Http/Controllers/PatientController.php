@@ -7,6 +7,7 @@ use App\Models\Appointments;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Department;
+use App\Models\MedRecord;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +46,21 @@ class PatientController extends Controller
 
     public function viewReportList()
     {
-        return view('patient.contents.reportList');
+        $email=Auth()->user()->email; //dapatemail dr login
+
+        $medrcs = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->join('doctor', 'medrecord.docid', '=', 'doctor.id')
+        ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+        ->select('medrecord.*','doctor.name as doctor_name','medservice.type as service_type','appointment.id as aptid')
+        ->where('patient.email', $email )
+        ->get();
+
+        $doctors = Doctor::all();
+        $patients = Patient::where('email', $email)->get();
+        $departments = Department::all();
+
+        return view('patient.contents.reportList', compact('medrcs','doctors','patients','departments'));
     }
 
 
