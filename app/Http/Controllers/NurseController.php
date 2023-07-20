@@ -9,16 +9,47 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 use App\Models\Patient; 
-use App\Models\Doctor;  
+use App\Models\Doctor;
+use App\Models\Nurse; 
+use App\Models\Profile;  
 use App\Models\Medicine; 
 use App\Models\Room; 
 use App\Models\Department; 
+use App\Models\Appointments;
 
 class NurseController extends Controller
 {
     public function index()
     {
         return view('nurse.index');
+    }
+
+
+    public function viewProfile()
+    {
+        // Get the currently authenticated user
+        $user = auth()->user();
+
+        $departments = Department::all();
+
+        if ($user->usertype === 3) {
+            // Get the nurse's name from the 'nurse' table based on the email
+            $nurse = Nurse::where('email', $user->email)->first();
+
+            $department = Department::find($nurse->deptid);
+
+            return view('nurse.contents.profile', [
+                'name' => $nurse->name,
+                'ic' => $nurse->ic,
+                'email' => $nurse->email,
+                'phoneno' => $nurse->phoneno,
+                'address' => $nurse->address,
+                'gender' => $nurse->gender,
+                'dob' => $nurse->dob,
+                'department' => $department,
+            ]);
+        }
+
     }
 
     public function viewDoctorList()
@@ -43,16 +74,27 @@ class NurseController extends Controller
         return view('nurse.contents.roomList', compact('rooms'));
     }
 
-    public function viewAppointmentList()
-    {
-        return view('nurse.contents.appointmentList');
-    }
-
     public function viewMedicineList()
     {
         $medicines = Medicine::all(); // Retrieve all medicines from the database
 
         return view('nurse.contents.medicineList', compact('medicines'));
+    }
+
+    public function viewAppointmentList()
+    {
+
+        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->join('department', 'appointment.deptid', '=', 'department.id')
+        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+        ->get();
+
+        $doctors = Doctor::all();
+        $patients = Patient::all();
+        $departments = Department::all();
+
+        return view('nurse.contents.appointmentList', compact('appointments','doctors','patients','departments'));
     }
 
     /////// PATIENT ////////////////
@@ -125,7 +167,7 @@ class NurseController extends Controller
     }
 
     // Delete patient
-    public function DeletePatient($id)
+    public function deletePatient($id)
     {
         $patient = Patient::findOrFail($id);
         $ic = $patient->ic;
@@ -171,7 +213,7 @@ class NurseController extends Controller
     }
 
     // Delete medicine
-    public function DeleteMedicine($id)
+    public function deleteMedicine($id)
     {
         $medicine = Medicine::findOrFail($id);
         $medicine->delete();
@@ -213,7 +255,7 @@ class NurseController extends Controller
     }
 
     // Delete room
-    public function DeleteRoom($id)
+    public function deleteRoom($id)
     {
         $room = Room::findOrFail($id);
 
@@ -227,6 +269,55 @@ class NurseController extends Controller
         return redirect('/nurse/roomList')->with('success', 'Room has been deleted');
     }
     
+    /////////////////////////////////Appointment//////////////////////////////////////////////////////////////////
+
+
+    public function AddAppointment(Request $request)
+    {
+     
+        //insert data into nurse table
+        $appointment = new Appointments();
+        $appointment->patientid = $request->patientid;
+        $appointment->docid = $request->docid;
+        $appointment->deptid = $request->deptid;
+        $appointment->date = $request->date;
+        $appointment->time = $request->time;
+        $appointment->status = $request->status;
+        $appointment->save();
+
+        return redirect('/nurse/appointmentList')->with('success', 'New Appointment has been successfully added');
+    }
+
+    public function EditAppointment(Request $request, $id)
+    {
+        $appointment = Appointments::find($id);
+        
+        $appointment->patientid = $request->input('patientid');
+        $appointment->docid = $request->input('docid');
+        $appointment->deptid = $request->input('deptid'); 
+        $appointment->date = $request->input('date'); 
+        $appointment->time = $request->input('time'); 
+        $appointment->status = $request->input('status');
+        $appointment->save();
+
+        return redirect('/nurse/appointmentList')->with('success', 'Appointment has been updated');
+    }
+
+    
+    public function deleteAppointment($id)
+    {
+        $appointment = Appointments::findOrFail($id);
+
+
+        $appointment->delete();
+
+        DB::statement('SET @counter = 0;');
+        DB::statement('UPDATE appointment SET id = @counter:=@counter+1;');
+
+
+        return redirect('/nurse/appointmentList')->with('success', 'Appointment has been deleted');
+    }
+
 
 
 }

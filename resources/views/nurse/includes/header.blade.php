@@ -121,7 +121,7 @@
                 </a>
               </li>
               <li>
-                <a href="{{ url('admin/profile.php') }}">
+                <a href="{{ url('nurse/profile') }}">
                   <i class="feather icon-user"></i> Profile
                 </a>
               </li>

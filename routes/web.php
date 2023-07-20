@@ -100,7 +100,9 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
 
 //Nurse
 Route::group(['middleware'=>['isNurse', 'auth']], function(){
+    //Manage page in nurse
     Route::get('/nurse/dashboard', [NurseController::class, 'index'])->name('nurse.contents.dashboard');
+    Route::get('/nurse/profile', [NurseController::class, 'viewProfile'])->name('nurse.contents.profile');
     Route::get('/nurse/doctorList', [NurseController::class, 'viewDoctorList']);
     Route::get('/nurse/patientList', [NurseController::class, 'viewPatientList']);
     Route::get('/nurse/roomList', [NurseController::class, 'viewRoomList']);
@@ -110,17 +112,23 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     //Manage patient in nurse
     Route::post('/nurse/patientList', [NurseController::class, 'AddPatient']);
     Route::post('/nurse/patientList/{id}', [NurseController::class, 'EditPatient']);
-    Route::delete('/nurse/patientList/{id}', [NurseController::class, 'DeletePatient'])->name('DeletePatient');
+    Route::delete('/nurse/patientList/{id}', [NurseController::class, 'deletePatient'])->name('deletePatient');
 
     //Manage room in nurse
     Route::post('/nurse/roomList', [NurseController::class, 'AddRoom']);
     Route::post('/nurse/roomList/{id}', [NurseController::class, 'EditRoom']);
-    Route::delete('/nurse/roomList/{id}', [NurseController::class, 'DeleteRoom'])->name('DeleteRoom');
+    Route::delete('/nurse/roomList/{id}', [NurseController::class, 'deleteRoom'])->name('deleteRoom');
 
     //Manage medicine in nurse
     Route::post('/nurse/medicineList', [NurseController::class, 'AddMedicine']);
     Route::post('/nurse/medicineList/{id}', [NurseController::class, 'EditMedicine']);
-    Route::delete('/nurse/medicineList/{id}', [NurseController::class, 'DeleteMedicine'])->name('DeleteMedicine');
+    Route::delete('/nurse/medicineList/{id}', [NurseController::class, 'deleteMedicine'])->name('deleteMedicine');
+
+    //Manage Appoitment in nurse
+    Route::post('/nurse/appointmentList', [NurseController::class, 'AddAppointment']);
+    Route::post('/nurse/appointmentList/{id}', [NurseController::class, 'EditAppointment']);
+    Route::delete('/nurse/appointmentList/{id}', [NurseController::class, 'deleteAppointment'])->name('deleteAppointment');
+
 });
 
     //Patient

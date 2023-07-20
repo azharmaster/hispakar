@@ -2,7 +2,7 @@
 
 @section('content')
 
-<!-- Success aler -->
+<!-- Success alert -->
 @if(session()->has('success'))
     <script>
         alert("{{ session()->get('success') }}");
