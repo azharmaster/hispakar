@@ -40,6 +40,15 @@
                 </li>
 
                 <li class="">
+                    <a href="/admin/medicineList" class="waves-effect waves-dark">
+                        <span class="pcoded-micon">
+                        <i class="fas fa-solid fas fa-prescription-bottle"></i>
+                        </span>
+                        <span class="pcoded-mtext">Medicines</span>
+                    </a>
+                </li>
+
+                <li class="">
                     <a href="/admin/roomList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-solid fa-home"></i>
@@ -56,6 +65,7 @@
                         <span class="pcoded-mtext">Department</span>
                     </a>
                 </li>
+                
 <br>
                 <li class="">
                     <a href="/admin/appointmentList" class="waves-effect waves-dark">

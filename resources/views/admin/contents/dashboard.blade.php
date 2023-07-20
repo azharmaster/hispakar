@@ -36,13 +36,13 @@
 
                     <div class="row">
 
-                      <div class="col-md-4">
+                      <div class="col-md-3">
                         <div class="card comp-card">
                           <div class="card-body">
                             <div class="row align-items-center">
                               <div class="col">
                                 <h6 class="m-b-25">Appointments</h6>
-                                <h3 class="f-w-700 text-c-blue">1,563</h3>
+                                <h3 class="f-w-700 text-c-blue">{{$totalapt}}</h3>
                               </div>
                               <div class="col-auto">
                                 <i class="fas fa-calendar-check bg-c-blue"></i>
@@ -52,32 +52,47 @@
                         </div>
                       </div>
 
-                      <div class="col-md-4">
+                      <div class="col-md-3">
                         <div class="card comp-card">
                           <div class="card-body">
                             <div class="row align-items-center">
                               <div class="col">
                                 <h6 class="m-b-25">Doctors</h6>
-                                <h3 class="f-w-700 text-c-green">1,563</h3>
+                                <h3 class="f-w-700 text-c-green">{{$totaldoc}}</h3>
                               </div>
                               <div class="col-auto">
-                                <i class="fas fa-plus-square bg-c-green"></i>
+                                <i class="fas fa-user-md bg-c-green"></i>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      <div class="col-md-4">
+                      <div class="col-md-3">
+                        <div class="card comp-card">
+                          <div class="card-body">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                <h6 class="m-b-25">Nurse</h6>
+                                <h3 class="f-w-700 text-c-red">{{$totalnurse}}</h3>
+                              </div>
+                              <div class="col-auto">
+                                <i class="fas fa-user-nurse bg-c-red"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
                         <div class="card comp-card">
                           <div class="card-body">
                             <div class="row align-items-center">
                               <div class="col">
                                 <h6 class="m-b-25">Rooms</h6>
-                                <h3 class="f-w-700 text-c-red">1,563</h3>
+                                <h3 class="f-w-700 text-c-red">{{$totalroom}}</h3>
                               </div>
                               <div class="col-auto">
-                                <i class="fas fa-home bg-c-red"></i>
+                                <i class="fas fa-clinic-medical bg-c-red"></i>
                               </div>
                             </div>
                           </div>

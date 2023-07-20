@@ -10,6 +10,7 @@ use App\Models\Nurse;
 use App\Models\Patient;
 use App\Models\Room;
 use App\Models\User;
+use App\Models\Medicine;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,17 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.contents.dashboard');
+        // $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        // ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        // ->join('department', 'appointment.deptid', '=', 'department.id')
+        // ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+        // ->get();
+        $totalapt = Appointments::all()->count();
+        $totaldoc = Doctor::all()->count();
+        $totalnurse = Doctor::all()->count();
+        $totalroom = Room::all()->count();
+
+        return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totalnurse'));
     }
 
     public function viewDepartmentList()
@@ -73,6 +84,13 @@ class AdminController extends Controller
         $departments = Department::all();
 
         return view('admin.contents.appointmentList', compact('appointments','doctors','patients','departments'));
+    }
+
+    public function viewMedicineList()
+    {
+        $medicines = Medicine::all();
+
+        return view('admin.contents.medicineList', compact('medicines'));
     }
 
     // Manage Doctor
@@ -446,5 +464,49 @@ class AdminController extends Controller
   
           return redirect('/admin/departmentList')->with('success', 'Department has been deleted');
       }
+
+
+        /////////////////////////////////MEDICINE//////////////////////////////////////////////////////////////////
+
+        public function AddMedicine(Request $request)
+        {
+         
+            //insert data into nurse table
+            $medicine = new Medicine();
+            $medicine->name = $request->name;
+            $medicine->price = $request->price;
+            $medicine->desc = $request->desc;
+            $medicine->stock = $request->stock;
+            $medicine->save();
+    
+            return redirect('/admin/medicineList')->with('success', 'New Medicine has been successfully added');
+        }
+    
+        public function EditMedicine(Request $request, $id)
+        {
+            $medicine = Medicine::find($id);
+            
+            $medicine->name = $request->input('name');
+            $medicine->price = $request->input('price');
+            $medicine->desc = $request->input('desc');
+            $medicine->stock = $request->input('stock'); 
+            $medicine->save();
+    
+            return redirect('/admin/medicineList')->with('success', 'Medicine has been updated');
+        }
+    
+        public function deleteMedicine($id)
+        {
+            $medicine = Medicine::findOrFail($id);
+    
+    
+            $medicine->delete();
+    
+            DB::statement('SET @counter = 0;');
+            DB::statement('UPDATE medicine SET id = @counter:=@counter+1;');
+    
+    
+            return redirect('/admin/medicineList')->with('success', 'Medicine has been deleted');
+        }
 
 }
