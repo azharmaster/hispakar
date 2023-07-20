@@ -50,7 +50,7 @@
                                 <div class="card-header">
                                     <h5 id="tableTitle">List of Patient</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
-                                    <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
+                                    <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#addModal-patient" title="Add Doctor">
                                         <i class="fas fa-solid fa-plus"></i>
                                         Add
                                     </button>
@@ -80,10 +80,10 @@
                                                             <td>{{ $patient->phoneno }}</td>
                                                             <td>{{ $patient->gender }}</td>
                                                             <td>
-                                                                <a title="Edit Patient" data-toggle="modal" data-target="#editModal-{{ $patient->id }}">
+                                                                <a title="Edit Patient" data-toggle="modal" data-target="#editModal-patient-{{ $patient->id }}">
                                                                     <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                 </a>
-                                                                <a href="/admin/patientList/{{ $patient->id }}" title="Delete Patient" data-toggle="modal" data-target="#deleteModal-{{ $patient->id }}">
+                                                                <a href="/admin/patientList/{{ $patient->id }}" title="Delete Patient" data-toggle="modal" data-target="#deleteModal-patient-{{ $patient->id }}">
                                                                     <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
                                                                 </a>
                                                             </td>

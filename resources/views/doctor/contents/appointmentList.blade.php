@@ -61,8 +61,9 @@
                                             <thead>
                                                 <tr style="text-align: center;">
                                                     <th>#</th>
-                                                    <th>IC</th>
+                                                    <th>Doctor Name</th>
                                                     <th>Patient Name</th>
+                                                    <th>Dept Name</th>
                                                     <th>Date-Time</th>
                                                     <th>Description</th>
                                                     <th style="width: 80px;">Action</th>
@@ -77,20 +78,19 @@
                                                     @foreach($appointments as $appointment)
                                                         <tr style="text-align: center;">
                                                             <td>{{ $loop->iteration }}</td>
-                                                            <!-- joined table -->
-                                                            <td>{{ $appointment->patient_ic}}</td>
-                                                            <td>{{ $appointment->patient_name}}</td>
-                                                            <td>{{ $appointment->date}} - {{ $appointment->time}}</td>
-                                                            <td>{{ $appointment->desc}}</td>
-                                                            <td style="text-align: center;">
-                                                                <a title="Edit Room" data-toggle="modal" data-target="#editModal">
+                                                            <td>{{ $appointment->doctor_name }}</td>
+                                                            <td>{{ $appointment->patient_name }}</td>
+                                                            <td>{{ $appointment->dept_name }}</td>
+                                                            <td>{{ $appointment->date }} {{ $appointment->time }}</td>
+                                                            <td>{{ $appointment->status }}</td>
+                                                             <td>
+                                                                <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="Edit Appointment">
                                                                     <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                 </a>
-                                                                <a title="Delete Room" data-toggle="modal" data-target="#deleteModal">
-                                                                    <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
+                                                                <a href="/doctor/appointmentList/{{ $appointment->id }}" title="Delete Room" data-target="#deleteModal-{{ $appointment->id }}" data-toggle="modal">
+                                                                    <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>
                                                                 </a>
                                                             </td>
-            
                                                         </tr>
                                                     @endforeach
                                                 @endif
@@ -109,148 +109,166 @@
 </div>
 <!-- end content -->
 
-<!-- Add Appointment form -->
-<div class="modal fade" id="viewModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">View Appointment</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                    <label for="id" class="input-group-addon" style="font-weight:bold;">IC Number :</label>
-                    <input type="text" class="form-control" name="id" id="id" value="490912-05-1856">
-                </div>
-                <div class="form-group">
-                    <label for="name" class="input-group-addon" style="font-weight:bold;">Name :</label>
-                    <input type="text" class="form-control" name="name" id="name" value="John Doe">
-                </div>
-                <div class="form-group">
-                    <label for="gender" class="input-group-addon" style="font-weight:bold;">Gender:</label>
-                    <select class="form-control" name="gender" id="gender">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="address" class="input-group-addon" style="font-weight:bold;">Address :</label>
-                    <input type="text" class="form-control" name="address" id="address" value="Malaysia">
-                </div>
-                <div class="form-group">
-                    <label for="contact" class="input-group-addon" style="font-weight:bold;">Contact :</label>
-                    <input type="text" class="form-control" name="contact" id="contact" value="0199237856">
-                </div>  
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                    <label for="desc" class="input-group-addon" style="font-weight:bold;">Description :</label>
-                    <input type="text" class="form-control" name="desc" id="desc" value="Fever">
-                </div>
-                <div class="form-group">
-                    <label for="doctor" class="input-group-addon" style="font-weight:bold;">Doctor In-Charge:</label>
-                    <input type="text" class="form-control" name="doctor" id="doctor" value="Dr. Nik Ahmad">
-                </div>
-                <div class="form-group">
-                    <label for="date" class="input-group-addon" style="font-weight:bold;">Appointment Date & Time :</label>
-                    <input type="datetime-local" class="form-control" name="date" id="date">
-                </div>
-                <div class="form-group">
-                    <label for="location" class="input-group-addon" style="font-weight:bold;">Location :</label>
-                    <input type="text" class="form-control" name="location" id="location" value="Room 1">
-                </div>
-                <div class="form-group">
-                    <label for="location" class="input-group-addon" style="font-weight:bold;">Level :</label>
-                    <input type="text" class="form-control" name="location" id="location" value="Level 2">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- end add Appointment form -->
-
-<!-- Edit Patient form -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+<!-- Add Appointments form -->
+<div class="modal fade" id="default-Modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Patient</h5>
+                <h5 class="modal-title">Add Appointments</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+            <form action="/doctor/appointmentList" class="form-horizontal row-fluid" method="POST" >
+              {{csrf_field()}}
+
                 <div class="container-fluid">
+                   
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" value="1">
+                        <span class="input-group-addon" style="width:150px;">Patient :</span>
+                        <select class="form-control" style="width:350px;" name="patientid">
+                        <option value="">Choose Patient</option>
+                                @foreach ($patients as $patient)
+                                    <option value="{{ $patient->id }}">{{ $patient->name }}</option>
+                                @endforeach
+                            </select>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="John Doe">
+                        <span class="input-group-addon" style="width:150px;">Doctor :</span>
+                        <select class="form-control" style="width:350px;" name="docid">
+                        <option value="">Choose Doctor</option>
+                                @foreach ($doctors as $doctor)
+                                    <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                @endforeach
+                            </select>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" id="gender" value="Male">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
+                        <span class="input-group-addon" style="width:150px;">Department :</span>
+                       
+                        <select class="form-control" style="width:350px;" name="deptid">
+                            <option value="">Choose Department</option>
+                                @foreach ($departments as $department)
+                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                @endforeach
+                            </select>
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Date :</span>
+                        <input type="date" style="width:350px;" class="form-control" name="date" id="date" placeholder="">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Time :</span>
+                        <input type="time" style="width:350px;" class="form-control" name="time" id="time" placeholder="">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Status :</span>
+                        <select style="width:350px;" class="form-control" name="status" id="status">
+                            <option value="">Status</option>
+                            <option value="0">Not Available</option>
+                            <option value="1">Available</option>
                         </select>
+                        
+                    </div>
+                    
+                        
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+                <button  name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
+
+                    
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end Add Appointments form -->
+
+
+@foreach ($appointments as $appointment)
+<!-- Edit Appointments form -->
+<div class="modal fade" id="editModal-{{ $appointment->id }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Appointments</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/doctor/appointmentList/{{ $appointment->id }}" class="form-horizontal row-fluid" method="POST" >
+              {{csrf_field()}}
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Patient ID :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="patientid" id="patientid" value="{{ $appointment->patientid }}">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" value="Malaysia">
+                        <span class="input-group-addon" style="width:150px;">Doctor ID :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="docid" id="docid" value="{{ $appointment->docid }}">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" value="0199237856">
+                        <span class="input-group-addon" style="width:150px;">Department ID :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="deptid" id="deptid" value="{{ $appointment->deptid }}">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" value="john@gmail.com">
+                        <span class="input-group-addon" style="width:150px;">Date :</span>
+                        <input type="date" style="width:350px;" class="form-control" name="date" id="date" value="{{ $appointment->date }}">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Time :</span>
+                        <input type="time" style="width:350px;" class="form-control" name="time" id="time" value="{{ $appointment->time }}">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Status :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="status" id="status" value="{{ $appointment->status }}">
                     </div>
                         
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success waves-effect waves-light ">Save changes</button>
+                <button  name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
+
             </div>
+            </form>
         </div>
     </div>
 </div>
 <!-- end edit Patient form -->
+@endforeach
+
 
 <!-- delete Patient form -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Patient</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p style="font-size: 15px;"> Are you sure want to delete this user? </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger waves-effect waves-light ">Delete</button>
+@foreach ($appointments as $appointment)
+    <div class="modal fade" id="deleteModal-{{ $appointment->id }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Room</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="font-size: 15px;">Are you sure you want to delete this room?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                    <form action="/doctor/appointmentList/{{ $appointment->id }}" method="POST" style="display: inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger waves-effect waves-light">Delete</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+@endforeach
 <!-- end delete Patient form -->
 
 
