@@ -78,6 +78,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
 //Doctor
 Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::get('/doctor/dashboard', [DoctorController::class, 'index'])->name('doctor.contents.dashboard');
+    Route::get('/doctor/profile', [DoctorController::class, 'viewProfile'])->name('doctor.contents.profile');
     Route::get('/doctor/patientList', [DoctorController::class, 'viewPatientList']);
     Route::get('/doctor/appointmentList', [DoctorController::class, 'viewAppointmentList']);
     Route::get('/doctor/appointmentReport/{id}', [DoctorController::class, 'viewAppointmentReport']);
@@ -116,6 +117,10 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/nurse/appointmentList', [NurseController::class, 'viewAppointmentList']);
     Route::get('/nurse/medicineList', [NurseController::class, 'viewMedicineList']);
 
+    //Profile
+    //Manage patient in nurse
+    Route::post('/nurse/profile/{id}', [NurseController::class, 'EditProfile']);
+    
     //Manage patient in nurse
     Route::post('/nurse/patientList', [NurseController::class, 'AddPatient']);
     Route::post('/nurse/patientList/{id}', [NurseController::class, 'EditPatient']);

@@ -39,6 +39,7 @@ class NurseController extends Controller
             $department = Department::find($nurse->deptid);
 
             return view('nurse.contents.profile', [
+                'id' => $nurse->id,
                 'name' => $nurse->name,
                 'ic' => $nurse->ic,
                 'email' => $nurse->email,
@@ -46,11 +47,13 @@ class NurseController extends Controller
                 'address' => $nurse->address,
                 'gender' => $nurse->gender,
                 'dob' => $nurse->dob,
+                'profilepic' => $nurse->profilepic,
+                'deptid' => $nurse->deptid,
                 'department' => $department,
-            ]);
+            ])->with('departments', $departments);
         }
-
     }
+
 
     public function viewDoctorList()
     {
@@ -96,6 +99,48 @@ class NurseController extends Controller
 
         return view('nurse.contents.appointmentList', compact('appointments','doctors','patients','departments'));
     }
+
+    public function EditProfile(Request $request, $id)
+    {
+        $nurse = Nurse::find($id);
+
+        // Update the corresponding user record
+        $user = User::where('email', $nurse->email)->first();
+        
+        // If the user record exists and the email is not changed or the new email is unique
+        if ($user && ($request->input('email') === $nurse->email || User::where('email', $request->input('email'))->doesntExist())) {
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            $user->save();
+
+            // Wrap both updates in a transaction to ensure atomicity
+            DB::beginTransaction();
+
+            try {
+                $nurse->name = $request->input('name');
+                $nurse->gender = $request->input('gender');
+                $nurse->phoneno = $request->input('phoneno');
+                $nurse->email = $request->input('email');
+                $nurse->deptid = $request->input('deptid'); 
+                $nurse->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+
+                $nurse->save();
+
+                DB::commit();
+                
+                return redirect('/nurse/profile')->with('success', 'Your profile has been updated');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                
+                return redirect()->back()->with('success', 'ERROR! Unable to updating your profile.');
+            }
+        } else {
+            return redirect()->back()->with('success', 'Unsuccessful, the email already exists.');
+        }
+    }
+
+
 
     /////// PATIENT ////////////////
     public function AddPatient(Request $request)
@@ -151,7 +196,7 @@ class NurseController extends Controller
         $patient->email = $request->input('email'); 
         $patient->status = $request->input('status'); 
         $patient->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-
+  
         $patient->save();
 
         // Update the corresponding user record

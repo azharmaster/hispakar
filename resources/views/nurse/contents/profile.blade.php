@@ -2,7 +2,7 @@
 
 @section('content')
 
-<!-- Success alert -->
+<!-- Alert -->
 @if(session()->has('success'))
     <script>
         alert("{{ session()->get('success') }}");
@@ -44,8 +44,14 @@
                         <div class="card">
                             <div class="card-block text-center">
                                 <!--profile picture -->
-                                <img src="../files/assets/images/avatar-4-1.jpg" class="img-radius" style="width: 140px; height: 140px;"> 
-                            </div>
+                                @if($profilepic)
+                                    <img src="{{ asset('files/assets/images/' . $profilepic) }}" class="img-radius" style="width: 140px; height: 140px;">
+                                @else
+                                    <img src="{{ asset('files/assets/images/profilePic/unknown.jpg') }}" class="img-radius" style="width: 140px; height: 140px;">
+                                @endif
+
+                            
+                              </div>
                             <h4 class="profile-username text-center" style="word-wrap: break-word; max-width: 300px;">
                               {{ ucfirst($name) }}
                             </h4>
@@ -70,42 +76,42 @@
                               <div class="form-group row">
                                   <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">IC</label>
                                   <div class="col-sm-7">
-                                  <input type="text" class="form-control form-control-border-bottom  profile" style="background-color: white; color: black;" id="exampleInputBorder" placeholder=".." readonly value="{{ $ic }}">
+                                  <input type="text" class="form-control form-control-border-bottom  profile" style="background-color: white; color: black;" readonly value="{{ $ic }}">
                                   </div>
                               </div>
 
                               <div class="form-group row">
                                   <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Name</label>
                                   <div class="col-sm-7">
-                                  <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="John Doe" id="inputName" placeholder="{{ ucfirst($name) }}" readonly>
+                                  <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" placeholder="{{ ucfirst($name) }}" readonly>
                                   </div>
                               </div>
 
                               <div class="form-group row">
                                   <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Gender</label>
                                   <div class="col-sm-7">
-                                  <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="Male" id="inputName" placeholder="{{ $gender }}" readonly>
+                                  <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" placeholder="{{ ucfirst($gender) }}" readonly>
                                   </div>
                               </div>
 
                               <div class="form-group row">
                                   <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Phone No.</label>
                                   <div class="col-sm-7">
-                                  <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="0149082376" id="inputName" placeholder="{{ $phoneno }}" readonly>
+                                  <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" placeholder="{{ $phoneno }}" readonly>
                                   </div>
                               </div>
 
                               <div class="form-group row">
                                   <label for="inputName2" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Email</label>
                                   <div class="col-sm-7">
-                                  <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" id="inputName2" value="johndoe@gmail.com" placeholder="{{ $email }}" readonly>
+                                  <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" placeholder="{{ $email }}" readonly>
                                   </div>
                               </div>
 
                               <div class="form-group row">
-                                  <label for="inputExperience" style="font-weight: normal; color: black;"  class="col-sm-3 col-form-label">Address</label>
+                                  <label for="inputExperience" style="font-weight: normal; color: black;"  class="col-sm-3 col-form-label">Department Name</label>
                                   <div class="col-sm-7">
-                                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" id="inputName2" value="Pulau Pinang" placeholder="{{ ucfirst($address)  }}" readonly>
+                                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" placeholder="{{ ucfirst($department->name)  }}" readonly>
                                       </div>
                               </div>
                             </div>  
@@ -119,7 +125,7 @@
 
 <!-- /.start edit profile modal-->
 <div class="modal fade" id="edit-profile" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-md " role="document">
+  <div class="modal-dialog modal-lg " role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Edit Profile</h5>
@@ -127,21 +133,31 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-
+      <form action="/nurse/profile/{{ $id }}" method="POST" enctype="multipart/form-data">
+        @csrf
       <div class="modal-body" style="margin-left: 15px; margin-right:15px;">
       <form >
         <div class="row">
           <div class="col">
-            <div class="form-group row">
-              <div class="col-sm-10">
+            
+            <div class="form-group row text-center">
+              <div class="col">
                 <div class="profilepic" onclick="openFileUploader()">
-                  <img class="profilepic__image" src="../files/assets/images/avatar-4-1.jpg" alt="Profile" />
-                  <div class="profilepic__content">
-                    <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
-                    <span class="profilepic__text">Choose Photo</span>
-                  </div>
+                  <label for="profilepic">
+                    
+                    @if($profilepic)
+                        <img class="profilepic__image img-radius" src="{{ asset('files/assets/images/' . $profilepic) }}" alt="Profile" style="width: 140px; height: 140px;">
+                    @else
+                        <img class="profilepic__image img-radius" src="{{ asset('files/assets/images/profilePic/unknown.jpg') }}" alt="Profile" style="width: 140px; height: 140px;">
+                    @endif
+
+                    <div class="profilepic__content mt-2">
+                          <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
+                          <span class="profilepic__text">Change Photo</span>
+                    </div>
+                  </label>
+                  <input type="file" id="profilepic" name="profilepic" accept="image/*" hidden>                 
                 </div>
-                <input class="file-upload" type="file" accept="image/*" onchange="readURL(this)" />
               </div>
             </div>
             <!-- /.form-group -->
@@ -149,7 +165,7 @@
             <div class="form-group row">
               <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">IC</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control form-control-border profile" style="background-color: white;" id="exampleInputBorder" value="490706-05-1288" placeholder="..">
+                <input type="text" name="name" id="ic" value="{{ $ic }}" readonly placeholder="IC" class="form-control form-control-border profile" style="background-color: white;">
               </div>
             </div>
             <!-- /.form-group -->
@@ -157,15 +173,7 @@
             <div class="form-group row">
               <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Name</label>
               <div class="col-sm-10">
-                <input type="text" class="profile form-control form-control-border" value="John Doe"  id="inputName" placeholder="Name">
-              </div>
-            </div>
-            <!-- /.form-group -->
-
-            <div class="form-group row">
-              <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Age</label>
-              <div class="col-sm-10">
-                <input type="text" class="profile form-control form-control-border" value="21"  id="inputName" placeholder="Name">
+                <input type="text"  name="name" id="name" value="{{ $name }}"  placeholder="Name" class="profile form-control form-control-border">
               </div>
             </div>
             <!-- /.form-group -->
@@ -173,15 +181,17 @@
             <div class="form-group row">
               <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Gender</label>
               <div class="col-sm-10">
-                <input type="text" class="profile form-control form-control-border" value="Male" id="inputName" placeholder="Name">
+                  <select name="gender" id="gender" class="form-control form-control-border">
+                      <option value="male" {{ $gender === 'male' ? 'selected' : '' }}>Male</option>
+                      <option value="female" {{ $gender === 'female' ? 'selected' : '' }}>Female</option>
+                  </select>
               </div>
-            </div>
-            <!-- /.form-group -->
+          </div>
 
             <div class="form-group row">
               <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Phone No.</label>
               <div class="col-sm-10">
-                <input type="text" class="profile form-control form-control-border" value="0149082376" id="inputName" placeholder="Name">
+                <input type="text" name="phoneno" id="phoneno" value="{{ $phoneno }}" placeholder="Phone number" class="profile form-control form-control-border">
               </div>
             </div>
             <!-- /.form-group -->
@@ -189,27 +199,33 @@
             <div class="form-group row">
               <label for="inputName2" style="font-weight: normal; " class="col-sm-2 col-form-label">Email</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control form-control-border" id="inputName2" value="johndoe@gmail.com" placeholder="Name">
+                <input type="text" name="email" id="email" value="{{ $email }}" placeholder="Email" class="form-control form-control-border">
+              </div>
+            </div>
+            <!-- /.form-group -->
+            
+            <div class="form-group row">
+              <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Department</label>
+              <div class="col-sm-10">
+                <select style="width:350px;" class="form-control" name="deptid">
+                  @foreach ($departments as $department)
+                      <option value="{{ $department->id }}" {{ ( $department->id == $deptid) ? 'selected' : '' }}> {{ $department->name }} </option>
+                  @endforeach   
+                </select>              
               </div>
             </div>
             <!-- /.form-group -->
 
-            <div class="form-group row">
-              <label for="inputExperience" style="font-weight: normal; "  class="col-sm-2 col-form-label">Address</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control form-control-border" id="exampleInputBorder" value="Pulau Pinang" placeholder="Location">
-              </div>
-            </div>
-            <!-- /.form-group -->
           </div> <!-- /.row -->
         </div> <!-- /.body content -->
       </div> <!-- /.end modal content -->
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success">Save Changes</button>
+        <button name="submit" class="btn btn-success">Save Changes</button>
       </div>
       </form>
     </div> <!-- /.end modal dialog -->
+  </form>
   </div> <!-- /.end edit profile modal-->
 </div>
 

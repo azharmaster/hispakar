@@ -26,6 +26,35 @@ class DoctorController extends Controller
         return view('doctor.contents.dashboard');
     }
 
+    public function viewProfile()
+    {
+        // Get the currently authenticated user
+        $user = auth()->user();
+
+        $departments = Department::all();
+
+        if ($user->usertype === 2) {
+            // Get the doctor's name from the 'nurse' table based on the email
+            $doctor = Doctor::where('email', $user->email)->first();
+
+            $department = Department::find($doctor->deptid);
+
+            return view('doctor.contents.profile', [
+                'id' => $doctor->id,
+                'name' => $doctor->name,
+                'ic' => $doctor->ic,
+                'email' => $doctor->email,
+                'phoneno' => $doctor->phoneno,
+                'education' => $doctor->education,
+                'gender' => $doctor->gender,
+                'dob' => $doctor->dob,
+                'profilepic' => $doctor->profilepic,
+                'deptid' => $doctor->deptid,
+                'department' => $department,
+            ])->with('departments', $departments);
+        }
+    }
+
     public function viewPatientList()
     {
         $patients = Patient::all();

@@ -1,208 +1,282 @@
+@extends('layouts.doctor')
+
+@section('content')
+
+<!-- Alert -->
+@if(session()->has('success'))
+    <script>
+        alert("{{ session()->get('success') }}");
+    </script>
+@endif
+
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
-  <div class="page-header card">
-    <div class="row align-items-end">
-      <div class="col-lg-8">
-        <div class="page-header-title">
-          <i class="fas fa-solid fa-user bg-c-blue"></i>
-          <div class="d-inline">
-            <h5>Profile</h5>
-            <span>John Doe's Profile Page</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="page-header-breadcrumb">
-          <ul class=" breadcrumb breadcrumb-title">
-            <li class="breadcrumb-item">
-              <a href="../doctor/index.php"><i class="feather icon-home"></i></a>
-            </li>
-            <li class="breadcrumb-item"><a href="../doctor/profile.php">Profile</a> </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="pcoded-inner-content">
-    <div class="main-body">
-      <div class="page-wrapper">
-        <div class="page-body">
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="card">
-                <div class="card-block">
-                  <!--profile picture -->
-                  <img src="../files/assets/images/avatar-4-1.jpg" class="img-radius" style="width: 140px; height: 140px;">
+    <div class="page-header card">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <i class="fas fa-regular fa-user bg-c-blue"></i>
+                    <!-- <i class="feather icon-home bg-c-blue"></i> -->
+                    <div class="d-inline" >
+                        <h5>Dr. {{ ucfirst($name) }}</h5>
+                    </div>
                 </div>
-                <h4 class="profile-username text-center">John Doe</h4>
-                <p class="text-muted text-center">DOCTOR</p>
-                <p class="text-muted text-center">Department of Surgery</p>
-                <a data-toggle="modal" title="Edit Profile" href="#edit-profile" class="btn btn-mat waves-effect waves-light btn-info mx-auto"><i class="fas fa-pencil-alt"></i>&nbsp;<b>Edit Profile</b></a>
-  
-                <br><br>
-  
-              </div>
             </div>
-  
-            <!-- user details -->
-            <div class="col-sm-8">
-              <div class="card">
-                <div class="card-block">
-                  <!--profile picture -->
-  
-                </div>
-                <div class="form-horizontal ml-3">
-                  <div class="form-group row">
-                    <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">IC</label>
-                    <div class="col-sm-7">
-                      <input type="text" class="form-control form-control-border-bottom  profile" style="background-color: white; color: black;" id="exampleInputBorder" placeholder=".." disabled value="490706-05-1288">
-                    </div>
-                  </div>
-  
-                  <div class="form-group row">
-                    <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Name</label>
-                    <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="John Doe" id="inputName" placeholder="Name" disabled>
-                    </div>
-                  </div>
-  
-                  <div class="form-group row">
-                    <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Gender</label>
-                    <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="Male" id="inputName" placeholder="Name" disabled>
-                    </div>
-                  </div>
-  
-                  <div class="form-group row">
-                    <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Phone No.</label>
-                    <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="0149082376" id="inputName" placeholder="Name" disabled>
-                    </div>
-                  </div>
-  
-                  <div class="form-group row">
-                    <label for="inputName2" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Email</label>
-                    <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" id="inputName2" value="johndoe@gmail.com" placeholder="Name" disabled>
-                    </div>
-                  </div>
-  
-                  <div class="form-group row">
-                    <label for="inputExperience" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Address</label>
-                    <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" id="inputName2" value="Pulau Pinang" placeholder="Name" disabled>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
-<div id="styleSelector"></div>
-
-<!-- /.start edit profile modal-->
-<div class="modal fade" id="edit-profile" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-md " role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Edit Profile</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body" style="margin-left: 15px; margin-right:15px;">
-        <form>
-          <div class="row">
-            <div class="col">
-              <div class="form-group row">
-                <div class="col-sm-10">
-                  <div class="profilepic" onclick="openFileUploader()">
-                    <img class="profilepic__image" src="../files/assets/images/avatar-4-1.jpg" alt="Profile" />
-                    <div class="profilepic__content">
-                      <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
-                      <span class="profilepic__text">Choose Photo</span>
+    
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="page-wrapper">
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <img src="../files/assets/images/dr-1.jpg" width="170" alt="User-Profile-Image">
+                                            <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#editProfileModal" style="width: 170px;">Edit Profile</button>
+                                        </div>
+                                        <div class="col-7" style="margin-left: 29px">
+                                            <h3 style="word-wrap: break-word; max-width: 200px;" >Dr {{ ucfirst($name) }}</h3>
+                                            <h6>Department of {{ $department->name }}</h6>
+                                            <hr>
+                                            <h6><i class="fas fa-graduation-cap text-primary mr-3"></i>{{ $education }}</h6>
+                                            <hr>
+                                            <p class="mb-2"><i class="fas fa-phone mr-3 text-primary"></i>{{ $phoneno }}</p>
+                                            <i class="far fa-envelope mr-3 text-primary"></i><span>{{ $email }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 p-0">
+                            <div class="row">
+                                <div class="col-6">
+                                    <a title="View Appointment" data-toggle="modal" data-target="#viewModal">
+                                    <div class="card comp-card bg-c-blue">
+                                        <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                            <h5 class="m-b-25 f-w-700 mb-4 text-white">Total Patient</h5>
+                                            <h4 class="f-w-700 text-white">34</h4>
+                                            </div>
+                                            <div class="col-auto">
+                                            <i class="fas fa-hospital-user bg-c-white text-primary"></i>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a title="View Appointment" data-toggle="modal" data-target="#viewModal">
+                                    <div class="card comp-card bg-c-green">
+                                        <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                            <h5 class="m-b-25 f-w-700 mb-4 text-white">Experience</h5>
+                                            <h4 class="f-w-700 text-white">10 years</h4>
+                                            </div>
+                                            <div class="col-auto">
+                                            <i class="fas fa-briefcase bg-c-white text-success"></i>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a title="View Appointment" data-toggle="modal" data-target="#viewModal">
+                                    <div class="card comp-card bg-c-green">
+                                        <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                            <h5 class="m-b-25 f-w-700 mb-4 text-white">Operations</h5>
+                                            <h4 class="f-w-700 text-white">73</h4>
+                                            </div>
+                                            <div class="col-auto">
+                                            <i class="fas fa-hospital bg-c-white text-success"></i>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a title="View Appointment" data-toggle="modal" data-target="#viewModal">
+                                    <div class="card comp-card">
+                                        <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                            <h5 class="m-b-25 f-w-700 mb-4">Patients Attending</h5>
+                                            <h4 class="f-w-700 text-success">5 patients</h4>
+                                            </div>
+                                            <div class="col-auto">
+                                            <i class="fas fa-plus bg-c-green"></i>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <div class="card sale-card">
+                            <div class="card-header">
+                            <h5>Patients by Age</h5>
+                            </div>
+                            <div class="card-block">
+                                <div>
+                                    <canvas id="myChart2" width="680" height="340" style="display: block; box-sizing: border-box; height: 272px; width: 544px;"></canvas>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <div class="card sale-card">
+                            <div class="card-header">
+                            <h5>Operations per Month</h5>
+                            </div>
+                            <div class="card-block">
+                                <div>
+                                    <canvas id="myChart" width="680" height="340" style="display: block; box-sizing: border-box; height: 272px; width: 544px;"></canvas>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <input class="file-upload" type="file" accept="image/*" onchange="readURL(this)" />
                 </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group row">
-                <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">IC</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border profile" style="background-color: white;" id="exampleInputBorder" value="490706-05-1288" placeholder="..">
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group row">
-                <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Name</label>
-                <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" value="John Doe" id="inputName" placeholder="Name">
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group row">
-                <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Age</label>
-                <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" value="21" id="inputName" placeholder="Name">
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group row">
-                <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Gender</label>
-                <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" value="Male" id="inputName" placeholder="Name">
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group row">
-                <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Phone No.</label>
-                <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" value="0149082376" id="inputName" placeholder="Name">
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group row">
-                <label for="inputName2" style="font-weight: normal; " class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border" id="inputName2" value="johndoe@gmail.com" placeholder="Name">
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group row">
-                <label for="inputExperience" style="font-weight: normal; " class="col-sm-2 col-form-label">Address</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border" id="exampleInputBorder" value="Pulau Pinang" placeholder="Location">
-                </div>
-              </div>
-              <!-- /.form-group -->
-            </div> <!-- /.row -->
-          </div> <!-- /.body content -->
-      </div> <!-- /.end modal content -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success">Save Changes</button>
-      </div>
-      </form>
-    </div> <!-- /.end modal dialog -->
-  </div> <!-- /.end edit profile modal-->
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- Add Patient form -->
+<div class="modal fade" id="default-Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Patient</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">ID :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" placeholder="ABC1234">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Name :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="John Doe">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width: 150px;">Gender:</span>
+                        <select class="form-control" style="width: 350px;" name="gender" id="gender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Address :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" placeholder="New York">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Contact :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" placeholder="0134567891">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Email :</span>
+                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" placeholder="johndoe@gmail.com">
+                    </div>
+                        
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light">Submit</button>
+                    
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end Add Patient form -->
 
-<script type="text/javascript" src="../files/bower_components/jquery/js/jquery.min-1.js"></script>
+<!-- Edit Patient form -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Name :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="John Doe">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width: 150px;">Specialization: </span>
+                        <input type="text" style="width:350px;" class="form-control" name="specialization" id="specialization" value="Malaysia">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Address :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" value="Malaysia">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Contact :</span>
+                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" value="0199237856">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Email :</span>
+                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" value="john@gmail.com">
+                    </div>      
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Credentials :</span>
+                        <textarea type="email" style="width: 100%;" class="form-control" name="cred" id="cred" value="john@gmail.com"></textarea>
+                    </div>                  
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success waves-effect waves-light ">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end edit Patient form -->
+
+<!-- delete Patient form -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Patient</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 15px;"> Are you sure want to delete this user? </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light ">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end delete Patient form -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min-1.js"></script><script type="text/javascript" src="../files/bower_components/jquery/js/jquery.min-1.js"></script>
 <script type="text/javascript" src="../files/bower_components/jquery-ui/js/jquery-ui.min-1.js"></script>
 <script type="text/javascript" src="../files/bower_components/popper.js/js/popper.min-1.js"></script>
 <script type="text/javascript" src="../files/bower_components/bootstrap/js/bootstrap.min-1.js"></script>
@@ -212,6 +286,9 @@
 <script src="../files/assets/pages/waves/js/waves.min-1.js"></script>
 
 <script type="text/javascript" src="../files/bower_components/jquery-slimscroll/js/jquery.slimscroll-1.js"></script>
+
+<script type="text/javascript" src="../files/assets/js/script.min-1.js"></script>
+
 
 <script type="text/javascript" src="../files/bower_components/modernizr/js/modernizr-1.js"></script>
 <script type="text/javascript" src="../files/bower_components/modernizr/js/css-scrollbars-1.js"></script>
@@ -240,19 +317,39 @@
 <script type="text/javascript" src="../files/assets/printScript.js"></script>
 
 <script>
-  function openFileUploader() {
-    $(".file-upload").click();
-  }
+    const ctx = document.getElementById('myChart');
+    //const label = Utils.months({count: 7});
+  
+    new Chart(ctx,  {
+        type: 'line',
+        data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        datasets: [
+            {
+            label: "New",
+            data: [12, 19, 3, 5, 2, 3],
+            borderColor: '#4099ff',
+            backgroundColor: '#4099ff'
+            },
 
-  function readURL(input) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
+        ]
+    }})
 
-      reader.onload = function(e) {
-        $('.profilepic__image').attr('src', e.target.result);
-      };
+const ctx2 = document.getElementById('myChart2');
+  
+new Chart(ctx2,  {
+    type: 'bar',
+    data: {
+    labels: ['Newborn', 'Infant', 'Child', 'Adolescent', 'Old Age'],
+    datasets: [
+        {
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1,
+        backgroundColor: ['#FFB1C1','#7FB5B5','#EC7C26','#3E5F8A','#1E5945','#57A639'],
+        },
 
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
+    ]
+}})
 </script>
+
+@endsection
