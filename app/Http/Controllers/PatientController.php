@@ -15,7 +15,23 @@ class PatientController extends Controller
 {
     public function index()
     {
-        return view('patient.index');
+
+        $email=Auth()->user()->email;
+
+        $totalAppointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->select('appointment.*')
+        ->where('patient.email', $email )
+        ->count();
+
+        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
+        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'doctor.name as doctor_name', 'medrecord.desc as desc_s')
+        ->where('patient.email', $email )
+        ->get();
+
+
+        return view('patient.contents.dashboard', compact('totalAppointments','appointments'));
     }
 
     public function viewAppointmentList()

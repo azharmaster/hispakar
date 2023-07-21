@@ -34,9 +34,12 @@ class AdminController extends Controller
         $totalmedicine = Medicine::all()->count();
 
         $medicines = Medicine::all();
+        $nurses = Nurse::join('department', 'nurse.deptid', '=', 'department.id')
+        ->select('nurse.*', 'department.name as dept_name')
+        ->get();
 
         return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totaldept',
-        'totalnurse','totalpatient','totalmedicine','medicines'));
+        'totalnurse','totalpatient','totalmedicine','medicines','nurses'));
     }
 
     public function viewDepartmentList()

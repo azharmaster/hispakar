@@ -42,8 +42,8 @@
                             <div class="card-body">
                               <div class="row align-items-center">
                                 <div class="col">
-                                  <h6 class="m-b-25">New Appointments</h6>
-                                  <h4 class="f-w-700 text-c-blue">1</h4>
+                                  <h6 class="m-b-25">Pending Appointments</h6>
+                                  <h4 class="f-w-700 text-c-blue">{{$totalAppointments}}</h4>
                                 </div>
                                 <div class="col-auto">
                                   <i class="fas fa-calendar-check bg-c-blue"></i>
@@ -311,31 +311,19 @@
                               <table class="table table-hover m-b-0">
                                 <thead style="text-align: center;">
                                 <tr>
-                                  <th>Name</th>
-                                  <th>ID</th>
+                                  <th>Doc Name</th>
                                   <th>Description</th>
                                   <th>Date</th>
                                 </tr>
                                 </thead>
                                 <tbody style="text-align: center;">
+                                @foreach($appointments as $appointment)
                                   <tr>
-                                    <td>1911</td>
-                                    <td>John Doe</td>
-                                    <td>Fever</td>
-                                    <td>22-06-2023</td>
+                                    <td>{{$appointment->doctor_name}}</td>
+                                    <td>{{$appointment->desc_s}}</td>
+                                    <td>{{$appointment->date}} {{$appointment->time}}</td>
                                   </tr>
-                                  <tr>
-                                    <td>1911</td>
-                                    <td>John Doe</td>
-                                    <td>Fever</td>
-                                    <td>22-06-2023</td>
-                                  </tr>
-                                  <tr>
-                                    <td>1911</td>
-                                    <td>John Doe</td>
-                                    <td>Fever</td>
-                                    <td>22-06-2023</td>
-                                  </tr>
+                                @endforeach
                                 </tbody>
                               </table>
                             </div>

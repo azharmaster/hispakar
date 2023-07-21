@@ -289,31 +289,13 @@
                                   </tr>
                                 </thead>
                                 <tbody>
+                                  @foreach($nurses as $nurse)
                                   <tr>
-                                    <td>Haley Kennedy </td>
-                                    <td>N0011</td>
+                                    <td>{{$nurse->name}} </td>
+                                    <td>{{$nurse->dept_name}} </td>
                                     <td>#PHD001</td>
                                   </tr>
-                                  <tr>
-                                    <td>Rhona Davidson</td>
-                                    <td>N0034</td>
-                                    <td>#PHD002</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Sofa</td>
-                                    <td>N0123</td>
-                                    <td>#PHD001</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Sofa</td>
-                                    <td>N9083</td>
-                                    <td>#PHD001</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Sofa</td>
-                                    <td>N0094</td>
-                                    <td>#PHD001</td>
-                                  </tr>
+                                  @endforeach
                                 </tbody>
                               </table>
                             </div>
