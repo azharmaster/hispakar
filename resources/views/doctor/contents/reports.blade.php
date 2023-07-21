@@ -1,6 +1,25 @@
 @extends('layouts.doctor')
 
 @section('content')
+
+<!-- Success Alert -->
+@if(session()->has('success'))
+    <script>
+        alert("{{ session()->get('success') }}");
+    </script>
+@endif
+
+<style>
+    .card-header {
+        display: flex;
+        align-items: center;
+    }
+
+    .btn {
+        margin: 0;
+    }
+
+</style>
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -19,12 +38,12 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="index.html">
+                            <a href="/doctor/dashboard">
                                 <i class="feather icon-home"></i>
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="doctor.php">Reports</a>
+                            <a href="/doctor/reports">Reports</a>
                         </li>
                     </ul>
                 </div>
@@ -40,61 +59,80 @@
                         <div class="col-sm-12">
                             <!-- Start Table -->
                             <div class="card">
-                                <div class="card-header">
-                                    <h5>List of Reports</h5>
+                                <div class="card-header d-flex justify-content-between">
+                                    <h5 id="tableTitle">List of Reports</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
-                                    <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
-                                        <i class="fas fa-solid fa-plus"></i>
+                                    <div>
+                                        <button type="button" class="btn btn-mat waves-effect waves-light btn-warning" data-toggle="modal" data-target="#filter" title="Add Doctor">
+                                            <i class="fas fa-regular fa-filter"></i>
+                                            Filter 
+                                        </button>
+                                        <!-- <button type="button" class="btn btn-mat waves-effect waves-light btn-primary ml-2" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
+                                            <i class="fas fa-solid fa-plus"></i>
                                             Add
-                                    </button>
-                                </div>
-                                <div class="card-block">
-                                <!-- to be fixed -->
-                                include('files.assets.printComponent')
-                                    <!-- /to be fixed -->
-                                    <div class="col-12">
-                                        <h2 class="text-center mb-5"  id="tableTitle" hidden>
-                                            <b>Reports List</b>
-                                        </h2>
+                                        </button> -->
                                     </div>
+                                </div>
+
+                                <div class="card-block">
+
                                     <div class="dt-responsive table-responsive">
                                         <table id="dataTable1" class="table table-bordered">
                                             <thead>
                                                 <tr style="text-align: center;">
                                                     <th>#</th>
-                                                    <th>Report ID</th>
+                                                    <th style="width:80px">Appointment ID</th>
                                                     <th>Patient Name</th>
+                                                    <th style="width:80px">Service Type</th>
                                                     <th>Description</th>
-                                                    <th>Prescription</th>
-                                                    <th style="width: 80px;">Action</th>
+                                                    <th>Date Time</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr style="text-align: center;">
-                                                    <td>1</td>
-                                                    <td>1911</td>
-                                                    <td>John Doe</td>
-                                                    <td>Migraine</td>
-                                                    <td>Paracetamol</td>
-                                                    <td>
-                                                        <!-- <button class="btn btn-mat waves-effect waves-light btn-warning" style="width: 50px;" title="View Doctor" data-toggle="modal" data-target="#viewModal">
-                                                            <i class="fas fa-eye"></i>
-                                                        </button> -->
-                                                        <!-- <button class="btn btn-mat waves-effect waves-light btn-success" style="width: 50px;" title="Edit Patient" data-toggle="modal" data-target="#editModal">
-                                                            <i class="fas fa-pencil-alt"></i>
-                                                        </button>
-                                                        <button class="btn btn-mat waves-effect waves-light btn-danger" style="width: 50px;" title="Delete Patient" data-toggle="modal" data-target="#deleteModal">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button> -->
-                                                        <a title="Edit Report" data-toggle="modal" data-target="#editModal">
-                                                        <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
-                                                        </a>
-                                                        <a title="Delete Report" data-toggle="modal" data-target="#deleteModal">
-                                                            <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red"></i>
-                                                        </a>
-                                                    </td>
-    
-                                                </tr>
+                                                @if ( $filteredReports->isEmpty() )
+                                                    <tr>
+                                                        <td>No data available</td>
+                                                    </tr>
+                                                @else
+                                                    @foreach ($filteredReports as $report)
+                                                        <tr style="text-align: center;">
+                                                            <td>{{ $loop->iteration }}</td>
+                                                            <td>{{ $report->aptid }}</td>
+                                                            <td>{{ $report->name }}</td>
+                                                            <td>
+                                                                @php
+                                                                    $serviceNames = [
+                                                                        1 => 'X-Ray',
+                                                                        2 => 'Check-up',
+                                                                        3 => 'MRI (Magnetic Resonance Imaging)',
+                                                                        4 => 'Blood testing',
+                                                                        5 => 'Ultrasound',
+                                                                        6 => 'CT scan (Computed Tomography)',
+                                                                        7 => 'ECG (Electrocardiogram)',
+                                                                        8 => 'Physical therapy',
+                                                                        9 => 'Surgery',
+                                                                        10 => 'Vaccinations',
+                                                                        11 => 'Laboratory services',
+                                                                        12 => 'Pharmacy services',
+                                                                        13 => 'Emergency care',
+                                                                        14 => 'Maternity and childbirth services',
+                                                                        15 => 'Cardiac catheterization',
+                                                                        16 => 'Endoscopy',
+                                                                        17 => 'Dialysis',
+                                                                        18 => 'Oncology (Cancer treatment)',
+                                                                        19 => 'Respiratory therapy',
+                                                                        20 => 'Occupational therapy',
+                                                                        // Add more service IDs and their corresponding names here
+                                                                    ];
+                                                                @endphp
+                                                                {{ $serviceNames[$report->serviceid] ?? '' }}
+                                                            </td>
+                                                            <td>{{ $report->desc }}</td>
+                                                            <td>{{ $report->datetime }}</td>
+                                                            
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -109,132 +147,42 @@
     </div>
 </div>
 
-<!-- Add Patient form -->
-<div class="modal fade" id="default-Modal" tabindex="-1" role="dialog">
+<!-- /.start filter modal-->
+<div class="modal fade" id="filter" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Patient</h5>
+                <h5 class="modal-title">Filter Report</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" placeholder="ABC1234">
+            <form action="{{ route('doctor.reports.filter') }}" method="POST">
+                {{csrf_field()}}
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="form-group input-group">
+                            <span class="input-group-addon" style="width:150px;">Start Date :</span>
+                            <input type="date" style="width:350px;" class="form-control" name="start_date" placeholder="dd/mm/yyyy" required>
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon" style="width:150px;">End Date :</span>
+                            <input type="date" style="width:350px;" class="form-control" name="end_date" placeholder="dd/mm/yyyy" required>
+                        </div>
                     </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="John Doe">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" id="gender">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" placeholder="New York">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" placeholder="0134567891">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" placeholder="johndoe@gmail.com">
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+                    <button name="submit" class="btn btn-primary waves-effect waves-light">Filter</button>
                         
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light">Submit</button>
-                    
-            </div>
+            </form>
         </div>
     </div>
 </div>
-<!-- end Add Patient form -->
 
-<!-- Edit Patient form -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Patient</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" value="1">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="John Doe">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" id="gender" value="Male">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" value="Malaysia">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" value="0199237856">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" value="john@gmail.com">
-                    </div>
-                        
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success waves-effect waves-light ">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end edit Patient form -->
+<!-- /.end filter modal-->
 
-<!-- delete Patient form -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Patient</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p style="font-size: 15px;"> Are you sure want to delete this user? </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger waves-effect waves-light ">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end delete Patient form -->
-
-@include('admin.includes.dtScripts')
 
 @endsection
 

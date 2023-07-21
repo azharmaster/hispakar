@@ -110,11 +110,11 @@ class DoctorController extends Controller
 
     public function viewReportList()
     {
-        $reports = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+        $filteredReports = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
                     ->select('medrecord.*', 'patient.*')
                     ->get();
                     
-        return view('doctor.contents.reports', compact('reports'));
+        return view('doctor.contents.reports', compact('filteredReports'));
     }
 
     // Manage Patient
@@ -368,5 +368,19 @@ class DoctorController extends Controller
 
         return redirect('/doctor/appointmentList')->with('success', 'Successfully inserted');
     }
+
+    public function filterReportList(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $filteredReports = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+                        ->select('medrecord.*', 'patient.*')
+                        ->whereBetween('medrecord.datetime', [$startDate, $endDate])
+                        ->get();
+
+        return view('doctor.contents.reports', compact('filteredReports'));
+    }
+
 
 }
