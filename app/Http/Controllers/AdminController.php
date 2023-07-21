@@ -28,9 +28,15 @@ class AdminController extends Controller
         $totalapt = Appointments::all()->count();
         $totaldoc = Doctor::all()->count();
         $totalnurse = Doctor::all()->count();
+        $totalpatient = Patient::all()->count();
         $totalroom = Room::all()->count();
+        $totaldept = Department::all()->count();
+        $totalmedicine = Medicine::all()->count();
 
-        return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totalnurse'));
+        $medicines = Medicine::all();
+
+        return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totaldept',
+        'totalnurse','totalpatient','totalmedicine','medicines'));
     }
 
     public function viewDepartmentList()

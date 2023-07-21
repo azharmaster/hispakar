@@ -36,21 +36,7 @@
 
                     <div class="row">
 
-                      <div class="col-md-3">
-                        <div class="card comp-card">
-                          <div class="card-body">
-                            <div class="row align-items-center">
-                              <div class="col">
-                                <h6 class="m-b-25">Appointments</h6>
-                                <h3 class="f-w-700 text-c-blue">{{$totalapt}}</h3>
-                              </div>
-                              <div class="col-auto">
-                                <i class="fas fa-calendar-check bg-c-blue"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      
 
                       <div class="col-md-3">
                         <div class="card comp-card">
@@ -83,6 +69,55 @@
                           </div>
                         </div>
                       </div>
+                      
+                      <div class="col-md-3">
+                        <div class="card comp-card">
+                          <div class="card-body">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                <h6 class="m-b-25">Patients</h6>
+                                <h3 class="f-w-700 text-c-red">{{$totalpatient}}</h3>
+                              </div>
+                              <div class="col-auto">
+                                <i class="fas fa-user-injured bg-c-yellow"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="card comp-card">
+                          <div class="card-body">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                <h6 class="m-b-25">Department</h6>
+                                <h3 class="f-w-700 text-c-blue">{{$totaldept}}</h3>
+                              </div>
+                              <div class="col-auto">
+                                <i class="fas fa-building bg-c-blue"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="card comp-card">
+                          <div class="card-body">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                <h6 class="m-b-25">Medicines</h6>
+                                <h3 class="f-w-700 text-c-red">{{$totalmedicine}}</h3>
+                              </div>
+                              <div class="col-auto">
+                                <i class="fas fa-tablets bg-c-yellow"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       <div class="col-md-3">
                         <div class="card comp-card">
                           <div class="card-body">
@@ -93,6 +128,22 @@
                               </div>
                               <div class="col-auto">
                                 <i class="fas fa-clinic-medical bg-c-red"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="card comp-card">
+                          <div class="card-body">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                <h6 class="m-b-25">Appointments</h6>
+                                <h3 class="f-w-700 text-c-blue">{{$totalapt}}</h3>
+                              </div>
+                              <div class="col-auto">
+                                <i class="fas fa-calendar-check bg-c-blue"></i>
                               </div>
                             </div>
                           </div>
@@ -199,9 +250,9 @@
                             <div class="scroll-widget">
                               <div class="row">
                                 <div class="col-md-12">
-                                  <div class="btn btn-danger m-1">Paracetemol</div>
-                                  <div class="btn btn-warning m-1">Ibuprofen</div>
-                                  <div class="btn btn-warning m-1">Antibiotics</div>
+                                  @foreach($medicines as $medicine)
+                                  <div class="btn btn-danger m-1">{{$medicine->name}} {{$medicine->stock}}</div>
+                                  @endforeach
 
                                 </div>
                               </div>
