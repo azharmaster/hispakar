@@ -7,7 +7,9 @@ use App\Models\Appointments;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Department;
+use App\Models\Medicine;
 use App\Models\MedRecord;
+use App\Models\Medprescription;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -17,6 +19,7 @@ class PatientController extends Controller
     {
 
         $email=Auth()->user()->email;
+        $name=Auth()->user()->name;
 
         $totalAppointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->select('appointment.*')
@@ -26,12 +29,29 @@ class PatientController extends Controller
         $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
-        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'doctor.name as doctor_name', 'medrecord.desc as desc_s')
+        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'doctor.name as doctor_name', 'medrecord.desc as descs')
         ->where('patient.email', $email )
         ->get();
 
+        $listmedicines = Medicine::select('medicine.name')
+        ->join('medprescription', 'medicine.id', '=', 'medprescription.medicineid')
+        ->join('patient', 'patient.id', '=', 'medprescription.patientid')
+        ->where('patient.email', '=', $email)
+        ->distinct()
+        ->get();
 
-        return view('patient.contents.dashboard', compact('totalAppointments','appointments'));
+        $listDoctors = Doctor::select('doctor.*','department.name as dept_name')
+        ->join('medrecord', 'doctor.id', '=', 'medrecord.docid')
+        ->join('department', 'doctor.deptid', '=', 'department.id')
+        ->join('patient', 'patient.id', '=', 'medrecord.patientid')
+        ->where('patient.email', '=', $email)
+        ->distinct()
+        ->get();
+
+        $detailpatients = Patient::where('email', $email)->get();
+
+
+        return view('patient.contents.dashboard', compact('name','totalAppointments','appointments','listmedicines','detailpatients','listDoctors'));
     }
 
     public function viewAppointmentList()
@@ -77,6 +97,16 @@ class PatientController extends Controller
         $departments = Department::all();
 
         return view('patient.contents.reportList', compact('medrcs','doctors','patients','departments'));
+    }
+
+    public function viewProfile()
+    {
+        $email=Auth()->user()->email; //dapatemail dr login
+
+        $userdetails = Patient::where('email', $email)->get();
+
+
+        return view('patient.contents.profile', compact('userdetails'));
     }
 
 

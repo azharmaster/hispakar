@@ -91,6 +91,7 @@ class AdminController extends Controller
         $doctors = Doctor::all();
         $patients = Patient::all();
         $departments = Department::all();
+        
 
         return view('admin.contents.appointmentList', compact('appointments','doctors','patients','departments'));
     }

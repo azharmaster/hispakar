@@ -9,7 +9,7 @@
                   <div class="page-header-title">
                     <i class="feather icon-home bg-c-blue"></i>
                     <div class="d-inline">
-                      <h5>Welcome John!</h5>
+                      <h5>Welcome {{$name}}!</h5>
                       <span>Are you feeling great today?</span>
                     </div>
                   </div>
@@ -43,7 +43,7 @@
                               <div class="row align-items-center">
                                 <div class="col">
                                   <h6 class="m-b-25">Pending Appointments</h6>
-                                  <h4 class="f-w-700 text-c-blue">{{$totalAppointments}}</h4>
+                                  <h4 class="f-w-700 text-c-blue">{{ $totalAppointments}}</h4>
                                 </div>
                                 <div class="col-auto">
                                   <i class="fas fa-calendar-check bg-c-blue"></i>
@@ -89,6 +89,7 @@
                       </div>
 
                       <div class="col-md-4">
+                      @foreach($listDoctors as $listDoctor)
                         <div class="card comp-card">
                           <div class="card-body">
                             <div class="row align-items-center">
@@ -99,15 +100,17 @@
                                     <img src="../files/assets/images/avatar-4-1.jpg" class="img-radius" style="width: 90px; height: 90px;">
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5">Dr. Nik Ahmad</h6>
-                                    <p class="m-b-5">Contact: 0178923546</p>
-                                    <h6 class="m-b-25"><span class="badge badge-primary">Therapist</span></h6>
+                                    <h6 class="m-b-5">{{$listDoctor->name}}</h6>
+                                    <p class="m-b-5">Contact: {{$listDoctor->phoneno}}</p>
+                                    <h6 class="m-b-25"><span class="badge badge-primary">{{$listDoctor->dept_name}}</span></h6>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
+                        @endforeach
+                        
 
                         <div class="card comp-card">
                           <div class="card-body">
@@ -115,15 +118,17 @@
                               <div class="col">
                                 <h6 class="m-b-25">Your Data</h6>
                                 <div class="row align-items-center">
+                                  @foreach($detailpatients as $detailpatient)
                                   <div class="col">
-                                    <h6 class="m-b-7"><span class="data-label">Weight</span><br> <span class="font-weight-bold"><span class="badge data-badge weight-badge">60 kg</span></span></h6>
+                                    <h6 class="m-b-7"><span class="data-label">Weight</span><br> <span class="font-weight-bold"><span class="badge data-badge weight-badge">{{$detailpatient->weight}} kg</span></span></h6>
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5"><span class="data-label">Height</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge">170 cm</span></span></h6>
+                                    <h6 class="m-b-5"><span class="data-label">Height</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge">{{$detailpatient->height}} cm</span></span></h6>
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5"><span class="data-label">Blood Type</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge">A+</span></span></h6>
+                                    <h6 class="m-b-5"><span class="data-label">Blood Type</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge">{{$detailpatient->bloodtype}}</span></span></h6>
                                   </div>
+                                  @endforeach
                                 </div>
                               </div>
                             </div>
@@ -152,9 +157,9 @@
                             <div class="scroll-widget">
                               <div class="row">
                                 <div class="col-md-12">
-                                  <div class="btn btn-danger m-1">Paracetemol</div>
-                                  <div class="btn btn-warning m-1">Ibuprofen</div>
-                                  <div class="btn btn-warning m-1">Antibiotics</div>
+                                  @foreach($listmedicines as $listmedicine)
+                                  <div class="btn btn-danger m-1">{{$listmedicine->name}}</div>
+                                  @endforeach
                                 </div>
                               </div>
                             </div>
@@ -311,19 +316,20 @@
                               <table class="table table-hover m-b-0">
                                 <thead style="text-align: center;">
                                 <tr>
-                                  <th>Doc Name</th>
+                                  <th>Doctor</th>
                                   <th>Description</th>
                                   <th>Date</th>
                                 </tr>
                                 </thead>
                                 <tbody style="text-align: center;">
-                                @foreach($appointments as $appointment)
+                                @foreach ($appointments as $appointment)
                                   <tr>
                                     <td>{{$appointment->doctor_name}}</td>
-                                    <td>{{$appointment->desc_s}}</td>
+                                    <td>{{$appointment->descs}}</td>
                                     <td>{{$appointment->date}} {{$appointment->time}}</td>
                                   </tr>
                                 @endforeach
+
                                 </tbody>
                               </table>
                             </div>
