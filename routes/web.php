@@ -158,7 +158,9 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::post('/patient/appointmentList', [PatientController::class, 'AddAppointment']);
     Route::post('/patient/appointmentList/{id}', [PatientController::class, 'EditAppointment']);
     Route::delete('/patient/appointmentList/{id}', [PatientController::class, 'deleteAppointment'])->name('deleteAppointment');
-    
+
+    //managedetailsuser
+    Route::post('/patient/profile/{id}', [PatientController::class, 'EditProfile']);
 });
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('patient.contents.dashboard');

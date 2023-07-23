@@ -2,6 +2,12 @@
 @extends('layouts.patient')
 
 @section('content')
+
+@if(session()->has('success'))
+    <script>
+        alert("{{ session()->get('success') }}");
+    </script>
+@endif
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
   <div class="page-header card">
@@ -126,8 +132,9 @@
       </div>
 
       <div class="modal-body" style="margin-left: 15px; margin-right:15px;">
-        <form>
-          @foreach($userdetails as $userdetail)
+      @foreach($userdetails as $userdetail)
+      <form action="/patient/profile/{{ $userdetail->id }}" class="form-horizontal row-fluid" method="POST" >
+      {{csrf_field()}}
           <div class="row">
             <div class="col">
               <div class="form-group row">
@@ -147,7 +154,7 @@
               <div class="form-group row">
                 <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">IC</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border profile"  value="{{$userdetail->ic}}" >
+                  <input type="text" class="form-control form-control-border profile" name="ic" value="{{$userdetail->ic}}" >
                 </div>
               </div>
               <!-- /.form-group -->
@@ -155,7 +162,7 @@
               <div class="form-group row">
                 <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Name</label>
                 <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" value="{{$userdetail->name}}" >
+                  <input type="text" class="profile form-control form-control-border" name="name" value="{{$userdetail->name}}" >
                 </div>
               </div>
               <!-- /.form-group -->
@@ -163,7 +170,7 @@
               <div class="form-group row">
                 <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Age</label>
                 <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" value="{{$userdetail->age}}" >
+                  <input type="text" class="profile form-control form-control-border" name="age" value="{{$userdetail->age}}" >
                 </div>
               </div>
               <!-- /.form-group -->
@@ -171,7 +178,7 @@
               <div class="form-group row">
                 <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Gender</label>
                 <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" value="{{$userdetail->gender}}" >
+                  <input type="text" class="profile form-control form-control-border" name="gender" value="{{$userdetail->gender}}" >
                 </div>
               </div>
               <!-- /.form-group -->
@@ -179,7 +186,7 @@
               <div class="form-group row">
                 <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Phone Number</label>
                 <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" value="{{$userdetail->phoneno}}" >
+                  <input type="text" class="profile form-control form-control-border" name="phoneno" value="{{$userdetail->phoneno}}" >
                 </div>
               </div>
               <!-- /.form-group -->
@@ -187,7 +194,7 @@
               <div class="form-group row">
                 <label for="inputName2" style="font-weight: normal; " class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border" id="inputName2" value="{{$userdetail->email}}">
+                  <input type="text" class="form-control form-control-border" id="inputName2" name="email" value="{{$userdetail->email}}">
                 </div>
               </div>
               <!-- /.form-group -->
@@ -195,7 +202,7 @@
               <div class="form-group row">
                 <label for="inputExperience" style="font-weight: normal; " class="col-sm-2 col-form-label">Address</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border" id="exampleInputBorder" value="{{$userdetail->address}}" placeholder="Location">
+                  <input type="text" class="form-control form-control-border" id="exampleInputBorder" name="address" value="{{$userdetail->address}}" placeholder="Location">
                 </div>
               </div>
               <!-- /.form-group -->
@@ -204,7 +211,7 @@
       </div> <!-- /.end modal content -->
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success">Save Changes</button>
+        <button name="submit" class="btn btn-success">Save Changes</button>
       </div>
       </form>
       @endforeach

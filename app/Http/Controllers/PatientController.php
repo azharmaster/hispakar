@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class PatientController extends Controller
 {
+    
     public function index()
     {
 
@@ -109,6 +110,25 @@ class PatientController extends Controller
         return view('patient.contents.profile', compact('userdetails'));
     }
 
+
+    ////////////////////////////////PROFILE///////////////////////////////////////////////////////////////////////
+
+
+    public function EditProfile(Request $request, $id)
+    {
+        $user = Patient::find($id);
+        
+        $user->name = $request->input('name');
+        $user->ic = $request->input('ic');
+        $user->age = $request->input('age'); 
+        $user->gender = $request->input('gender'); 
+        $user->phoneno = $request->input('phoneno'); 
+        $user->email = $request->input('email');
+        $user->address = $request->input('address');
+        $user->save();
+
+        return redirect('/patient/profile')->with('success', 'Profile has been updated');
+    }
 
     /////////////////////////////////Appointment//////////////////////////////////////////////////////////////////
 
