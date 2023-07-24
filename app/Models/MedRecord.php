@@ -24,4 +24,10 @@ class MedRecord extends Model
     ];
 
     public $timestamps = false;
+
+    public function doctor()
+    {
+        return $this->hasMany(Doctor::class, 'docid','id');
+    }
+
 }

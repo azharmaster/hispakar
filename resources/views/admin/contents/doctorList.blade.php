@@ -74,15 +74,20 @@
                                                             <td>{{ $doctor->name }}</td>
                                                             <td>{{ $doctor->phoneno }}</td>
                                                             <td>{{ $doctor->email }}</td>
-                                                            <td>{{ $doctor->specialization }}</td>
+                                                            <td>{{ $doctor->dept_name }}</td>
                                                             <td>{{ $doctor->gender }}</td>
                                                             <td>
+                                                                <a title="Profile Doctor" data-toggle="modal" data-target="#profiledoctor-{{ $doctor->id }}">
+                                                                    <i style="font-size:20px;" class="icon feather icon-eye f-w-600 f-16 m-r-15 text-c-yellow"></i>
+                                                                </a>
                                                                 <a title="Edit Doctor" data-toggle="modal" data-target="#editModal-{{ $doctor->id }}">
                                                                     <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                 </a>
                                                                 <a href="/admin/doctorList/{{ $doctor->id }}" title="Delete Doctor" data-target="#deleteModal-{{ $doctor->id }}" data-toggle="modal">
                                                                     <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>
                                                                 </a>
+                                                                
+
                                                             </td>
                                                         </tr>
                                                         @endforeach
@@ -296,11 +301,8 @@
 @endforeach
 <!-- end delete Doctor form -->
 
-<script>
-    function confirmDelete() {
-        return confirm("Are you sure you want to delete this user?");
-    }
-</script>
+
+@include('dup.profiledoctor')
 
 
 @endsection

@@ -17,7 +17,7 @@
           <i class="fas fa-solid fa-user bg-c-blue"></i>
           <div class="d-inline">
             <h5>Profile</h5>
-            <span>John Doe's Profile Page</span>
+            <span>{{$name}}'s Profile Page</span>
           </div>
         </div>
       </div>
@@ -41,15 +41,17 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="card">
-              @foreach($userdetails as $userdetail)
+              
                 <div class="card-block text-center">
                   <!--profile picture -->
                   <img src="../files/assets/images/avatar-4-1.jpg" class="img-radius" style="width: 140px; height: 140px;">
                 </div>
                 
-                <h4 class="profile-username text-center text-uppercase">{{$userdetail->name}}</h4>
-                <p class="text-muted text-center">{{$userdetail->phoneno}}</p>
-                <p class="text-muted text-center">{{$userdetail->address}}</p>
+                <h4 class="profile-username text-center text-uppercase">{{$name}}</h4>
+                
+                @foreach($detailpatients as $detailpatient)
+                <p class="text-muted text-center"><span class="badge data-badge weight-badge">{{$detailpatient->weight}} KG</span> <span class="badge data-badge height-badge">{{$detailpatient->height}} CM</span></p>
+                <p class="text-muted text-center"><span class="badge data-badge blood-badge">{{$detailpatient->bloodtype}}</span></p>
                 <a data-toggle="modal" title="Edit Profile" href="#edit-profile" class="btn btn-mat waves-effect waves-light btn-info mx-auto"><i class="fas fa-pencil-alt"></i>&nbsp;<b>Edit Profile</b></a>
                 @endforeach
                 <br><br>
@@ -202,7 +204,31 @@
               <div class="form-group row">
                 <label for="inputExperience" style="font-weight: normal; " class="col-sm-2 col-form-label">Address</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border" id="exampleInputBorder" name="address" value="{{$userdetail->address}}" placeholder="Location">
+                  <input type="text" class="form-control form-control-border" id="exampleInputBorder" name="address" value="{{$userdetail->address}}" >
+                </div>
+              </div>
+              <!-- /.form-group -->
+
+              <div class="form-group row">
+                <label for="inputExperience" style="font-weight: normal; " class="col-sm-2 col-form-label">Weight</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control form-control-border"name="weight" value="{{$userdetail->weight}}" >
+                </div>
+              </div>
+              <!-- /.form-group -->
+
+              <div class="form-group row">
+                <label for="inputExperience" style="font-weight: normal; " class="col-sm-2 col-form-label">Height</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control form-control-border"  name="height" value="{{$userdetail->height}}" >
+                </div>
+              </div>
+              <!-- /.form-group -->
+
+              <div class="form-group row">
+                <label for="inputExperience" style="font-weight: normal; " class="col-sm-2 col-form-label">Blood Type</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control form-control-border" id="exampleInputBorder" name="bloodtype" value="{{$userdetail->bloodtype}}" >
                 </div>
               </div>
               <!-- /.form-group -->

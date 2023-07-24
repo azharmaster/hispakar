@@ -11,6 +11,7 @@ use App\Models\Patient;
 use App\Models\Room;
 use App\Models\User;
 use App\Models\Medicine;
+use App\Models\MedRecord;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -51,11 +52,30 @@ class AdminController extends Controller
 
     public function viewDoctorList()
     {
-        $doctors = Doctor::all();
+        $doctors = Doctor::join('department', 'doctor.deptid', '=', 'department.id')
+        ->select('doctor.*', 'department.name as dept_name')
+        ->get();
+
+
         $departments = Department::all();
+
+        foreach ($doctors as $doctor) { //total patient
+            $doctor->record_count = MedRecord::where('docid', $doctor->id)->count();
+        }
+
+        foreach ($doctors as $doctor) { //total operation
+            $doctor->operation_count = MedRecord::where('docid', $doctor->id)->count();
+        }
+
+        foreach ($doctors as $doctor) { //total appointment
+            $doctor->appointment_count = Appointments::where('docid', $doctor->id)->count();
+        }
+        
 
         return view('admin.contents.doctorList', compact('doctors', 'departments'));
     }
+
+ 
 
     public function viewNurseList()
     {
@@ -67,7 +87,12 @@ class AdminController extends Controller
 
     public function viewPatientList()
     {
-        $patients = Patient::all();
+        $patients = Patient::with('appointments.docid')->get();
+
+        // foreach ($patients as $patient) { //total appointment
+        //     $patient->appointment_count = Appointments::where('docid', $patient->id)->count();
+        // }
+        
 
         return view('admin.contents.patientList', compact('patients'));
     }

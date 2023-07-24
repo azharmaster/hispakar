@@ -103,11 +103,13 @@ class PatientController extends Controller
     public function viewProfile()
     {
         $email=Auth()->user()->email; //dapatemail dr login
+        $name=Auth()->user()->name;
 
         $userdetails = Patient::where('email', $email)->get();
+        $detailpatients = Patient::where('email', $email)->get();
 
 
-        return view('patient.contents.profile', compact('userdetails'));
+        return view('patient.contents.profile', compact('userdetails','detailpatients','name'));
     }
 
 
@@ -125,6 +127,9 @@ class PatientController extends Controller
         $user->phoneno = $request->input('phoneno'); 
         $user->email = $request->input('email');
         $user->address = $request->input('address');
+        $user->weight = $request->input('weight');
+        $user->height = $request->input('height');
+        $user->bloodtype = $request->input('bloodtype');
         $user->save();
 
         return redirect('/patient/profile')->with('success', 'Profile has been updated');
