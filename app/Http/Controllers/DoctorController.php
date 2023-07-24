@@ -119,15 +119,15 @@ class DoctorController extends Controller
     }
 
     //Edit Profile
-    public function EditProfile(Request $request, $id)
+    public function editProfile(Request $request, $id)
     {
         $doctor = Doctor::find($id);
 
         // Update the corresponding user record
         $user = User::where('email', $doctor->email)->first();
-        
-        // If the user record exists and the email is not changed or the new email is unique
-        if ($user && ($request->input('email') === $doctor->email || User::where('email', $request->input('email'))->doesntExist())) {
+
+        // If the email is the same as the existing one or it's unique for other users
+        if ($user && ($request->input('email') === $doctor->email || User::where('email', $request->input('email'))->where('id', '!=', $user->id)->doesntExist())) {
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
@@ -141,7 +141,7 @@ class DoctorController extends Controller
                 $doctor->gender = $request->input('gender');
                 $doctor->phoneno = $request->input('phoneno');
                 $doctor->email = $request->input('email');
-                $doctor->deptid = $request->input('deptid'); 
+                $doctor->deptid = $request->input('deptid');
                 $doctor->education = $request->input('education');
                 $doctor->experience = $request->input('experience');
                 $doctor->dob = $request->input('dob');
@@ -150,12 +150,12 @@ class DoctorController extends Controller
                 $doctor->save();
 
                 DB::commit();
-                
+
                 return redirect('/doctor/profile')->with('success', 'Your profile has been updated');
             } catch (\Exception $e) {
                 DB::rollBack();
-                
-                return redirect()->back()->with('success', 'ERROR! Unable to updating your profile.');
+
+                return redirect()->back()->with('success', 'ERROR! Unable to update your profile.');
             }
         } else {
             return redirect()->back()->with('success', 'Unsuccessful, the email already exists.');

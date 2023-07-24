@@ -219,7 +219,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="input-group-addon" style="font-weight:bold;" >Experience :</label>
-                                <textarea type="text" class="form-control" rows="5" name="experience" id="experience" value="{{ $experience }}"></textarea>
+                                <textarea type="text" class="form-control" rows="5" name="experience" id="experience">{{ $experience }}</textarea>
                             </div>  
 
 
