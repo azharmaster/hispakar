@@ -17,8 +17,9 @@
                 <div class="page-header-title">
                     <i class="fas fa-regular fa-user bg-c-blue"></i>
                     <!-- <i class="feather icon-home bg-c-blue"></i> -->
-                    <div class="d-inline" >
-                        <h5>Dr. {{ ucfirst($name) }}</h5>
+                    <div class="d-inline">
+                        <h5>Profile</h5>
+                        <span>{{ ucfirst($name) }}'s Profile </span>
                     </div>
                 </div>
             </div>
@@ -39,7 +40,7 @@
                                             <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#editProfileModal" style="width: 170px;">Edit Profile</button>
                                         </div>
                                         <div class="col-7" style="margin-left: 29px">
-                                            <h3 style="word-wrap: break-word; max-width: 200px;" >Dr {{ ucfirst($name) }}</h3>
+                                            <h3 style="word-wrap: break-word; max-width: 200px;" >{{ ucfirst($name) }}</h3>
                                             <h6>Department of {{ $department->name }}</h6>
                                             <hr>
                                             <h6><i class="fas fa-graduation-cap text-primary mr-3"></i>{{ $education }}</h6>
@@ -154,61 +155,9 @@
     </div>
 </div>
 
-<!-- Add Patient form -->
-<div class="modal fade" id="default-Modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Patient</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">ID :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="id" id="id" placeholder="ABC1234">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="John Doe">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Gender:</span>
-                        <select class="form-control" style="width: 350px;" name="gender" id="gender">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" placeholder="New York">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" placeholder="0134567891">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" placeholder="johndoe@gmail.com">
-                    </div>
-                        
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light">Submit</button>
-                    
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end Add Patient form -->
-
-<!-- Edit Patient form -->
+<!-- Edit Doctor form -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Profile</h5>
@@ -216,105 +165,79 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form action="/doctor/profile/{{ $id }}" method="POST">
+             @csrf
             <div class="modal-body">
                 <div class="container-fluid">
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Name :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="John Doe">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="hidden" style="width:350px;" class="form-control" name="id" id="id" value="{{ $id }}">
+
+                            <div class="form-group">
+                                <label for="name" class="input-group-addon" style="font-weight:bold;">IC :</label>
+                                <input type="text" class="form-control" name="ic" id="ic" value="{{ $ic }}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="input-group-addon" style="font-weight:bold;">Name :</label>
+                                <input type="text" class="form-control" name="name" id="name" value="{{ $name }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="gender" class="input-group-addon" style="font-weight:bold;">Gender:</label>
+                                <select class="form-control" name="gender" id="gender">
+                                    <option value="male" {{ $gender === 'male' ? 'selected' : '' }}>Male</option>
+                                    <option value="female" {{ $gender === 'female' ? 'selected' : '' }}>Female</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact" class="input-group-addon" style="font-weight:bold;">Contact No :</label>
+                                <input type="text" class="form-control" name="phoneno" id="phoneno" value="{{ $phoneno }}">
+                            </div> 
+                            <div class="form-group">
+                                <label for="name" class="input-group-addon" style="font-weight:bold;">Date of Birth :</label>
+                                <input type="date" class="form-control" name="dob" id="dob" value="{{ $dob }}">
+                            </div>
+                            
+                           
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name" class="input-group-addon" style="font-weight:bold;">Email :</label>
+                                <input type="email" class="form-control" name="email" id="email" value="{{ $email }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="input-group-addon" style="font-weight:bold;">Highest education :</label>
+                                <input type="text" class="form-control" name="education" id="education" value="{{ $education }}">
+                            </div>
+                            <div class="form-group ">
+                                <label for="inputName" class="input-group-addon" style="font-weight:bold;">Department</label>
+                                  <select class="form-control" name="deptid">
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}" {{ ( $department->id == $deptid) ? 'selected' : '' }}> {{ $department->name }} </option>
+                                    @endforeach   
+                                  </select> 
+                            </div>
+                            <div class="form-group">
+                                <label class="input-group-addon" style="font-weight:bold;" >Experience :</label>
+                                <textarea type="text" class="form-control" rows="5" name="experience" id="experience" value="{{ $experience }}"></textarea>
+                            </div>  
+
+
+                        </div>
                     </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Specialization: </span>
-                        <input type="text" style="width:350px;" class="form-control" name="specialization" id="specialization" value="Malaysia">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Address :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="address" id="address" value="Malaysia">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Contact :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="contact" id="contact" value="0199237856">
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Email :</span>
-                        <input type="email" style="width:350px;" class="form-control" name="email" id="email" value="john@gmail.com">
-                    </div>      
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Credentials :</span>
-                        <textarea type="email" style="width: 100%;" class="form-control" name="cred" id="cred" value="john@gmail.com"></textarea>
-                    </div>                  
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success waves-effect waves-light ">Save changes</button>
+                <button name="submit" class="btn btn-success waves-effect waves-light ">Save changes</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
-<!-- end edit Patient form -->
+<!-- end edit Doctor form -->
 
-<!-- delete Patient form -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Patient</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p style="font-size: 15px;"> Are you sure want to delete this user? </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger waves-effect waves-light ">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end delete Patient form -->
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min-1.js"></script><script type="text/javascript" src="../files/bower_components/jquery/js/jquery.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/jquery-ui/js/jquery-ui.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/popper.js/js/popper.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/bootstrap/js/bootstrap.min-1.js"></script>
-
-<script src="../files/assets/jquery/jquery.min.js"></script>
-
-<script src="../files/assets/pages/waves/js/waves.min-1.js"></script>
-
-<script type="text/javascript" src="../files/bower_components/jquery-slimscroll/js/jquery.slimscroll-1.js"></script>
-
-<script type="text/javascript" src="../files/assets/js/script.min-1.js"></script>
-
-
-<script type="text/javascript" src="../files/bower_components/modernizr/js/modernizr-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/modernizr/js/css-scrollbars-1.js"></script>
-
-<script src="../files/bower_components/datatables.net/js/jquery.dataTables.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-buttons/js/dataTables.buttons.min-1.js"></script>
-<script src="../files/assets/pages/data-table/js/jszip.min-1.js"></script>
-<script src="../files/assets/pages/data-table/js/pdfmake.min-1.js"></script>
-<script src="../files/assets/pages/data-table/js/vfs_fonts-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/dataTables.buttons.min-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/buttons.flash.min-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/jszip.min-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/vfs_fonts-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/buttons.colVis.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-buttons/js/buttons.print.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-buttons/js/buttons.html5.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-bs4/js/dataTables.bootstrap4.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-responsive/js/dataTables.responsive.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-responsive-bs4/js/responsive.bootstrap4.min-1.js"></script>
-
-<script src="../files/assets/pages/data-table/js/data-table-custom-1.js"></script>
-<script src="../files/assets/js/pcoded.min-1.js"></script>
-<script src="../files/assets/js/vertical/vertical-layout.min-1.js"></script>
-<script src="../files/assets/js/jquery.mCustomScrollbar.concat.min-1.js"></script>
-<script type="text/javascript" src="../files/assets/js/script-1.js"></script>
-<script type="text/javascript" src="../files/assets/printScript.js"></script>
+@include('doctor.includes.dtScripts')
 
 <script>
     const ctx = document.getElementById('myChart');

@@ -85,6 +85,9 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::get('/doctor/medicines', [DoctorController::class, 'viewMedicineList']);
     Route::get('/doctor/reports', [DoctorController::class, 'viewReportList']);
 
+    //Manage profile
+    Route::post('/doctor/profile/{id}', [NurseController::class, 'EditProfile']);
+
     //Manage Patient
     Route::post('/doctor/patientList', [DoctorController::class, 'AddPatient']);
     Route::post('/doctor/patientList/{id}', [DoctorController::class, 'EditPatient']);

@@ -1,3 +1,7 @@
+<!---- this is for chart at profile ------>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!---- dtScripts ------>
 <script type="text/javascript" src="{{ asset('files/bower_components/jquery/js/jquery.min-1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('files/bower_components/jquery-ui/js/jquery-ui.min-1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('files/bower_components/popper.js/js/popper.min-1.js') }}"></script>
