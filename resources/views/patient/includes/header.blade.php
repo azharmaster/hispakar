@@ -116,11 +116,6 @@
               <i class="feather icon-chevron-down"></i>
             </div>
             <ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-              <!-- <li>
-                <a href="#!">
-                  <i class="feather icon-settings"></i> Settings
-                </a>
-              </li> -->
               <li>
                 <a href="/patient/profile">
                   <i class="feather icon-user"></i> Profile
@@ -132,11 +127,14 @@
                 </a>
               </li>
               <li>
+<<<<<<< HEAD
                 <a href="auth-lock-screen.html">
                   <i class="feather icon-lock"></i> Lock Screen
                 </a>
               </li> -->
               <li>
+=======
+>>>>>>> fbf435b901eb1a7e90964398ba52302326bf9009
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); 
                 document.getElementById('logout-form').submit();">
                   <i class="feather icon-log-out"></i> Logout

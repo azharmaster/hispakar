@@ -1,5 +1,4 @@
 <nav class="navbar header-navbar pcoded-header">
-
 @guest
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
@@ -21,6 +20,7 @@
   </ul>
 
   @else
+
   <div class="navbar-wrapper">
     <div class="navbar-logo">
       <a href="{{ url('index.php') }}">
@@ -116,17 +116,33 @@
               <i class="feather icon-chevron-down"></i>
             </div>
             <ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+<<<<<<< HEAD
+              <!-- <li>
+                <a href="#!">
+                  <i class="feather icon-settings"></i> Settings
+                </a>
+              </li> -->
+=======
+>>>>>>> fbf435b901eb1a7e90964398ba52302326bf9009
               <li>
-                <a href="{{ url('admin/profile.php') }}">
+                <a href="/patient/profile">
                   <i class="feather icon-user"></i> Profile
                 </a>
               </li>
-              <li>
+              <!-- <li>
                 <a href="email-inbox.html">
                   <i class="feather icon-mail"></i> My Messages
                 </a>
               </li>
               <li>
+<<<<<<< HEAD
+                <a href="auth-lock-screen.html">
+                  <i class="feather icon-lock"></i> Lock Screen
+                </a>
+              </li> -->
+              <li>
+=======
+>>>>>>> fbf435b901eb1a7e90964398ba52302326bf9009
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); 
                 document.getElementById('logout-form').submit();">
                   <i class="feather icon-log-out"></i> Logout
