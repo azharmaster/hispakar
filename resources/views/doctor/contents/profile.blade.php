@@ -31,16 +31,16 @@
             <div class="page-wrapper">
                 <div class="page-body">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12 col-sm-6">
                             <div class="card">
                                 <div class="card-block">
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-6 mx-auto d-block col-sm-4">
                                             <img src="../files/assets/images/dr-1.jpg" width="170" alt="User-Profile-Image">
                                             <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#editProfileModal" style="width: 170px;">Edit Profile</button>
                                         </div>
-                                        <div class="col-7" style="margin-left: 29px">
-                                            <h3 style="word-wrap: break-word; max-width: 200px;" >{{ ucfirst($name) }}</h3>
+                                        <div class="col-12 col-sm-7 text-center text-sm-left">
+                                            <h3 class="pt-3 pt-sm-0" style="word-wrap: break-word;" >{{ ucfirst($name) }}</h3>
                                             <h6>Department of {{ $department->name }}</h6>
                                             <hr>
                                             <h6><i class="fas fa-graduation-cap text-primary mr-3"></i>{{ $education }}</h6>
@@ -52,7 +52,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 p-0">
+                        <div class="col-12 col-md-6 p-0">
                             <div class="row">
                                 <div class="col-6">
                                     <a title="View Appointment" data-toggle="modal" data-target="#viewModal">
@@ -64,7 +64,7 @@
                                             <h4 class="f-w-700 text-white">34</h4>
                                             </div>
                                             <div class="col-auto">
-                                            <i class="fas fa-hospital-user bg-c-white text-primary"></i>
+                                            <i class="fas fa-hospital-user bg-c-white text-primary d-none d-sm-block"></i>
                                             </div>
                                         </div>
                                         </div>
@@ -81,7 +81,7 @@
                                             <h4 class="f-w-700 text-white">10 years</h4>
                                             </div>
                                             <div class="col-auto">
-                                            <i class="fas fa-briefcase bg-c-white text-success"></i>
+                                            <i class="fas fa-briefcase bg-c-white text-success d-none d-sm-block"></i>
                                             </div>
                                         </div>
                                         </div>
@@ -98,7 +98,7 @@
                                             <h4 class="f-w-700 text-white">73</h4>
                                             </div>
                                             <div class="col-auto">
-                                            <i class="fas fa-hospital bg-c-white text-success"></i>
+                                            <i class="fas fa-hospital bg-c-white text-success d-none d-sm-block"></i>
                                             </div>
                                         </div>
                                         </div>
@@ -115,7 +115,7 @@
                                             <h4 class="f-w-700 text-success">5 patients</h4>
                                             </div>
                                             <div class="col-auto">
-                                            <i class="fas fa-plus bg-c-green"></i>
+                                            <i class="fas fa-plus bg-c-green d-none d-sm-block"></i>
                                             </div>
                                         </div>
                                         </div>
