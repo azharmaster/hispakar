@@ -29,19 +29,19 @@
 
                 <div class="container-fluid">
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Room Name :</span>
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Room Name :</label>
                         <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="Name" required>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Room type :</span>
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Room type :</label>
                         <input type="text" style="width:350px;" class="form-control" name="type" id="type" placeholder="eg. Operation Room" required>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Description :</span>
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Description :</label>
                         <textarea rows="2" style="width: 350px;" class="form-control" name="desc" id="desc" placeholder="Enter description.." required></textarea>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Status :</span>
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Status :</label>
                         <select style="width:350px;" class="form-control" name="status" id="status" required>
                             <option value="1">Available</option>
                             <option value="0">Not available</option> 
@@ -75,19 +75,19 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Room Name :</span>
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Room Name :</label>
                         <input type="text" style="width:350px;" class="form-control" name="name" id="name" value="{{ $room->name }}" placeholder="Name">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Room type :</span>
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Room type :</label>
                         <input type="text" style="width:350px;" class="form-control" name="type" id="type" value="{{ $room->type }}" placeholder="eg. Operation Room">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">desc :</span>
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">desc :</label>
                         <textarea rows="2" style="width: 350px;" class="form-control" name="desc" id="desc" placeholder="Enter description.." required>{{ $room->desc }}</textarea>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Status :</span>
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Status :</label>
                         <select style="width:350px;" class="form-control" name="status" id="status">
 
                             @if ($room->status === 0)

@@ -21,9 +21,21 @@ class NurseController extends Controller
 {
     public function index()
     {
-        return view('nurse.index');
-    }
+        $totalapt = Appointments::all()->count();
+        $totaldoc = Doctor::all()->count();
+        $totalnurse = Doctor::all()->count();
+        $totalpatient = Patient::all()->count();
+        $totalroom = Room::all()->count();
+        $totaldept = Department::all()->count();
+        $totalmedicine = Medicine::all()->count();
 
+        $patients = Patient::all();
+        $medicines = Medicine::all();
+        $rooms = Room::all();
+        $doctors = Doctor::all();
+
+        return view('nurse.contents.dashboard', compact('totalpatient', 'medicines', 'totalroom', 'totaldoc'));
+    }
 
     public function viewProfile()
     {

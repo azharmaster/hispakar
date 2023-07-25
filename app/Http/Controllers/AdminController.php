@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Appointments;
 use App\Models\Department;
+use App\Models\Admin;
 use App\Models\Doctor;
 use App\Models\Nurse;
 use App\Models\Patient;
@@ -41,6 +42,24 @@ class AdminController extends Controller
 
         return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totaldept',
         'totalnurse','totalpatient','totalmedicine','medicines','nurses'));
+    }
+
+    public function viewProfile()
+    {
+        // Get the currently authenticated user
+        $user = auth()->user();
+
+        if ($user->usertype === 1) {
+            // Get the nurse's name from the 'nurse' table based on the email
+            $admin = Admin::where('email', $user->email)->first();
+
+            return view('admin.contents.profile', [
+                'id' => $admin->id,
+                'name' => $admin->name,
+                'email' => $admin->email,
+                'phoneno' => $admin->phoneno
+            ]);
+        }
     }
 
     public function viewDepartmentList()

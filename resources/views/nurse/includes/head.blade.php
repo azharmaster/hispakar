@@ -50,4 +50,26 @@
         white-space: normal;
         word-wrap: break-word;
     }
+
+    td {
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    .btn-primary2 {
+        background-color: #007BFF;
+        color: white;
+        border-color: #007BFF;
+    }
+
+    .btn-primary2:hover {
+        background-color: #0069D9;
+        color: white;
+        border-color: #0069D9;
+    }
+
+    .custom-thinner-outline {
+        border-width: 1px; /* Adjust the value to create a thinner outline */
+        border-color: #007BFF; /* Adjust the border color as needed */
+    }
 </style>
