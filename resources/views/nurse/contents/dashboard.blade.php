@@ -117,7 +117,7 @@
                               <h6 class="m-b-20 f-w-600">Appointment</h6>
                               
                               <div class="row d-flex justify-content-between ">
-                                <h2 class="f-w-700 text-c-red ml-3">{{ $totaldoc }}</h2>
+                                <h2 class="f-w-700 text-c-red ml-3">{{ $totalapt }}</h2>
                                 <i class="fas fa-calendar-check bg-c-red" style="margin-top: -8px; margin-right: -18px"></i>
                               </div>
                               
@@ -134,7 +134,7 @@
 
                 <!-- Start Table -->
                 <div class="col-md-8">
-                  <div class="card table-card card-outline card-border-primary custom-thinner-outline" >
+                  <div class="card table-card card-outline card-border-primary custom-thinner-outline" style="height: 450px">
                     <div class="card-header">
                     <h5>Today's Appointments</h5>
                       <div class="card-header-right">
@@ -148,61 +148,53 @@
                         </ul>
                       </div>
                     </div>
-                    <div class="card-block p-b-0" style="height: 400px">
+                    <div class="card-block p-b-0" >
                       <div class="table-responsive">
-                        <table class="table table-hover m-b-0">
+                        <table id="notOverflow" class="table table-hover m-b-0">
                           <thead>
                           <tr>
-                            <th>Patient</th>
-                            <th>Date</th>
                             <th>Time</th>
-                            <th>Desc</th>
+                            <th>Patient</th>
                             <th>Doctor</th>
+                            <th>Department</th>
                           </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>Haley Kennedy</td>
-                              <td>24/6/23</td>
-                              <td>10:30</td>
-                              <td>Migraine</td>
-                              <td>Haley Kennedy</td>
-                            </tr>
-                            <tr>
-                              <td>Rhona Davidson</td>
-                              <td>24/6/23</td>
-                              <td>11:00</td>
-                              <td>High Blood Pressure</td>
-                              <td>Haley Kennedy</td>
-                            </tr>
-                            <tr>
-                              <td>Colleen Hurst</td>
-                              <td>24/6/23</td>
-                              <td>11:30</td>
-                              <td>Broken Limb follow up</td>
-                              <td>Haley Kennedy</td>
-                            </tr>
-                            <tr>
-                              <td>Colleen Hurst</td>
-                              <td>24/6/23</td>
-                              <td>11:30</td>
-                              <td>Broken Limb follow up</td>
-                              <td>Haley Kennedy</td>
-                            </tr>
+                            @php
+                              $today = now()->format('Y-m-d'); // date today
+                              $todaysAppointments = $appointments->where('date', $today)->sortBy('time')->take(5);
+                            @endphp
+
+                            @if ($todaysAppointments->isEmpty())
+                                <tr>
+                                    <td colspan="4">No appointment today</td>
+                                </tr>
+                            @else
+                                @foreach ($todaysAppointments as $appointment)
+                                    <tr>
+                                        <td>{{ $appointment->time }}</td>
+                                        <td>{{ $appointment->patient->name }}</td>
+                                        <td>{{ $appointment->doctor->name }}</td>
+                                        <td>{{ $appointment->department->name }}</td>
+                                    </tr>
+                                @endforeach
+                            @endif
+
                           </tbody>
                         </table>
-                        <div class="modal-footer border-0" style="margin-top: -12px">
-                          <button type="button" class="btn btn-primary2 waves-effect" data-dismiss="modal">See All</button>
-                        </div>
                       </div>
                     </div>
+                    <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
+                      <a href="/nurse/appointmentList" class="btn btn-primary2 waves-effect" data-dismiss="modal">See All</a>
+                    </div>
                   </div>
+                  <!-- End card -->
                 </div>
-                  <!-- End table -->
+                <!-- End col -->
 
                   <!-- Med Supply -->
                 <div class="col-xl-4 col-md-12">
-                  <div class="card latest-update-card card-outline card-border-primary custom-thinner-outline">
+                  <div class="card latest-update-card card-outline card-border-primary custom-thinner-outline"  style="height: 450px">
                     <div class="card-header">
                       <h5>Medicine Supply</h5>
                       <div class="card-header-right">
@@ -217,7 +209,7 @@
                       </div>
                     </div>
 
-                    <div class="card-block" style="height: 400px">
+                    <div class="card-block">
                       <div class="scroll-widget">
                         <div class="row">
                           <div class="col-md-12">
@@ -247,15 +239,15 @@
                           </div>
                         </div>
                       </div>
-                      <div class="modal-footer border-0" style="margin-top: 15px">
-                        <button type="button" class="btn btn-primary2 waves-effect" data-dismiss="modal">See All</button>
+                      <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
+                        <a href="/nurse/medicineList" class="btn btn-primary2 waves-effect" data-dismiss="modal">See All</a>
                       </div>
                     </div>
-                    <!-- End card-block -->
-                                    
+                    <!-- End card block-->
                   </div>
+                  <!-- End card -->
                 </div>   
-                    <!-- End Med Supply -->
+                <!-- End col Med Supply -->
 
                 <div class="col-md-12 col-xl-6">
                   <div class="card sale-card card-outline card-border-primary custom-thinner-outline custom-card" style="height: 400px;">
@@ -281,7 +273,7 @@
                     },
                     {
                       label: 'Cancelled',
-                      backgroundColor: '#FF5733', // Red
+                      backgroundColor: '#DE3A18', // Red
                       data: [40, 68, 45, 30, 76, 62],
                     }]
                   };
