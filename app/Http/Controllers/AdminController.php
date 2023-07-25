@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointments;
 use App\Models\Department;
 use App\Models\Admin;
+use App\Models\DocSchedule;
 use App\Models\Doctor;
 use App\Models\Nurse;
 use App\Models\Patient;
@@ -141,6 +142,18 @@ class AdminController extends Controller
         
 
         return view('admin.contents.appointmentList', compact('appointments','doctors','patients','departments'));
+    }
+
+    public function getDoctorSchedule($doctorId)
+    {
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+
+        $doctorSchedule = DocSchedule::where('docid', $doctorId)
+            ->whereBetween('date', [$startOfWeek, $endOfWeek])
+            ->get();
+
+        return response()->json($doctorSchedule);
     }
 
     public function viewMedicineList()
@@ -439,17 +452,62 @@ class AdminController extends Controller
 
     public function AddAppointment(Request $request)
     {
-     
-        //insert data into nurse table
+        // Get the input data
+        $patientId = $request->patientid;
+        $doctorId = $request->docid;
+        $deptId = $request->deptid;
+        $date = $request->date;
+        $time = $request->time;
+    
+        // Convert time from '2:00 PM - 2:30 PM' to 'H:i' format
+        $timeParts = explode(' - ', $time);
+        $startTime = Carbon::createFromFormat('h:i A', $timeParts[0])->format('H:i');
+        $endTime = Carbon::createFromFormat('h:i A', $timeParts[1])->format('H:i');
+    
+        // Check for overlapping appointments
+        $overlappingAppointments = DB::table('appointment')
+            ->where('docid', $doctorId)
+            ->where('date', $date)
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->where(function ($query) use ($startTime, $endTime) {
+                    $query->where('time', '>=', $startTime)
+                        ->where('time', '<', $endTime);
+                })
+                ->orWhere(function ($query) use ($startTime, $endTime) {
+                    $query->where('time', '<=', $startTime)
+                        ->where('time', '>', $startTime);
+                })
+                ->orWhere(function ($query) use ($startTime, $endTime) {
+                    $query->where('time', '>=', $startTime)
+                        ->where('time', '<=', $endTime);
+                });
+            })
+            ->count();
+    
+        // If there are overlapping appointments, display an alert
+        if ($overlappingAppointments > 0) {
+            return redirect()->back()->with('error', 'The selected time slot is already booked. Please choose another time.');
+        }
+    
+        // If the time slot is available, save the new appointment
         $appointment = new Appointments();
-        $appointment->patientid = $request->patientid;
-        $appointment->docid = $request->docid;
-        $appointment->deptid = $request->deptid;
-        $appointment->date = $request->date;
-        $appointment->time = $request->time;
-        $appointment->status = $request->status;
-        $appointment->save();
+        $appointment->patientid = $patientId;
+        $appointment->docid = $doctorId;
+        $appointment->deptid = $deptId;
+        $appointment->date = $date;
 
+        // Convert time from '2:00 PM - 2:30 PM' to 'Y-m-d H:i:s' format
+        $timeRange = $request->time;
+        $timeParts = explode(' - ', $timeRange);
+        $startDateTime = date('Y-m-d H:i:s', strtotime($timeParts[0]));
+        // If you need to use the end time as well, you can convert it in a similar way.
+        // $endDateTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
+
+        $appointment->time = $startDateTime;
+        $appointment->status = $request->status;
+        $appointment->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+        $appointment->save();
+    
         return redirect('/admin/appointmentList')->with('success', 'New Appointment has been successfully added');
     }
 

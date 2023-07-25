@@ -9,7 +9,7 @@
                 <div class="page-header-title">
                     <i class="feather icon-home bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>WELCOME DOCTOR</h5>
+                        <h5>Welcome, Doctor {{ $name }}!</h5>
                         <span>Current room: Room 5</span>
                     </div>
                 </div>
@@ -40,8 +40,8 @@
                                     <div class="row align-items-center">
                                         <div class="col">
                                             <h6 class="m-b-25">Appointments</h6>
-                                            <h3 class="f-w-700 text-c-blue">12</h3>
-                                            <p class="m-b-0">Last Updated: 1 hour ago</p>
+                                            <h3 class="f-w-700 text-c-blue"> {{ $totalApt }}</h3>
+                                            <p class="m-b-0">Last Updated: {{ $timeDifference }}</p>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar-check bg-c-blue"></i>
@@ -57,8 +57,8 @@
                                     <div class="row align-items-center">
                                         <div class="col">
                                             <h6 class="m-b-25">Patients</h6>
-                                            <h3 class="f-w-700 text-c-green">15</h3>
-                                            <p class="m-b-0">Last Updated: 1 hour ago</p>
+                                            <h3 class="f-w-700 text-c-green">{{ $totalPatient }}</h3>
+                                            <p class="m-b-0">Last Updated: {{ $timePDifference }}</p>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-plus-square bg-c-green"></i>
@@ -74,8 +74,8 @@
                                     <div class="row align-items-center">
                                         <div class="col">
                                             <h6 class="m-b-25">Nurses</h6>
-                                            <h3 class="f-w-700 text-c-red">3</h3>
-                                            <p class="m-b-0">Last Updated: 1 hour ago</p>
+                                            <h3 class="f-w-700 text-c-red">{{ $totalNurse }}</h3>
+                                            <p class="m-b-0">Last Updated: {{ $timeNDifference }}</p>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-home bg-c-red"></i>
@@ -88,7 +88,7 @@
                         <div class="col-6">
                             <div class="card new-cust-card">
                                 <div class="card-header">
-                                    <h5>Appointments Today</h5>
+                                    <h5>Today's Appointment / {{ $currentDate }}</h5>
                                     <div class="card-header-right">
                                         <ul class="list-unstyled card-option">
                                             <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
@@ -102,62 +102,51 @@
                                 </div>
     
                                 <div class="card-block">
-                                    <div class="align-middle m-b-25">
-                                        <a href="doctorPage.php?p=appointmentReport">
-                                            <img src="../files/assets/images/avatar-2-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
-                                            <div class="d-inline-block">
-                                                <h6>Alex Thompson</h6>
-                                                <p class="text-muted m-b-0">Consultation</p>
-                                                <button class="status btn btn-sm btn-success mb-2 align-top">Current Appointment</button>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="align-middle m-b-25">
-                                        <img src="../files/assets/images/avatar-3-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
-                                        <div class="d-inline-block">
-                                            <a href="#!">
-                                                <h6>John Doue</h6>
+                                    @php
+                                        $currentTime = \Carbon\Carbon::now('Asia/Kuala_Lumpur');
+                                    @endphp
+
+                                    @foreach ($aptDs as $aptD)
+                                        @php
+                                            // Convert the appointment time to Carbon objects for start and end times
+                                            $startTime = \Carbon\Carbon::createFromFormat('H:i:s', $aptD->time);
+                                            $endTime = $startTime->copy()->addMinutes(30); // Assuming each appointment is 30 minutes
+
+                                            // Check if the appointment is in the past, ongoing, or in the future
+                                            $isPastAppointment = $currentTime->greaterThan($endTime);
+                                            $isCurrentTimeInRange = $currentTime->between($startTime, $endTime);
+                                        @endphp
+                                        <div class="align-middle m-b-25">
+                                            <a href="/doctor/appointmentList">
+                                                <img src="../files/assets/images/avatar-2-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                                <div class="d-inline-block">
+                                                    <h6>{{ $aptD->name }}</h6>
+                                                    <p class="text-muted m-b-0">Consultation</p>
+                                                    <button class="status btn btn-sm 
+                                                                @if ($isPastAppointment)
+                                                                    btn-danger
+                                                                @elseif ($isCurrentTimeInRange)
+                                                                    btn-success
+                                                                @else
+                                                                    btn-warning
+                                                                @endif
+                                                                mb-2 align-top">
+                                                        @if ($isPastAppointment)
+                                                            Appointment Passed
+                                                        @elseif ($isCurrentTimeInRange)
+                                                            Now
+                                                        @else
+                                                            Next: {{ $startTime->format('h:i A') }} - {{ $endTime->format('h:i A') }}
+                                                        @endif
+                                                    </button>
+                                                </div>
                                             </a>
-                                            <p class="text-muted m-b-0">Follow Up</p>
-                                            <span class="status btn btn-sm btn-warning">Next : 10:30</span>
                                         </div>
-                                    </div>
-                                    <div class="align-middle m-b-25">
-                                        <img src="../files/assets/images/avatar-3-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
-                                        <div class="d-inline-block">
-                                            <a href="#!">
-                                                <h6>Alex Thompson</h6>
-                                            </a>
-                                            <p class="text-muted m-b-0">Follow up</p>
-                                            <span class="status btn btn-sm btn-danger">Cancelled</span>
-                                        </div>
-                                    </div>
-                                    <div class="align-middle m-b-25">
-                                        <img src="../files/assets/images/avatar-2-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
-                                        <div class="d-inline-block">
-                                            <a href="#!">
-                                                <h6>Alex Thompson</h6>
-                                            </a>
-                                            <p class="text-muted m-b-0">Consultation</p>
-                                            <span class="status btn btn-sm btn-warning align-center">Next : 11.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="align-middle m-b-0">
-                                        <img src="../files/assets/images/avatar-2-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
-                                        <div class="d-inline-block">
-                                            <a href="#!">
-                                                <h6>Alex Thompson</h6>
-                                            </a>
-                                            <p class="text-muted m-b-0">Consultation</p>
-                                            <span class="status btn btn-sm btn-warning">Next : 11.30</span>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
-    
-    
-    
+                        
                         <!-- Start Table -->
                         <div class="col-md-6">
                             <div class="card table-card">
@@ -477,7 +466,7 @@
     
                         <!-- Med Supply -->
                         <div class="col-xl-4 col-md-12">
-                            <div class="card latest-update-card">
+                            <div class="card latest-update-card card-outline card-border-primary custom-thinner-outline"  style="height: 450px">
                                 <div class="card-header">
                                     <h5>Medicine Supply</h5>
                                     <div class="card-header-right">
@@ -491,105 +480,47 @@
                                         </ul>
                                     </div>
                                 </div>
-    
+
                                 <div class="card-block">
                                     <div class="scroll-widget">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="btn btn-danger m-1">Paracetemol</div>
-                                                <div class="btn btn-warning m-1">Ibuprofen</div>
-                                                <div class="btn btn-warning m-1">Antibiotics</div>
-    
+
+                                                <!-- define color -->
+                                                @php $colors = ['danger', 'warning']; $counter = 0; @endphp 
+
+                                                <!-- loop medicine -->
+                                                @foreach($medicines as $medicine)
+                                                <a title="View Medicine" data-toggle="modal" data-target="#viewModal-medicine-{{ $medicine->id }}"
+                                                class="btn btn-{{ $colors[$counter % count($colors)] }} m-1 bg-white">{{ $medicine->name }}</a>
+                                                
+                                                <!-- increment for color -->
+                                                @php $counter++; @endphp 
+                                                
+                                                @endforeach
+
+                                                <!-- dummy -->
+                                                @foreach($medicines as $medicine)
+                                                <a title="View Medicine" data-toggle="modal" data-target="#viewModal-medicine-{{ $medicine->id }}"
+                                                class="btn btn-{{ $colors[$counter % count($colors)] }} m-1 bg-white">{{ $medicine->name }}</a>
+                                                <!-- increment for color -->
+                                                @php $counter++; @endphp 
+                                                @endforeach
+                                                <!-- ./dummy -->
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
+                                        <a href="/doctor/medicineList" class="btn btn-primary2 waves-effect" data-dismiss="modal">See All</a>
+                                    </div>
                                 </div>
+                                <!-- End card block-->
                             </div>
-                        </div>
-                        <!-- End Med Supply -->
+                            <!-- End card -->
+                        </div>   
+                        <!-- End col Med Supply -->
     
-    
-    
-                        <!-- Issues -->
-                        <!-- <div class="col-xl-4 col-md-6">
-     class="card latest-update-card">
-     class="card-header">
-    Latest Activity</h5>
-     class="card-header-right">
-    class="list-unstyled card-option">
-    class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
-    <i class="feather icon-maximize full-card"></i></li>
-    <i class="feather icon-minus minimize-card"></i></li>
-    <i class="feather icon-refresh-cw reload-card"></i></li>
-    <i class="feather icon-trash close-card"></i></li>
-    <i class="feather icon-chevron-left open-card-option"></i></li>
-    >
-    v>
-    v>
-     class="card-block">
-     class="scroll-widget">
-     class="latest-update-box">
-     class="row p-t-20 p-b-30">
-     class="col-auto text-right update-meta p-r-0">
-    lass="b-primary update-icon ring"></i>
-    v>
-     class="col p-l-5">
-    ref="#!"><h6>Rescheduled appointment</h6></a>
-    lass="text-muted m-b-0">Lorem ipsum dolor sit amet, <a href="#!" class="text-c-blue"> More</a></p>
-    v>
-    v>
-     class="row p-b-30">
-     class="col-auto text-right update-meta p-r-0">
-    lass="b-primary update-icon ring"></i>
-    v>
-     class="col p-l-5">
-    ref="#!"><h6>Referred to specialist</h6></a>
-    lass="text-muted m-b-0">Lorem dolor sit amet, <a href="#!" class="text-c-blue"> More</a></p>
-    v>
-    v>
-     class="row p-b-30">
-     class="col-auto text-right update-meta p-r-0">
-    lass="b-success update-icon ring"></i>
-    v>
-     class="col p-l-5">
-    ref="#!"><h6>Urgent Care</h6></a>
-    lass="text-muted m-b-0">Lorem ipsum dolor sit ipsum amet, <a href="#!" class="text-c-green"> More</a></p>
-    v>
-    v>
-     class="row p-b-30">
-     class="col-auto text-right update-meta p-r-0">
-    lass="b-danger update-icon ring"></i>
-    v>
-     class="col p-l-5">
-    ref="#!"><h6>Your Manager Posted.</h6></a>
-    lass="text-muted m-b-0">Lorem ipsum dolor sit amet, <a href="#!" class="text-c-red"> More</a></p>
-    v>
-    v>
-     class="row p-b-30">
-     class="col-auto text-right update-meta p-r-0">
-    lass="b-primary update-icon ring"></i>
-    v>
-     class="col p-l-5">
-    ref="#!"><h6>Showcases</h6></a>
-    lass="text-muted m-b-0">Lorem dolor sit amet, <a href="#!" class="text-c-blue"> More</a></p>
-    v>
-    v>
-     class="row">
-     class="col-auto text-right update-meta p-r-0">
-    lass="b-success update-icon ring"></i>
-    v>
-     class="col p-l-5">
-    ref="#!"><h6>Miscellaneous</h6></a>
-    lass="text-muted m-b-0">Lorem ipsum dolor sit ipsum amet, <a href="#!" class="text-c-green"> More</a></p>
-    v>
-    v>
-    v>
-    v>
-    v>
-    v>
-    v> -->
-                        <!-- End Latest Activity -->
-    
+
                         <!-- Calendar -->
                         <div class="col-xl-8 col-md-12 ">
                             <div class="card">
@@ -619,48 +550,47 @@
 <div id="styleSelector">
 </div>
 
+<!-- View Medicine Modal -->
+@foreach ($medicines as $medicine)
+<div class="modal fade" id="viewModal-medicine-{{ $medicine->id }}" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content card-outline card-border-primary">
+              <div class="modal-header border-0">
+                  <h5 class="modal-title">Medicine</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div class="container-fluid">
+                    <table class="table table-bordered table-responsive" >
+                        <tr>
+                          <th>Name</th>
+                          <td>{{ $medicine->name }}</td>
+                        </tr>
+                        <tr>
+                          <th>Stock left</th>
+                          <td>{{ $medicine->stock }}</td>
+                        </tr>
+                        <tr>
+                          <th>Price per item</th>
+                          <td>RM {{ number_format($medicine->price, 2) }}</td>
+                        </tr>
+                        <tr>
+                          <th>Description</th>
+                          <td>{{ $medicine->desc }}</td>
+                        </tr>
+                    </table>
+                </div>
+              </div>
 
-<!--[if lt IE 10]>
-    <div class="ie-warning">
-        <h1>Warning!!</h1>
-        <p>You are using an outdated version of Internet Explorer, please upgrade
-            <br/>to any of the following web browsers to access this website.
-        </p>
-        <div class="iew-container">
-            <ul class="iew-download">
-                <li>
-                    <a href="http://www.google.com/chrome/">
-                        <img src="./files/assets/images/browser/chrome.png" alt="Chrome">
-                        <div>Chrome</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.mozilla.org/en-US/firefox/new/">
-                        <img src="./files/assets/images/browser/firefox.png" alt="Firefox">
-                        <div>Firefox</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://www.opera.com">
-                        <img src="./files/assets/images/browser/opera.png" alt="Opera">
-                        <div>Opera</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.apple.com/safari/">
-                        <img src="./files/assets/images/browser/safari.png" alt="Safari">
-                        <div>Safari</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                        <img src="./files/assets/images/browser/ie.png" alt="">
-                        <div>IE (9 & above)</div>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <p>Sorry for the inconvenience!</p>
-    </div>
-<![endif]-->
+              <div class="modal-footer border-0" style="margin-top: -12px">
+                  <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+  </div>
+@endforeach
+<!-- bbh -->
+
 @endsection
