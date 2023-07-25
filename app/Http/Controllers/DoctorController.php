@@ -28,63 +28,26 @@ class DoctorController extends Controller
         $email=Auth()->user()->email;
         $name=Auth()->user()->name;
 
-        $doctor = Doctor::where('email', Auth::user()->email)->first();
-
-        $doctorId = $doctor->id;
-
-        //total appointment
         $totalApt = Appointments::join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->select('appointment.*')
         ->where('doctor.email', $email)
         ->count();
 
-        // Get the most recent appointment's created_at timestamp
-        $latestAppointment = Appointments::orderBy('created_at', 'desc')->first();
-
-        // Calculate the time difference between now and the appointment's created_at timestamp
-        $timeDifference = $latestAppointment ? Carbon::parse($latestAppointment->created_at)->diffForHumans() : 'N/A';
-
-        //total patient
         $totalPatient = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->select('appointment.*')
         ->count();
 
-        // Get the most recent patient's created_at timestamp
-        $latestPatient = Patient::orderBy('created_at', 'desc')->first();
-
-        // Calculate the time difference between now and the patient's created_at timestamp
-        $timePDifference = $latestPatient ? Carbon::parse($latestPatient->created_at)->diffForHumans() : 'N/A';
-  
-        //total patient
         $totalNurse = Nurse::join('doctor', 'nurse.deptid', '=', 'doctor.deptid')
         ->select('nurse.*')
         ->count();
 
-        // Get the most recent nurse's created_at timestamp
-        $latestNurse = Nurse::orderBy('created_at', 'desc')->first();
-
-        // Calculate the time difference between now and the nurse's created_at timestamp
-        $timeNDifference = $latestNurse ? Carbon::parse($latestNurse->created_at)->diffForHumans() : 'N/A';
-  
-        // Get the current date in the 'Y-m-d' format
-        $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
-
-        //appointment list
         $aptDs = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->select('appointment.*', 'patient.*')
-        ->where('doctor.id', $doctorId)
-        ->whereDate('appointment.date', $currentDate) 
-        ->orderBy('appointment.time', 'asc')
-        ->take(5)
         ->get();
 
-        //medicine list
-        $medicines = Medicine::all();
-
-        return view('doctor.contents.dashboard',compact('name', 'totalApt', 'timeDifference', 
-        'timePDifference', 'totalPatient', 'timeNDifference', 'totalNurse', 'aptDs', 'currentDate', 'medicines'));
+        return view('doctor.contents.dashboard',compact('name', 'totalApt', 'totalPatient', 'totalNurse', 'aptDs'));
     }
 
     public function viewSchedule()

@@ -235,7 +235,6 @@ class PatientController extends Controller
         $appointment->date = $request->input('date'); 
         $appointment->time = $request->input('time'); 
         $appointment->status = $request->input('status');
-        $appointment->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $appointment->save();
 
         return redirect('/patient/appointmentList')->with('success', 'Appointment has been updated');

@@ -82,24 +82,7 @@
                                                             <td>{{ $appointment->patient_name }}</td>
                                                             <td>{{ $appointment->dept_name }}</td>
                                                             <td>{{ $appointment->date }} {{ $appointment->time }}</td>
-                                                            <td>
-                                                                @if($appointment->status == 0)
-                                                                    Pending
-
-                                                                @elseif ($appointment->status == 1)
-                                                                    Confirm
-
-                                                                @elseif ($appointment->status == 2)
-                                                                    Reject
-
-                                                                @elseif ($appointment->status == 3)
-                                                                    Cancel
-
-                                                                @else
-                                                                    {{ $appointment->status }}
-                                                                    
-                                                                @endif
-                                                            </td>
+                                                            <td>{{ $appointment->status }}</td>
                                                              <td>
                                                                 <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="Edit Appointment">
                                                                     <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
