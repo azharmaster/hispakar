@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Appointments;
 use App\Models\Department;
 use App\Models\DocSchedule;
@@ -42,6 +43,24 @@ class AdminController extends Controller
 
         return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totaldept',
         'totalnurse','totalpatient','totalmedicine','medicines','nurses'));
+    }
+
+    public function viewProfile()
+    {
+        // Get the currently authenticated user
+        $user = auth()->user();
+
+        if ($user->usertype === 1) {
+            // Get the nurse's name from the 'nurse' table based on the email
+            $admin = Admin::where('email', $user->email)->first();
+
+            return view('admin.contents.profile', [
+                'id' => $admin->id,
+                'name' => $admin->name,
+                'email' => $admin->email,
+                'phoneno' => $admin->phoneno
+            ]);
+        }
     }
 
     public function viewDepartmentList()
@@ -88,12 +107,16 @@ class AdminController extends Controller
 
     public function viewPatientList()
     {
-        $patients = Patient::with('appointments.docid')->get();
+        //$patients = Patient::with('appointments.docid')->get();
+        $patients = Patient::all();
 
         // foreach ($patients as $patient) { //total appointment
         //     $patient->appointment_count = Appointments::where('docid', $patient->id)->count();
         // }
         
+        foreach ($patients as $patient) { //total appointment
+            $patient->appointment_count = Appointments::where('patientid', $patient->id)->count();
+        }
 
         return view('admin.contents.patientList', compact('patients'));
     }
@@ -497,6 +520,7 @@ class AdminController extends Controller
         $appointment->date = $request->input('date'); 
         $appointment->time = $request->input('time'); 
         $appointment->status = $request->input('status');
+        $appointment->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $appointment->save();
 
         return redirect('/admin/appointmentList')->with('success', 'Appointment has been updated');
