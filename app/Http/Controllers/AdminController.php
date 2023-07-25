@@ -87,12 +87,15 @@ class AdminController extends Controller
 
     public function viewPatientList()
     {
-        $patients = Patient::with('appointments.docid')->get();
+        $patients = Patient::all();
 
         // foreach ($patients as $patient) { //total appointment
         //     $patient->appointment_count = Appointments::where('docid', $patient->id)->count();
         // }
         
+        foreach ($patients as $patient) { //total appointment
+            $patient->appointment_count = Appointments::where('patientid', $patient->id)->count();
+        }
 
         return view('admin.contents.patientList', compact('patients'));
     }

@@ -121,20 +121,9 @@
                   <i class="feather icon-user"></i> Profile
                 </a>
               </li>
-              <!-- <li>
-                <a href="email-inbox.html">
-                  <i class="feather icon-mail"></i> My Messages
-                </a>
-              </li>
+             
               <li>
-<<<<<<< HEAD
-                <a href="auth-lock-screen.html">
-                  <i class="feather icon-lock"></i> Lock Screen
-                </a>
-              </li> -->
-              <li>
-=======
->>>>>>> fbf435b901eb1a7e90964398ba52302326bf9009
+
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); 
                 document.getElementById('logout-form').submit();">
                   <i class="feather icon-log-out"></i> Logout

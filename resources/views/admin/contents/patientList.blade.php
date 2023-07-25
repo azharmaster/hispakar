@@ -174,7 +174,7 @@
                                             <div class="col">
                                             <h5 class="m-b-25 f-w-700 mb-4 text-white">Doctor Name</h5>
 
-                                            <h4 class="f-w-700 text-white">{{$patient->name}}</h4>
+                                            <h4 class="f-w-700 text-white">12</h4>
                                             </div>
                                             <div class="col-auto">
                                             <i class="fas fa-hospital-user bg-c-white text-primary"></i>
@@ -209,7 +209,7 @@
                                         <div class="row align-items-center">
                                             <div class="col">
                                             <h5 class="m-b-25 f-w-700 mb-4">Appointment </h5>
-                                            <h4 class="f-w-700 text-success">{{$patient->appointment_count}}</h4>
+                                            <h4 class="f-w-700 text-success">12</h4>
                                             </div>
                                             <div class="col-auto">
                                             <i class="fas fa-plus bg-c-green"></i>

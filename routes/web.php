@@ -36,6 +36,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/appointmentList', [AdminController::class, 'viewAppointmentList']);
     Route::get('/admin/departmentList', [AdminController::class, 'viewDepartmentList']);
     Route::get('/admin/medicineList', [AdminController::class, 'viewMedicineList']);
+    Route::get('/admin/medicineList', [AdminController::class, 'viewProfile']);
 
     //Manage Doctor
     Route::post('/admin/doctorList', [AdminController::class, 'AddDoctor']);
@@ -152,10 +153,10 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
 
     //Patient
     Route::group(['middleware'=>['isPatient', 'auth']], function(){
-    Route::get('patient/dashboard', [PatientController::class, 'index'])->name('patient.contents.dashboard');
-    Route::get('patient/appointmentList', [PatientController::class, 'viewAppointmentList']);
-    Route::get('patient/reportList', [PatientController::class, 'viewReportList']);
-    Route::get('patient/profile', [PatientController::class, 'viewProfile']);
+    Route::get('/patient/dashboard', [PatientController::class, 'index'])->name('patient.contents.dashboard');
+    Route::get('/patient/appointmentList', [PatientController::class, 'viewAppointmentList']);
+    Route::get('/patient/reportList', [PatientController::class, 'viewReportList']);
+    Route::get('/patient/profile', [PatientController::class, 'viewProfile']);
 
     //Manage Appoiment
     Route::post('/patient/appointmentList', [PatientController::class, 'AddAppointment']);
