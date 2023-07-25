@@ -8,6 +8,13 @@
         alert("{{ session()->get('success') }}");
     </script>
 @endif
+
+@if(session('error'))
+    <script>
+        alert("{{ session('error') }}");
+    </script>
+@endif
+
 <!-- Start Content -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -133,18 +140,20 @@
 
                 <div class="container-fluid">
                    
-                        @foreach ($patients as $patient)
+                    @foreach ($patients as $patient)
                         <input type="hidden" value="{{ $patient->id }}" name="patientid">
-                        @endforeach
+                    @endforeach
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Doctor :</span>
-                        <select class="form-control" style="width:350px;" name="docid">
-                        <option value="">Choose Doctor</option>
-                                @foreach ($doctors as $doctor)
-                                    <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
-                                @endforeach
-                            </select>
+                        <select class="form-control" style="width:350px;" name="docid" id="doctorSelect">
+                            <option value="">Choose Doctor</option>
+                            @foreach ($doctors as $doctor)
+                                <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Department :</span>
                        
@@ -155,24 +164,28 @@
                                 @endforeach
                             </select>
                     </div>
+
+                    <!-- Date Selection Dropdown -->
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Date :</span>
-                        <input type="date" style="width:350px;" class="form-control" name="date" id="date" placeholder="">
+                        <select class="form-control" style="width:350px;" name="date" id="dateSelect">
+                            <!-- Dates will be populated dynamically using JavaScript -->
+                        </select>
                     </div>
+
+                    <!-- Time Selection Dropdown -->
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Time :</span>
-                        <input type="time" style="width:350px;" class="form-control" name="time" id="time" placeholder="">
-                    </div>
-                    
-                    
-                        
+                        <select class="form-control" style="width:350px;" name="time" id="timeSelect">
+                            <!-- Times will be populated dynamically using JavaScript -->
+                        </select>
+                    </div>   
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button  name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
-
-                    
+                <button  name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>       
             </div>
             </form>
         </div>
@@ -280,7 +293,65 @@
 @endforeach
 <!-- end delete Patient form -->
 
+<!--script to get the doctor schedule -->
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Moment.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
+<script>
+    $(document).ready(function () {
+        // Event handler for doctor selection dropdown
+        $('#doctorSelect').change(function () {
+            var selectedDoctorId = $(this).val();
+
+            // Send an AJAX request to fetch the selected doctor's schedule
+            $.ajax({
+                url: '/patient/getDoctorSchedule/' + selectedDoctorId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Populate the date selection dropdown with the fetched dates
+                    var dateSelect = $('#dateSelect');
+                    dateSelect.empty();
+                    dateSelect.append('<option value="">Choose Date</option>');
+                    $.each(data, function (index, value) {
+                        dateSelect.append('<option value="' + value.date + '">' + value.date + '</option>');
+                    });
+                },
+                error: function () {
+                    alert('Error occurred while fetching the doctor schedule.');
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Event handler for date selection dropdown
+        $('#dateSelect').change(function () {
+            var selectedDate = $(this).val();
+
+            // Clear any previous options in the time selection dropdown
+            $('#timeSelect').empty();
+
+            // Set the start and end time for the time slots
+            var startTime = moment('08:00 AM', 'hh:mm A');
+            var endTime = moment('05:00 PM', 'hh:mm A');
+
+            // Generate time slots with 30-minute intervals and add them to the time selection dropdown
+            while (startTime.isBefore(endTime)) {
+                var endTimeFormatted = moment(startTime).add(30, 'minutes');
+                var formattedTime = startTime.format('h:mm A') + ' - ' + endTimeFormatted.format('h:mm A');
+                $('#timeSelect').append('<option value="' + formattedTime + '">' + formattedTime + '</option>');
+                startTime.add(30, 'minutes');
+            }
+        });
+    });
+</script>
+
+<!--/script to get the doctor schedule -->
 
 @endsection
 

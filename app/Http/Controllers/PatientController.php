@@ -7,9 +7,11 @@ use App\Models\Appointments;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Department;
+use App\Models\DocSchedule;
 use App\Models\Medicine;
 use App\Models\MedRecord;
 use App\Models\Medprescription;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -79,7 +81,18 @@ class PatientController extends Controller
         return view('patient.contents.appointmentList', compact('appointments','doctors','patients','departments'));
     }
 
-    
+    //get the doctor schedule date 
+    public function getDoctorSchedule($doctorId)
+    {
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+
+        $doctorSchedule = DocSchedule::where('docid', $doctorId)
+            ->whereBetween('date', [$startOfWeek, $endOfWeek])
+            ->get();
+
+        return response()->json($doctorSchedule);
+    }
 
     public function viewReportList()
     {
@@ -140,15 +153,73 @@ class PatientController extends Controller
 
     public function AddAppointment(Request $request)
     {
+         // Get the currently logged-in doctor
+         $patient = Patient::where('email', Auth::user()->email)->first();
+    
+         if (!$patient) {
+             // Handle the case if the logged-in user is not a doctor
+             // For example, redirect them to a different page or show an error message
+             // You can also return an empty array of appointments if you prefer
+         }
      
+        //$patientId = $patient->id;
+
+        // Get the input data
+        $patientId = $patient->id;;
+        $doctorId = $request->docid;
+        $deptId = $request->deptid;
+        $date = $request->date;
+        $time = $request->time;
+    
+        // Convert time from '2:00 PM - 2:30 PM' to 'H:i' format
+        $timeParts = explode(' - ', $time);
+        $startTime = Carbon::createFromFormat('h:i A', $timeParts[0])->format('H:i');
+        $endTime = Carbon::createFromFormat('h:i A', $timeParts[1])->format('H:i');
+    
+        // Check for overlapping appointments
+        $overlappingAppointments = DB::table('appointment')
+            ->where('docid', $doctorId)
+            ->where('date', $date)
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->where(function ($query) use ($startTime, $endTime) {
+                    $query->where('time', '>=', $startTime)
+                        ->where('time', '<', $endTime);
+                })
+                ->orWhere(function ($query) use ($startTime, $endTime) {
+                    $query->where('time', '<=', $startTime)
+                        ->where('time', '>', $startTime);
+                })
+                ->orWhere(function ($query) use ($startTime, $endTime) {
+                    $query->where('time', '>=', $startTime)
+                        ->where('time', '<=', $endTime);
+                });
+            })
+            ->count();
+    
+        // If there are overlapping appointments, display an alert
+        if ($overlappingAppointments > 0) {
+            return redirect()->back()->with('error', 'The selected time slot is already booked. Please choose another time.');
+        }
+    
+        // If the time slot is available, save the new appointment
+
         //insert data into nurse table
         $appointment = new Appointments();
-        $appointment->patientid = $request->patientid;
-        $appointment->docid = $request->docid;
-        $appointment->deptid = $request->deptid;
-        $appointment->date = $request->date;
-        $appointment->time = $request->time;
+        $appointment->patientid = $patientId;
+        $appointment->docid = $doctorId;
+        $appointment->deptid = $deptId;
+        $appointment->date = $date;
+
+        // Convert time from '2:00 PM - 2:30 PM' to 'Y-m-d H:i:s' format
+        $timeRange = $request->time;
+        $timeParts = explode(' - ', $timeRange);
+        $startDateTime = date('Y-m-d H:i:s', strtotime($timeParts[0]));
+        // If you need to use the end time as well, you can convert it in a similar way.
+        // $endDateTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
+
+        $appointment->time = $startDateTime;
         $appointment->status = 0;
+        $appointment->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $appointment->save();
 
         return redirect('/patient/appointmentList')->with('success', 'New Appointment has been successfully added');
@@ -169,7 +240,6 @@ class PatientController extends Controller
         return redirect('/patient/appointmentList')->with('success', 'Appointment has been updated');
     }
 
-    
     public function deleteAppointment($id)
     {
         $appointment = Appointments::findOrFail($id);

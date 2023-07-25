@@ -9,7 +9,7 @@
                 <div class="page-header-title">
                     <i class="feather icon-home bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>WELCOME DOCTOR</h5>
+                        <h5>Welcome, Doctor {{ $name }}!</h5>
                         <span>Current room: Room 5</span>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                                     <div class="row align-items-center">
                                         <div class="col">
                                             <h6 class="m-b-25">Appointments</h6>
-                                            <h3 class="f-w-700 text-c-blue">12</h3>
+                                            <h3 class="f-w-700 text-c-blue"> {{ $totalApt }}</h3>
                                             <p class="m-b-0">Last Updated: 1 hour ago</p>
                                         </div>
                                         <div class="col-auto">
@@ -57,7 +57,7 @@
                                     <div class="row align-items-center">
                                         <div class="col">
                                             <h6 class="m-b-25">Patients</h6>
-                                            <h3 class="f-w-700 text-c-green">15</h3>
+                                            <h3 class="f-w-700 text-c-green">{{ $totalPatient }}</h3>
                                             <p class="m-b-0">Last Updated: 1 hour ago</p>
                                         </div>
                                         <div class="col-auto">
@@ -74,7 +74,7 @@
                                     <div class="row align-items-center">
                                         <div class="col">
                                             <h6 class="m-b-25">Nurses</h6>
-                                            <h3 class="f-w-700 text-c-red">3</h3>
+                                            <h3 class="f-w-700 text-c-red">{{ $totalNurse }}</h3>
                                             <p class="m-b-0">Last Updated: 1 hour ago</p>
                                         </div>
                                         <div class="col-auto">
@@ -102,56 +102,18 @@
                                 </div>
     
                                 <div class="card-block">
+                                    @foreach ( $aptDs as $aptD )
                                     <div class="align-middle m-b-25">
-                                        <a href="doctorPage.php?p=appointmentReport">
+                                        <a href="/doctor/appointmentList">
                                             <img src="../files/assets/images/avatar-2-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
                                             <div class="d-inline-block">
-                                                <h6>Alex Thompson</h6>
+                                                <h6>{{ $aptD->name }}</h6>
                                                 <p class="text-muted m-b-0">Consultation</p>
                                                 <button class="status btn btn-sm btn-success mb-2 align-top">Current Appointment</button>
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="align-middle m-b-25">
-                                        <img src="../files/assets/images/avatar-3-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
-                                        <div class="d-inline-block">
-                                            <a href="#!">
-                                                <h6>John Doue</h6>
-                                            </a>
-                                            <p class="text-muted m-b-0">Follow Up</p>
-                                            <span class="status btn btn-sm btn-warning">Next : 10:30</span>
-                                        </div>
-                                    </div>
-                                    <div class="align-middle m-b-25">
-                                        <img src="../files/assets/images/avatar-3-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
-                                        <div class="d-inline-block">
-                                            <a href="#!">
-                                                <h6>Alex Thompson</h6>
-                                            </a>
-                                            <p class="text-muted m-b-0">Follow up</p>
-                                            <span class="status btn btn-sm btn-danger">Cancelled</span>
-                                        </div>
-                                    </div>
-                                    <div class="align-middle m-b-25">
-                                        <img src="../files/assets/images/avatar-2-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
-                                        <div class="d-inline-block">
-                                            <a href="#!">
-                                                <h6>Alex Thompson</h6>
-                                            </a>
-                                            <p class="text-muted m-b-0">Consultation</p>
-                                            <span class="status btn btn-sm btn-warning align-center">Next : 11.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="align-middle m-b-0">
-                                        <img src="../files/assets/images/avatar-2-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
-                                        <div class="d-inline-block">
-                                            <a href="#!">
-                                                <h6>Alex Thompson</h6>
-                                            </a>
-                                            <p class="text-muted m-b-0">Consultation</p>
-                                            <span class="status btn btn-sm btn-warning">Next : 11.30</span>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
