@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Appointments;
 use App\Models\Department;
-use App\Models\DocSchedule;
 use App\Models\Doctor;
 use App\Models\Medicine;
 use App\Models\MedPrescription;
 use App\Models\MedRecord;
 use App\Models\MedService;
-use App\Models\Nurse;
 use App\Models\Patient;
 use App\Models\User;
 use Carbon\Carbon;
@@ -25,56 +23,7 @@ class DoctorController extends Controller
 {
     public function index()
     {
-        $email=Auth()->user()->email;
-        $name=Auth()->user()->name;
-
-        $totalApt = Appointments::join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.*')
-        ->where('doctor.email', $email)
-        ->count();
-
-        $totalPatient = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.*')
-        ->count();
-
-        $totalNurse = Nurse::join('doctor', 'nurse.deptid', '=', 'doctor.deptid')
-        ->select('nurse.*')
-        ->count();
-
-        $aptDs = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.*', 'patient.*')
-        ->get();
-
-        return view('doctor.contents.dashboard',compact('name', 'totalApt', 'totalPatient', 'totalNurse', 'aptDs'));
-    }
-
-    public function viewSchedule()
-    {
-        // Get the currently logged-in user
-        $user = Auth::user();
-
-        // Find the Doctor model associated with the logged-in user
-        $doctor = Doctor::where('email', $user->email)->first();
-
-        if (!$doctor) {
-            // Handle the case if the logged-in user is not a doctor
-            // For example, redirect them to a different page or show an error message
-            // You can also return an empty array of schedules if you prefer
-        }
-
-        // Get the schedules associated with the found doctor
-        $schedules = DocSchedule::where('docid', $doctor->id)->get();
-
-         // Pass the doctor ID to the view
-        $doctorId = $doctor->id;
-
-        // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-        $currentDay = Carbon::now('Asia/Kuala_Lumpur')->dayOfWeek;
-
-        // Pass the schedules and doctorId to the view
-        return view('doctor.contents.scheduleList', compact('schedules', 'doctorId', 'currentDay'));
+        return view('doctor.contents.dashboard');
     }
 
     public function viewProfile()
@@ -114,53 +63,20 @@ class DoctorController extends Controller
         return view('doctor.contents.patientList', compact('patients'));
     }
 
-    public function viewAppointmentList(Request $request)
+    public function viewAppointmentList()
     {
-        // Get the currently logged-in doctor
-        $doctor = Doctor::where('email', Auth::user()->email)->first();
-    
-        if (!$doctor) {
-            // Handle the case if the logged-in user is not a doctor
-            // For example, redirect them to a different page or show an error message
-            // You can also return an empty array of appointments if you prefer
-        }
-    
-        // Get the doctor's schedule for the current week
-        $startOfWeek = Carbon::now('Asia/Kuala_Lumpur')->startOfWeek();
-        $endOfWeek = Carbon::now('Asia/Kuala_Lumpur')->endOfWeek();
-
-        $doctorSchedule = DocSchedule::where('docid', $doctor->id)
-            ->whereBetween('date', [$startOfWeek, $endOfWeek])
-            ->pluck('date')
-            ->toArray();
-
-        // Get the selected date from the request, or set it to the first available date if not provided
-        $selectedDate = $request->input('date', reset($doctorSchedule));
-
-        // Set the fixed time slots from 8:00 AM to 5:00 PM with 30-minute intervals
-        $start = Carbon::parse('8:00 AM');
-        $end = Carbon::parse('5:00 PM');
-        $timeSlots = [];
-        
-        while ($start < $end) {
-            $timeSlots[] = $start->format('g:i A') . ' - ' . $start->addMinutes(30)->format('g:i A');
-        }
-
-        // To join tables and retrieve the appointment list based on the doctor's ID
+        //to join table
         $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-            ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-            ->join('department', 'appointment.deptid', '=', 'department.id')
-            ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
-            ->where('doctor.id', $doctor->id)
-            ->get();
-    
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->join('department', 'appointment.deptid', '=', 'department.id')
+        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+        ->get();
+
         $patients = Patient::all();
         $doctors = Doctor::all();
         $departments = Department::all();
-    
 
-        return view('doctor.contents.appointmentList', compact('appointments', 'patients', 'doctors', 'departments', 
-            'doctor', 'doctorSchedule', 'timeSlots', 'selectedDate'));
+        return view('doctor.contents.appointmentList', compact('appointments', 'patients', 'doctors','departments'));
     }
 
     public function viewAppointmentReport($id)
@@ -168,7 +84,6 @@ class DoctorController extends Controller
         $appointment = Appointments::with(['patient', 'medrecord'])
             ->where('id', $id)
             ->first();
-
 
             if (!$appointment->patient || !$appointment->medrecord) {
                 $appointment = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
@@ -202,55 +117,6 @@ class DoctorController extends Controller
                     
         return view('doctor.contents.reports', compact('filteredReports'));
     }
-
-    // Manage Schedule
-    public function AddSchedule(Request $request)
-    {
-        $schedule = new DocSchedule();
-
-        $schedule->docid = $request->docid;
-        $schedule->day = $request->day;
-        $schedule->date = $request->date;
-        $schedule->starttime = $request->starttime;
-        $schedule->endtime = $request->endtime;
-        $schedule->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-
-        $schedule->save();
-
-        return redirect('/doctor/scheduleList')->with('success', 'New schedule has been successfully added');
-
-    }
-
-    public function EditSchedule(Request $request, $id)
-    {
-        $schedule = DocSchedule::find($id);
-
-        $schedule->docid = $request->input('docid');
-        $schedule->day = $request->input('day');
-        $schedule->date = $request->input('date');
-        $schedule->starttime = $request->input('starttime');
-        $schedule->endtime = $request->input('endtime');
-        $schedule->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-
-        $schedule->save();
-
-        return redirect('/doctor/scheduleList')->with('success', 'Schedule has been updated');
-
-    }
-
-    public function DeleteSchedule($id)
-    {
-        $schedule = DocSchedule::findOrFail($id);
-
-        $schedule->delete();
-
-        DB::statement('SET @counter = 0;');
-        DB::statement('UPDATE docschedule SET id = @counter:=@counter+1;');
-
-
-        return redirect('/doctor/scheduleList')->with('success', 'Schedule has been deleted');
-    }
-
 
     //Edit Profile
     public function editProfile(Request $request, $id)
@@ -388,17 +254,8 @@ class DoctorController extends Controller
         $appointment->docid = $request->docid;
         $appointment->deptid = $request->deptid;
         $appointment->date = $request->date;
-
-        // Convert time from '2:00 PM - 2:30 PM' to 'Y-m-d H:i:s' format
-        $timeRange = $request->time;
-        $timeParts = explode(' - ', $timeRange);
-        $startDateTime = date('Y-m-d H:i:s', strtotime($timeParts[0]));
-        // If you need to use the end time as well, you can convert it in a similar way.
-        // $endDateTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
-
-        $appointment->time = $startDateTime;
+        $appointment->time = $request->time;
         $appointment->status = $request->status;
-        $appointment->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $appointment->save();
 
         return redirect('/doctor/appointmentList')->with('success', 'New Appointment has been successfully added');

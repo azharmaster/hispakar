@@ -10,15 +10,6 @@
                         <span class="pcoded-mtext">Dashboard</span>
                     </a>
                 </li>
-
-                <li class="">
-                    <a href="/doctor/scheduleList" class="waves-effect waves-dark">
-                        <span class="pcoded-micon">
-                            <i class="fas fa-solid fa-calendar"></i></span>
-                        <span class="pcoded-mtext">Schedule</span>
-                    </a>
-                </li>
-
                 <li class="">
                     <a href="/doctor/patientList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
