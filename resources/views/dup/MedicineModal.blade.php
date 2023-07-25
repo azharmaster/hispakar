@@ -27,19 +27,19 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="form-group input-group">
-                            <span class="input-group-addon" style="width:150px;">Name :</span>
+                            <label class="input-group-addon" style="width:150px;">Name :</label>
                             <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="Name" required>
                         </div>
                         <div class="form-group input-group">
-                            <span class="input-group-addon" style="width:150px;">Quantity :</span>
+                            <label class="input-group-addon" style="width:150px;">Quantity :</label>
                             <input type="number" style="width:350px;" class="form-control" name="stock" id="stock" placeholder="Stock" required>
                         </div>
                         <div class="form-group input-group">
-                            <span class="input-group-addon" style="width:150px;">Price per item :</span>
+                            <label class="input-group-addon" style="width:150px;">Price per item :</label>
                             <input type="text" style="width:350px;" class="form-control" name="price" id="address" placeholder="Price" required>
                         </div>
                         <div class="form-group input-group">
-                            <span class="input-group-addon" style="width:150px;">Description :</span>
+                            <label class="input-group-addon" style="width:150px;">Description :</label>
                             <textarea rows="5" style="width:350px;" class="form-control" name="desc" id="desc" placeholder="Enter description.." required></textarea>
                         </div>
                             
@@ -73,19 +73,19 @@
                     <input type="hidden" style="width:350px;" class="form-control" name="id" id="id" value="{{ $medicine->id }}">
 
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Name :</span>
+                        <label class="input-group-addon" style="width:150px;">Name :</label>
                         <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="Name" value="{{ $medicine->name }}" required>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Quantity :</span>
+                        <label class="input-group-addon" style="width:150px;">Quantity :</label>
                         <input type="number" style="width:350px;" class="form-control" name="stock" id="stock" placeholder="Stock" value="{{ $medicine->stock }}" required>
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Price per item :</span>
+                        <label class="input-group-addon" style="width: 150px;">Price per item :</label>
                         <input type="number" step="0.01" style="width: 350px;" class="form-control" name="price" id="price" placeholder="Price" value="{{ $medicine->price }}" required>
                     </div>                                          
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Description :</span>
+                        <label class="input-group-addon" style="width: 150px;">Description :</label>
                         <textarea rows="5" style="width: 350px;" class="form-control" name="desc" id="desc" required>{{ $medicine->desc }}</textarea>
                     </div>                    
                 </div>

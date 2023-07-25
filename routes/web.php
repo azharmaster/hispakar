@@ -29,6 +29,7 @@ Auth::routes();
 
 Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.contents.dashboard');
+    Route::get('/admin/profile', [AdminController::class, 'viewProfile'])->name('admin.contents.profile');
     Route::get('/admin/doctorList', [AdminController::class, 'viewDoctorList']);
     Route::get('/admin/nurseList', [AdminController::class, 'viewNurseList']);
     Route::get('/admin/patientList', [AdminController::class, 'viewPatientList']);
@@ -36,6 +37,9 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/appointmentList', [AdminController::class, 'viewAppointmentList']);
     Route::get('/admin/departmentList', [AdminController::class, 'viewDepartmentList']);
     Route::get('/admin/medicineList', [AdminController::class, 'viewMedicineList']);
+
+    //Manage profile
+    Route::post('/admin/profile/{id}', [AdminController::class, 'EditProfile']);
 
     //Manage Doctor
     Route::post('/admin/doctorList', [AdminController::class, 'AddDoctor']);

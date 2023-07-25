@@ -1,19 +1,3 @@
-@php
-    $user = '';
-    $userType = Auth::user()->usertype;
-
-    if ($userType == 1) {
-        $user = 'admin';
-    } elseif ($userType == 2) {
-        $user = 'doctor';
-    } elseif ($userType == 3) {
-        $user = 'nurse';
-    } elseif ($userType == 4) {
-        $user = 'patient';
-    }
-@endphp
-
-
 <!-- end profile form -->
 @foreach ($doctors as $doctor)
 <div class="modal fade" id="profiledoctor-{{ $doctor->id }}" tabindex="-1" role="dialog">
