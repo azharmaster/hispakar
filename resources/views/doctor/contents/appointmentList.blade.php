@@ -82,7 +82,24 @@
                                                             <td>{{ $appointment->patient_name }}</td>
                                                             <td>{{ $appointment->dept_name }}</td>
                                                             <td>{{ $appointment->date }} {{ $appointment->time }}</td>
-                                                            <td>{{ $appointment->status }}</td>
+                                                            <td>
+                                                                @if($appointment->status == 0)
+                                                                    Pending
+
+                                                                @elseif ($appointment->status == 1)
+                                                                    Confirm
+
+                                                                @elseif ($appointment->status == 2)
+                                                                    Reject
+
+                                                                @elseif ($appointment->status == 3)
+                                                                    Cancel
+
+                                                                @else
+                                                                    {{ $appointment->status }}
+                                                                    
+                                                                @endif
+                                                            </td>
                                                              <td>
                                                                 <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="Edit Appointment">
                                                                     <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
@@ -134,15 +151,14 @@
                                 @endforeach
                             </select>
                     </div>
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Doctor :</span>
                         <select class="form-control" style="width:350px;" name="docid">
-                        <option value="">Choose Doctor</option>
-                                @foreach ($doctors as $doctor)
-                                    <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
-                                @endforeach
-                            </select>
+                            <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                        </select>
                     </div>
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Department :</span>
                        
@@ -153,25 +169,35 @@
                                 @endforeach
                             </select>
                     </div>
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Date :</span>
-                        <input type="date" style="width:350px;" class="form-control" name="date" id="date" placeholder="">
+                        <select class="form-control" style="width:350px;" name="date" id="date" placeholder="">
+                            <option value="">Choose Date</option>
+                            @foreach ($doctorSchedule as $date)
+                                <option value="{{ $date }}" @if ($selectedDate === $date) selected @endif>{{ $date }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Time :</span>
-                        <input type="time" style="width:350px;" class="form-control" name="time" id="time" placeholder="">
+                        <select class="form-control" style="width:350px;" name="time" id="time" placeholder="">
+                            <option value="">Choose Time</option>
+                            @foreach ($timeSlots as $slot)
+                                <option value="{{ $slot }}">{{ $slot }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Status :</span>
                         <select style="width:350px;" class="form-control" name="status" id="status">
                             <option value="">Status</option>
                             <option value="0">Not Available</option>
                             <option value="1">Available</option>
-                        </select>
-                        
-                    </div>
-                    
-                        
+                        </select> 
+                    </div>      
                 </div>
             </div>
             <div class="modal-footer">
