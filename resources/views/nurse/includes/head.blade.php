@@ -13,7 +13,7 @@
 <meta name="keywords" content="flat ui, admin Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
 <meta name="author" content="colorlib">
 
-<link rel="icon" href="../files/assets/images/favicon-1.ico" type="image/x-icon">
+<link rel="icon" href="{{ asset('files/assets/images/pakar.png') }}">
 <link href="{{ asset('css-2?family=Open+Sans:300,400,600,700,800') }}" rel="stylesheet">
 <link href="{{ asset('css-3?family=Quicksand:500,700') }}" rel="stylesheet">
 
