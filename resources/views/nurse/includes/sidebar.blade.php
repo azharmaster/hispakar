@@ -2,7 +2,6 @@
 <nav class="pcoded-navbar">
     <div class="nav-list">
         <div class="pcoded-inner-navbar main-menu">
-            <div class="pcoded-navigation-label">Navigation</div>
             <ul class="pcoded-item pcoded-left-item">
                 <li class="">
                     <a href="/nurse/dashboard" class="waves-effect waves-dark">

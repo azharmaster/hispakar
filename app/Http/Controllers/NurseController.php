@@ -16,17 +16,53 @@ use App\Models\Medicine;
 use App\Models\Room; 
 use App\Models\Department; 
 use App\Models\Appointments;
+use App\Models\MedRecord;
 
 class NurseController extends Controller
 {
     public function index()
-    {
+    { 
+        // Get the current month and year
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+
         //card
         $totalapt = Appointments::all()->count();
         $totaldoc = Doctor::all()->count();
         $totalpatient = Patient::all()->count();
         $totalroom = Room::all()->count();
 
+        //gender
+        $totalmale = Patient::where('gender', 'male')->count();
+        $totalfemale = Patient::where('gender', 'female')->count();
+
+        //appointment statistic
+        $totalattend = [];
+        // Loop through the past five months and get the attendance data
+        for ($i = 4; $i >= 0; $i--) {
+            $month = ($currentMonth - $i) % 12;
+            $year = $currentYear;
+            if ($month === 0) {
+                // If the calculated month is 0 (December), set it to 12 and adjust the year
+                $month = 12;
+                $year--;
+            }
+            
+            // Get the start and end dates of the current month
+            $startDate = "$year-$month-01";
+            $endDate = date('Y-m-t', strtotime($startDate));
+
+            $totalattend[] = MedRecord::whereBetween('datetime', [$startDate, $endDate])->count();
+            $totalcancel[] = Appointments::whereMonth('date', $month)->whereYear('date', $year)->where('status', 3)->count();
+        }
+
+        //Age
+        $children = Patient::where('age', '<=', 12)->count(); // Age up to 12 years
+        $teenage = Patient::whereBetween('age', [13, 19])->count(); // Age between 13 and 19 years
+        $adult = Patient::whereBetween('age', [20, 64])->count(); // Age between 20 and 64 years
+        $older = Patient::where('age', '>=', 65)->count(); // Age 65 years and above
+
+        //
         $medicines = Medicine::all();
         $appointments = Appointments::all();
 
@@ -34,7 +70,18 @@ class NurseController extends Controller
         $rooms = Room::all();
         $doctors = Doctor::all();
 
-        return view('nurse.contents.dashboard', compact('totalpatient', 'totalroom', 'totaldoc', 'totalapt', 'medicines',  'appointments'));
+        return view('nurse.contents.dashboard', compact(
+            // for card
+            'totalpatient', 'totalroom','totaldoc','totalapt', 
+            //for chart by gender
+            'totalmale', 'totalfemale',
+            //for appoinment statistic by month
+            'totalattend', 'totalcancel',
+            //for pie chart by ages
+            'children', 'teenage', 'adult', 'older',
+
+            'medicines',  
+            'appointments'));
     }
 
     public function viewProfile()

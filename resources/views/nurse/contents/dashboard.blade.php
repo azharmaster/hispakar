@@ -5,7 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Start Dashboard -->
-<div class="pcoded-content">
+<div class="pcoded-content" >
   <div class="page-header card">
       <div class="row align-items-end">
           <div class="col-lg-8">
@@ -132,233 +132,184 @@
                     </div>
                     <!-- ./card -->
 
-                <!-- Start Table -->
-                <div class="col-md-8">
-                  <div class="card table-card card-outline card-border-primary custom-thinner-outline" style="height: 450px">
-                    <div class="card-header">
-                    <h5>Today's Appointments</h5>
-                      <div class="card-header-right">
-                        <ul class="list-unstyled card-option">
-                        <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
-                        <li><i class="feather icon-maximize full-card"></i></li>
-                        <li><i class="feather icon-minus minimize-card"></i></li>
-                        <li><i class="feather icon-refresh-cw reload-card"></i></li>
-                        <li><i class="feather icon-trash close-card"></i></li>
-                        <li><i class="feather icon-chevron-left open-card-option"></i></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="card-block p-b-0" >
-                      <div class="table-responsive">
-                        <table id="notOverflow" class="table table-hover m-b-0">
-                          <thead>
-                          <tr>
-                            <th>Time</th>
-                            <th>Patient</th>
-                            <th>Doctor</th>
-                            <th>Department</th>
-                          </tr>
-                          </thead>
-                          <tbody>
-                            @php
-                              $today = now()->format('Y-m-d'); // date today
-                              $todaysAppointments = $appointments->where('date', $today)->sortBy('time')->take(5);
-                            @endphp
+                    <!-- Start Table -->
+                    <div class="col-md-8">
+                      <div class="card table-card card-outline card-border-primary custom-thinner-outline" style="height: 450px">
+                        <div class="card-header">
+                        <h5>Today's Appointments</h5>
+                          <div class="card-header-right">
+                            <ul class="list-unstyled card-option">
+                            <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
+                            <li><i class="feather icon-maximize full-card"></i></li>
+                            <li><i class="feather icon-minus minimize-card"></i></li>
+                            <li><i class="feather icon-refresh-cw reload-card"></i></li>
+                            <li><i class="feather icon-trash close-card"></i></li>
+                            <li><i class="feather icon-chevron-left open-card-option"></i></li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="card-block p-b-0" >
+                          <div class="table-responsive">
+                            <table id="notOverflow" class="table table-hover m-b-0">
+                              <thead>
+                              <tr>
+                                <th>Time</th>
+                                <th>Patient</th>
+                                <th>Doctor</th>
+                                <th>Department</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                                @php
+                                  $today = now()->format('Y-m-d'); // date today
+                                  $todaysAppointments = $appointments->where('date', $today)->sortBy('time')->take(5);
+                                @endphp
 
-                            @if ($todaysAppointments->isEmpty())
-                                <tr>
-                                    <td colspan="4">No appointment today</td>
-                                </tr>
-                            @else
-                                @foreach ($todaysAppointments as $appointment)
+                                @if ($todaysAppointments->isEmpty())
                                     <tr>
-                                        <td>{{ $appointment->time }}</td>
-                                        <td>{{ $appointment->patient->name }}</td>
-                                        <td>{{ $appointment->doctor->name }}</td>
-                                        <td>{{ $appointment->department->name }}</td>
+                                        <td colspan="4">No appointment today</td>
                                     </tr>
+                                @else
+                                    @foreach ($todaysAppointments as $appointment)
+                                        <tr>
+                                            <td>{{ $appointment->time }}</td>
+                                            <td>{{ $appointment->patient->name }}</td>
+                                            <td>{{ $appointment->doctor->name }}</td>
+                                            <td>{{ $appointment->department->name }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
+                          <a href="/nurse/appointmentList" class="text-mute"><i class="fas fa-bars m-r-10"></i>View More</a>
+
+                        </div>
+                      </div>
+                      <!-- End card -->
+                    </div>
+                    <!-- End col -->
+
+                    <!-- Med Supply -->
+                    <div class="col-xl-4 col-md-12">
+                      <div class="card latest-update-card card-outline card-border-primary custom-thinner-outline"  style="height: 450px">
+                        <div class="card-header">
+                          <h5>Medicine Supply</h5>
+                          <div class="card-header-right">
+                          <ul class="list-unstyled card-option">
+                          <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
+                          <li><i class="feather icon-maximize full-card"></i></li>
+                          <li><i class="feather icon-minus minimize-card"></i></li>
+                          <li><i class="feather icon-refresh-cw reload-card"></i></li>
+                          <li><i class="feather icon-trash close-card"></i></li>
+                          <li><i class="feather icon-chevron-left open-card-option"></i></li>
+                          </ul>
+                          </div>
+                        </div>
+
+                        <div class="card-block">
+                          <div class="scroll-widget">
+                            <div class="row">
+                              <div class="col-md-12">
+
+                                <!-- define color -->
+                                @php $colors = ['danger', 'warning']; $counter = 0; @endphp 
+
+                                <!-- loop medicine -->
+                                @foreach($medicines as $medicine)
+                                  <a title="View Medicine" data-toggle="modal" data-target="#viewModal-medicine-{{ $medicine->id }}"
+                                  class="btn btn-{{ $colors[$counter % count($colors)] }} m-1 bg-white">{{ $medicine->name }}</a>
+                                  
+                                  <!-- increment for color -->
+                                  @php $counter++; @endphp 
+                                  
                                 @endforeach
-                            @endif
 
-                          </tbody>
-                        </table>
+                                <!-- dummy -->
+                                @foreach($medicines as $medicine)
+                                  <a title="View Medicine" data-toggle="modal" data-target="#viewModal-medicine-{{ $medicine->id }}"
+                                  class="btn btn-{{ $colors[$counter % count($colors)] }} m-1 bg-white">{{ $medicine->name }}</a>
+                                  <!-- increment for color -->
+                                  @php $counter++; @endphp 
+                                @endforeach
+                                <!-- ./dummy -->
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
+                            <a href="/nurse/medicineList" class="text-mute"><i class="fas fa-bars m-r-10"></i>View More</a>
+                          </div>
+                        </div>
+                        <!-- End card block-->
                       </div>
-                    </div>
-                    <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
-                      <a href="/nurse/appointmentList" class="btn btn-primary2 waves-effect" data-dismiss="modal">See All</a>
-                    </div>
-                  </div>
-                  <!-- End card -->
-                </div>
-                <!-- End col -->
+                      <!-- End card -->
+                    </div>   
+                    <!-- End col Med Supply -->
 
-                  <!-- Med Supply -->
-                <div class="col-xl-4 col-md-12">
-                  <div class="card latest-update-card card-outline card-border-primary custom-thinner-outline"  style="height: 450px">
-                    <div class="card-header">
-                      <h5>Medicine Supply</h5>
-                      <div class="card-header-right">
-                      <ul class="list-unstyled card-option">
-                      <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
-                      <li><i class="feather icon-maximize full-card"></i></li>
-                      <li><i class="feather icon-minus minimize-card"></i></li>
-                      <li><i class="feather icon-refresh-cw reload-card"></i></li>
-                      <li><i class="feather icon-trash close-card"></i></li>
-                      <li><i class="feather icon-chevron-left open-card-option"></i></li>
-                      </ul>
-                      </div>
-                    </div>
-
-                    <div class="card-block">
-                      <div class="scroll-widget">
-                        <div class="row">
-                          <div class="col-md-12">
-
-                            <!-- define color -->
-                            @php $colors = ['danger', 'warning']; $counter = 0; @endphp 
-
-                            <!-- loop medicine -->
-                            @foreach($medicines as $medicine)
-                              <a title="View Medicine" data-toggle="modal" data-target="#viewModal-medicine-{{ $medicine->id }}"
-                              class="btn btn-{{ $colors[$counter % count($colors)] }} m-1 bg-white">{{ $medicine->name }}</a>
-                              
-                              <!-- increment for color -->
-                              @php $counter++; @endphp 
-                              
-                            @endforeach
-
-                            <!-- dummy -->
-                            @foreach($medicines as $medicine)
-                              <a title="View Medicine" data-toggle="modal" data-target="#viewModal-medicine-{{ $medicine->id }}"
-                              class="btn btn-{{ $colors[$counter % count($colors)] }} m-1 bg-white">{{ $medicine->name }}</a>
-                              <!-- increment for color -->
-                              @php $counter++; @endphp 
-                            @endforeach
-                            <!-- ./dummy -->
-
+                    <div class="col-md-12 col-xl-6">
+                      <div class="card sale-card  custom-card" style="height: 400px;">
+                        <div class="card-header">
+                          <h5>Appointment Attendance Statistics</h5>
+                        </div>
+                        <div class="card-block p-4">
+                          <div style="width: 440px; height: 280px; margin: auto;">
+                            <canvas id="chartAttendance"></canvas>
                           </div>
                         </div>
                       </div>
-                      <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
-                        <a href="/nurse/medicineList" class="btn btn-primary2 waves-effect" data-dismiss="modal">See All</a>
+                    </div>
+                  
+                    <div class="col-md-12 col-xl-6">
+                      <div class="card sale-card " style="height: 400px;">
+                        <div class="card-header">
+                          <h5>Patients by Age</h5>
+                        </div>
+                        <div class="card-block">
+                          <div>
+                            <canvas id="chartByAge"></canvas>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <!-- End card block-->
-                  </div>
-                  <!-- End card -->
-                </div>   
-                <!-- End col Med Supply -->
 
-                <div class="col-md-12 col-xl-6">
-                  <div class="card sale-card card-outline card-border-primary custom-thinner-outline custom-card" style="height: 400px;">
-                    <div class="card-header">
-                      <h5>Appointment attend Statistics</h5>
+                    <!-- Col -->
+                    <div class="col-xl-4 col-md-6">
+
+                      <div class="card latest-update-card">
+                        <div class="card-header">
+                            <h5>Patients by Gender</h5>
+                        </div>
+                        <div class="card-block">
+                          <div class="row p-t-10 p-b-10">
+                              
+                            <div class="col">
+                              <canvas id="chartByGender" style="max-width: 100px"></canvas>
+                            </div>
+                            <!-- col -->
+                            
+                            <div class="col mt-3">
+                              <div>
+                                <div class="d-flex justify-content-between mr-4">
+                                  <i class="fas fa-male mr-2 text-primary" style="font-size:  21px"></i> {{ $totalmale }}
+                                </div>
+                                <br>
+                                <div class="d-flex justify-content-between mr-4">
+                                  <i class="fas fa-female mr-2" style="font-size:  21px; color: #FF69B4;"></i> {{ $totalfemale }}
+                                </div>
+                              </div>
+                            </div>
+                            <!-- col -->
+
+                          </div>
+                        </div>
                     </div>
-                    <div class="card-block p-4">
-                      <div style="max-width: 600px; height: 280px; margin: auto;">
-                        <canvas id="myChart5"></canvas>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              
-                <script>
-                  // Dummy data for the bar chart
-                  const barChartData = {
-                    labels: ['March', 'April', 'May', 'June'],
-                    datasets: [{
-                      label: 'Attend',
-                      backgroundColor: '#3AA946', // Green
-                      data: [80, 81, 56, 55],
-                    },
-                    {
-                      label: 'Cancelled',
-                      backgroundColor: '#DE3A18', // Red
-                      data: [40, 68, 45, 30, 76, 62],
-                    }]
-                  };
-              
-                  // Configuration options for the bar chart
-                  const barChartOptions = {
-                    barThickness: 10,
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                      y: {
-                        beginAtZero: true
-                      }
-                    },
-                    plugins: {
-                      legend: {
-                        labels: {
-                          usePointStyle: true, // Use point-style icons instead of text labels
-                        }
-                      }
-                    }
-                  };
-              
-                  // Create and render the bar chart
-                  const ctx1 = document.getElementById('myChart5').getContext('2d');
-                  const barChart = new Chart(ctx1, {
-                    type: 'bar',
-                    data: barChartData,
-                    options: barChartOptions
-                  });
-                </script>
+                    <!--card -->
 
-                <div class="col-md-12 col-xl-6">
-                  <div class="card sale-card card-outline card-border-primary custom-thinner-outline" style="height: 400px;">
-                    <div class="card-header">
-                      <h5>Patients by Age</h5>
-                    </div>
-                    <div class="card-block">
-                      <div>
-                        <canvas id="myChart4"></canvas>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <script>
-                  // Dummy data for the pie chart
-                  const pieChartData = {
-                    labels: ['0-20', '21-40', '41-60', '61-80', '81+'],
-                    datasets: [{
-                      data: [25, 30, 20, 15, 10],
-                      backgroundColor: ['#4CAF50', '#2196F3', '#FF5722', '#FFC107', '#9C27B0'],
-                      hoverBackgroundColor: ['#8BC34A', '#42A5F5', '#FF7043', '#FFD54F', '#BA68C8'],
-                    }],
-                  };
-
-                  // Configuration options for the pie chart
-                  const pieChartOptions = {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: {
-                        position: 'bottom',
-                        labels: {
-                          fontColor: '#333',
-                          fontSize: 12,
-                          boxWidth: 12,
-                        },
-                      },
-                    },
-                  };
-
-                  // Create and render the pie chart
-                  const ctx2 = document.getElementById('myChart4').getContext('2d');
-                  const pieChart = new Chart(ctx2, {
-                    type: 'pie',
-                    data: pieChartData,
-                    options: pieChartOptions,
-                  });
-                </script>
-
-
-                <!-- Issues -->
-                <div class="col-xl-4 col-md-6">
-                  <div class="card latest-update-card">
+                    <div class="card latest-update-card" >
                       <div class="card-header">
                           <h5>Major Issues</h5>
                           <div class="card-header-right">
@@ -433,6 +384,7 @@
                           </div>
                       </div>
                   </div>
+                  <!-- card -->
                 </div>
                 <!-- End Latest Activity -->
 
@@ -455,67 +407,15 @@
                 <!-- End Calendar -->
 
 
-</div>
+              </div>
 
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div id="styleSelector">
-</div>
-
-</div>
-</div>
-</div>
-</div>
-
-<!-- Add Patient form -->
-<div class="modal fade" id="assign-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Assign Room</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="form-group input-group">
-                            <span class="input-group-addon" style="width:150px;">ID :</span>
-                            <input type="text" style="width:350px;" class="form-control" name="id" id="id" placeholder="ABC1234" disabled>
-                        </div>
-                        <div class="form-group input-group">
-                            <span class="input-group-addon" style="width:150px;">Name :</span>
-                            <input type="text" style="width:350px;" class="form-control" name="name" id="name" placeholder="John Doe" disabled>
-                        </div>
-                        <div class="form-group input-group">
-                            <span class="input-group-addon" style="width: 150px;">Room No:</span>
-                            <select class="form-control" style="width: 350px;" name="gender" id="gender">
-                                <option value="room1">Room 1</option>
-                                <option value="room2">Room 2</option>
-                                <option value="room3">Room 3</option>
-                                <option value="room4">Room 4</option>
-                                <option value="room5">Room 5</option>
-                                <option value="room6">Room 6</option>
-                            </select>
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary waves-effect waves-light">Submit</button>
-                    
-                </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    <!-- end Add Patient form -->
 
+  <div id="styleSelector"></div>
 
 <!-- View Medicine Modal -->
 @foreach ($medicines as $medicine)
@@ -558,6 +458,159 @@
       </div>
   </div>
 @endforeach
-<!-- bbh -->
+<!-- ./ View Medicine Modal -->
+
+<script>
+  //Chart Attendance Statistic
+    const currentDate = new Date();
+  
+    // Calculate the labels for the past five months and the current month
+    const labels = [];
+    for (let i = 4; i >= 0; i--) {
+        const date = new Date(currentDate);
+        date.setMonth(date.getMonth() - i);
+        const month = date.toLocaleString('default', { month: 'long' });
+        labels.push(month);
+    }
+
+    // Dummy data for the bar chart
+    const barChartData = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Attend',
+                backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                borderColor: 'rgba(75, 192, 192, 1)', // Add border color here
+                borderWidth: 1, // Adjust border width as needed
+                data: @json($totalattend), // Use the data from the controller
+            },
+            {
+                label: 'Cancelled',
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                borderColor: 'rgba(255, 99, 132, 1)', // Add border color here
+                borderWidth: 1, // Adjust border width as needed
+                data: @json($totalcancel), // Replace this with the actual data for the past five months
+            },
+        ],
+    };
+
+    // Configuration options for the bar chart
+    const barChartOptions = {
+      barThickness: 10,
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true, // Start the y-axis from 0
+          max: Math.max(...barChartData.datasets.flatMap((dataset) => dataset.data)) + 1, // Set the maximum value of the y-axis to the highest value in the data
+          ticks: {
+            stepSize: 1, // Display only integer values on the y-axis
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            usePointStyle: true, // Use point-style icons instead of text labels
+          },
+        },
+      },
+    };
+
+    // Create and render the bar chart
+    const ctx1 = document.getElementById('chartAttendance').getContext('2d');
+    const barChart = new Chart(ctx1, {
+      type: 'bar',
+      data: barChartData,
+      options: barChartOptions,
+    });
+</script>
+
+
+<script>
+  // Chart Patient By Ages
+  // Dummy data for the pie chart
+  const pieChartData = {
+    labels: ['0-20', '21-40', '41-60', '61+'],
+    datasets: [{
+      data: [{{ $children }}, {{ $teenage }}, {{ $adult }}, {{ $older }}],
+      backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0'],
+      borderColor: '#FFFFFF', // Add border color here
+      borderWidth: 3, // Adjust border width as needed
+      hoverBackgroundColor: ['#2093D0', '#E8546F', '#E6C117', '#35A7A7'], // Add hover background color here
+    }],
+  };
+
+  // Configuration options for the pie chart
+  const pieChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          fontColor: '#333',
+          fontSize: 12,
+          boxWidth: 12,
+        },
+      },
+    },
+  };
+
+  // Create and render the pie chart
+  const ctx2 = document.getElementById('chartByAge').getContext('2d');
+  const pieChart = new Chart(ctx2, {
+    type: 'pie',
+    data: pieChartData,
+    options: pieChartOptions,
+  });
+</script>
+
+<script>
+  // Patient Pie Chart by Gender
+  // Dummy data for the pie chart
+  const data = {
+    labels: ['Male', 'Female'],
+    datasets: [{
+      data: [{{ $totalmale }}, {{ $totalfemale }}], 
+      backgroundColor: ['#36A2EB', '#FF6384'], // Colors for Male and Female respectively
+      borderColor: '#FFFFFF', // Add border color here
+      borderWidth: 3, // Adjust border width as needed
+      hoverBackgroundColor: ['#2093D0', '#E8546F'], // Hover colors for Male and Female respectively
+    }]
+  };
+
+  // Configuration options for the pie chart
+  const options = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false, // Hide the legend
+        },
+        labels: false, // Hide the labels
+      },
+    };
+
+  // Create and render the pie chart
+  const ctx = document.getElementById('chartByGender').getContext('2d');
+  const myChart = new Chart(ctx, {
+    type: 'pie',
+    data: data,
+    options: options,
+  });
+
+</script>
+
+<script>
+  // calendar
+  document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth'
+      });
+      calendar.render();
+  });
+  </script>
 
 @endsection
