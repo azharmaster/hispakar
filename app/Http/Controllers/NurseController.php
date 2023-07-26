@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\User;
 use App\Models\Patient; 
@@ -168,9 +169,17 @@ class NurseController extends Controller
         
         // If the user record exists and the email is not changed or the new email is unique
         if ($user && ($request->input('email') === $nurse->email || User::where('email', $request->input('email'))->doesntExist())) {
+            
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+
+            if ($request->hasFile('image')) {
+                $filename = $request->file('image')->getClientOriginalName();
+                $request->file('image')->storeAs('profilePic', $filename, 'public');
+                $user->image = $filename;
+            }// public/storage/profilePic
+            
             $user->save();
 
             // Wrap both updates in a transaction to ensure atomicity
