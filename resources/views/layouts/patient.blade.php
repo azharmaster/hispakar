@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
-    @include('patient.includes.head')
+    <title>PAKAR HIS | User</title>
+    @include('layouts.includes.head')
+
     <style>
     .data-label {
       font-size: 15px;
@@ -31,8 +33,6 @@
         grid-gap: 20px;
       }
     }
-
-
   </style>
 </head>
 

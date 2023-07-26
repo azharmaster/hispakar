@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-    @include('doctor.includes.head')
+    <title>PAKAR HIS | Doctor</title>
+    @include('layouts.includes.head')
 </head>
 
 <body>

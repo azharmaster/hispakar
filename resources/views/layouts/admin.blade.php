@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-    @include('admin.includes.head')
+    <title>PAKAR HIS | Admin</title>
+    @include('layouts.includes.head')
 </head>
 
 <body>
