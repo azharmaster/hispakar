@@ -81,8 +81,8 @@
                                                             <td>{{ $patient->gender }}</td>
                                                             
                                                             <td>
-                                                            <a title="Profile Doctor" data-toggle="modal" data-target="#profilepatient-{{ $patient->id }}">
-                                                                    <i style="font-size:20px;" class="icon feather icon-eye f-w-600 f-16 m-r-15 text-c-yellow"></i>
+                                                                <a href="/admin/patientProfile/{{ $patient->id }}" >
+                                                                    <i style="font-size:20px;" class="feather icon-eye f-w-600 f-16 text-c-yellow "></i>
                                                                 </a>
                                                                 <a title="Edit Patient" data-toggle="modal" data-target="#editModal-patient-{{ $patient->id }}">
                                                                     <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>

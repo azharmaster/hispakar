@@ -3,7 +3,7 @@
 @section('content')
 
 
-@foreach($doctordetails as $doctordetail)
+@foreach($patientdetails as $patientdetail)
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -13,8 +13,8 @@
                     <i class="fas fa-regular fa-user bg-c-blue"></i>
                     <!-- <i class="feather icon-home bg-c-blue"></i> -->
                     <div class="d-inline">
-                        <h5>Profile Doctor</h5>
-                        <span>{{ $doctordetail->name }}'s Profile </span>
+                        <h5>Profile Patient</h5>
+                        <span>{{ $patientdetail->name }}'s Profile </span>
                     </div>
                 </div>
             </div>
@@ -35,13 +35,15 @@
                                            
                                         </div>
                                         <div class="col-12 col-sm-7 text-center text-sm-left">
-                                            <h3 class="pt-3 pt-sm-0" style="word-wrap: break-word;" >{{ $doctordetail->name }}</h3>
-                                            <h6>Department of {{ $doctordetail->dept_name }}</h6>
+                                            <h3 class="pt-3 pt-sm-0 text-uppercase" style="word-wrap: break-word;" >{{ $patientdetail->name }}</h3>
+                                            <h6><span class="badge badge-warning">{{ $patientdetail->height }} CM</span> <span class="badge badge-primary">{{ $patientdetail->weight }} KG</span>
+                                            <span class="badge badge-danger">{{ $patientdetail->bloodtype }} </span>
+                                        </h6>
                                             <hr>
-                                            <h6><i class="fas fa-graduation-cap text-primary mr-3"></i>{{ $doctordetail->education }}</h6>
+                                            <h6><i class="fas fa-map-marker-alt text-primary mr-3"></i>{{ $patientdetail->address }}</h6>
                                             <hr>
-                                            <p class="mb-2"><i class="fas fa-phone mr-3 text-primary"></i>{{ $doctordetail->phoneno }}</p>
-                                            <i class="far fa-envelope mr-3 text-primary"></i><span>{{ $doctordetail->email }}</span>
+                                            <p class="mb-2"><i class="fas fa-phone mr-3 text-primary"></i>{{ $patientdetail->phoneno }}</p>
+                                            <i class="far fa-envelope mr-3 text-primary"></i><span>{{ $patientdetail->email }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -49,14 +51,16 @@
                         </div>
                         <div class="col-12 col-md-6 p-0">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-12">
                                     <a title="View Appointment" data-toggle="modal" data-target="#viewModal">
                                     <div class="card comp-card bg-c-blue">
                                         <div class="card-body">
                                         <div class="row align-items-center">
                                             <div class="col">
-                                            <h5 class="m-b-25 f-w-700 mb-4 text-white">Total Patient</h5>
-                                            <h4 class="f-w-700 text-white">{{$totaloperation}}</h4>
+                                            <h5 class="m-b-25 f-w-700 mb-4 text-white">Doctor Name</h5>
+                                            @foreach($doctors as $doctor)
+                                            <h6 class="f-w-700 text-white text-uppercase">{{$doctor->doctor}}</h6>
+                                            @endforeach
                                             </div>
                                             <div class="col-auto">
                                             <i class="fas fa-hospital-user bg-c-white text-primary d-none d-sm-block"></i>
@@ -66,23 +70,7 @@
                                     </div>
                                     </a>
                                 </div>
-                                <div class="col-6">
-                                    <a title="View Appointment" data-toggle="modal" data-target="#viewModal">
-                                    <div class="card comp-card bg-c-green">
-                                        <div class="card-body">
-                                        <div class="row align-items-center">
-                                            <div class="col">
-                                            <h5 class="m-b-25 f-w-700 mb-4 text-white">Experience</h5>
-                                            <h4 class="f-w-700 text-white">10 years</h4>
-                                            </div>
-                                            <div class="col-auto">
-                                            <i class="fas fa-briefcase bg-c-white text-success d-none d-sm-block"></i>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </a>
-                                </div>
+                                
                                 <div class="col-6">
                                     <a title="View Appointment" data-toggle="modal" data-target="#viewModal">
                                     <div class="card comp-card bg-c-green">
@@ -90,7 +78,7 @@
                                         <div class="row align-items-center">
                                             <div class="col">
                                             <h5 class="m-b-25 f-w-700 mb-4 text-white">Operations</h5>
-                                            <h4 class="f-w-700 text-white">{{$totalrecord}}</h4>
+                                            <h4 class="f-w-700 text-white">{{$totaloperation}}</h4>
                                             </div>
                                             <div class="col-auto">
                                             <i class="fas fa-hospital bg-c-white text-success d-none d-sm-block"></i>
@@ -150,7 +138,7 @@
     </div>
 </div>
 
-@endforeach
+
 
 @include('doctor.includes.dtScripts')
 
@@ -189,4 +177,6 @@ new Chart(ctx2,  {
     ]
 }})
 </script>
+
+@endforeach
 @endsection

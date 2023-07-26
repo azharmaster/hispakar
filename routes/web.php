@@ -37,10 +37,11 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/appointmentList', [AdminController::class, 'viewAppointmentList']);
     Route::get('/admin/departmentList', [AdminController::class, 'viewDepartmentList']);
     Route::get('/admin/medicineList', [AdminController::class, 'viewMedicineList']);
-    Route::get('/admin/medicineList', [AdminController::class, 'viewProfile']);
+    Route::get('/admin/doctorProfile/{id}', [AdminController::class, 'viewDoctorProfile']);
+    Route::get('/admin/patientProfile/{id}', [AdminController::class, 'viewPatientProfile']);
 
     //Manage profile
-    Route::post('/admin/profile/{id}', [AdminController::class, 'EditProfile']);
+    Route::post('/admin/profile', [AdminController::class, 'EditProfile']);
 
     //Manage Doctor
     Route::post('/admin/doctorList', [AdminController::class, 'AddDoctor']);

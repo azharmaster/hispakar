@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index() //dashboard
     {
         // $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         // ->join('doctor', 'appointment.docid', '=', 'doctor.id')
@@ -44,22 +44,61 @@ class AdminController extends Controller
         'totalnurse','totalpatient','totalmedicine','medicines','nurses'));
     }
 
-    public function viewProfile()
+    public function viewProfile() //profile admin
     {
-        // Get the currently authenticated user
-        $user = auth()->user();
+        $email=Auth()->user()->email; //dapatemail dr login
+        $name=Auth()->user()->name;
 
-        if ($user->usertype === 1) {
-            // Get the nurse's name from the 'nurse' table based on the email
-            $admin = Admin::where('email', $user->email)->first();
+        $admindetails = Admin::where('email', $email)->get();
 
-            return view('admin.contents.profile', [
-                'id' => $admin->id,
-                'name' => $admin->name,
-                'email' => $admin->email,
-                'phoneno' => $admin->phoneno
-            ]);
-        }
+        return view('admin.contents.profile', compact('admindetails','name'));
+       
+    }
+
+    public function viewDoctorProfile($id) //profile doctor
+    {
+
+        // $doctordetails = Doctor::where('id', $id)->get();
+        $doctordetails = Doctor::join('department', 'doctor.deptid', '=', 'department.id')
+        ->select('doctor.*', 'department.name as dept_name')
+        ->where('doctor.id', $id)
+        ->get();
+
+        $totaloperation = MedRecord::where('docid', $id)
+        ->distinct('patientid')
+        ->count('patientid');
+
+        $totalrecord = MedRecord::where('docid', $id)
+        ->count('id');
+
+        $totalapt = Appointments::where('docid', $id)
+        ->where('status', 1)
+        ->count('id');
+
+        return view('admin.contents.doctorProfile', compact('doctordetails','totaloperation','totalrecord','totalapt'));
+       
+    }
+
+    public function viewPatientProfile($id) //profile doctor
+    {
+
+        $patientdetails = Patient::where('id', $id)->get();
+
+        $totaloperation = MedRecord::where('patientid', $id)
+        ->count('patientid');
+
+        $totalapt = Appointments::where('patientid', $id)
+        ->where('status', 1)
+        ->count('id');
+
+        $doctors = MedRecord::where('patientid', $id)
+        ->select(DB::raw('(SELECT name FROM doctor WHERE id = docid) as doctor'))
+        ->distinct()
+        ->get();
+
+
+        return view('admin.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors'));
+       
     }
 
     public function viewDepartmentList()
@@ -78,17 +117,17 @@ class AdminController extends Controller
 
         $departments = Department::all();
 
-        foreach ($doctors as $doctor) { //total patient
-            $doctor->record_count = MedRecord::where('docid', $doctor->id)->count();
-        }
+        // foreach ($doctors as $doctor) { //total patient
+        //     $doctor->record_count = MedRecord::where('docid', $doctor->id)->count();
+        // }
 
-        foreach ($doctors as $doctor) { //total operation
-            $doctor->operation_count = MedRecord::where('docid', $doctor->id)->count();
-        }
+        // foreach ($doctors as $doctor) { //total operation
+        //     $doctor->operation_count = MedRecord::where('docid', $doctor->id)->count();
+        // }
 
-        foreach ($doctors as $doctor) { //total appointment
-            $doctor->appointment_count = Appointments::where('docid', $doctor->id)->count();
-        }
+        // foreach ($doctors as $doctor) { //total appointment
+        //     $doctor->appointment_count = Appointments::where('docid', $doctor->id)->count();
+        // }
         
 
         return view('admin.contents.doctorList', compact('doctors', 'departments'));
@@ -564,6 +603,26 @@ class AdminController extends Controller
     
     
             return redirect('/admin/medicineList')->with('success', 'Medicine has been deleted');
+        }
+
+        public function EditProfile(Request $request)
+        {
+
+            $email=Auth()->user()->email;
+
+            $profile=Admin::where('email', $email)->first();
+            $profile->name = $request->name;
+            $profile->email = $request->email;
+            $profile->phoneno = $request->phoneno;
+            $profile->save();
+            
+            $user=User::where('email', $email)->first();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
+
+            return redirect('/admin/profile')->with('success', 'Profile has been updated');
+
         }
 
 }

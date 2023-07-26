@@ -30,4 +30,11 @@ class MedRecord extends Model
         return $this->hasMany(Doctor::class, 'docid','id');
     }
 
+    public function doctors()
+    {
+        return $this->belongsTo(Doctor::class, 'docid');
+    }
+
+    
+
 }
