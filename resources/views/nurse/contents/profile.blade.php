@@ -46,7 +46,7 @@
 
                                 <!--profile picture -->
                                 <div class="parent-container2">
-                                  <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                                  <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/nurse/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
                                   </div>
                                 </div>
 
@@ -147,7 +147,7 @@
                   <label for="profilepic">
                     <div class="parent-container2">
                       <!-- profile pic displayed-->
-                      <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                      <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/nurse/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
                       </div>
                     </div>
                   </label>
