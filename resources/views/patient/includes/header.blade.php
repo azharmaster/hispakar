@@ -111,9 +111,17 @@
         <li class="user-profile header-notification">
           <div class="dropdown-primary dropdown">
             <div class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{{ asset('files/assets/images/avatar-4-1.jpg') }}" class="img-radius" alt="User-Profile-Image">
-              <span>{{ Auth::user()->name }}</span>
-              <i class="feather icon-chevron-down"></i>
+              
+              <div class="d-flex justify-content-center align-items-center" style="margin-top: -2px">
+                <!-- pic shown here -->
+                <div class="parent-container">
+                  <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/patient/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }});">
+                  </div>
+                </div>
+                <span class="ml-2">{{ Auth::user()->name }}</span>
+                <i class="feather icon-chevron-down"></i>
+              </div>
+
             </div>
             <ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
               <li>

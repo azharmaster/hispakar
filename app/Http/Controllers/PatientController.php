@@ -1,19 +1,25 @@
 <?php
-
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Models\Appointments;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\User;
+use App\Models\Patient; 
 use App\Models\Doctor;
-use App\Models\Patient;
+use App\Models\Nurse; 
+
 use App\Models\Department;
 use App\Models\DocSchedule;
+use App\Models\Appointments;
 use App\Models\Medicine;
 use App\Models\MedRecord;
 use App\Models\Medprescription;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+
 
 class PatientController extends Controller
 {
@@ -132,21 +138,54 @@ class PatientController extends Controller
 
     public function EditProfile(Request $request, $id)
     {
-        $user = Patient::find($id);
-        
-        $user->name = $request->input('name');
-        $user->ic = $request->input('ic');
-        $user->age = $request->input('age'); 
-        $user->gender = $request->input('gender'); 
-        $user->phoneno = $request->input('phoneno'); 
-        $user->email = $request->input('email');
-        $user->address = $request->input('address');
-        $user->weight = $request->input('weight');
-        $user->height = $request->input('height');
-        $user->bloodtype = $request->input('bloodtype');
-        $user->save();
+        $patient = Patient::find($id);
 
-        return redirect('/patient/profile')->with('success', 'Profile has been updated');
+        // Update the corresponding user record
+        $user = User::where('email', $patient->email)->first();
+        
+        // If the user record exists and the email is not changed or the new email is unique
+        if ($user && ($request->input('email') === $patient->email || User::where('email', $request->input('email'))->doesntExist())) {
+            
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+
+            if ($request->hasFile('image')) {
+                $filename = $request->file('image')->getClientOriginalName();
+                $request->file('image')->storeAs('patient/profilePic', $filename, 'public');
+                $user->image = $filename;
+            }// public/storage/profilePic
+            
+            $user->save();
+
+            // Wrap both updates in a transaction to ensure atomicity
+            DB::beginTransaction();
+
+            try {
+                $patient->name = $request->input('name');
+                $patient->age = $request->input('age'); 
+                $patient->gender = $request->input('gender'); 
+                $patient->phoneno = $request->input('phoneno'); 
+                $patient->email = $request->input('email');
+                $patient->address = $request->input('address');
+                $patient->weight = $request->input('weight');
+                $patient->height = $request->input('height');
+                $patient->bloodtype = $request->input('bloodtype');
+                $patient->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+
+                $patient->save();
+
+                DB::commit();
+                
+                return redirect('/patient/profile')->with('success', 'Your profile has been updated');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                
+                return redirect()->back()->with('success', 'ERROR! Unable to updating your profile.');
+            }
+        } else {
+            return redirect()->back()->with('success', 'Unsuccessful, the email already exists.');
+        }
     }
 
     /////////////////////////////////Appointment//////////////////////////////////////////////////////////////////

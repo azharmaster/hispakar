@@ -42,9 +42,12 @@
             <div class="col-sm-4">
               <div class="card">
               
-                <div class="card-block text-center">
+                <div class="card-block d-flex justify-content-center">
                   <!--profile picture -->
-                  <img src="../files/assets/images/avatar-4-1.jpg" class="img-radius" style="width: 140px; height: 140px;">
+                  <div class="parent-container2">
+                    <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/patient/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                    </div>
+                  </div>
                 </div>
                 
                 <h4 class="profile-username text-center text-uppercase">{{$name}}</h4>
@@ -72,42 +75,42 @@
                   <div class="form-group row">
                     <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">IC</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control form-control-border-bottom  profile" style="background-color: white; color: black;" id="exampleInputBorder"  value="{{$userdetail->ic}}" disabled>
+                      <input type="text" class="form-control form-control-border-bottom  profile" style="background-color: white; color: black;" id="exampleInputBorder"  value="{{$userdetail->ic}}" readonly>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Name</label>
                     <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$userdetail->name}}"  disabled>
+                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$userdetail->name}}"  readonly>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Gender</label>
                     <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$userdetail->gender}}"  disabled>
+                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$userdetail->gender}}"  readonly>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Phone No.</label>
                     <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$userdetail->phoneno}}"  disabled>
+                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$userdetail->phoneno}}"  readonly>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="inputName2" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Email</label>
                     <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;"  value="{{$userdetail->email}}" disabled>
+                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;"  value="{{$userdetail->email}}" readonly>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="inputExperience" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Address</label>
                     <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;"  value="{{$userdetail->address}}" disabled>
+                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;"  value="{{$userdetail->address}}" readonly>
                     </div>
                   </div>
                   @endforeach
@@ -135,20 +138,36 @@
 
       <div class="modal-body" style="margin-left: 15px; margin-right:15px;">
       @foreach($userdetails as $userdetail)
-      <form action="/patient/profile/{{ $userdetail->id }}" class="form-horizontal row-fluid" method="POST" >
+      <form action="/patient/profile/{{ $userdetail->id }}" class="form-horizontal row-fluid" method="POST" enctype="multipart/form-data" >
       {{csrf_field()}}
           <div class="row">
             <div class="col">
-              <div class="form-group row">
-                <div class="col-sm-10">
-                  <div class="profilepic text-center" onclick="openFileUploader()">
-                    <img class="profilepic__image" src="../files/assets/images/avatar-4-1.jpg" alt="Profile" />
-                    <div class="profilepic__content">
+              
+              <!-- To display profile pic only -->
+              <div class="form-group row text-center">
+                <div class="col">
+                  <div class="profilepic" onclick="openFileUploader()">
+                    <label for="profilepic">
+                      <div class="parent-container2">
+                        <!-- profile pic displayed-->
+                        <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/patient/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                        </div>
+                      </div>
+                    </label>
+                  </div><!-- /.profilepic -->
+                </div>
+              </div>
+              <!-- /.form-group -->
+              
+              <div class="form-group row text-center" style="margin-top: -20px">
+                <div class="col">
+                  <div class="file-input-container">
+                    <label for="profilepic" class="profilepic__content">
                       <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
-                      <span class="profilepic__text">Choose Photo</span>
-                    </div>
+                      <span class="profilepic__text">Change Photo</span>
+                    </label>
+                    <input type="file" id="profilepic" name="image" accept="image/*" hidden>
                   </div>
-                  <input class="file-upload" type="file" accept="image/*" onchange="readURL(this)" />
                 </div>
               </div>
               <!-- /.form-group -->
@@ -156,7 +175,7 @@
               <div class="form-group row">
                 <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">IC</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border profile" name="ic" value="{{$userdetail->ic}}" >
+                  <input type="text" name="name" id="ic" value="{{ $userdetail->ic }}" readonly placeholder="IC" class="form-control form-control-border profile" style="background-color: white;">
                 </div>
               </div>
               <!-- /.form-group -->
@@ -172,7 +191,7 @@
               <div class="form-group row">
                 <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Age</label>
                 <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" name="age" value="{{$userdetail->age}}" >
+                  <input type="text" class="profile form-control form-control-border" id="age" name="age" value="{{$userdetail->age}}" >
                 </div>
               </div>
               <!-- /.form-group -->
@@ -180,15 +199,17 @@
               <div class="form-group row">
                 <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Gender</label>
                 <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" name="gender" value="{{$userdetail->gender}}" >
+                    <select name="gender" id="gender" class="form-control form-control-border">
+                        <option value="male" {{ $userdetail->gender === 'male' ? 'selected' : '' }}>Male</option>
+                        <option value="female" {{ $userdetail->gender === 'female' ? 'selected' : '' }}>Female</option>
+                    </select>
                 </div>
               </div>
-              <!-- /.form-group -->
 
               <div class="form-group row">
-                <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Phone Number</label>
+                <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Phone No.</label>
                 <div class="col-sm-10">
-                  <input type="text" class="profile form-control form-control-border" name="phoneno" value="{{$userdetail->phoneno}}" >
+                  <input type="text" class="profile form-control form-control-border" id="phoneno"name="phoneno" value="{{$userdetail->phoneno}}" >
                 </div>
               </div>
               <!-- /.form-group -->
@@ -196,7 +217,7 @@
               <div class="form-group row">
                 <label for="inputName2" style="font-weight: normal; " class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border" id="inputName2" name="email" value="{{$userdetail->email}}">
+                  <input type="email" class="form-control form-control-border" id="email" name="email" value="{{$userdetail->email}}">
                 </div>
               </div>
               <!-- /.form-group -->
@@ -204,7 +225,7 @@
               <div class="form-group row">
                 <label for="inputExperience" style="font-weight: normal; " class="col-sm-2 col-form-label">Address</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border" id="exampleInputBorder" name="address" value="{{$userdetail->address}}" >
+                  <input type="text" class="form-control form-control-border" id="address" name="address" value="{{$userdetail->address}}" >
                 </div>
               </div>
               <!-- /.form-group -->
@@ -212,7 +233,7 @@
               <div class="form-group row">
                 <label for="inputExperience" style="font-weight: normal; " class="col-sm-2 col-form-label">Weight</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border"name="weight" value="{{$userdetail->weight}}" >
+                  <input type="text" class="form-control form-control-border" id="weight" name="weight" value="{{$userdetail->weight}}" >
                 </div>
               </div>
               <!-- /.form-group -->
@@ -220,7 +241,7 @@
               <div class="form-group row">
                 <label for="inputExperience" style="font-weight: normal; " class="col-sm-2 col-form-label">Height</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border"  name="height" value="{{$userdetail->height}}" >
+                  <input type="text" class="form-control form-control-border"  id="height"name="height" value="{{$userdetail->height}}" >
                 </div>
               </div>
               <!-- /.form-group -->
@@ -228,10 +249,21 @@
               <div class="form-group row">
                 <label for="inputExperience" style="font-weight: normal; " class="col-sm-2 col-form-label">Blood Type</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-border" id="exampleInputBorder" name="bloodtype" value="{{$userdetail->bloodtype}}" >
+                  <select class="form-control" name="bloodtype">
+                      <option value="A+" {{ $userdetail->bloodtype === 'A+' ? 'selected' : '' }}>A+</option>
+                      <option value="A-" {{ $userdetail->bloodtype === 'A-' ? 'selected' : '' }}>A-</option>
+                      <option value="B+" {{ $userdetail->bloodtype === 'B+' ? 'selected' : '' }}>B+</option>
+                      <option value="B-" {{ $userdetail->bloodtype === 'B-' ? 'selected' : '' }}>B-</option>
+                      <option value="AB+" {{ $userdetail->bloodtype === 'AB+' ? 'selected' : '' }}>AB+</option>
+                      <option value="AB-" {{ $userdetail->bloodtype === 'AB-' ? 'selected' : '' }}>AB-</option>
+                      <option value="O+" {{ $userdetail->bloodtype === 'O+' ? 'selected' : '' }}>O+</option>
+                      <option value="O-" {{ $userdetail->bloodtype === 'O-' ? 'selected' : '' }}>O-</option>
+                  </select>
                 </div>
               </div>
               <!-- /.form-group -->
+
+
             </div> <!-- /.row -->
           </div> <!-- /.body content -->
       </div> <!-- /.end modal content -->
@@ -243,60 +275,22 @@
       @endforeach
     </div> <!-- /.end modal dialog -->
   </div> <!-- /.end edit profile modal-->
+
+  <!-- for profile pic input style -->
+  <script>
+    const fileInput = document.getElementById("profilepic");
+    const textSpan = document.querySelector(".profilepic__text");
+
+    fileInput.addEventListener("change", () => {
+        const file = fileInput.files[0];
+        if (file) {
+        textSpan.textContent = file.name;
+        } else {
+        textSpan.textContent = "Change Photo";
+        }
+    });
+  </script>
+
 </div>
 @endsection
-<!-- 
-<script type="text/javascript" src="../files/bower_components/jquery/js/jquery.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/jquery-ui/js/jquery-ui.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/popper.js/js/popper.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/bootstrap/js/bootstrap.min-1.js"></script>
 
-<script src="../files/assets/jquery/jquery.min.js"></script>
-
-<script src="../files/assets/pages/waves/js/waves.min-1.js"></script>
-
-<script type="text/javascript" src="../files/bower_components/jquery-slimscroll/js/jquery.slimscroll-1.js"></script>
-
-<script type="text/javascript" src="../files/bower_components/modernizr/js/modernizr-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/modernizr/js/css-scrollbars-1.js"></script>
-
-<script src="../files/bower_components/datatables.net/js/jquery.dataTables.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-buttons/js/dataTables.buttons.min-1.js"></script>
-<script src="../files/assets/pages/data-table/js/jszip.min-1.js"></script>
-<script src="../files/assets/pages/data-table/js/pdfmake.min-1.js"></script>
-<script src="../files/assets/pages/data-table/js/vfs_fonts-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/dataTables.buttons.min-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/buttons.flash.min-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/jszip.min-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/vfs_fonts-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/buttons.colVis.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-buttons/js/buttons.print.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-buttons/js/buttons.html5.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-bs4/js/dataTables.bootstrap4.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-responsive/js/dataTables.responsive.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-responsive-bs4/js/responsive.bootstrap4.min-1.js"></script>
-
-<script src="../files/assets/pages/data-table/js/data-table-custom-1.js"></script>
-<script src="../files/assets/js/pcoded.min-1.js"></script>
-<script src="../files/assets/js/vertical/vertical-layout.min-1.js"></script>
-<script src="../files/assets/js/jquery.mCustomScrollbar.concat.min-1.js"></script>
-<script type="text/javascript" src="../files/assets/js/script-1.js"></script>
-<script type="text/javascript" src="../files/assets/printScript.js"></script>
-
-<script>
-  function openFileUploader() {
-    $(".file-upload").click();
-  }
-
-  function readURL(input) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-
-      reader.onload = function(e) {
-        $('.profilepic__image').attr('src', e.target.result);
-      };
-
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-</script> -->
