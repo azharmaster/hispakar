@@ -136,7 +136,45 @@ class DoctorController extends Controller
                 ->count();
         }
 
-        //patient statistics by day
+        //patient by gender
+        $totalmale = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
+                    ->where('patient.gender', 'male')
+                    ->where('medrecord.docid', $doctor->id)
+                    ->count();
+
+        $totalfemale = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
+                    ->where('patient.gender', 'female')
+                    ->where('medrecord.docid', $doctor->id)
+                    ->count();
+        
+        //Age
+        $children = Patient::join('appointment', 'patient.id', '=', 'appointment.patientid')
+        ->where('patient.age', '<=', 12)
+        ->where('appointment.docid', $doctor->id)
+        ->select('patient.id') // Select only the patient IDs
+        ->distinct()
+        ->count(); // Age up to 12 years
+
+        $teenage = Patient::join('appointment', 'patient.id', '=', 'appointment.patientid')
+        ->whereBetween('age', [13, 19])
+        ->where('appointment.docid', $doctor->id)
+        ->select('patient.id') // Select only the patient IDs
+        ->distinct()
+        ->count(); // Age between 13 and 19 years
+
+        $adult = Patient::join('appointment', 'patient.id', '=', 'appointment.patientid')
+        ->whereBetween('age', [20, 64])
+        ->where('appointment.docid', $doctor->id)
+        ->select('patient.id') // Select only the patient IDs
+        ->distinct()
+        ->count(); // Age between 20 and 64 years
+
+        $older = Patient::join('appointment', 'patient.id', '=', 'appointment.patientid')
+        ->where('age', '>=', 65)
+        ->where('appointment.docid', $doctor->id)
+        ->select('patient.id') // Select only the patient IDs
+        ->distinct()
+        ->count(); // Age 65 years and above
 
 
         //calendar
@@ -164,9 +202,27 @@ class DoctorController extends Controller
             ];
         }
 
-        return view('doctor.contents.dashboard', compact('name', 'roomName', 'totalApt', 'timeDifference', 
-        'timePDifference', 'totalPatient', 'timeNDifference', 'totalNurse', 'aptDs', 'currentDate', 
-        'medicines','totalattend', 'totalcancel', 'calendarEvents'
+        return view('doctor.contents.dashboard', compact(
+        //doctor name & room
+        'name', 'roomName', 
+        // total apt & time
+        'totalApt', 'timeDifference', 
+        //total patient & time
+        'timePDifference', 'totalPatient', 
+        //total nurse & time
+        'timeNDifference', 'totalNurse', 
+        //total apts & current date
+        'aptDs', 'currentDate', 
+        //medicines
+        'medicines',
+        //graph total attend & cancel
+        'totalattend', 'totalcancel', 
+        //graph patient by gender
+        'totalmale', 'totalfemale',
+        //age
+        'children', 'teenage', 'adult', 'older',
+        //calendar
+        'calendarEvents'
         ));
     }
 
@@ -245,6 +301,9 @@ class DoctorController extends Controller
             // You can also return an empty array of appointments if you prefer
         }
     
+         // Get the current date
+        $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
+
         // Get the doctor's schedule for the current week
         $startOfWeek = Carbon::now('Asia/Kuala_Lumpur')->startOfWeek();
         $endOfWeek = Carbon::now('Asia/Kuala_Lumpur')->endOfWeek();
@@ -273,6 +332,8 @@ class DoctorController extends Controller
             ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
             ->where('appointment.status', 1)
             ->where('doctor.id', $doctor->id)
+            ->where('appointment.deptid', $doctor->deptid)
+            ->where('appointment.date', $currentDate)
             ->get();
     
         $patients = Patient::all();
@@ -316,8 +377,9 @@ class DoctorController extends Controller
         $patients = Patient::all(); // Add this line to fetch all patients
 
         $medicines = Medicine::all();
+        $medNum = 1; // Initialize the $medNum variable to 1
 
-        return view('doctor.contents.appointmentReport', compact('appointment', 'medicines', 'singlePatient', 'medservices', 'patients'));
+        return view('doctor.contents.appointmentReport', compact('appointment', 'medicines', 'singlePatient', 'medservices', 'patients', 'medNum'));
     }
 
     public function viewMedicineList()
@@ -617,8 +679,17 @@ class DoctorController extends Controller
     }
    
     //Appointment record
+    public function getMedicinePrice($id)
+    {
+        $medicine = Medicine::findOrFail($id);
+        return response()->json(['price' => $medicine->price]);
+    }
+    
     public function AddAppointmentRecord(Request $request, $id)
     {
+        // Get the currently logged-in doctor
+        $doctor = Doctor::where('email', Auth::user()->email)->first();
+    
         // Insert data into medrecord table
         $medRec = new MedRecord();
         $medRec->aptid = $id;
@@ -626,12 +697,12 @@ class DoctorController extends Controller
         $medRec->desc = $request->input('desc')['med_record'];
         $medRec->datetime = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $medRec->patientid = $request->input('patientid');
-        $medRec->docid = Auth::id();
+        $medRec->docid = $doctor->id;
         $medRec->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $medRec->save();
 
-        //Med Prescription
-       // Get the selected medicine values from the request
+       //Med Prescription
+        // Get the selected medicine values from the request
         $selectedMedicines = $request->input('medicines')['id'] ?? [];
         $quantities = Arr::wrap($request->input('qty'));
         $descriptions = Arr::wrap($request->input('desc')['med_prescription']);
@@ -654,7 +725,7 @@ class DoctorController extends Controller
                     $medPres->name = $medicineName;
                     $medPres->qty = $quantities[$i];
                     $medPres->desc = $descriptions[$i];
-                    $medPres->docid = Auth::id();
+                    $medPres->docid = $doctor->id;
                     $medPres->patientid = $request->input('patientid');
                     $medPres->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
                     $medPres->save();
@@ -678,13 +749,14 @@ class DoctorController extends Controller
             // return redirect()->back()->withErrors(['error' => "Mismatched array lengths for selected medicines, quantities, and descriptions"]);
         }
 
-
         // Check if the checkbox is checked
         if ($request->has('scheduleNext')) {
             // Checkbox is checked, so insert the data into the database
             $apt = new Appointments();
             $apt->patientid = $request->input('patientid');
-            $apt->docid = Auth::id();
+            $apt->docid = $doctor->id;
+            $apt->deptid = $doctor->deptid;
+            $apt->status = 1;
             $apt->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
 
             // Check if the date and time inputs are provided
@@ -714,6 +786,5 @@ class DoctorController extends Controller
 
         return view('doctor.contents.reports', compact('filteredReports'));
     }
-
 
 }

@@ -117,7 +117,7 @@
                         <div class="card">
                             <div class="card-block">
                             </div>
-                            <form action="{{ route('doctor.addAppointmentRecord', ['id' => $appointment->id]) }}" method="POST">
+                            <form id="appointmentForm" action="{{ route('doctor.addAppointmentRecord', ['id' => $appointment->id]) }}" method="POST" >
                                 {{csrf_field()}}
 
                                 <input type="hidden" name="id" value="{{ $appointment->id }}">
@@ -175,6 +175,25 @@
                                             <td class="text-align-center"><span onclick="deleteRow(this)"><i class="fas fa-trash-alt text-danger"></i></span></td>
                                         </tr>
                                     </table>
+                                    <table style="display: none;">
+                                        <tr id="medRowTemplate">
+                                            <th>Medicine ${medNum}</th>
+                                            <td>
+                                                <select class="form-control" name="medicines[id][]">
+                                                    @foreach ($medicines as $medicine)
+                                                        <option value="{{ $medicine->id }}:{{ $medicine->name }}">{{ $medicine->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" name="qty[]" placeholder="Quantity">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" name="desc[med_prescription][]" placeholder="Description">
+                                            </td>
+                                            <td class="text-align-center"><span onclick="deleteRow(this)"><i class="fas fa-trash-alt text-danger"></i></span></td>
+                                        </tr>
+                                    </table>
                                     <div class="form-group row">
                                         <div class="col">
                                             <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" onclick="addMedRow()">
@@ -197,8 +216,6 @@
                                             <input class="form-control" type="time" id="timeInput" name="time" disabled>
                                         </div>
                                     </div>
-
-
     
                                     <div class="form-group row">
                                         <div class="col">
@@ -311,8 +328,8 @@
 <!--/view details -->
 
 <script>
-     var table = document.getElementById("medTable");
-    var medNum = 1;
+    var table = document.getElementById("medTable");
+    let medNum = 1;
 
     function addMedRow() {
         medNum++;
@@ -320,17 +337,17 @@
         row.innerHTML = `
             <th>Medicine ${medNum}</th>
             <td>
-                <select class="form-control" name="medicine[${medNum}][id]">
+                <select class="form-control" name="medicines[id][]">
                     @foreach ($medicines as $medicine)
-                        <option value="{{ $medicine->id }}">{{ $medicine->name }}</option>
+                        <option value="{{ $medicine->id }}:{{ $medicine->name }}">{{ $medicine->name }}</option>
                     @endforeach
                 </select>
             </td>
             <td>
-                <input type="number" class="form-control" name="medicine[${medNum}][qty]" placeholder="Quantity" required>
+                <input type="number" class="form-control" name="qty[]" placeholder="Quantity">
             </td>
             <td>
-                <input type="text" class="form-control" name="medicine[${medNum}][desc]" placeholder="Description" required>
+                <input type="text" class="form-control" name="desc[med_prescription][]" placeholder="Description">
             </td>
             <td class="text-align-center"><span onclick="deleteRow(this)"><i class="fas fa-trash-alt text-danger"></i></span></td>
         `;
@@ -341,15 +358,22 @@
         table.deleteRow(i);
     }
 
-    function getRowIndex(table, columnIndex, cells) {
-        var rows = table.rows;
-        for (var i = 0; i < rows.length; i++) {
-            var cells = rows[i].cells;
-            if (columnIndex < cells.length && cells[columnIndex] === cell) {
-            return i;
-            }
-        }
-        return -1; // Return -1 if the cell is not found in the specified column
+    function submitForm() {
+        // Serialize the form data and submit the form
+        var formData = new FormData(document.getElementById("appointmentForm"));
+        fetch('/submitForm', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response if needed
+            console.log(data);
+        })
+        .catch(error => {
+            // Handle any errors that occurred during form submission
+            console.error('Error submitting the form:', error);
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
