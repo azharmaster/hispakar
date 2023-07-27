@@ -452,7 +452,9 @@ class AdminController extends Controller
         $room->name = $request->name;
         $room->type = $request->type;
         $room->desc = $request->desc;
+        $room->staff_id = $request->staff_id;
         $room->status = $request->status;
+        $room->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $room->save();
 
         return redirect('/admin/roomList')->with('success', 'New Rooms has been successfully added');
@@ -466,6 +468,8 @@ class AdminController extends Controller
         $room->type = $request->input('type');
         $room->desc = $request->input('desc'); 
         $room->status = $request->input('status');
+        $room->staff_id = $request->input('staff_id');
+        $room->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $room->save();
 
         return redirect('/admin/roomList')->with('success', 'Room has been updated');
@@ -560,6 +564,7 @@ class AdminController extends Controller
         $appointment->date = $request->input('date'); 
         $appointment->time = $request->input('time'); 
         $appointment->status = $request->input('status');
+        $appointment->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $appointment->save();
 
         return redirect('/admin/appointmentList')->with('success', 'Appointment has been updated');

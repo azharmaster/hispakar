@@ -58,6 +58,7 @@
                                                     <th>Room Name</th>
                                                     <th>Type</th>
                                                     <th>Description</th>
+                                                    <th>Person In Charge (PIC)</th>
                                                     <th>Status</th>
                                                     <th style="width: 10px;">Action</th>
                                                 </tr>
@@ -74,6 +75,7 @@
                                                     <td>{{ $room->name }}</td>
                                                     <td>{{ $room->type }}</td>
                                                     <td>{{ $room->desc }}</td>
+                                                    <td>{{ $room->staff_id }}</td>
 
                                                     @if ( $room->status == 1)
                                                         <td>Available</td> <!-- available -->

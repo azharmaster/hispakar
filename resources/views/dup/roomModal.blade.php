@@ -41,6 +41,10 @@
                         <textarea rows="2" style="width: 350px;" class="form-control" name="desc" id="desc" placeholder="Enter description.." required></textarea>
                     </div>
                     <div class="form-group input-group">
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Staff ID :</label>
+                        <input type="text" style="width:350px;" class="form-control" name="staff_id" id="staff_id" placeholder="N1234" required>
+                    </div>
+                    <div class="form-group input-group">
                         <label class="input-group-addon" style="width:150px; font-weight:bold;">Status :</label>
                         <select style="width:350px;" class="form-control" name="status" id="status" required>
                             <option value="1">Available</option>
@@ -83,8 +87,12 @@
                         <input type="text" style="width:350px;" class="form-control" name="type" id="type" value="{{ $room->type }}" placeholder="eg. Operation Room">
                     </div>
                     <div class="form-group input-group">
-                        <label class="input-group-addon" style="width:150px; font-weight:bold;">desc :</label>
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Description :</label>
                         <textarea rows="2" style="width: 350px;" class="form-control" name="desc" id="desc" placeholder="Enter description.." required>{{ $room->desc }}</textarea>
+                    </div>
+                    <div class="form-group input-group">
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Staff ID :</label>
+                        <input type="text" style="width:350px;" class="form-control" name="staff_id" id="staff_id" value="{{ $room->staff_id }}" placeholder="N1234" required>
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon" style="width:150px; font-weight:bold;">Status :</label>
