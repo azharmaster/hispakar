@@ -42,13 +42,13 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="card">
-                            <div class="card-block text-center">
+                            <div class="card-block d-flex justify-content-center">
+
                                 <!--profile picture -->
-                                @if($profilepic)
-                                    <img src="{{ asset('files/assets/images/' . $profilepic) }}" class="img-radius" style="width: 140px; height: 140px;">
-                                @else
-                                    <img src="{{ asset('files/assets/images/profilePic/unknown.jpg') }}" class="img-radius" style="width: 140px; height: 140px;">
-                                @endif
+                                <div class="parent-container2">
+                                  <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/nurse/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                                  </div>
+                                </div>
 
                             
                               </div>
@@ -140,27 +140,35 @@
         <div class="row">
           <div class="col">
             
+            <!-- To display profile pic only -->
             <div class="form-group row text-center">
               <div class="col">
                 <div class="profilepic" onclick="openFileUploader()">
                   <label for="profilepic">
-                    
-                    @if($profilepic)
-                        <img class="profilepic__image img-radius" src="{{ asset('files/assets/images/' . $profilepic) }}" alt="Profile" style="width: 140px; height: 140px;">
-                    @else
-                        <img class="profilepic__image img-radius" src="{{ asset('files/assets/images/profilePic/unknown.jpg') }}" alt="Profile" style="width: 140px; height: 140px;">
-                    @endif
-
-                    <div class="profilepic__content mt-2">
-                          <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
-                          <span class="profilepic__text">Change Photo</span>
+                    <div class="parent-container2">
+                      <!-- profile pic displayed-->
+                      <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/nurse/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                      </div>
                     </div>
                   </label>
-                  <input type="file" id="profilepic" name="profilepic" accept="image/*" hidden>                 
+                </div><!-- /.profilepic -->
+              </div>
+            </div>
+            <!-- /.form-group -->
+            
+            <div class="form-group row text-center" style="margin-top: -20px">
+              <div class="col">
+                <div class="file-input-container">
+                  <label for="profilepic" class="profilepic__content">
+                    <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
+                    <span class="profilepic__text">Change Photo</span>
+                  </label>
+                  <input type="file" id="profilepic" name="image" accept="image/*" hidden>
                 </div>
               </div>
             </div>
             <!-- /.form-group -->
+            
 
             <div class="form-group row">
               <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">IC</label>
@@ -228,5 +236,20 @@
   </form>
   </div> <!-- /.end edit profile modal-->
 </div>
+
+<!-- for profile pic input style -->
+<script>
+  const fileInput = document.getElementById("profilepic");
+  const textSpan = document.querySelector(".profilepic__text");
+
+  fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (file) {
+      textSpan.textContent = file.name;
+      } else {
+      textSpan.textContent = "Change Photo";
+      }
+  });
+</script>
 
 @endsection

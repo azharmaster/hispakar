@@ -1,6 +1,9 @@
 @extends('layouts.doctor')
 
 @section('content')
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -229,13 +232,13 @@
                         <!-- End table -->
     
                         <div class="col-md-12 col-xl-6">
-                            <div class="card sale-card">
+                            <div class="card sale-card  custom-card" style="height: 400px;">
                                 <div class="card-header">
-                                    <h5>Approval and Cancellation</h5>
+                                    <h5>Appointment Attendance Statistics</h5>
                                 </div>
-                                <div class="card-block">
-                                    <div>
-                                        <canvas id="myChart2"></canvas>
+                                <div class="card-block p-4">
+                                    <div style="width: 440px; height: 280px; margin: auto;">
+                                        <canvas id="chartAttendance"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -592,5 +595,83 @@
   </div>
 @endforeach
 <!-- bbh -->
+
+<script>
+  //Chart Attendance Statistic
+    const currentDate = new Date();
+  
+    // Calculate the labels for the past five months and the current month
+    const labels = [];
+    for (let i = 4; i >= 0; i--) {
+        const date = new Date(currentDate);
+        date.setMonth(date.getMonth() - i);
+        const month = date.toLocaleString('default', { month: 'long' });
+        labels.push(month);
+    }
+
+    // Dummy data for the bar chart
+    const barChartData = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Attend',
+                backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                borderColor: 'rgba(75, 192, 192, 1)', // Add border color here
+                borderWidth: 1, // Adjust border width as needed
+                data: @json($totalattend), // Use the data from the controller
+            },
+            {
+                label: 'Cancelled',
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                borderColor: 'rgba(255, 99, 132, 1)', // Add border color here
+                borderWidth: 1, // Adjust border width as needed
+                data: @json($totalcancel), // Replace this with the actual data for the past five months
+            },
+        ],
+    };
+
+    // Configuration options for the bar chart
+    const barChartOptions = {
+      barThickness: 10,
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true, // Start the y-axis from 0
+          max: Math.max(...barChartData.datasets.flatMap((dataset) => dataset.data)) + 1, // Set the maximum value of the y-axis to the highest value in the data
+          ticks: {
+            stepSize: 1, // Display only integer values on the y-axis
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            usePointStyle: true, // Use point-style icons instead of text labels
+          },
+        },
+      },
+    };
+
+    // Create and render the bar chart
+    const ctx1 = document.getElementById('chartAttendance').getContext('2d');
+    const barChart = new Chart(ctx1, {
+      type: 'bar',
+      data: barChartData,
+      options: barChartOptions,
+    });
+</script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth'
+      });
+      calendar.render();
+    });
+
+  </script>
 
 @endsection

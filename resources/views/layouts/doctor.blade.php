@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-    @include('doctor.includes.head')
+    <title>PAKAR HIS | Doctor</title>
+    @include('layouts.includes.head')
 </head>
 
 <body>
@@ -35,51 +36,6 @@
             </div>
         </div>
     </div>
-
-
-    <!--[if lt IE 10]>
-      <div class="ie-warning">
-          <h1>Warning!!</h1>
-          <p>You are using an outdated version of Internet Explorer, please upgrade
-              <br/>to any of the following web browsers to access this website.
-          </p>
-          <div class="iew-container">
-              <ul class="iew-download">
-                  <li>
-                      <a href="http://www.google.com/chrome/">
-                          <img src="./files/assets/images/browser/chrome.png" alt="Chrome">
-                          <div>Chrome</div>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://www.mozilla.org/en-US/firefox/new/">
-                          <img src="./files/assets/images/browser/firefox.png" alt="Firefox">
-                          <div>Firefox</div>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="http://www.opera.com">
-                          <img src="./files/assets/images/browser/opera.png" alt="Opera">
-                          <div>Opera</div>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://www.apple.com/safari/">
-                          <img src="./files/assets/images/browser/safari.png" alt="Safari">
-                          <div>Safari</div>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                          <img src="./files/assets/images/browser/ie.png" alt="">
-                          <div>IE (9 & above)</div>
-                      </a>
-                  </li>
-              </ul>
-          </div>
-          <p>Sorry for the inconvenience!</p>
-      </div>
-  <![endif]-->
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min-1.js"></script>
@@ -132,7 +88,7 @@
     
 </body>
 
-<script>
+<!-- <script>
     const ctx = document.getElementById('myChart');
   
     new Chart(ctx, {
@@ -141,7 +97,7 @@
         labels: ['Neurology', 'Oncology', 'Cardiology', 'Ophtalmology'],
         datasets: [{
           label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
+          data: [12, 19, 3, 5],
           borderWidth: 1
         }]
       },
@@ -162,7 +118,7 @@
         labels: ['January', 'March', 'April', 'May', 'June'],
         datasets: [{
           label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
+          data: [12, 19, 3, 5, 2],
           borderWidth: 1
         }]
       },
@@ -174,18 +130,6 @@
         }
       }
     });
-  </script>
-
-<script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth'
-      });
-      calendar.render();
-    });
-
-  </script>
+  </script> -->
 
 </html>

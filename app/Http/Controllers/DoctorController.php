@@ -32,10 +32,16 @@ class DoctorController extends Controller
 
         $doctorId = $doctor->id;
 
-        //total appointment
-        $totalApt = Appointments::join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.*')
-        ->where('doctor.email', $email)
+        //total appointment card
+        // $totalApt = Appointments::join('doctor', 'appointment.docid', '=', 'doctor.id')
+        // ->select('appointment.*')
+        // ->where('doctor.email', $email)
+        // ->count();
+
+        $totalApt = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->select('appointment.*', 'patient.*')
+        ->where('doctor.id', $doctorId)
         ->count();
 
         // Get the most recent appointment's created_at timestamp
@@ -44,11 +50,13 @@ class DoctorController extends Controller
         // Calculate the time difference between now and the appointment's created_at timestamp
         $timeDifference = $latestAppointment ? Carbon::parse($latestAppointment->created_at)->diffForHumans() : 'N/A';
 
-        //total patient
-        $totalPatient = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.*')
-        ->count();
+        //total patient card
+        // $totalPatient = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        // ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        // ->select('appointment.*')
+        // ->count();
+
+        $totalPatient = Patient::all()->count();
 
         // Get the most recent patient's created_at timestamp
         $latestPatient = Patient::orderBy('created_at', 'desc')->first();
@@ -56,7 +64,7 @@ class DoctorController extends Controller
         // Calculate the time difference between now and the patient's created_at timestamp
         $timePDifference = $latestPatient ? Carbon::parse($latestPatient->created_at)->diffForHumans() : 'N/A';
   
-        //total patient
+        //total nurse card
         $totalNurse = Nurse::join('doctor', 'nurse.deptid', '=', 'doctor.deptid')
         ->select('nurse.*')
         ->count();
@@ -70,7 +78,7 @@ class DoctorController extends Controller
         // Get the current date in the 'Y-m-d' format
         $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
 
-        //appointment list
+        //appointment list today
         $aptDs = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->select('appointment.*', 'patient.*')
@@ -80,11 +88,46 @@ class DoctorController extends Controller
         ->take(5)
         ->get();
 
-        //medicine list
+        //medicine list card
         $medicines = Medicine::all();
 
-        return view('doctor.contents.dashboard',compact('name', 'totalApt', 'timeDifference', 
-        'timePDifference', 'totalPatient', 'timeNDifference', 'totalNurse', 'aptDs', 'currentDate', 'medicines'));
+        //approval & cancellation graph
+        // Get the current month and year
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+
+        $totalattend = [];
+        // Loop through the past five months and get the attendance data
+        for ($i = 4; $i >= 0; $i--) {
+            $month = ($currentMonth - $i) % 12;
+            $year = $currentYear;
+            if ($month === 0) {
+                // If the calculated month is 0 (December), set it to 12 and adjust the year
+                $month = 12;
+                $year--;
+            }
+            
+            // Get the start and end dates of the current month
+            $startDate = "$year-$month-01";
+            $endDate = date('Y-m-t', strtotime($startDate));
+
+            $totalattend[] = Appointments::whereMonth('date', $month)
+                ->whereYear('date', $year)
+                ->where('status', 1)
+                ->where('docid', $doctor->id)
+                ->count();
+
+            $totalcancel[] = Appointments::whereMonth('date', $month)
+                ->whereYear('date', $year)
+                ->where('status', 3)
+                ->where('docid', $doctor->id)
+                ->count();
+        }
+
+
+        return view('doctor.contents.dashboard', compact('name', 'totalApt', 'timeDifference', 
+        'timePDifference', 'totalPatient', 'timeNDifference', 'totalNurse', 'aptDs', 'currentDate', 
+        'medicines','totalattend', 'totalcancel',));
     }
 
     public function viewSchedule()

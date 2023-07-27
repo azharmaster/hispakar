@@ -2,7 +2,10 @@
 
 @section('content')
 
+<!-- script for chart -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- script for calendar -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 
 <!-- Start Dashboard -->
 <div class="pcoded-content" >

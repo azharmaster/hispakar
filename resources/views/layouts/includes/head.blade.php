@@ -1,11 +1,3 @@
-<title>PAKAR HIS | Nurse</title>
-
-
-<!--[if lt IE 10]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-		<![endif]-->
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +5,7 @@
 <meta name="keywords" content="flat ui, admin Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
 <meta name="author" content="colorlib">
 
-<link rel="icon" href="../files/assets/images/favicon-1.ico" type="image/x-icon">
+<link rel="icon" href="{{ asset('files/assets/images/pakar.png') }}">
 <link href="{{ asset('css-2?family=Open+Sans:300,400,600,700,800') }}" rel="stylesheet">
 <link href="{{ asset('css-3?family=Quicksand:500,700') }}" rel="stylesheet">
 
@@ -45,7 +37,9 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('files/assets/css/pages-1.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('files/assets/css/print.css') }}">
 
+<!-- added style -->
 <style>
+    /* Responsive table */
     #dataTable1 td {
         white-space: normal;
         word-wrap: break-word;
@@ -56,6 +50,7 @@
         word-wrap: break-word;
     }
 
+    /* new color*/
     .btn-primary2 {
         background-color: #007BFF;
         color: white;
@@ -68,8 +63,36 @@
         border-color: #0069D9;
     }
 
+    /* card outline */
     .custom-thinner-outline {
-        border-width: 1px; /* Adjust the value to create a thinner outline */
-        border-color: #007BFF; /* Adjust the border color as needed */
+        border-width: 1px; 
+        border-color: #007BFF;
     }
+    
+    /* profile pic */
+    .parent-container2 {
+        width: 140px;
+        height: 140px;
+        border: 2px solid rgb(233, 231, 231);
+        border-radius: 50%; 
+    }
+
+    .parent-container {
+        width: 30px;
+        height: 30px;
+        margin-top: -3px;
+    }
+
+    .pic-holder {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    /* ./profile pic */
+
 </style>
