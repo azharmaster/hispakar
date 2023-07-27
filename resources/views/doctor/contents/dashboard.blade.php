@@ -124,7 +124,7 @@
                                             @endphp
                                             <div class="align-middle m-b-25">
                                                 <a href="/doctor/appointmentList">
-                                                    <img src="../files/assets/images/avatar-2-1.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                                <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
                                                     <div class="d-inline-block">
                                                         <h6>{{ $aptD->name }}</h6>
                                                         <p class="text-muted m-b-0">Consultation</p>
@@ -155,7 +155,7 @@
                         </div>
                         
                         <!-- Start Table -->
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <div class="card table-card">
                                 <div class="card-header">
                                     <h5>To Be Approved</h5>
@@ -232,7 +232,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- End table -->
     
                         <div class="col-md-12 col-xl-6">
@@ -250,17 +250,49 @@
     
     
                         <div class="col-md-12 col-xl-6">
-                            <div class="card sale-card">
+                            <div class="card latest-update-card">
                                 <div class="card-header">
-                                    <h5>Patients Statistics by Day</h5>
+                                    <h5>Patients by Gender</h5>
                                 </div>
                                 <div class="card-block">
-                                    <canvas id="patientChart" style="height: 300px;"></canvas>
+                                    <div class="row p-t-10 p-b-10">
+                                        
+                                        <div class="col">
+                                            <canvas id="chartByGender" style="max-width: 100px"></canvas>
+                                        </div>
+                                        <!-- col -->
+                                        
+                                        <div class="col mt-3">
+                                            <div>
+                                                <div class="d-flex justify-content-between mr-4">
+                                                    <i class="fas fa-male mr-2 text-primary" style="font-size:  21px"></i> {{ $totalmale }}
+                                                </div>
+                                                <br>
+                                                <div class="d-flex justify-content-between mr-4">
+                                                    <i class="fas fa-female mr-2" style="font-size:  21px; color: #FF69B4;"></i> {{ $totalfemale }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- col -->
+                                    </div>
+                                </div>
+                            </div>
+                        <!--card -->
+                        </div>
+
+                        <div class="col-md-12 col-xl-6">
+                            <div class="card sale-card " style="height: 400px;">
+                                <div class="card-header">
+                                    <h5>Patients by Age</h5>
+                                </div>
+                                <div class="card-block">
+                                    <div>
+                                        <canvas id="chartByAge"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                        
-    
                         <!-- Med Supply -->
                         <div class="col-xl-4 col-md-12">
                             <div class="card latest-update-card card-outline card-border-primary custom-thinner-outline"  style="height: 450px">
@@ -454,6 +486,81 @@
       data: barChartData,
       options: barChartOptions,
     });
+</script>
+
+<script>
+  // Patient Pie Chart by Gender
+  // Dummy data for the pie chart
+  const data = {
+    labels: ['Male', 'Female'],
+    datasets: [{
+      data: [{{ $totalmale }}, {{ $totalfemale }}], 
+      backgroundColor: ['#36A2EB', '#FF6384'], // Colors for Male and Female respectively
+      borderColor: '#FFFFFF', // Add border color here
+      borderWidth: 3, // Adjust border width as needed
+      hoverBackgroundColor: ['#2093D0', '#E8546F'], // Hover colors for Male and Female respectively
+    }]
+  };
+
+  // Configuration options for the pie chart
+  const options = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false, // Hide the legend
+        },
+        labels: false, // Hide the labels
+      },
+    };
+
+  // Create and render the pie chart
+  const ctx = document.getElementById('chartByGender').getContext('2d');
+  const myChart = new Chart(ctx, {
+    type: 'pie',
+    data: data,
+    options: options,
+  });
+
+</script>
+
+<script>
+  // Chart Patient By Ages
+  // Dummy data for the pie chart
+  const pieChartData = {
+    labels: ['0-20', '21-40', '41-60', '61+'],
+    datasets: [{
+      data: [{{ $children }}, {{ $teenage }}, {{ $adult }}, {{ $older }}],
+      backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0'],
+      borderColor: '#FFFFFF', // Add border color here
+      borderWidth: 3, // Adjust border width as needed
+      hoverBackgroundColor: ['#2093D0', '#E8546F', '#E6C117', '#35A7A7'], // Add hover background color here
+    }],
+  };
+
+  // Configuration options for the pie chart
+  const pieChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          fontColor: '#333',
+          fontSize: 12,
+          boxWidth: 12,
+        },
+      },
+    },
+  };
+
+  // Create and render the pie chart
+  const ctx2 = document.getElementById('chartByAge').getContext('2d');
+  const pieChart = new Chart(ctx2, {
+    type: 'pie',
+    data: pieChartData,
+    options: pieChartOptions,
+  });
 </script>
 
 <script>

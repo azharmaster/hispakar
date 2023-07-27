@@ -70,6 +70,9 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
      Route::delete('/admin/appointmentList/{id}', [AdminController::class, 'deleteAppointment'])->name('deleteAppointment');
      Route::get('/admin/getDoctorSchedule/{doctorId}', [AdminController::class, 'getDoctorSchedule']);
      Route::post('/admin/check-availability', 'AdminController@checkAvailability');
+     Route::get('/admin/getBookedAppointmentTimes/{date}', [AdminController::class, 'getBookedAppointmentTimes']);
+     Route::post('/admin/isTimeBooked', [AdminController::class, 'isTimeBooked']);
+
 
     //Manage Department
     Route::post('/admin/departmentList', [AdminController::class, 'AddDepartment']);
@@ -115,6 +118,8 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
 
     //appointment record
     Route::post('/doctor/appointmentReport/{id}', [DoctorController::class, 'AddAppointmentRecord'])->name('doctor.addAppointmentRecord');
+    Route::get('/doctor/getMedicinePrice/{id}', [DoctorController::class, 'getMedicinePrice']);
+
 
     //filter record
     Route::post('/doctor/reports', [DoctorController::class, 'filterReportList'])->name('doctor.reports.filter');
@@ -162,7 +167,8 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::post('/nurse/appointmentList/{id}', [NurseController::class, 'EditAppointment']);
     Route::delete('/nurse/appointmentList/{id}', [NurseController::class, 'deleteAppointment'])->name('deleteAppointment');
     Route::get('/nurse/getDoctorSchedule/{doctorId}', [NurseController::class, 'getDoctorSchedule']);
-
+    Route::get('/nurse/getBookedAppointmentTimes/{date}', [NurseController::class, 'getBookedAppointmentTimes']);
+    Route::post('/nurse/isTimeBooked', [NurseController::class, 'isTimeBooked']);
 });
 
     //Patient
