@@ -19,10 +19,6 @@ use App\Models\Appointments;
 use App\Models\Medicine;
 use App\Models\MedRecord;
 use App\Models\Medprescription;
-use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class PatientController extends Controller
 {
