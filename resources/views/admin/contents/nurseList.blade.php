@@ -148,7 +148,7 @@
                         </div>
                         <div class="form-group">
                             <label for="name" class="input-group-addon" style="font-weight:bold;">Password :</label>
-                            <input type="text" class="form-control" name="password" id="name" value="1234" readonly>
+                            <input type="password" class="form-control" name="password" id="name" value="1234" readonly>
                         </div>
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Contact :</label>
