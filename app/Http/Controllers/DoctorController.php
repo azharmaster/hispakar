@@ -269,6 +269,7 @@ class DoctorController extends Controller
             ->join('doctor', 'appointment.docid', '=', 'doctor.id')
             ->join('department', 'appointment.deptid', '=', 'department.id')
             ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+            ->where('appointment.status', 1)
             ->where('doctor.id', $doctor->id)
             ->get();
     
@@ -327,11 +328,15 @@ class DoctorController extends Controller
     public function viewReportList()
     {
         $filteredReports = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
-                    ->select('medrecord.*', 'patient.*')
-                    ->get();
-                    
+                        ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+                        ->select('medrecord.*', 'patient.name as patient_name', 'medservice.type as service_type', 'medrecord.datetime')
+                        ->with('medservice') // Eager load the medservice relationship
+                        ->get();
+                        
         return view('doctor.contents.reports', compact('filteredReports'));
-    }
+    }   
+
+
 
     // Manage Schedule
     public function AddSchedule(Request $request)

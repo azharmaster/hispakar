@@ -19,4 +19,9 @@ class MedService extends Model
     ];
 
     public $timestamps = false;
+
+    public function medrecords()
+    {
+        return $this->hasMany(Medrecord::class, 'service_id');
+    }
 }

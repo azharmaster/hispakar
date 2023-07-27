@@ -81,7 +81,7 @@
                                             <thead>
                                                 <tr style="text-align: center;">
                                                     <th>#</th>
-                                                    <th style="width:80px">Appointment ID</th>
+                                                    <th style="width:60px">Appointment ID</th>
                                                     <th>Patient Name</th>
                                                     <th style="width:80px">Service Type</th>
                                                     <th>Description</th>
@@ -98,40 +98,13 @@
                                                         <tr style="text-align: center;">
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $report->aptid }}</td>
-                                                            <td>{{ $report->name }}</td>
-                                                            <td>
-                                                                @php
-                                                                    $serviceNames = [
-                                                                        1 => 'X-Ray',
-                                                                        2 => 'Check-up',
-                                                                        3 => 'MRI (Magnetic Resonance Imaging)',
-                                                                        4 => 'Blood testing',
-                                                                        5 => 'Ultrasound',
-                                                                        6 => 'CT scan (Computed Tomography)',
-                                                                        7 => 'ECG (Electrocardiogram)',
-                                                                        8 => 'Physical therapy',
-                                                                        9 => 'Surgery',
-                                                                        10 => 'Vaccinations',
-                                                                        11 => 'Laboratory services',
-                                                                        12 => 'Pharmacy services',
-                                                                        13 => 'Emergency care',
-                                                                        14 => 'Maternity and childbirth services',
-                                                                        15 => 'Cardiac catheterization',
-                                                                        16 => 'Endoscopy',
-                                                                        17 => 'Dialysis',
-                                                                        18 => 'Oncology (Cancer treatment)',
-                                                                        19 => 'Respiratory therapy',
-                                                                        20 => 'Occupational therapy',
-                                                                        // Add more service IDs and their corresponding names here
-                                                                    ];
-                                                                @endphp
-                                                                {{ $serviceNames[$report->serviceid] ?? '' }}
-                                                            </td>
-                                                            <td>{{ $report->desc }}</td>
+                                                            <td>{{ $report->patient_name }}</td>
+                                                            <td>{{ $report->service_type }}</td>
+                                                            <td>{{ $report->desc }}</td> <!-- Access 'desc' from the medservice relationship -->
                                                             <td>{{ $report->datetime }}</td>
-                                                            
                                                         </tr>
                                                     @endforeach
+
                                                 @endif
                                             </tbody>
                                         </table>

@@ -35,6 +35,10 @@ class MedRecord extends Model
         return $this->belongsTo(Doctor::class, 'docid');
     }
 
+    public function medservice()
+    {
+        return $this->belongsTo(Medservice::class, 'serviceid');
+    }
     
 
 }
