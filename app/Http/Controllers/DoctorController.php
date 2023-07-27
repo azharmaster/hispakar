@@ -13,6 +13,7 @@ use App\Models\MedRecord;
 use App\Models\MedService;
 use App\Models\Nurse;
 use App\Models\Patient;
+use App\Models\Room;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,6 +32,15 @@ class DoctorController extends Controller
         $doctor = Doctor::where('email', Auth::user()->email)->first();
 
         $doctorId = $doctor->id;
+
+        $drRoom = Room::join('doctor', 'room.staff_id', '=', 'doctor.staff_id')
+        ->select('room.name')
+        ->where('doctor.id', $doctorId)
+        ->first();
+
+        if ($drRoom) {
+            $roomName = $drRoom->name; // Extract just the room name from the object
+        }
 
         //total appointment card
         // $totalApt = Appointments::join('doctor', 'appointment.docid', '=', 'doctor.id')
@@ -124,10 +134,38 @@ class DoctorController extends Controller
                 ->count();
         }
 
+        //patient statistics by day
 
-        return view('doctor.contents.dashboard', compact('name', 'totalApt', 'timeDifference', 
+
+        //calendar
+        // Initialize an empty array to store the transformed events
+        $calendarEvents = [];
+
+        // Fetch appointment data
+        $appointments = DB::table('appointment')
+        ->select('date', DB::raw('COUNT(*) as appointment_count'))
+        ->groupBy('date')
+        ->where('docid', $doctorId)
+        ->get();
+
+        foreach ($appointments as $appointment) {
+        $appointmentDate = $appointment->date;
+        $appointmentCount = $appointment->appointment_count;
+
+            $calendarEvents[] = [
+                'title' => $appointmentCount . ' - Appointment',
+                'start' => $appointmentDate,
+                'url' => url('doctor/appointmentList?date=' . $appointmentDate . '&sort=asc'),
+                'backgroundColor' => '#FF9F32',
+                'borderColor' => '#FF9F32',
+                'allDay' => true,
+            ];
+        }
+
+        return view('doctor.contents.dashboard', compact('name', 'roomName', 'totalApt', 'timeDifference', 
         'timePDifference', 'totalPatient', 'timeNDifference', 'totalNurse', 'aptDs', 'currentDate', 
-        'medicines','totalattend', 'totalcancel',));
+        'medicines','totalattend', 'totalcancel', 'calendarEvents'
+        ));
     }
 
     public function viewSchedule()

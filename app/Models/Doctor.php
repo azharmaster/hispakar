@@ -30,4 +30,9 @@ class Doctor extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function room()
+    {
+        return $this->belongsTo(Room::class, 'staff_id', 'staff_id');
+    }
+
 }

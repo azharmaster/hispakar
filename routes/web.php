@@ -161,6 +161,7 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::post('/nurse/appointmentList', [NurseController::class, 'AddAppointment']);
     Route::post('/nurse/appointmentList/{id}', [NurseController::class, 'EditAppointment']);
     Route::delete('/nurse/appointmentList/{id}', [NurseController::class, 'deleteAppointment'])->name('deleteAppointment');
+    Route::get('/nurse/getDoctorSchedule/{doctorId}', [NurseController::class, 'getDoctorSchedule']);
 
 });
 
