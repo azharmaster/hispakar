@@ -77,6 +77,18 @@
                                                     </tr>
                                                 @else
                                                     @foreach($patients as $patient)
+
+                                                    @php
+                                                        //date in mm/dd/yyyy format; or it can be in other formats as well
+                                                        $birthDate = "12/17/1983";
+                                                        //explode the date to get month, day and year
+                                                        $birthDate = explode("/", $birthDate);
+                                                        //get age from date or birthdate
+                                                        $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[0], $birthDate[1], $birthDate[2]))) > date("md")
+                                                            ? ((date("Y") - $birthDate[2]) - 1)
+                                                            : (date("Y") - $birthDate[2]));
+                                                        echo "Age is:" . $age;
+                                                    @endphp
                                                         <tr style="text-align: center;">
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $patient->ic }}</td>
@@ -87,7 +99,7 @@
                                                             <td>{{ $patient->gender }}</td>
                                                             <td>
                                                                 <a href="/admin/patientProfile/{{ $patient->id }}" >
-                                                                    <i style="font-size:20px;" class="feather icon-eye f-w-600 f-16 text-c-yellow "></i>
+                                                                    <i style="font-size:20px;" class="feather icon-eye f-w-600 f-16 m-r-15 text-c-yellow "></i>
                                                                 </a>
                                                                 <a title="Edit Patient" data-toggle="modal" data-target="#editModal-patient-{{ $patient->id }}">
                                                                     <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>

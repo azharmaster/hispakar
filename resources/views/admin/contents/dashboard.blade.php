@@ -264,9 +264,18 @@
                                     <div class="scroll-widget">
                                         <div class="row">
                                             <div class="col-md-12">
+                                                
+
+                                                @php $colors = ['danger', 'warning']; $counter = 0; @endphp 
+
+                                                <!-- loop medicine -->
                                                 @foreach($medicines as $medicine)
-                                                <div class="btn btn-danger m-1">{{$medicine->name}} {{$medicine->stock}}
-                                                </div>
+                                                <a title="View Medicine" data-toggle="modal" data-target="#viewModal-medicine-{{ $medicine->id }}"
+                                                class="btn btn-{{ $colors[$counter % count($colors)] }} m-1 bg-white">{{ $medicine->name }} {{$medicine->stock}}</a>
+                                                
+                                                <!-- increment for color -->
+                                                @php $counter++; @endphp 
+                                                
                                                 @endforeach
 
                                             </div>
@@ -454,7 +463,48 @@
 </div>
 </div>
 </div>
+  <!-- View Medicine Modal -->
+  @foreach ($medicines as $medicine)
+<div class="modal fade" id="viewModal-medicine-{{ $medicine->id }}" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content card-outline card-border-primary">
+              <div class="modal-header border-0">
+                  <h5 class="modal-title">Medicine</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div class="container-fluid">
+                    <table class="table table-bordered table-responsive" >
+                        <tr>
+                          <th>Name</th>
+                          <td>{{ $medicine->name }}</td>
+                        </tr>
+                        <tr>
+                          <th>Stock left</th>
+                          <td>{{ $medicine->stock }}</td>
+                        </tr>
+                        <tr>
+                          <th>Price per item</th>
+                          <td>RM {{ number_format($medicine->price, 2) }}</td>
+                        </tr>
+                        <tr>
+                          <th>Description</th>
+                          <td>{{ $medicine->desc }}</td>
+                        </tr>
+                    </table>
+                </div>
+              </div>
 
+              <div class="modal-footer border-0" style="margin-top: -12px">
+                  <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+  </div>
+@endforeach
+<!-- ./ View Medicine Modal -->
 
 <!--[if lt IE 10]>
       <div class="ie-warning">

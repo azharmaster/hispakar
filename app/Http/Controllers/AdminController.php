@@ -482,10 +482,7 @@ class AdminController extends Controller
         $room->type = $request->input('type');
         $room->desc = $request->input('desc'); 
         $room->status = $request->input('status');
-<<<<<<< Updated upstream
         $room->staff_id = $request->input('staff_id');
-=======
->>>>>>> Stashed changes
         $room->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $room->save();
 
@@ -611,6 +608,7 @@ class AdminController extends Controller
           $dept = new Department();
           $dept->name = $request->name;
           $dept->desc = $request->desc;
+          $dept->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
           $dept->save();
   
           return redirect('/admin/departmentList')->with('success', 'New department has been successfully added');
@@ -622,6 +620,7 @@ class AdminController extends Controller
           
           $dept->name = $request->input('name');
           $dept->desc = $request->input('desc'); 
+          $dept->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
           $dept->save();
   
           return redirect('/admin/departmentList')->with('success', 'Department has been updated');
@@ -653,6 +652,7 @@ class AdminController extends Controller
             $medicine->price = $request->price;
             $medicine->desc = $request->desc;
             $medicine->stock = $request->stock;
+            $medicine->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
             $medicine->save();
     
             return redirect('/admin/medicineList')->with('success', 'New Medicine has been successfully added');
@@ -666,6 +666,7 @@ class AdminController extends Controller
             $medicine->price = $request->input('price');
             $medicine->desc = $request->input('desc');
             $medicine->stock = $request->input('stock'); 
+            $medicine->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
             $medicine->save();
     
             return redirect('/admin/medicineList')->with('success', 'Medicine has been updated');
@@ -694,11 +695,13 @@ class AdminController extends Controller
             $profile->name = $request->name;
             $profile->email = $request->email;
             $profile->phoneno = $request->phoneno;
+            $profile->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
             $profile->save();
             
             $user=User::where('email', $email)->first();
             $user->name = $request->name;
             $user->email = $request->email;
+            $user->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
             $user->save();
 
             return redirect('/admin/profile')->with('success', 'Profile has been updated');
