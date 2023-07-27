@@ -17,7 +17,9 @@ use App\Models\Medicine;
 use App\Models\Room; 
 use App\Models\Department; 
 use App\Models\Appointments;
+use App\Models\DocSchedule;
 use App\Models\MedRecord;
+use Illuminate\Support\Facades\Auth;
 
 class NurseController extends Controller
 {
@@ -146,11 +148,13 @@ class NurseController extends Controller
 
     public function viewAppointmentList()
     {
+        $nurse = Nurse::where('email', Auth::user()->email)->first();
 
         $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->join('department', 'appointment.deptid', '=', 'department.id')
         ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+        ->where('appointment.deptid', $nurse->deptid)
         ->get();
 
         $doctors = Doctor::all();
@@ -158,6 +162,18 @@ class NurseController extends Controller
         $departments = Department::all();
 
         return view('nurse.contents.appointmentList', compact('appointments','doctors','patients','departments'));
+    }
+
+    public function getDoctorSchedule($doctorId)
+    {
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+
+        $doctorSchedule = DocSchedule::where('docid', $doctorId)
+            ->whereBetween('date', [$startOfWeek, $endOfWeek])
+            ->get();
+
+        return response()->json($doctorSchedule);
     }
 
     public function EditProfile(Request $request, $id)
@@ -347,7 +363,9 @@ class NurseController extends Controller
         $room->name = $request->name;
         $room->type = $request->type;
         $room->desc = $request->desc;
+        $room->staff_id = $request->staff_id;
         $room->status = $request->status;
+        $room->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $room->save();
 
         return redirect('/nurse/roomList')->with('success', 'New Rooms has been successfully added');
@@ -362,6 +380,8 @@ class NurseController extends Controller
         $room->type = $request->input('type');
         $room->desc = $request->input('desc'); 
         $room->status = $request->input('status');
+        $room->staff_id = $request->input('staff_id');
+        $room->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $room->save();
 
         return redirect('/nurse/roomList')->with('success', 'Room has been updated');
@@ -387,15 +407,60 @@ class NurseController extends Controller
 
     public function AddAppointment(Request $request)
     {
-     
-        //insert data into nurse table
+        // Get the input data
+        $patientId = $request->patientid;
+        $doctorId = $request->docid;
+        $deptId = $request->deptid;
+        $date = $request->date;
+        $time = $request->time;
+    
+        // Convert time from '2:00 PM - 2:30 PM' to 'H:i' format
+        $timeParts = explode(' - ', $time);
+        $startTime = Carbon::createFromFormat('h:i A', $timeParts[0])->format('H:i');
+        $endTime = Carbon::createFromFormat('h:i A', $timeParts[1])->format('H:i');
+    
+        // Check for overlapping appointments
+        $overlappingAppointments = DB::table('appointment')
+            ->where('docid', $doctorId)
+            ->where('date', $date)
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->where(function ($query) use ($startTime, $endTime) {
+                    $query->where('time', '>=', $startTime)
+                        ->where('time', '<', $endTime);
+                })
+                ->orWhere(function ($query) use ($startTime, $endTime) {
+                    $query->where('time', '<=', $startTime)
+                        ->where('time', '>', $startTime);
+                })
+                ->orWhere(function ($query) use ($startTime, $endTime) {
+                    $query->where('time', '>=', $startTime)
+                        ->where('time', '<=', $endTime);
+                });
+            })
+            ->count();
+    
+        // If there are overlapping appointments, display an alert
+        if ($overlappingAppointments > 0) {
+            return redirect()->back()->with('error', 'The selected time slot is already booked. Please choose another time.');
+        }
+    
+        // If the time slot is available, save the new appointment
         $appointment = new Appointments();
-        $appointment->patientid = $request->patientid;
-        $appointment->docid = $request->docid;
-        $appointment->deptid = $request->deptid;
-        $appointment->date = $request->date;
-        $appointment->time = $request->time;
+        $appointment->patientid = $patientId;
+        $appointment->docid = $doctorId;
+        $appointment->deptid = $deptId;
+        $appointment->date = $date;
+
+        // Convert time from '2:00 PM - 2:30 PM' to 'Y-m-d H:i:s' format
+        $timeRange = $request->time;
+        $timeParts = explode(' - ', $timeRange);
+        $startDateTime = date('Y-m-d H:i:s', strtotime($timeParts[0]));
+        // If you need to use the end time as well, you can convert it in a similar way.
+        // $endDateTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
+
+        $appointment->time = $startDateTime;
         $appointment->status = $request->status;
+        $appointment->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $appointment->save();
 
         return redirect('/nurse/appointmentList')->with('success', 'New Appointment has been successfully added');
@@ -411,6 +476,7 @@ class NurseController extends Controller
         $appointment->date = $request->input('date'); 
         $appointment->time = $request->input('time'); 
         $appointment->status = $request->input('status');
+        $appointment->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $appointment->save();
 
         return redirect('/nurse/appointmentList')->with('success', 'Appointment has been updated');

@@ -14,6 +14,7 @@
         alert("{{ session('error') }}");
     </script>
 @endif
+
 <!-- Start Content -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -158,9 +159,9 @@
                             @endforeach
                         </select>
                     </div>
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Department :</span>
-                       
                         <select class="form-control" style="width:350px;" name="deptid">
                             <option value="">Choose Department</option>
                                 @foreach ($departments as $department)
@@ -168,6 +169,7 @@
                                 @endforeach
                             </select>
                     </div>
+
                     <!-- Date Selection Dropdown -->
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Date :</span>
@@ -183,6 +185,7 @@
                             <!-- Times will be populated dynamically using JavaScript -->
                         </select>
                     </div>
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Status :</span>
                         <select style="width:350px;" class="form-control" name="status" id="status">
@@ -191,9 +194,7 @@
                             <option value="1">Confirm</option>
                         </select>
                         
-                    </div>
-                    
-                        
+                    </div>  
                 </div>
             </div>
             <div class="modal-footer">
