@@ -94,7 +94,7 @@
                         </div>
                         <div class="form-group">
                             <label for="name" class="input-group-addon" style="font-weight:bold;">Password :</label>
-                            <input type="text" class="form-control" name="password" id="name" value="1234" readonly>
+                            <input type="password" class="form-control" name="password" id="name" value="1234" readonly>
                         </div>
                         <input type="hidden" style="width:350px;" class="form-control" name="usertype" value="4">
                         <input type="hidden" style="width:350px;" class="form-control" name="status" value="1">
@@ -196,6 +196,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+                <button name="submit" class="btn btn-danger waves-effect waves-light ">Reset Password</button>
                 <button name="submit" class="btn btn-success waves-effect waves-light ">Save changes</button>
             </div>
             </form>

@@ -62,8 +62,10 @@
                                             <thead class="text-left">
                                                 <tr>
                                                     <th style="width: 10px;">#</th>
+                                                    <th>IC</th>
                                                     <th>Name</th>
                                                     <th>Contact No</th>
+                                                    <th>Email</th>
                                                     <th>Age</th>
                                                     <th>Gender</th>
                                                     <th style="width: 10px;">Action</th>
@@ -78,8 +80,10 @@
                                                     @foreach($patients as $patient)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
+                                                            <td>{{ $patient->ic }}</td>
                                                             <td>{{ $patient->name }}</td>
                                                             <td>{{ $patient->phoneno }}</td>
+                                                            <td>{{ $patient->email }}</td>
                                                             <td>{{ $patient->age }}</td>
                                                             <td>{{ $patient->gender }}</td>
                                                             <td>

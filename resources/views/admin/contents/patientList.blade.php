@@ -61,9 +61,12 @@
                                             <thead>
                                                 <tr style="text-align: center;" style="page-break-inside: avoid;">
                                                     <th>#</th>
+                                                    <th>IC</th>
                                                     <th>Name</th>
                                                     <th>Contact No</th>
-                                                    <th>Description</th>
+                                                    <th>Email</th>
+                                                    <th>Age</th>
+                                                    <th>Gender</th>
                                                     <th style="width: 80px;">Action</th>
                                                 </tr>
                                             </thead>
@@ -76,10 +79,12 @@
                                                     @foreach($patients as $patient)
                                                         <tr style="text-align: center;">
                                                             <td>{{ $loop->iteration }}</td>
+                                                            <td>{{ $patient->ic }}</td>
                                                             <td>{{ $patient->name }}</td>
                                                             <td>{{ $patient->phoneno }}</td>
+                                                            <td>{{ $patient->email }}</td>
+                                                            <td>{{ $patient->age }}</td>
                                                             <td>{{ $patient->gender }}</td>
-                                                            
                                                             <td>
                                                                 <a href="/admin/patientProfile/{{ $patient->id }}" >
                                                                     <i style="font-size:20px;" class="feather icon-eye f-w-600 f-16 text-c-yellow "></i>
