@@ -170,11 +170,13 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/patient/appointmentList', [PatientController::class, 'viewAppointmentList']);
     Route::get('/patient/reportList', [PatientController::class, 'viewReportList']);
     Route::get('/patient/profile', [PatientController::class, 'viewProfile']);
+    Route::get('/patient/medrecord', [PatientController::class, 'viewMedRecord']);
+    Route::get('/patient/medprescription', [PatientController::class, 'viewMedPrescription']);
 
     //Manage Appoiment
-    Route::post('/patient/appointmentList', [PatientController::class, 'AddAppointment']);
+    // Route::post('/patient/appointmentList', [PatientController::class, 'AddAppointment']);
     Route::post('/patient/appointmentList/{id}', [PatientController::class, 'EditAppointment']);
-    Route::delete('/patient/appointmentList/{id}', [PatientController::class, 'deleteAppointment'])->name('deleteAppointment');
+    Route::delete('/patient/appointmentList/{id}', [PatientController::class, 'cancelAppointment'])->name('cancelAppointment');
     Route::get('/patient/getDoctorSchedule/{doctorId}', [PatientController::class, 'getDoctorSchedule']);
 
     //managedetailsuser

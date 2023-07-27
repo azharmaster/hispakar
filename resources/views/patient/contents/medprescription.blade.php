@@ -24,8 +24,8 @@
                     <i class="fas fa-regular fa-calendar-check bg-c-blue"></i>
                     <!-- <i class="feather icon-home bg-c-blue"></i> -->
                     <div class="d-inline">
-                        <h5>Appointments</h5>
-                        <span>Below is the list of all appointments.</span>
+                        <h5>Medical Prescription</h5>
+                        <span>Below is the list of all medical prescription.</span>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="doctor.php">Appointments</a>
+                            <a href="doctor.php">Medical Prescription</a>
                         </li>
                     </ul>
                 </div>
@@ -55,7 +55,7 @@
                             <!-- Start Table -->
                             <div class="card">
                                 <div class="card-header">
-                                <h5 id="tableTitle" >List of Appointments</h5>
+                                <h5 id="tableTitle" >List of Medical Prescription</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
                                     <!-- <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
                                         <i class="fas fa-solid fa-plus"></i>
@@ -69,46 +69,33 @@
                                             <thead>
                                                 <tr style="text-align: center;">
                                                     <th>#</th>
-                                                    <th>Doctor Name</th>
-                                                    <th>Patient Name</th>
-                                                    <th>Dept Name</th>
-                                                    <th>Date-Time</th>
-                                                    <th>Status</th>
-                                                    <th style="width: 80px;">Action</th>
+                                                    <th>Medicine Name</th>
+                                                    <th>Name</th>
+                                                    <th>Quantity</th>
+                                                    <th>Desc</th>
+                                                    <th>Price</th>
+                                                    <th>Nurse Name</th>
+                                                    <th >Date</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            @if ( $appointments->isEmpty() )
+                                            @if ( $medprescriptions->isEmpty() )
                                                         <tr>
                                                             <td>No data available</td>
                                                         </tr>
                                                     @else
-                                                        @foreach($appointments as $appointment)
+                                                        @foreach($medprescriptions as $medprescription)
                                                         <tr style="text-align: center;">
                                                             <td>{{ $loop->iteration }}</td>
-                                                            <td>{{ $appointment->doctor_name }}</td>
-                                                            <td>{{ $appointment->patient_name }}</td>
-                                                            <td>{{ $appointment->dept_name }} </td>
-                                                            <td>{{ $appointment->date }} {{ $appointment->time }} </td>
-                                                            <td>
-                                                            @if ($appointment->status === 0) Pending
-                                                            @elseif ($appointment->status === 1) Confirm
-                                                            @else Cancel  
-                                                            @endif
-                                                            </td>
-                                                             <td>
-                                                             @if ($appointment->appt_count > 0)
-                                                                <span class="badge badge-success">Done</span>
-                                                            @else 
-                                                                @if($appointment->status === 2)
-                                                                <span class="badge badge-danger">Cancel</span>
-                                                                @else
-                                                                    <a href="/patient/appointmentList/{{ $appointment->id }}" title="Cancel Appointment" class="btn btn-danger" data-target="#cancelModal-{{ $appointment->id }}" data-toggle="modal">
-                                                                    <i class="fas fa-times"></i>
-                                                                    </a>
-                                                                @endif
-                                                            @endif
-                                                            </td>
+                                                            <td>{{ $medprescription->medicine_name }} </td>
+                                                            <td>{{ $medprescription->name }}</td>
+                                                            <td>{{ $medprescription->qty }}</td>
+                                                            <td>{{ $medprescription->desc }} </td>
+                                                            <td>{{ $medprescription->price }}</td>
+                                                            <td>{{ $medprescription->nurse_name }}</td>
+                                                            <td>{{ $medprescription->created_at }} </td>
+                                                            
+                                                            
                                                         </tr>
                                                     @endforeach
                                             @endif
@@ -128,33 +115,6 @@
 </div>
 <!-- end content -->
 
-
-<!-- delete Patient form -->
-@foreach ($appointments as $appointment)
-    <div class="modal fade" id="cancelModal-{{ $appointment->id }}" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Appointment</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p style="font-size: 15px;">Are you sure you want to cancel this appointment?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">No</button>
-                    <form action="/patient/appointmentList/{{ $appointment->id }}" method="POST" style="display: inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger waves-effect waves-light">Yes</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-@endforeach
 <!-- end delete Patient form -->
 
 <!--script to get the doctor schedule -->
