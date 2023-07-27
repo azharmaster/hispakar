@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Controllers\Controller;
+
 use App\Models\Appointments;
 use App\Models\Department;
 use App\Models\DocSchedule;
@@ -15,12 +15,14 @@ use App\Models\Nurse;
 use App\Models\Patient;
 use App\Models\Room;
 use App\Models\User;
+
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class DoctorController extends Controller
 {
@@ -396,10 +398,18 @@ class DoctorController extends Controller
         $user = User::where('email', $doctor->email)->first();
 
         // If the email is the same as the existing one or it's unique for other users
-        if ($user && ($request->input('email') === $doctor->email || User::where('email', $request->input('email'))->where('id', '!=', $user->id)->doesntExist())) {
+        if ($user && ($request->input('email') === $doctor->email || User::where('email', $request->input('email'))->doesntExist())) {
+            
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+
+            if ($request->hasFile('image')) {
+                $filename = $request->file('image')->getClientOriginalName();
+                $request->file('image')->storeAs('doctor/profilePic', $filename, 'public');
+                $user->image = $filename;
+            }// public/storage/profilePic
+
             $user->save();
 
             // Wrap both updates in a transaction to ensure atomicity

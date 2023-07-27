@@ -33,11 +33,15 @@
                     <div class="row">
                         <div class="col-12 col-sm-6">
                             <div class="card">
-                                <div class="card-block">
+                                <div class="card-block" style="min-height: 265px">
                                     <div class="row">
                                         <div class="col-6 mx-auto d-block col-sm-4">
-                                            <img src="../files/assets/images/dr-1.jpg" width="170" alt="User-Profile-Image">
-                                            <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#editProfileModal" style="width: 170px;">Edit Profile</button>
+                                            <!--profile picture -->
+                                            <div class="parent-container2" style="width: 140px; height: 140px;">
+                                                <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#editProfileModal" style="width: 140px;">Edit Profile</button>
                                         </div>
                                         <div class="col-12 col-sm-7 text-center text-sm-left">
                                             <h3 class="pt-3 pt-sm-0" style="word-wrap: break-word;" >{{ ucfirst($name) }}</h3>
@@ -165,10 +169,40 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="/doctor/profile/{{ $id }}" method="POST">
+            <form action="/doctor/profile/{{ $id }}" method="POST" enctype="multipart/form-data">
              @csrf
             <div class="modal-body">
                 <div class="container-fluid">
+                    
+                    <!-- To display profile pic only -->
+                    <div class="form-group row text-center">
+                        <div class="col">
+                        <div class="profilepic" onclick="openFileUploader()">
+                            <label for="profilepic">
+                            <div class="parent-container2">
+                                <!-- profile pic displayed-->
+                                <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/nurse/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                                </div>
+                            </div>
+                            </label>
+                        </div><!-- /.profilepic -->
+                        </div>
+                    </div>
+                    <!-- /.form-group -->
+                    
+                    <div class="form-group row text-center" style="margin-top: -20px">
+                        <div class="col">
+                        <div class="file-input-container">
+                            <label for="profilepic" class="profilepic__content">
+                            <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
+                            <span class="profilepic__text">Change Photo</span>
+                            </label>
+                            <input type="file" id="profilepic" name="image" accept="image/*" hidden>
+                        </div>
+                        </div>
+                    </div>
+                    <!-- /.form-group -->
+                    
                     <div class="row">
                         <div class="col-md-6">
                             <input type="hidden" style="width:350px;" class="form-control" name="id" id="id" value="{{ $id }}">
@@ -237,8 +271,6 @@
 </div>
 <!-- end edit Doctor form -->
 
-@include('doctor.includes.dtScripts')
-
 <script>
     const ctx = document.getElementById('myChart');
     //const label = Utils.months({count: 7});
@@ -273,6 +305,21 @@ new Chart(ctx2,  {
 
     ]
 }})
+</script>
+
+<!-- for profile pic input style -->
+<script>
+    const fileInput = document.getElementById("profilepic");
+    const textSpan = document.querySelector(".profilepic__text");
+
+    fileInput.addEventListener("change", () => {
+        const file = fileInput.files[0];
+        if (file) {
+        textSpan.textContent = file.name;
+        } else {
+        textSpan.textContent = "Change Photo";
+        }
+    });
 </script>
 
 @endsection
