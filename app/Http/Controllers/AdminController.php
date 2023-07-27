@@ -198,18 +198,6 @@ class AdminController extends Controller
         return view('admin.contents.appointmentList', compact('appointments','doctors','patients','departments'));
     }
 
-    public function getDoctorSchedule($doctorId)
-    {
-        $startOfWeek = now()->startOfWeek();
-        $endOfWeek = now()->endOfWeek();
-
-        $doctorSchedule = DocSchedule::where('docid', $doctorId)
-            ->whereBetween('date', [$startOfWeek, $endOfWeek])
-            ->get();
-
-        return response()->json($doctorSchedule);
-    }
-
     public function viewMedicineList()
     {
         $medicines = Medicine::all();
@@ -507,6 +495,42 @@ class AdminController extends Controller
 
     /////////////////////////////////Appointment//////////////////////////////////////////////////////////////////
 
+    public function getDoctorSchedule($doctorId)
+    {
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+
+        $doctorSchedule = DocSchedule::where('docid', $doctorId)
+            ->whereBetween('date', [$startOfWeek, $endOfWeek])
+            ->get();
+
+        return response()->json($doctorSchedule);
+    }
+
+    public function getBookedAppointmentTimes($date)
+    {
+        // Fetch booked appointment times based on the selected date
+        $bookedAppointmentTimes = Appointments::where('date', $date)
+            ->pluck('time')
+            ->toArray();
+    
+        return response()->json($bookedAppointmentTimes);
+    }
+
+    public function isTimeBooked(Request $request)
+    {
+        $selectedDate = $request->input('date');
+        $startTime = $request->input('startTime');
+        $endTime = $request->input('endTime');
+    
+        // Check if the selected time slot is booked
+        $isBooked = Appointments::where('date', $selectedDate)
+            ->where('time', '>=', $startTime)
+            ->where('time', '<', $endTime)
+            ->exists();
+    
+        return response()->json(['booked' => $isBooked]);
+    }    
 
     public function AddAppointment(Request $request)
     {
@@ -562,7 +586,7 @@ class AdminController extends Controller
         // $endDateTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
 
         $appointment->time = $startDateTime;
-        $appointment->status = $request->status;
+        $appointment->status = 1;
         $appointment->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $appointment->save();
     

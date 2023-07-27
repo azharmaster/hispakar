@@ -101,8 +101,8 @@
                                                                 @endif
                                                             </td>
                                                              <td>
-                                                                <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="Edit Appointment">
-                                                                    <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="Add Appointment Record">
+                                                                    <i style="font-size:20px;" class="fas fa-plus f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                 </a>
                                                                 <a href="/doctor/appointmentList/{{ $appointment->id }}" title="Delete Room" data-target="#deleteModal-{{ $appointment->id }}" data-toggle="modal">
                                                                     <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>
@@ -161,14 +161,16 @@
 
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Department :</span>
-                       
                         <select class="form-control" style="width:350px;" name="deptid">
                             <option value="">Choose Department</option>
-                                @foreach ($departments as $department)
-                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
-                                @endforeach
-                            </select>
+                            @foreach ($departments as $department)
+                                <option value="{{ $department->id }}" @if ($doctor->deptid == $department->id) selected @endif>
+                                    {{ $department->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
+
 
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Date :</span>

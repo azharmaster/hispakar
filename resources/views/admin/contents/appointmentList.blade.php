@@ -178,23 +178,17 @@
                         </select>
                     </div>
 
-                    <!-- Time Selection Dropdown -->
+                    <!-- Add a loading spinner in the time selection dropdown -->
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Time :</span>
-                        <select class="form-control" style="width:350px;" name="time" id="timeSelect">
+                        <span class="input-group-addon" style="width: 150px;">Time :</span>
+                        <select class="form-control" style="width: 350px;" name="time" id="timeSelect">
                             <!-- Times will be populated dynamically using JavaScript -->
+                            <option value=""><i class="fa fa-spinner fa-spin"></i> Loading...</option>
                         </select>
                     </div>
-
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Status :</span>
-                        <select style="width:350px;" class="form-control" name="status" id="status">
-                            <option value="">Status</option>
-                            <option value="0">Cancel</option>
-                            <option value="1">Confirm</option>
-                        </select>
-                        
-                    </div>  
+                    
+                    
+                    <input type="hidden" name="status" id="status">
                 </div>
             </div>
             <div class="modal-footer">
@@ -358,6 +352,9 @@
             // Clear any previous options in the time selection dropdown
             $('#timeSelect').empty();
 
+            // Show a loading indicator while waiting for the AJAX response
+            $('#timeSelect').append('<option value=""><i class="fa fa-spinner fa-spin"></i> Loading...</option>');
+
             // Set the start and end time for the time slots
             var startTime = moment('08:00 AM', 'hh:mm A');
             var endTime = moment('05:00 PM', 'hh:mm A');
@@ -366,12 +363,44 @@
             while (startTime.isBefore(endTime)) {
                 var endTimeFormatted = moment(startTime).add(30, 'minutes');
                 var formattedTime = startTime.format('h:mm A') + ' - ' + endTimeFormatted.format('h:mm A');
-                $('#timeSelect').append('<option value="' + formattedTime + '">' + formattedTime + '</option>');
+
+                // Check if the current time slot is booked
+                var isBooked = isTimeBooked(selectedDate, startTime.format('H:mm'), endTimeFormatted.format('H:mm'));
+                if (!isBooked) {
+                    $('#timeSelect').append('<option value="' + formattedTime + '">' + formattedTime + '</option>');
+                }
+
                 startTime.add(30, 'minutes');
             }
         });
     });
+
+    function isTimeBooked(selectedDate, startTime, endTime) {
+        var isBooked = false;
+
+        // Send an AJAX request to check if the selected time slot is booked
+        $.ajax({
+            url: '/admin/isTimeBooked',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                date: selectedDate,
+                startTime: startTime,
+                endTime: endTime
+            },
+            async: false,
+            success: function (data) {
+                isBooked = data.booked;
+            },
+            error: function () {
+                alert('Error occurred while checking booked appointment times.');
+            }
+        });
+
+        return isBooked;
+    }
 </script>
+
 
 <!--/script to get the doctor schedule -->
 
