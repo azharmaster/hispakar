@@ -22,6 +22,24 @@
                     </a>
                 </li>
 
+                <li class="">
+                    <a href="/patient/medrecord" class="waves-effect waves-dark">
+                        <span class="pcoded-micon">
+                            <i class="fas fa-solid fa-calendar-check"></i>
+                        </span>
+                        <span class="pcoded-mtext">Medicine Record</span>
+                    </a>
+                </li>
+
+                <li class="">
+                    <a href="/patient/medprescription" class="waves-effect waves-dark">
+                        <span class="pcoded-micon">
+                            <i class="fas fa-solid fa-calendar-check"></i>
+                        </span>
+                        <span class="pcoded-mtext">Medicine Prescription</span>
+                    </a>
+                </li>
+
                 <div class="pcoded-navigation-label">History</div>
                 <li class="">
                     <a href="/patient/reportList" class="waves-effect waves-dark">

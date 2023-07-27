@@ -42,7 +42,7 @@
                             <div class="card-body">
                               <div class="row align-items-center">
                                 <div class="col">
-                                  <h6 class="m-b-25">Pending Appointments</h6>
+                                  <h6 class="m-b-25">Ticket Appointment</h6>
                                   <h4 class="f-w-700 text-c-blue">{{ $totalAppointments}}</h4>
                                 </div>
                                 <div class="col-auto">
@@ -76,7 +76,7 @@
                             <div class="card-body">
                               <div class="row align-items-center">
                                 <div class="col">
-                                  <h6 class="m-b-25"> Appointment Confirmation</h6>
+                                  <h6 class="m-b-25"> Next Apppointment</h6>
                                   <h4 class="f-w-700 text-c-red">To be confirmed</h4>
                                 </div>
                                 <div class="col-auto">
@@ -157,8 +157,18 @@
                             <div class="scroll-widget">
                               <div class="row">
                                 <div class="col-md-12">
+                                 
+
+                                  @php $colors = ['danger', 'warning']; $counter = 0; @endphp 
+
+                                  <!-- loop medicine -->
                                   @foreach($listmedicines as $listmedicine)
-                                  <div class="btn btn-danger m-1">{{$listmedicine->name}}</div>
+                                    <a title="View Medicine" data-toggle="modal" data-target="#viewModal-medicine-{{ $listmedicine->id }}"
+                                    class="btn btn-{{ $colors[$counter % count($colors)] }} m-1 bg-white">{{ $listmedicine->name }}</a>
+                                    
+                                    <!-- increment for color -->
+                                    @php $counter++; @endphp 
+                                    
                                   @endforeach
                                 </div>
                               </div>
@@ -250,52 +260,7 @@
 
                       <!-- Start Table -->
                       <div class="col-md-6">
-                      <!-- <div class="table-container"> -->
-                        <!-- <div class="card table-card available-doctors">
-                          <div class="card-header">
-                          <h5>Available Doctors</h5>
-                            <div class="card-header-right">
-                              <ul class="list-unstyled card-option">
-                              <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
-                              <li><i class="feather icon-maximize full-card"></i></li>
-                              <li><i class="feather icon-minus minimize-card"></i></li>
-                              <li><i class="feather icon-refresh-cw reload-card"></i></li>
-                              <li><i class="feather icon-trash close-card"></i></li>
-                              <li><i class="feather icon-chevron-left open-card-option"></i></li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div class="card-block p-b-0">
-                            <div class="table-responsive">
-                              <table class="table table-hover m-b-0">
-                                <thead>
-                                <tr>
-                                  <th>Name</th>
-                                  <th>ID</th>
-                                  <th>Location</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>Haley Kennedy	</td>
-                                    <td>N0011</td>
-                                    <td>#PHD001</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Rhona Davidson</td>
-                                    <td>N0034</td>
-                                    <td>#PHD002</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Sofa</td>
-                                    <td>N0123</td>
-                                    <td>#PHD001</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div> -->
+                      
 
                         <div class="card table-card history">
                           <div class="card-header">
@@ -438,56 +403,48 @@
   </div>
   <!-- end view Appointment form -->
 
-  <!-- View confirmation Appointment form -->
-  <div class="modal fade" id="viewAptModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title"> Appointment Confirmation</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-            <div class="form-group">
-                <label for="id" class="input-group-addon" style="font-weight:bold;">IC Number :</label>
-                <input type="text" class="form-control" name="id" id="id" value="490912-05-1856" readonly>
-            </div>
-            <div class="form-group">
-                <label for="name" class="input-group-addon" style="font-weight:bold;">Name :</label>
-                <input type="text" class="form-control" name="name" id="name" value="John Doe" readonly>
-            </div>
-            <div class="form-group">
-                <label for="desc" class="input-group-addon" style="font-weight:bold;">Description :</label>
-                <input type="text" class="form-control" name="desc" id="desc" value="Fever" readonly>
-            </div>
-            <div class="form-group">
-                <label for="doctor" class="input-group-addon" style="font-weight:bold;">Doctor In-Charge:</label>
-                <input type="text" class="form-control" name="doctor" id="doctor" value="Dr. Nik Ahmad" readonly>
-            </div>
-            <div class="form-group">
-                <label for="date" class="input-group-addon" style="font-weight:bold;">Appointment Date & Time :</label>
-                <input type="datetime-local" class="form-control" name="date" id="date" readonly>
-            </div>
-            <div class="form-group input-group">
-              <span class="input-group-addon" style="font-weight:bold;">Are you sure want to confirm this appointment? :</span>
-              <select class="form-control" style="width: 350px;" name="confirm" id="confirm">
-                <option selected="selected">Choose</option>
-                <option value="yes">Yes (Confirm)</option>
-                <option value="no">No (Cancel)</option>
-              </select>
-            </div>
+  <!-- View Medicine Modal -->
+@foreach ($listmedicines as $listmedicine)
+<div class="modal fade" id="viewModal-medicine-{{ $listmedicine->id }}" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content card-outline card-border-primary">
+              <div class="modal-header border-0">
+                  <h5 class="modal-title">Medicine</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div class="container-fluid">
+                    <table class="table table-bordered table-responsive" >
+                        <tr>
+                          <th>Name</th>
+                          <td>{{ $listmedicine->name }}</td>
+                        </tr>
+                        <tr>
+                          <th>Stock left</th>
+                          <td>{{ $listmedicine->stock }}</td>
+                        </tr>
+                        <tr>
+                          <th>Price per item</th>
+                          <td>RM {{ number_format($listmedicine->price, 2) }}</td>
+                        </tr>
+                        <tr>
+                          <th>Description</th>
+                          <td>{{ $listmedicine->desc }}</td>
+                        </tr>
+                    </table>
+                </div>
+              </div>
+
+              <div class="modal-footer border-0" style="margin-top: -12px">
+                  <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+              </div>
           </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary waves-effect waves-light">Submit</button>
-        </div>
       </div>
-    </div>
   </div>
-  <!-- end view confirmation Appointment form -->
+@endforeach
+<!-- ./ View Medicine Modal -->
 
 <!--[if lt IE 10]>
     <div class="ie-warning">

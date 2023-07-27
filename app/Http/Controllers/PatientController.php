@@ -11,6 +11,7 @@ use App\Models\DocSchedule;
 use App\Models\Medicine;
 use App\Models\MedRecord;
 use App\Models\Medprescription;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +37,7 @@ class PatientController extends Controller
         ->where('patient.email', $email )
         ->get();
 
-        $listmedicines = Medicine::select('medicine.name')
+        $listmedicines = Medicine::select('medicine.*')
         ->join('medprescription', 'medicine.id', '=', 'medprescription.medicineid')
         ->join('patient', 'patient.id', '=', 'medprescription.patientid')
         ->where('patient.email', '=', $email)
@@ -74,11 +75,15 @@ class PatientController extends Controller
         ->where('patient.email', $email )
         ->get();
 
-        $doctors = Doctor::all();
-        $patients = Patient::where('email', $email)->get();
-        $departments = Department::all();
+        foreach ($appointments as $appointment) { //total appointment
+            $appointment->appt_count = MedRecord::where('aptid', $appointment->id)
+            ->where('appointment.status', 1)
+            ->join('appointment', 'appointment.id', '=', 'medrecord.aptid')
+            ->count();
+        }
 
-        return view('patient.contents.appointmentList', compact('appointments','doctors','patients','departments'));
+
+        return view('patient.contents.appointmentList', compact('appointments'));
     }
 
     
@@ -113,6 +118,39 @@ class PatientController extends Controller
 
         return view('patient.contents.reportList', compact('medrcs','doctors','patients','departments'));
     }
+
+    public function viewMedRecord()
+    {
+        $email=Auth()->user()->email; //dapatemail dr login
+
+        $medrcs = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->join('doctor', 'medrecord.docid', '=', 'doctor.id')
+        ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+        ->select('medrecord.*','doctor.name as doctor_name','medservice.type as service_type','appointment.id as aptid')
+        ->where('patient.email', $email )
+        ->get();
+
+
+        return view('patient.contents.medrecord', compact('medrcs'));
+    }
+
+    public function viewMedPrescription()
+    {
+        $email=Auth()->user()->email; //dapatemail dr login
+
+        $medprescriptions = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
+        ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
+        ->join('nurse', 'medprescription.nurseid', '=', 'nurse.id')
+        ->join('medicine', 'medprescription.medicineid', '=', 'medicine.id')
+        ->select('medprescription.*','nurse.name as nurse_name','medicine.name as medicine_name','appointment.id as aptid')
+        ->where('patient.email', $email )
+        ->get();
+
+
+        return view('patient.contents.medprescription', compact('medprescriptions'));
+    }
+
 
     public function viewProfile()
     {
@@ -152,108 +190,106 @@ class PatientController extends Controller
     /////////////////////////////////Appointment//////////////////////////////////////////////////////////////////
 
 
-    public function AddAppointment(Request $request)
-    {
-         // Get the currently logged-in doctor
-         $patient = Patient::where('email', Auth::user()->email)->first();
+    // public function AddAppointment(Request $request)
+    // {
+    //      // Get the currently logged-in doctor
+    //      $patient = Patient::where('email', Auth::user()->email)->first();
     
-         if (!$patient) {
-             // Handle the case if the logged-in user is not a doctor
-             // For example, redirect them to a different page or show an error message
-             // You can also return an empty array of appointments if you prefer
-         }
+    //      if (!$patient) {
+    //          // Handle the case if the logged-in user is not a doctor
+    //          // For example, redirect them to a different page or show an error message
+    //          // You can also return an empty array of appointments if you prefer
+    //      }
      
-        //$patientId = $patient->id;
+    //     //$patientId = $patient->id;
 
-        // Get the input data
-        $patientId = $patient->id;;
-        $doctorId = $request->docid;
-        $deptId = $request->deptid;
-        $date = $request->date;
-        $time = $request->time;
+    //     // Get the input data
+    //     $patientId = $patient->id;;
+    //     $doctorId = $request->docid;
+    //     $deptId = $request->deptid;
+    //     $date = $request->date;
+    //     $time = $request->time;
     
-        // Convert time from '2:00 PM - 2:30 PM' to 'H:i' format
-        $timeParts = explode(' - ', $time);
-        $startTime = Carbon::createFromFormat('h:i A', $timeParts[0])->format('H:i');
-        $endTime = Carbon::createFromFormat('h:i A', $timeParts[1])->format('H:i');
+    //     // Convert time from '2:00 PM - 2:30 PM' to 'H:i' format
+    //     $timeParts = explode(' - ', $time);
+    //     $startTime = Carbon::createFromFormat('h:i A', $timeParts[0])->format('H:i');
+    //     $endTime = Carbon::createFromFormat('h:i A', $timeParts[1])->format('H:i');
     
-        // Check for overlapping appointments
-        $overlappingAppointments = DB::table('appointment')
-            ->where('docid', $doctorId)
-            ->where('date', $date)
-            ->where(function ($query) use ($startTime, $endTime) {
-                $query->where(function ($query) use ($startTime, $endTime) {
-                    $query->where('time', '>=', $startTime)
-                        ->where('time', '<', $endTime);
-                })
-                ->orWhere(function ($query) use ($startTime, $endTime) {
-                    $query->where('time', '<=', $startTime)
-                        ->where('time', '>', $startTime);
-                })
-                ->orWhere(function ($query) use ($startTime, $endTime) {
-                    $query->where('time', '>=', $startTime)
-                        ->where('time', '<=', $endTime);
-                });
-            })
-            ->count();
+    //     // Check for overlapping appointments
+    //     $overlappingAppointments = DB::table('appointment')
+    //         ->where('docid', $doctorId)
+    //         ->where('date', $date)
+    //         ->where(function ($query) use ($startTime, $endTime) {
+    //             $query->where(function ($query) use ($startTime, $endTime) {
+    //                 $query->where('time', '>=', $startTime)
+    //                     ->where('time', '<', $endTime);
+    //             })
+    //             ->orWhere(function ($query) use ($startTime, $endTime) {
+    //                 $query->where('time', '<=', $startTime)
+    //                     ->where('time', '>', $startTime);
+    //             })
+    //             ->orWhere(function ($query) use ($startTime, $endTime) {
+    //                 $query->where('time', '>=', $startTime)
+    //                     ->where('time', '<=', $endTime);
+    //             });
+    //         })
+    //         ->count();
     
-        // If there are overlapping appointments, display an alert
-        if ($overlappingAppointments > 0) {
-            return redirect()->back()->with('error', 'The selected time slot is already booked. Please choose another time.');
-        }
+    //     // If there are overlapping appointments, display an alert
+    //     if ($overlappingAppointments > 0) {
+    //         return redirect()->back()->with('error', 'The selected time slot is already booked. Please choose another time.');
+    //     }
     
-        // If the time slot is available, save the new appointment
+    //     // If the time slot is available, save the new appointment
 
-        //insert data into nurse table
-        $appointment = new Appointments();
-        $appointment->patientid = $patientId;
-        $appointment->docid = $doctorId;
-        $appointment->deptid = $deptId;
-        $appointment->date = $date;
+    //     //insert data into nurse table
+    //     $appointment = new Appointments();
+    //     $appointment->patientid = $patientId;
+    //     $appointment->docid = $doctorId;
+    //     $appointment->deptid = $deptId;
+    //     $appointment->date = $date;
 
-        // Convert time from '2:00 PM - 2:30 PM' to 'Y-m-d H:i:s' format
-        $timeRange = $request->time;
-        $timeParts = explode(' - ', $timeRange);
-        $startDateTime = date('Y-m-d H:i:s', strtotime($timeParts[0]));
-        // If you need to use the end time as well, you can convert it in a similar way.
-        // $endDateTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
+    //     // Convert time from '2:00 PM - 2:30 PM' to 'Y-m-d H:i:s' format
+    //     $timeRange = $request->time;
+    //     $timeParts = explode(' - ', $timeRange);
+    //     $startDateTime = date('Y-m-d H:i:s', strtotime($timeParts[0]));
+    //     // If you need to use the end time as well, you can convert it in a similar way.
+    //     // $endDateTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
 
-        $appointment->time = $startDateTime;
-        $appointment->status = 0;
-        $appointment->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-        $appointment->save();
+    //     $appointment->time = $startDateTime;
+    //     $appointment->status = 0;
+    //     $appointment->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+    //     $appointment->save();
 
-        return redirect('/patient/appointmentList')->with('success', 'New Appointment has been successfully added');
-    }
+    //     return redirect('/patient/appointmentList')->with('success', 'New Appointment has been successfully added');
+    // }
 
-    public function EditAppointment(Request $request, $id)
-    {
-        $appointment = Appointments::find($id);
+    // public function EditAppointment(Request $request, $id)
+    // {
+    //     $appointment = Appointments::find($id);
         
-        $appointment->patientid = $request->input('patientid');
-        $appointment->docid = $request->input('docid');
-        $appointment->deptid = $request->input('deptid'); 
-        $appointment->date = $request->input('date'); 
-        $appointment->time = $request->input('time'); 
-        $appointment->status = $request->input('status');
-        $appointment->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-        $appointment->save();
+    //     $appointment->patientid = $request->input('patientid');
+    //     $appointment->docid = $request->input('docid');
+    //     $appointment->deptid = $request->input('deptid'); 
+    //     $appointment->date = $request->input('date'); 
+    //     $appointment->time = $request->input('time'); 
+    //     $appointment->status = $request->input('status');
+    //     $appointment->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+    //     $appointment->save();
 
-        return redirect('/patient/appointmentList')->with('success', 'Appointment has been updated');
-    }
+    //     return redirect('/patient/appointmentList')->with('success', 'Appointment has been updated');
+    // }
 
     
-    public function deleteAppointment($id)
+    public function cancelAppointment($id)
     {
+        
+
         $appointment = Appointments::findOrFail($id);
+        
+        $appointment->status = 2;
+        $appointment->save();
 
-
-        $appointment->delete();
-
-        DB::statement('SET @counter = 0;');
-        DB::statement('UPDATE appointment SET id = @counter:=@counter+1;');
-
-
-        return redirect('/patient/appointmentList')->with('success', 'Appointment has been deleted');
+        return redirect('/patient/appointmentList')->with('success', 'Appointment has been cancel');
     }
 }
