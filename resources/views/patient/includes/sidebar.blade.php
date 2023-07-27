@@ -31,7 +31,7 @@
                     </a>
                 </li>
 
-                <li class="">
+                <!-- <li class="">
                     <a href="/patient/medprescription" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-solid fa-calendar-check"></i>
@@ -48,7 +48,7 @@
                         </span>
                         <span class="pcoded-mtext">Medical Reports</span>
                     </a>
-                </li>
+                </li> -->
 
                 <br>
 

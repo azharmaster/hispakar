@@ -23,26 +23,40 @@ class AdminController extends Controller
 {
     public function index() //dashboard
     {
-        // $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-        // ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        // ->join('department', 'appointment.deptid', '=', 'department.id')
-        // ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
-        // ->get();
+        $firstDay = Carbon::now()->startOfMonth();
+        $now = Carbon::now();
+
         $totalapt = Appointments::all()->count();
+        $totalapt2 = Appointments::whereBetween('created_at', [$firstDay, $now])->count();
+
         $totaldoc = Doctor::all()->count();
-        $totalnurse = Doctor::all()->count();
+        $totaldoc2 = Doctor::whereBetween('created_at', [$firstDay, $now])->count();
+
+        $totalnurse = Nurse::all()->count();
+        $totalnurse2 = Nurse::whereBetween('created_at', [$firstDay, $now])->count();
+
         $totalpatient = Patient::all()->count();
+        $totalpatient2 = Patient::whereBetween('created_at', [$firstDay, $now])->count();
+
         $totalroom = Room::all()->count();
+        $totalroom2 = Room::whereBetween('created_at', [$firstDay, $now])->count();
+
         $totaldept = Department::all()->count();
+        $totaldept2 = Department::whereBetween('created_at', [$firstDay, $now])->count();
+
         $totalmedicine = Medicine::all()->count();
+        $totalmedicine2 = Medicine::whereBetween('created_at', [$firstDay, $now])->count();
 
         $medicines = Medicine::all();
+
         $nurses = Nurse::join('department', 'nurse.deptid', '=', 'department.id')
         ->select('nurse.*', 'department.name as dept_name')
         ->get();
+        
 
         return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totaldept',
-        'totalnurse','totalpatient','totalmedicine','medicines','nurses'));
+        'totalnurse','totalpatient','totalmedicine','medicines','nurses','totalapt2','totaldoc2',
+        'totalnurse2','totalpatient2','totalroom2','totaldept2','totalmedicine2'));
     }
 
     public function viewProfile() //profile admin
@@ -468,7 +482,10 @@ class AdminController extends Controller
         $room->type = $request->input('type');
         $room->desc = $request->input('desc'); 
         $room->status = $request->input('status');
+<<<<<<< Updated upstream
         $room->staff_id = $request->input('staff_id');
+=======
+>>>>>>> Stashed changes
         $room->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $room->save();
 
