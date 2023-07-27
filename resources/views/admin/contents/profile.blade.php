@@ -17,7 +17,7 @@
           <i class="fas fa-solid fa-user bg-c-blue"></i>
           <div class="d-inline">
             <h5>Profile</h5>
-            <span>{{$name}}'s Profile Page</span>
+            <span>{{ ucfirst($name) }}'s Profile Page</span>
           </div>
         </div>
       </div>
@@ -25,9 +25,9 @@
         <div class="page-header-breadcrumb">
           <ul class=" breadcrumb breadcrumb-title">
             <li class="breadcrumb-item">
-              <a href="../admin/index.php"><i class="feather icon-home"></i></a>
+              <a href="/admin/dashboard"><i class="feather icon-home"></i></a>
             </li>
-            <li class="breadcrumb-item"><a href="../admin/profile.php">Profile</a> </li>
+            <li class="breadcrumb-item"><a href="/admin/profile">Profile</a> </li>
           </ul>
         </div>
       </div>
@@ -40,16 +40,18 @@
         <div class="page-body">
           <div class="row">
             <div class="col-sm-4">
-              <div class="card">
+              <div class="card " style="min-height: 335px">
               
-                <div class="card-block text-center">
+                <div class="card-block d-flex justify-content-center">
                   <!--profile picture -->
-                  <img src="../files/assets/images/avatar-4-1.jpg" class="img-radius" style="width: 140px; height: 140px;">
+                  <div class="parent-container2">
+                    <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/admin/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                    </div>
+                  </div>
                 </div>
                 
-                <h4 class="profile-username text-center text-uppercase">{{$name}}</h4>
-                <!-- <p class="text-muted text-center"></p>
-                <p class="text-muted text-center"></p> -->
+                <h4 class="profile-username text-center">{{ ucfirst($name) }}</h4>
+                <p class="text-muted text-center mt-2">ADMIN</p>
                 <a data-toggle="modal" title="Edit Profile" href="#edit-profile" class="btn btn-mat waves-effect waves-light btn-info mx-auto"><i class="fas fa-pencil-alt"></i>&nbsp;<b>Edit Profile</b></a>
                
                 <br><br>
@@ -59,7 +61,7 @@
 
             <!-- user details -->
             <div class="col-sm-8">
-              <div class="card">
+              <div class="card" style="min-height: 335px">
                 <div class="card-header">
                   <h5>User Details</h5>
 
@@ -72,7 +74,7 @@
                   <div class="form-group row">
                     <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Name</label>
                     <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$admindetail->name}}"  disabled>
+                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{ ucfirst($admindetail->name) }}"  readonly>
                     </div>
                   </div>
 
@@ -81,14 +83,14 @@
                   <div class="form-group row">
                     <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Phone No.</label>
                     <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$admindetail->phoneno}}"  disabled>
+                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$admindetail->phoneno}}"  readonly>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="inputName2" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Email</label>
                     <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;"  value="{{$admindetail->email}}" disabled>
+                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;"  value="{{$admindetail->email}}" readonly>
                     </div>
                   </div>
 
@@ -118,25 +120,39 @@
 
       <div class="modal-body" style="margin-left: 15px; margin-right:15px;">
       @foreach($admindetails as $admindetail)
-      <form action="/admin/profile" class="form-horizontal row-fluid" method="POST" >
+      <form action="/admin/profile/{{ $admindetail->id }}" class="form-horizontal row-fluid" method="POST" enctype="multipart/form-data" >
       {{csrf_field()}}
           <div class="row">
             <div class="col">
-              <div class="form-group row">
-                <div class="col-sm-10">
-                  <div class="profilepic text-center" onclick="openFileUploader()">
-                    <img class="profilepic__image" src="../files/assets/images/avatar-4-1.jpg" alt="Profile" />
-                    <div class="profilepic__content">
-                      <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
-                      <span class="profilepic__text">Choose Photo</span>
-                    </div>
-                  </div>
-                  <input class="file-upload" type="file" accept="image/*" onchange="readURL(this)" />
+             
+              <!-- To display profile pic only -->
+              <div class="form-group row text-center">
+                <div class="col">
+                  <div class="profilepic" onclick="openFileUploader()">
+                    <label for="profilepic">
+                      <div class="parent-container2">
+                        <!-- profile pic displayed-->
+                        <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/nurse/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                        </div>
+                      </div>
+                    </label>
+                  </div><!-- /.profilepic -->
                 </div>
               </div>
               <!-- /.form-group -->
-
-                
+              
+              <div class="form-group row text-center" style="margin-top: -20px">
+                <div class="col">
+                  <div class="file-input-container">
+                    <label for="profilepic" class="profilepic__content">
+                      <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
+                      <span class="profilepic__text">Change Photo</span>
+                    </label>
+                    <input type="file" id="profilepic" name="image" accept="image/*" hidden>
+                  </div>
+                </div>
+              </div>
+              <!-- /.form-group -->
 
               <div class="form-group row">
                 <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Name</label>
@@ -146,12 +162,8 @@
               </div>
               <!-- /.form-group -->
 
-              
-
-             
-
               <div class="form-group row">
-                <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Phone Number</label>
+                <label for="inputName" style="font-weight: normal; " class="col-sm-2 col-form-label">Phone No.</label>
                 <div class="col-sm-10">
                   <input type="text" class="profile form-control form-control-border" name="phoneno" value="{{$admindetail->phoneno}}" >
                 </div>
@@ -180,59 +192,20 @@
     </div> <!-- /.end modal dialog -->
   </div> <!-- /.end edit profile modal-->
 </div>
-@endsection
-<!-- 
-<script type="text/javascript" src="../files/bower_components/jquery/js/jquery.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/jquery-ui/js/jquery-ui.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/popper.js/js/popper.min-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/bootstrap/js/bootstrap.min-1.js"></script>
 
-<script src="../files/assets/jquery/jquery.min.js"></script>
-
-<script src="../files/assets/pages/waves/js/waves.min-1.js"></script>
-
-<script type="text/javascript" src="../files/bower_components/jquery-slimscroll/js/jquery.slimscroll-1.js"></script>
-
-<script type="text/javascript" src="../files/bower_components/modernizr/js/modernizr-1.js"></script>
-<script type="text/javascript" src="../files/bower_components/modernizr/js/css-scrollbars-1.js"></script>
-
-<script src="../files/bower_components/datatables.net/js/jquery.dataTables.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-buttons/js/dataTables.buttons.min-1.js"></script>
-<script src="../files/assets/pages/data-table/js/jszip.min-1.js"></script>
-<script src="../files/assets/pages/data-table/js/pdfmake.min-1.js"></script>
-<script src="../files/assets/pages/data-table/js/vfs_fonts-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/dataTables.buttons.min-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/buttons.flash.min-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/jszip.min-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/vfs_fonts-1.js"></script>
-<script src="../files/assets/pages/data-table/extensions/buttons/js/buttons.colVis.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-buttons/js/buttons.print.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-buttons/js/buttons.html5.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-bs4/js/dataTables.bootstrap4.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-responsive/js/dataTables.responsive.min-1.js"></script>
-<script src="../files/bower_components/datatables.net-responsive-bs4/js/responsive.bootstrap4.min-1.js"></script>
-
-<script src="../files/assets/pages/data-table/js/data-table-custom-1.js"></script>
-<script src="../files/assets/js/pcoded.min-1.js"></script>
-<script src="../files/assets/js/vertical/vertical-layout.min-1.js"></script>
-<script src="../files/assets/js/jquery.mCustomScrollbar.concat.min-1.js"></script>
-<script type="text/javascript" src="../files/assets/js/script-1.js"></script>
-<script type="text/javascript" src="../files/assets/printScript.js"></script>
-
+<!-- for profile pic input style -->
 <script>
-  function openFileUploader() {
-    $(".file-upload").click();
-  }
+  const fileInput = document.getElementById("profilepic");
+  const textSpan = document.querySelector(".profilepic__text");
 
-  function readURL(input) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
+  fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (file) {
+      textSpan.textContent = file.name;
+      } else {
+      textSpan.textContent = "Change Photo";
+      }
+  });
+</script>
+@endsection
 
-      reader.onload = function(e) {
-        $('.profilepic__image').attr('src', e.target.result);
-      };
-
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-</script> -->

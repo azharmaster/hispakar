@@ -75,7 +75,8 @@ class AdminController extends Controller
 
         // $doctordetails = Doctor::where('id', $id)->get();
         $doctordetails = Doctor::join('department', 'doctor.deptid', '=', 'department.id')
-        ->select('doctor.*', 'department.name as dept_name')
+        ->join('users', 'doctor.email', '=', 'users.email')
+        ->select('doctor.*', 'department.name as dept_name', 'users.image as image')
         ->where('doctor.id', $id)
         ->get();
 
@@ -686,26 +687,50 @@ class AdminController extends Controller
             return redirect('/admin/medicineList')->with('success', 'Medicine has been deleted');
         }
 
-        public function EditProfile(Request $request)
+        public function EditProfile(Request $request, $id)
         {
+            $admin = Admin::find($id);
 
-            $email=Auth()->user()->email;
-
-            $profile=Admin::where('email', $email)->first();
-            $profile->name = $request->name;
-            $profile->email = $request->email;
-            $profile->phoneno = $request->phoneno;
-            $profile->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-            $profile->save();
+            // Update the corresponding user record
+            $user = User::where('email', $admin->email)->first();
             
-            $user=User::where('email', $email)->first();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-            $user->save();
-
-            return redirect('/admin/profile')->with('success', 'Profile has been updated');
-
+            // If the user record exists and the email is not changed or the new email is unique
+            if ($user && ($request->input('email') === $admin->email || User::where('email', $request->input('email'))->doesntExist())) {
+                
+                $user->name = $request->input('name');
+                $user->email = $request->input('email');
+                $user->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+    
+                if ($request->hasFile('image')) {
+                    $filename = $request->file('image')->getClientOriginalName();
+                    $request->file('image')->storeAs('admin/profilePic', $filename, 'public');
+                    $user->image = $filename;
+                }// public/storage/profilePic
+                
+                $user->save();
+    
+                // Wrap both updates in a transaction to ensure atomicity
+                DB::beginTransaction();
+    
+                try {
+                    $admin->name = $request->input('name');
+                    $admin->phoneno = $request->input('phoneno');
+                    $admin->email = $request->input('email');
+                    $admin->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+    
+                    $admin->save();
+    
+                    DB::commit();
+                    
+                    return redirect('/admin/profile')->with('success', 'Your profile has been updated');
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    
+                    return redirect()->back()->with('success', 'ERROR! Unable to updating your profile.');
+                }
+            } else {
+                return redirect()->back()->with('success', 'Unsuccessful, the email already exists.');
+            }
         }
 
 }
