@@ -36,7 +36,7 @@
   </style>
 </head>
 
-<body>
+<body onafterprint="hideLogo()">
     <div class="loader-bg">
         <div class="loader-bar"></div>
     </div>

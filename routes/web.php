@@ -143,6 +143,7 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/nurse/appointmentList', [NurseController::class, 'viewAppointmentList']);
     Route::get('/nurse/medicineList', [NurseController::class, 'viewMedicineList']);
 
+
     //Profile
     //Manage patient in nurse
     Route::post('/nurse/profile/{id}', [NurseController::class, 'EditProfile']);
@@ -179,6 +180,8 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/patient/profile', [PatientController::class, 'viewProfile']);
     Route::get('/patient/medrecord', [PatientController::class, 'viewMedRecord']);
     Route::get('/patient/medprescription', [PatientController::class, 'viewMedPrescription']);
+    Route::get('/patient/appointmentSummary', [PatientController::class, 'viewAppointmentSummary']);
+
 
     //Manage Appoiment
     // Route::post('/patient/appointmentList', [PatientController::class, 'AddAppointment']);

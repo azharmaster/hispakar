@@ -68,5 +68,9 @@ function loadDataTable(){
 }
 
 function hideLogo() {
+    let content = document.getElementById("content");
+    let checkupInfo = document.getElementById("checkup-print");
 
+    content.classList.remove("ml-0");
+    checkupInfo.hidden = true;
 }
