@@ -17,7 +17,7 @@
           <i class="fas fa-solid fa-user bg-c-blue"></i>
           <div class="d-inline">
             <h5>Profile</h5>
-            <span>{{$name}}'s Profile Page</span>
+            <span>{{ucfirst($name)}}'s Profile Page</span>
           </div>
         </div>
       </div>
@@ -25,9 +25,9 @@
         <div class="page-header-breadcrumb">
           <ul class=" breadcrumb breadcrumb-title">
             <li class="breadcrumb-item">
-              <a href="../patient/index.php"><i class="feather icon-home"></i></a>
+              <a href="/patient/dashboard"><i class="feather icon-home"></i></a>
             </li>
-            <li class="breadcrumb-item"><a href="../patient/profile.php">Profile</a> </li>
+            <li class="breadcrumb-item"><a href="/patient/profile">Profile</a> </li>
           </ul>
         </div>
       </div>
@@ -40,7 +40,7 @@
         <div class="page-body">
           <div class="row">
             <div class="col-sm-4">
-              <div class="card">
+              <div class="card" style="min-height: 418px">
               
                 <div class="card-block d-flex justify-content-center">
                   <!--profile picture -->
@@ -64,7 +64,7 @@
 
             <!-- user details -->
             <div class="col-sm-8">
-              <div class="card">
+              <div class="card" style="min-height: 418px">
                 <div class="card-header">
                   <h5>User Details</h5>
 
@@ -82,14 +82,14 @@
                   <div class="form-group row">
                     <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Name</label>
                     <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$userdetail->name}}"  readonly>
+                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{ucfirst($userdetail->name)}}"  readonly>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">Gender</label>
                     <div class="col-sm-7">
-                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{$userdetail->gender}}"  readonly>
+                      <input type="text" class="profile form-control form-control-border-bottom " style="background-color: white; color: black;" value="{{ucfirst($userdetail->gender)}}"  readonly>
                     </div>
                   </div>
 

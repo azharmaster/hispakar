@@ -26,9 +26,9 @@
             <div class="page-header-breadcrumb">
                 <ul class=" breadcrumb breadcrumb-title">
                     <li class="breadcrumb-item">
-                        <a href="../nurse/index.php"><i class="feather icon-home"></i></a>
+                        <a href="/nurse/dashboard"><i class="feather icon-home"></i></a>
                     </li>
-                    <li class="breadcrumb-item"><a href="../nurse/profile.php">Profile</a> </li>
+                    <li class="breadcrumb-item"><a href="/nurse/profile">Profile</a> </li>
                 </ul>
             </div>
         </div>
@@ -41,7 +41,7 @@
             <div class="page-body">
                 <div class="row">
                     <div class="col-sm-4">
-                        <div class="card">
+                        <div class="card" style="min-height: 418px">
                             <div class="card-block d-flex justify-content-center">
 
                                 <!--profile picture -->
@@ -52,7 +52,7 @@
 
                             
                               </div>
-                            <h4 class="profile-username text-center" style="word-wrap: break-word; max-width: 300px;">
+                            <h4 class="profile-username text-center">
                               {{ ucfirst($name) }}
                             </h4>
                             <p class="text-muted text-center mt-2">NURSE</p>
@@ -67,11 +67,12 @@
 
                     <!-- user details -->
                     <div class="col-sm-8">
-                        <div class="card">
-                            <div class="card-block">
-                                <!--profile picture -->
-                                
+                        <div class="card" style="min-height: 418px">
+                            <div class="card-header">
+                              <h5>User Details</h5>
+            
                             </div>
+                            <br>
                             <div class="form-horizontal ml-3 mb-2">
                               <div class="form-group row">
                                   <label for="inputName" style="font-weight: normal; color: black;" class="col-sm-3 col-form-label">IC</label>

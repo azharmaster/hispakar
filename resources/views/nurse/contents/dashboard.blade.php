@@ -6,6 +6,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- script for calendar -->
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<!-- css for radial chart / chart patient by gender -->
+<link rel="stylesheet" href="{{ asset('files/assets/pages/chart/radial/css/radial-1.css') }}" type="text/css" media="all">
 
 <!-- Start Dashboard -->
 <div class="pcoded-content" >
@@ -267,54 +269,74 @@
                     </div>
                   
                     <div class="col-md-12 col-xl-6">
-                      <div class="card sale-card " style="height: 400px;">
+                      <div class="card sale-card" style="height: 400px;">
                         <div class="card-header">
                           <h5>Patients by Age</h5>
                         </div>
                         <div class="card-block">
-                          <div>
+                          <div class="col-2 justify-content-end text-right" style="margin-left: -15px"> <!-- Updated class here -->
+                            <div class="label-main">
+                              <label class="label label-inverse-primary">Children</label>
+                            </div>
+                            <div class="label-main">
+                              <label class="label label-inverse-danger">Teenage</label>
+                            </div>
+                            <div class="label-main">
+                              <label class="label label-inverse-warning">Adult</label>
+                            </div>
+                            <div class="label-main">
+                              <label class="label label-inverse-info">Older</label>
+                            </div>
+                          </div>
+                          <div class="col-12 ml-3" style="margin-top: -150px">
                             <canvas id="chartByAge"></canvas>
                           </div>
                         </div>
                       </div>
                     </div>
+                    
 
-                    <!-- Col -->
-                    <div class="col-xl-4 col-md-6">
+                  <!-- Col -->
+                  <div class="col-xl-4 col-md-6">
 
-                      <div class="card latest-update-card">
-                        <div class="card-header">
-                            <h5>Patients by Gender</h5>
-                        </div>
-                        <div class="card-block">
-                          <div class="row p-t-10 p-b-10">
-                              
-                            <div class="col">
-                              <canvas id="chartByGender" style="max-width: 100px"></canvas>
-                            </div>
-                            <!-- col -->
-                            
-                            <div class="col mt-3">
-                              <div>
-                                <div class="d-flex justify-content-between mr-4">
-                                  <i class="fas fa-male mr-2 text-primary" style="font-size:  21px"></i> {{ $totalmale }}
-                                </div>
-                                <br>
-                                <div class="d-flex justify-content-between mr-4">
-                                  <i class="fas fa-female mr-2" style="font-size:  21px; color: #FF69B4;"></i> {{ $totalfemale }}
-                                </div>
-                              </div>
-                            </div>
-                            <!-- col -->
-
+                    <div class="card latest-update-card">
+                      @php
+                          $totalPopulation = $totalmale + $totalfemale;
+                          $malePercentage = intval($totalPopulation > 0 ? ($totalmale / $totalPopulation) * 100 : 0);
+                      @endphp
+                      <div class="card-header">
+                          <h5>Patients by Gender</h5>
+                      </div>
+                      <div class="card-block">
+                        <div class="row">
+                          <div class="col mb-4 text-center d-flex justify-content-center">
+                            <canvas id="chartByGender" style="max-width: 100px"></canvas>
                           </div>
+                        </div> 
+                        <div class="row">
+                          <div class="col-6 d-flex justify-content-center">
+                            <div class="s-caption mt-2 mr-2"><i class="fas fa-female mr-2" style="font-size:  22px; color: #FF69B4;"></i></div>
+                            <div class="s-cont d-inline-block">
+                              <h5 class="f-w-700 m-b-0">{{ $totalfemale }}</h5>
+                              <p class="m-b-0">Female</p>
+                            </div>
+                          </div>
+                          <div class="col-6 b-l-default d-flex justify-content-center">
+                            <div class="s-caption mt-2 mr-2"><i class="fas fa-male mr-2 text-primary" style="font-size:  22px"></i></div>
+                            <div class="s-cont d-inline-block">
+                              <h5 class="f-w-700 m-b-0">{{ $totalmale }}</h5>
+                              <p class="m-b-0">Male</p>
+                            </div>
+                          </div>
+                          <!-- col -->
                         </div>
+                      </div>
                     </div>
                     <!--card -->
 
                     <div class="card latest-update-card" >
                       <div class="card-header">
-                          <h5>Major Issues</h5>
+                          <h5>Recent Activity</h5>
                           <div class="card-header-right">
                               <ul class="list-unstyled card-option">
                                   <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
@@ -335,7 +357,7 @@
                                       </div>
                                       <div class="col p-l-5">
                                           <a href="#!"><h6>Rescheduled appointment</h6></a>
-                                          <p class="text-muted m-b-0">Lorem ipsum dolor sit amet, <a href="#!" class="text-c-blue"> More</a></p>
+                                          <p class="text-muted m-b-0"><a href="#!" class="text-c-blue"> More</a></p>
                                       </div>
                                   </div>
                                   <div class="row p-b-30">
@@ -344,7 +366,7 @@
                                       </div>
                                       <div class="col p-l-5">
                                           <a href="#!"><h6>Referred to specialist</h6></a>
-                                          <p class="text-muted m-b-0">Lorem dolor sit amet, <a href="#!" class="text-c-blue"> More</a></p>
+                                          <p class="text-muted m-b-0"><a href="#!" class="text-c-blue"> More</a></p>
                                       </div>
                                   </div>
                                   <div class="row p-b-30">
@@ -353,7 +375,7 @@
                                       </div>
                                       <div class="col p-l-5">
                                           <a href="#!"><h6>Urgent Care</h6></a>
-                                          <p class="text-muted m-b-0">Lorem ipsum dolor sit ipsum amet, <a href="#!" class="text-c-green"> More</a></p>
+                                          <p class="text-muted m-b-0"><a href="#!" class="text-c-green"> More</a></p>
                                       </div>
                                   </div>
                                   <div class="row p-b-30">
@@ -361,8 +383,8 @@
                                           <i class="b-danger update-icon ring"></i>
                                       </div>
                                       <div class="col p-l-5">
-                                          <a href="#!"><h6>Your Manager Posted.</h6></a>
-                                          <p class="text-muted m-b-0">Lorem ipsum dolor sit amet, <a href="#!" class="text-c-red"> More</a></p>
+                                          <a href="#!"><h6>Update Profile</h6></a>
+                                          <p class="text-muted m-b-0"><a href="#!" class="text-c-red"> More</a></p>
                                       </div>
                                   </div>
                                   <div class="row p-b-30">
@@ -394,7 +416,7 @@
 
                 <!-- Calendar -->
                 <div class="col-xl-8 col-md-12 ">
-                  <div class="card">
+                  <div class="card" style="min-height: 690px">
                       <div class="card-header">
                       <h5 class="m-b-5">Calendar</h5>
                         <div class="card-block p-b-0">
@@ -532,9 +554,8 @@
 
 <script>
   // Chart Patient By Ages
-  // Dummy data for the pie chart
   const pieChartData = {
-    labels: ['0-20', '21-40', '41-60', '61+'],
+    labels: ['0-12', '13-19', '20-64', '65+'],
     datasets: [{
       data: [{{ $children }}, {{ $teenage }}, {{ $adult }}, {{ $older }}],
       backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0'],
@@ -570,39 +591,40 @@
 </script>
 
 <script>
-  // Patient Pie Chart by Gender
-  // Dummy data for the pie chart
-  const data = {
-    labels: ['Male', 'Female'],
-    datasets: [{
-      data: [{{ $totalmale }}, {{ $totalfemale }}], 
-      backgroundColor: ['#36A2EB', '#FF6384'], // Colors for Male and Female respectively
-      borderColor: '#FFFFFF', // Add border color here
-      borderWidth: 3, // Adjust border width as needed
-      hoverBackgroundColor: ['#2093D0', '#E8546F'], // Hover colors for Male and Female respectively
-    }]
-  };
-
-  // Configuration options for the pie chart
-  const options = {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false, // Hide the legend
-        },
-        labels: false, // Hide the labels
-      },
+  // Patient Donut Chart by Gender
+  // Wait for the DOM content to load before initializing the chart
+  document.addEventListener("DOMContentLoaded", function() {
+    // Data for the donut chart
+    const donutData = {
+      datasets: [
+        {
+          data: [{{ $totalmale }}, {{ $totalfemale }}], // Replace these values with your data (male and female percentages)
+          backgroundColor: ["#36A2EB", "#FF6384"], // Blue and Pink colors
+          borderWidth: 0 // No borders
+        }
+      ],
+      // Optional: Add labels for the tooltip
+      labels: false,
     };
 
-  // Create and render the pie chart
-  const ctx = document.getElementById('chartByGender').getContext('2d');
-  const myChart = new Chart(ctx, {
-    type: 'pie',
-    data: data,
-    options: options,
-  });
+    // Options for the donut chart
+    const donutOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "70%", // Adjust the cutout value to control the size of the donut hole
+      legend: {
+        display: false // Hide legend
+      }
+    };
 
+    // Get the canvas element and create the donut chart
+    const donutChartCanvas = document.getElementById("chartByGender");
+    new Chart(donutChartCanvas, {
+      type: "doughnut",
+      data: donutData,
+      options: donutOptions
+    });
+  });
 </script>
 
 <script>
@@ -614,6 +636,6 @@
       });
       calendar.render();
   });
-  </script>
+</script>
 
 @endsection

@@ -72,6 +72,11 @@ class AdminController extends Controller
 
     public function viewDoctorProfile($id) //profile doctor
     {
+        // Get the current date
+        $today = Carbon::today();
+        // Get the current month and year
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
 
         // $doctordetails = Doctor::where('id', $id)->get();
         $doctordetails = Doctor::join('department', 'doctor.deptid', '=', 'department.id')
@@ -80,18 +85,103 @@ class AdminController extends Controller
         ->where('doctor.id', $id)
         ->get();
 
-        $totaloperation = MedRecord::where('docid', $id)
+        $totalpatient = MedRecord::where('docid', $id)
         ->distinct('patientid')
         ->count('patientid');
+
+        $totalmale = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as total_male'))
+        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->where('medrecord.docid', $id)
+        ->where('patient.gender', 'male')
+        ->count();
+
+        $totalfemale = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as total_female'))
+        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->where('medrecord.docid', $id)
+        ->where('patient.gender', 'female')
+        ->count();
+
+        //Age
+        $children = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as children'))
+        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->where('medrecord.docid', $id)
+        ->where('age', '<=', 12)
+        ->count();
+
+        $teenage = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as teenage'))
+        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->where('medrecord.docid', $id)
+        ->whereBetween('age', [13, 19])
+        ->count();
+
+        $adult = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as adult'))
+        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->where('medrecord.docid', $id)
+        ->whereBetween('age', [20, 64])
+        ->count();
+
+        $older = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as older'))
+        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->where('medrecord.docid', $id)
+        ->where('age', '>=', 65)
+        ->count();
+
+        $totalapttoday = Appointments::where('docid', $id)
+        ->where('status', 1)
+        ->whereDate('date', $today)
+        ->count('id');
 
         $totalrecord = MedRecord::where('docid', $id)
         ->count('id');
 
-        $totalapt = Appointments::where('docid', $id)
+        $totalnextapt = Appointments::where('docid', $id)
         ->where('status', 1)
+        ->where('appointment.date', '>', $today) // Add the condition to check if the appointment date is after today
+        ->whereNotIn('id', function ($query) {
+            $query->select('aptid')
+                ->from('medrecord');
+        })
         ->count('id');
 
-        return view('admin.contents.doctorProfile', compact('doctordetails','totaloperation','totalrecord','totalapt'));
+        //chart attendance statistic
+        $totalattend = [];
+        $totalcancel = [];
+
+        // Loop through the past five months and get the attendance and cancellation data
+        for ($i = 4; $i >= 0; $i--) {
+            $month = ($currentMonth - $i) % 12;
+            $year = $currentYear;
+            if ($month === 0) {
+                // If the calculated month is 0 (December), set it to 12 and adjust the year
+                $month = 12;
+                $year--;
+            }
+            
+            // Get the start and end dates of the current month
+            $startDate = "$year-$month-01";
+            $endDate = date('Y-m-t', strtotime($startDate));
+
+            // Get the total attendance count for the current month
+            $totalattend[] = MedRecord::where('docid', $id)
+                ->whereBetween('datetime', [$startDate, $endDate])
+                ->count();
+
+            // Get the total cancellation count for the current month
+            $totalcancel[] = Appointments::where('appointment.docid', $id)
+                ->leftJoin('medrecord', 'appointment.id', '=', 'medrecord.aptid')
+                ->whereNull('medrecord.aptid')
+                ->whereMonth('appointment.date', $month)
+                ->whereYear('appointment.date', $year)
+                ->count();
+        }
+
+        return view('admin.contents.doctorProfile', compact(
+                        'doctordetails',
+                        'totalpatient', 'totalapttoday','totalrecord','totalnextapt', //card
+                        'totalmale', 'totalfemale', // gender chart
+                        'totalattend', 'totalcancel', // attendance chart
+                        'children', 'teenage', 'adult', 'older', // ages chart
+                    ));
        
     }
 
