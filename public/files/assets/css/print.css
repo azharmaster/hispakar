@@ -1,6 +1,30 @@
 @media print{
 
-    nav, .page-header.card, .card-header, .footer{
+  nav, .page-header.card, .footer{
+    visibility: hidden;
+    display: none;
+  }
+
+  .pcoded-inner-navbar{
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+      width: 0;
+  }
+
+  .pcoded-content {
+    margin-left: 0;
+  }
+
+  .nav-list{
+      display: none;
+  }
+
+  #checkup-info{
+    page-break-after: always;
+  }
+
+    /* nav, .page-header.card, .card-header, .footer{
       visibility: hidden;
       display: none;
     }
@@ -27,33 +51,6 @@
     #tableTitle {page-break-after: avoid;}
     table {page-break-before: avoid;}
     table tr {page-break-inside: auto;}
-    thead{display:table-header-group}
+    thead{display:table-header-group} */
     
-     /* #print-btn, #filter-btn, #dataTable1_length, #dataTable1_filter, 
-     #dataTable1_info, #dataTable1_paginate, .sidebar, #add-btn{
-      display: none;
-    }
-
-    #assetLink{
-      color: #212529;
-      text-decoration:wavy;
-    }
-
-    i,  a.btn, .btn, #excelBtn, #pdfBtn, #printBtn, #colVisBtn{
-      display: none;
-    } 
-  
-    #printable-section {
-      margin: 0;
-      padding: 0;
-      visibility: visible;
-      position: absolute;
-      top: 0;
-      left: 100;
-      width: 100%;
-    }
-
-    td {
-      display: table-cell;
-    } */
   }
