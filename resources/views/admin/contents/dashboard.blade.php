@@ -37,7 +37,7 @@
                     <div class="row">
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card prod-p-card card-red">
+                            <a href="/admin/doctorList"><div class="card prod-p-card card-red">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-30">
                                         <div class="col">
@@ -51,11 +51,11 @@
                                     <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totaldoc2}}</span>From
                                         Previous Month</p>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card prod-p-card card-yellow">
+                        <a href="/admin/nurseList"><div class="card prod-p-card card-yellow">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-30">
                                         <div class="col">
@@ -69,11 +69,11 @@
                                     <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totalnurse2}}</span>From
                                         Previous Month</p>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card prod-p-card card-green">
+                        <a href="/admin/patientList"><div class="card prod-p-card card-green">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-30">
                                         <div class="col">
@@ -87,11 +87,11 @@
                                     <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totalpatient2}}</span>From
                                         Previous Month</p>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card prod-p-card card-info">
+                        <a href="/admin/departmentList"><div class="card prod-p-card card-info">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-30">
                                         <div class="col">
@@ -105,11 +105,11 @@
                                     <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totaldept2}}</span>From
                                         Previous Month</p>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card prod-p-card card-primary">
+                        <a href="/admin/medicineList"> <div class="card prod-p-card card-primary">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-30">
                                         <div class="col">
@@ -123,11 +123,11 @@
                                     <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totalmedicine2}}</span>From
                                         Previous Month</p>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card prod-p-card card-green">
+                        <a href="/admin/roomList"><div class="card prod-p-card card-green">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-30">
                                         <div class="col">
@@ -141,11 +141,11 @@
                                     <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totalroom2}}</span>From
                                         Previous Month</p>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card prod-p-card card-red">
+                            <a href="/admin/appointmentList"><div class="card prod-p-card card-red">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-30">
                                         <div class="col">
@@ -159,7 +159,7 @@
                                     <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totalapt2}}</span>From
                                         Previous Month</p>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
 
                       
