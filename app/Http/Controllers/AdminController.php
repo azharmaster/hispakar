@@ -202,8 +202,22 @@ class AdminController extends Controller
         ->distinct()
         ->get();
 
+        $listmedicines = Medicine::select('medicine.*')
+        ->join('medprescription', 'medicine.id', '=', 'medprescription.medicineid')
+        ->where('medprescription.patientid', '=', $id)
+        ->distinct()
+        ->get();
 
-        return view('admin.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors'));
+
+        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
+        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'doctor.name as doctor_name', 'medrecord.desc as descs')
+        ->where('patient.id', $id )
+        ->get();
+
+
+        return view('admin.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines'));
        
     }
 

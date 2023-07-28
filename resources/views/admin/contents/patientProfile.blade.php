@@ -108,16 +108,43 @@
                             </div>
                         </div>
                         <div class="col-md-12 col-xl-6">
-                            <div class="card sale-card">
-                            <div class="card-header">
-                            <h5>Patients by Age</h5>
+                        <div class="card latest-update-card">
+                          <div class="card-header">
+                            <h5>Previous Medicine</h5>
+                            <div class="card-header-right">
+                              <ul class="list-unstyled card-option">
+                                <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
+                                <li><i class="feather icon-maximize full-card"></i></li>
+                                <li><i class="feather icon-minus minimize-card"></i></li>
+                                <li><i class="feather icon-refresh-cw reload-card"></i></li>
+                                <li><i class="feather icon-trash close-card"></i></li>
+                                <li><i class="feather icon-chevron-left open-card-option"></i></li>
+                              </ul>
                             </div>
-                            <div class="card-block">
-                                <div>
-                                    <canvas id="myChart2" width="680" height="340" style="display: block; box-sizing: border-box; height: 272px; width: 544px;"></canvas>
+                          </div>
+
+                          <div class="card-block">
+                            <div class="scroll-widget">
+                              <div class="row">
+                                <div class="col-md-12">
+                                 
+
+                                  @php $colors = ['danger', 'warning']; $counter = 0; @endphp 
+
+                                  <!-- loop medicine -->
+                                  @foreach($listmedicines as $listmedicine)
+                                    <a title="View Medicine" data-toggle="modal" data-target="#viewModal-medicine-{{ $listmedicine->id }}"
+                                    class="btn btn-{{ $colors[$counter % count($colors)] }} m-1 bg-white">{{ $listmedicine->name }}</a>
+                                    
+                                    <!-- increment for color -->
+                                    @php $counter++; @endphp 
+                                    
+                                  @endforeach
                                 </div>
+                              </div>
                             </div>
-                            </div>
+                          </div>
+                        </div>
                         </div>
                         <div class="col-md-12 col-xl-6">
                             <div class="card sale-card">
@@ -131,6 +158,51 @@
                             </div>
                             </div>
                         </div>
+                        <!-- Start Table -->
+                      <div class="col-md-12">
+                      
+
+                      <div class="card table-card history">
+                        <div class="card-header">
+                        <h5>History</h5>
+                          <div class="card-header-right">
+                            <ul class="list-unstyled card-option">
+                            <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
+                            <li><i class="feather icon-maximize full-card"></i></li>
+                            <li><i class="feather icon-minus minimize-card"></i></li>
+                            <li><i class="feather icon-refresh-cw reload-card"></i></li>
+                            <li><i class="feather icon-trash close-card"></i></li>
+                            <li><i class="feather icon-chevron-left open-card-option"></i></li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="card-block p-b-0">
+                          <div class="table-responsive">
+                            <table class="table table-hover m-b-0">
+                              <thead style="text-align: center;">
+                              <tr>
+                                <th>Doctor</th>
+                                <th>Description</th>
+                                <th>Date</th>
+                              </tr>
+                              </thead>
+                              <tbody style="text-align: center;">
+                              @foreach ($appointments as $appointment)
+                                <tr>
+                                  <td>{{$appointment->doctor_name}}</td>
+                                  <td>{{$appointment->descs}}</td>
+                                  <td>{{$appointment->date}} {{$appointment->time}}</td>
+                                </tr>
+                              @endforeach
+
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    <!-- </div> -->
+                    </div>
+                    <!-- End table -->
                     </div>
                 </div>
             </div>
@@ -138,7 +210,48 @@
     </div>
 </div>
 
+ <!-- View Medicine Modal -->
+ @foreach ($listmedicines as $listmedicine)
+<div class="modal fade" id="viewModal-medicine-{{ $listmedicine->id }}" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content card-outline card-border-primary">
+              <div class="modal-header border-0">
+                  <h5 class="modal-title">Medicine</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div class="container-fluid">
+                    <table class="table table-bordered table-responsive" >
+                        <tr>
+                          <th>Name</th>
+                          <td>{{ $listmedicine->name }}</td>
+                        </tr>
+                        <tr>
+                          <th>Stock left</th>
+                          <td>{{ $listmedicine->stock }}</td>
+                        </tr>
+                        <tr>
+                          <th>Price per item</th>
+                          <td>RM {{ number_format($listmedicine->price, 2) }}</td>
+                        </tr>
+                        <tr>
+                          <th>Description</th>
+                          <td>{{ $listmedicine->desc }}</td>
+                        </tr>
+                    </table>
+                </div>
+              </div>
 
+              <div class="modal-footer border-0" style="margin-top: -12px">
+                  <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+  </div>
+@endforeach
+<!-- ./ View Medicine Modal -->
 
 @include('doctor.includes.dtScripts')
 

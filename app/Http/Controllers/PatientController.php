@@ -329,9 +329,4 @@ class PatientController extends Controller
 
         return redirect('/patient/appointmentList')->with('success', 'Appointment has been cancel');
     }
-
-    public function viewAppointmentSummary()
-    {
-        return view('patient.contents.appointmentSummary');
-    }
 }
