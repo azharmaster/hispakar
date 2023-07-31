@@ -40,5 +40,27 @@ class MedRecord extends Model
         return $this->belongsTo(Medservice::class, 'serviceid');
     }
     
+    // Assuming MedRecord has a relationship with the Appointment model
+    public function appointment()
+    {
+        return $this->belongsTo(Appointments::class, 'appointment_id');
+    }
+
+    // Add other relationships with the Patient and Doctor models, if applicable
+    // Example:
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patientid');
+    }
+
+    public function attendingDoctor()
+    {
+        return $this->belongsTo(Doctor::class, 'docid');
+    }
+
+    public function medPrescription()
+    {
+        return $this->belongsTo(MedPrescription::class, 'medprescription_id');
+    }
 
 }

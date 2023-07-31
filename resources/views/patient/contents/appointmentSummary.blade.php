@@ -63,62 +63,86 @@
                                     </div>
                                 </div>
                                 <div class="card-block">
-                                <p>Personnel: Dr Asyraf</p>
+                                <p>Personnel: {{ $record->attendingDoctor->name ?? 'Not Assigned' }}
+
+                                </p>
+
+
                                 </div>
                                 <div class="card-block" id="checkup-info">
                                     <table class="table table-bordered">
                                         <tr>
                                             <th>Name</th>
-                                            <td>John Doer</td>
+                                            <td>{{ $record->patient->name }}</td>
                                             <th>Birth Date</th>
-                                            <td>23 August 1987</td>
+                                            <td>{{ $record->patient->dob }}</td>
                                         </tr>
                                         <tr>
                                             <th>Weight</th>
-                                            <td>70 kg</td>
+                                            <td>{{ $record->patient->weight }}</td>
                                             <th>Height</th>
-                                            <td>175 cm</td>
+                                            <td>{{ $record->patient->height }} m</td>
                                         </tr>
                                         <tr>
-                                            <th>Medical History</th>
-                                            <td colspan="3">Type 2 Diabetes, High Blood Pressure</td>
+                                            <th>Previous Medical History</th>
+                                            <td colspan="3">
+                                                @isset($previousRecord)
+                                                    {{ $previousRecord->desc }}
+                                                @else
+                                                    No previous medical history available for this patient.
+                                                @endisset
+                                            </td>
                                         </tr>
+
+
+
                                         <tr>
                                             <th>Previous Medication</th>
                                             <td colspan="3">
                                                 <ul>
-                                                    <li>Paracetamol</li>
-                                                    <li>Insulin</li>
-                                                    <li>Biguanides</li>
-                                                    <li>Alpha-glucosidase inhibitors</li>
+                                                    @isset($prevMedicine)
+                                                        {{ $prevMedicine->name }}
+                                                    @else
+                                                        No previous medicine available for this patient.
+                                                    @endisset
                                                 </ul>
                                             </td>
                                         </tr>
+
                                         <tr>
                                             <th colspan="4" class="text-center">Check-Up Description</th>
                                         </tr>
                                         <tr>
                                             <th>Service Type</th>
-                                            <td colspan="3">X-ray</td>
+                                            <td colspan="3">{{ $record->medService->type }}</td>
                                         </tr>
                                         <tr>
                                             <th>Description</th>
-                                            <td colspan="3">Mild Flu</td>
+                                            <td colspan="3">{{ $record->desc }}</td>
                                         </tr>
                                         <tr>
                                             <th colspan="4" class="text-center">Medication</th>
                                         </tr>
-                                        <tr>
-                                            <th>Paracetamol</th>
-                                            <td>10 pcs</td>
-                                            <td colspan="2">Flu</td>
-                                        </tr>
+                                        @foreach ($medicines as $medicine)
+                                            <tr>
+                                                <th>{{ $medicine->name }}</th>
+                                                <td>{{ $medicine->qty }} pcs</td>
+                                                <td colspan="2">{{ $medicine->desc }}</td>
+                                            </tr>
+                                        @endforeach
                                     </table>
 
                                     <table class="table table-bordered">
                                         <tr class="table-danger">
                                             <th colspan="2">Next Appointment</th>
-                                            <td colspan="2">12/3/2023</td>
+                                            <td colspan="2">
+                                                @if ($upcomingAppointment)
+                                                    {{ $upcomingAppointment->date }} {{ $upcomingAppointment->time }}
+                                                @else
+                                                    No upcoming appointment
+                                                @endif
+                                            </td>
+
                                         </tr>
                                     </table>
     
@@ -138,8 +162,8 @@
                                     <div class="row">
                                         <div class="col">
                                             <p>Invoice No. : 90843-2-3243</p>
-                                            <p>Name : Ahmad Albab</p>
-                                            <p>Date: 10-9-2023</p>
+                                            <p>Name : {{ $record->patient->name }}</p>
+                                            <p>Date: {{ $record->datetime }}</p>
                                         </div>
                                         <div class="col">
                                             <h4>Hospital Name</h4>
@@ -159,64 +183,53 @@
                                                 <th>Price (RM)</th>
                                             </tr>
                                         </thead>
-                                        <tr>
-                                            <td>Consultation</td>
-                                            <td>Minor checkup</td>
-                                            <td>-</td>
-                                            <td>30</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Medication</td>
-                                            <td>
-                                                <ul>
-                                                    <li>Paracetamol x3</li>
-                                                    <li>Antibiotics 100ml</li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>10</li>
-                                                    <li>20</li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <li>10</li>
-                                                        <li>20</li>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr class="border-bottom">
-                                            <td></td>
-                                        </tr>
-
-                                        <tr style="border-top: 1px;">
-                                            <th colspan="3" class="text-right">Tax Rate</th>
-                                            <td>60</td>
-                                        </tr>
-
-                                        <tr style="border-top: 1px;">
-                                            <td rowspan="2" class="text-wrap" style="width: 30%;">
-                                                <b>NOTICE</b>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-                                                    laboris nisi ut aliquip ex ea commodo consequat.
-                                                </p>
-                                            </td>
-                                            <th colspan="2" class="text-right">Sub Total</th>
-                                            <td>60</td>
-                                        </tr>
-                                        <tr>
-
-                                        </tr>
-                                       
-                                        
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ $record->medService->type }}</td>
+                                                <td>{{ $record->desc }}</td>
+                                                <td>{{ $servicePrice->charge }}</td>
+                                                <td>{{ $servicePrice->charge }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Medication</td>
+                                                <td colspan="3">
+                                                    <table class="table table-borderless">
+                                                        <tbody>
+                                                            @foreach ($medicines as $medicine)
+                                                                <tr>
+                                                                    <td >{{ $medicine->name }} ({{ $medicine->qty }} pcs)</td>
+                                                                    <td style="text-align: left;">{{ $medicinePrice->price }}</td>
+                                                                    <td>{{ $medicinePrice->price }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="border-bottom">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr style="border-top: 1px;">
+                                                <th colspan="3" class="text-right">Tax Rate</th>
+                                                <td>60</td>
+                                            </tr>
+                                            <tr style="border-top: 1px;">
+                                                <td rowspan="2" class="text-wrap" style="width: 30%;">
+                                                    <b>NOTICE</b>
+                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                                </td>
+                                                <th colspan="2" class="text-right">Sub Total</th>
+                                                <td>60</td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
-    
+
+
                                 </div>
                             <!-- End table -->
                         </div>

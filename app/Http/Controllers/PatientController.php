@@ -90,7 +90,77 @@ class PatientController extends Controller
         return view('patient.contents.appointmentList', compact('appointments'));
     }
 
+    public function viewAppointmentSummary($id)
+    {
+        //get the details of current logged in patient
+        $patient = Patient::where('email', Auth::user()->email)->first();
+
+        $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription')
+                ->where('id', $id)
+                ->first();
+        
+        // Get the previous record with the same patient ID
+        $previousRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+                        ->where('medrecord.patientid', $record->patient_id)
+                        ->where('medrecord.id', '<', $id)
+                        ->orderBy('medrecord.id', 'desc')
+                        ->first();
+
+        //get the previous medicine for the medicine record
+        $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
+                        ->where('medprescription.patientid', $record->patient_id)
+                        ->where('medprescription.id', '<', $id)
+                        ->orderBy('medprescription.id', 'desc')
+                        ->first();
+
+        // Join with medservice table
+        $record->load('medService');
+
+        // Join with medservice table for the previous record as well
+        if ($previousRecord) {
+            $previousRecord->load('medService');
+        }
+
+        $medicines = MedRecord::join('medprescription', 'medrecord.aptid', '=', 'medprescription.aptid')
+                    ->where('medrecord.patientid', $patient->id)
+                    ->get(); // Use first() instead of get()
+
+                // Now you can access the name property
+
+        //get the next appointment record
+        $currentDateTime = Carbon::now();
     
+        $upcomingAppointment = Appointments::where('patientid', $patient->id)
+            ->where(function ($query) use ($currentDateTime) {
+                // Get the records that have an appointment after the current date and time
+                $query->where('date', '>', $currentDateTime->toDateString())
+                      ->orWhere(function ($query) use ($currentDateTime) {
+                          $query->where('date', '=', $currentDateTime->toDateString())
+                                ->where('time', '>', $currentDateTime->toTimeString());
+                      });
+            })
+            ->orderBy('date')
+            ->orderBy('time')
+            ->first();
+        
+        //get the medservice price based on service id
+        $servicePrice = MedRecord::join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+                        ->where('medrecord.patientid', $patient->id)
+                        ->first();
+
+        //get the medicine price based on id 
+        $medicinePrice = Medprescription::join('medicine', 'medprescription.medicineid', '=', 'medicine.id')
+                        ->where('medprescription.patientid', $patient->id)
+                        ->first();                    
+
+        $rc = MedRecord::join('doctor', 'medrecord.docid', '=', 'doctor.id')
+            ->join('patient', 'medrecord.patientid', '=', 'patient.id')
+            ->get();
+
+        return view('patient.contents.appointmentSummary', compact('record', 'previousRecord', 'rc', 'prevMedicine', 
+        'medicines', 'upcomingAppointment', 'servicePrice', 'medicinePrice'));
+    }
+
     //get the doctor schedule date 
     public function getDoctorSchedule($doctorId)
     {

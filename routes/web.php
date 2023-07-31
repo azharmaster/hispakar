@@ -116,6 +116,7 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::post('/doctor/appointmentList/{id}', [DoctorController::class, 'EditAppointment']);
     Route::delete('/doctor/appointmentList/{id}', [DoctorController::class, 'deleteAppointment'])->name('deleteAppointment');
     Route::get('/doctor/getDoctorSchedule/{doctorId}', [DoctorController::class, 'getDoctorSchedule']);
+    Route::get('/doctor/get-time-slots', [DoctorAppointmentController::class, 'getTimeSlots']);
 
     //Manage medicine
     Route::post('/doctor/medicines', [DoctorController::class, 'AddMedicine']);
@@ -186,8 +187,9 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/patient/profile', [PatientController::class, 'viewProfile']);
     Route::get('/patient/medrecord', [PatientController::class, 'viewMedRecord']);
     Route::get('/patient/medprescription', [PatientController::class, 'viewMedPrescription']);
-    Route::get('/patient/appointmentSummary', [PatientController::class, 'viewAppointmentSummary']);
+    //Route::get('/patient/appointmentSummary', [PatientController::class, 'viewAppointmentSummary']);
 
+    Route::get('/patient/appointmentSummary/{id}', [PatientController::class, 'viewAppointmentSummary']);
 
     //Manage Appoiment
     // Route::post('/patient/appointmentList', [PatientController::class, 'AddAppointment']);

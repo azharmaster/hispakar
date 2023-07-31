@@ -171,7 +171,6 @@
                         </select>
                     </div>
 
-
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Date :</span>
                         <select class="form-control" style="width:350px;" name="date" id="date" placeholder="">
@@ -298,6 +297,7 @@
     </div>
 @endforeach
 <!-- end delete Patient form -->
+
 
 
 @endsection

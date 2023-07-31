@@ -75,6 +75,7 @@
                                                     <th>Date Time</th>
                                                     <th>Total Cost</th>
                                                     <th>Doctor</th>
+                                                    <th>Action</th>
                                                     <!-- <th style="width: 80px;">Action</th> -->
                                                 </tr>
                                             </thead>
@@ -94,7 +95,11 @@
                                                             <td>{{ $medrc->datetime }}</td>
                                                             <td>{{ $medrc->totalcost }}</td>
                                                             <td>{{ $medrc->doctor_name }}</td>
-                                                             
+                                                            <td> 
+                                                                <a href="/patient/appointmentSummary/{{ $medrc->id }}" title="Download Appointment Record">
+                                                                    <i style="font-size:20px;" class="fas fa-download f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                </a>
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                             @endif
