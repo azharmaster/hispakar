@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -143,6 +144,16 @@ class AdminController extends Controller
         })
         ->count('id');
 
+        //modal
+        $nextaptdetails = Appointments::where('docid', $id)
+        ->where('status', 1)
+        ->where('appointment.date', '>', $today) // Add the condition to check if the appointment date is after today
+        ->whereNotIn('id', function ($query) {
+            $query->select('aptid')
+                ->from('medrecord');
+        })
+        ->get();
+
         //chart attendance statistic
         $totalattend = [];
         $totalcancel = [];
@@ -176,12 +187,13 @@ class AdminController extends Controller
         }
 
         return view('admin.contents.doctorProfile', compact(
-                        'doctordetails',
-                        'totalpatient', 'totalapttoday','totalrecord','totalnextapt', //card
-                        'totalmale', 'totalfemale', // gender chart
-                        'totalattend', 'totalcancel', // attendance chart
-                        'children', 'teenage', 'adult', 'older', // ages chart
-                    ));
+            'doctordetails',
+            'totalpatient', 'totalapttoday','totalrecord','totalnextapt', //card
+            'totalmale', 'totalfemale', // gender chart
+            'totalattend', 'totalcancel', // attendance chart
+            'children', 'teenage', 'adult', 'older', // ages chart
+            'nextaptdetails', // card modal
+        ));
        
     }
 
@@ -831,7 +843,7 @@ class AdminController extends Controller
     
                 if ($request->hasFile('image')) {
                     $filename = $request->file('image')->getClientOriginalName();
-                    $request->file('image')->storeAs('admin/profilePic', $filename, 'public');
+                    $request->file('image')->storeAs('profilePic', $filename, 'public');
                     $user->image = $filename;
                 }// public/storage/profilePic
                 

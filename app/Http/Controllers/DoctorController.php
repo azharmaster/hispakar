@@ -468,7 +468,7 @@ class DoctorController extends Controller
 
             if ($request->hasFile('image')) {
                 $filename = $request->file('image')->getClientOriginalName();
-                $request->file('image')->storeAs('doctor/profilePic', $filename, 'public');
+                $request->file('image')->storeAs('profilePic', $filename, 'public');
                 $user->image = $filename;
             }// public/storage/profilePic
 
