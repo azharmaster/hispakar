@@ -22,6 +22,7 @@ use App\Models\Medprescription;
 
 class PatientController extends Controller
 {
+
     
     public function index()
     {
@@ -29,15 +30,20 @@ class PatientController extends Controller
         $email=Auth()->user()->email;
         $name=Auth()->user()->name;
 
-        $totalAppointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        $aptlatest =  Appointments::join('medrecord', 'appointment.id', '>', 'medrecord.aptid')
         ->select('appointment.*')
-        ->where('patient.email', $email )
-        ->count();
+        ->orderByDesc('appointment.id')
+        ->first();
+
+        // $timeAgo = Carbon::parse($aptlatest->created_at)->diffForHumans();
+        // $countdownDate = Carbon::parse($aptlatest->created_at)->format('Y-m-d H:i:s');
+        $countdownDate = Carbon::parse($aptlatest->date . ' ' . $aptlatest->time)->format('Y-m-d H:i:s');
 
         $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
-        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'doctor.name as doctor_name', 'medrecord.desc as descs')
+        ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'medservice.type as type_service', 'doctor.name as doctor_name', 'medrecord.desc as descs')
         ->where('patient.email', $email )
         ->get();
 
@@ -59,17 +65,13 @@ class PatientController extends Controller
         $detailpatients = Patient::where('email', $email)->get();
 
 
-        return view('patient.contents.dashboard', compact('name','totalAppointments','appointments','listmedicines','detailpatients','listDoctors'));
+        return view('patient.contents.dashboard', compact('name','aptlatest','countdownDate','appointments','listmedicines','detailpatients','listDoctors'));
     }
 
     public function viewAppointmentList()
     {
 
-        // Get the currently authenticated user...
-        // $user = Auth::user();
 
-        // // Get the currently authenticated user's ID...
-        // $id = Auth::email();
         $email=Auth()->user()->email; //dapatemail dr login
 
         $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')

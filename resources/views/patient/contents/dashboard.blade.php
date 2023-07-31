@@ -42,8 +42,8 @@
                             <div class="card-body">
                               <div class="row align-items-center">
                                 <div class="col">
-                                  <h6 class="m-b-25">Ticket Appointment</h6>
-                                  <h4 class="f-w-700 text-c-blue">{{ $totalAppointments}}</h4>
+                                  <h6 class="m-b-25">Upcoming Appointment</h6>
+                                  <h4 class="f-w-700 text-c-blue"><div id="countdown"></div></h4>
                                 </div>
                                 <div class="col-auto">
                                   <i class="fas fa-calendar-check bg-c-blue"></i>
@@ -60,7 +60,7 @@
                             <div class="row align-items-center">
                               <div class="col">
                                 <h6 class="m-b-25">Days to Appointment</h6>
-                                <h4 class="f-w-700 text-c-green">2 Days</h4>
+                                <h4 class="f-w-700 text-c-green"><div id="countdownday"></div></h4>
                               </div>
                               <div class="col-auto">
                                 <i class="fas fa-solid fa-bell bg-c-green"></i>
@@ -283,6 +283,7 @@
                                 <tr>
                                   <th>Doctor</th>
                                   <th>Description</th>
+                                  <th>Service</th>
                                   <th>Date</th>
                                 </tr>
                                 </thead>
@@ -291,6 +292,7 @@
                                   <tr>
                                     <td>{{$appointment->doctor_name}}</td>
                                     <td>{{$appointment->descs}}</td>
+                                    <td>{{$appointment->type_service}}</td>
                                     <td>{{$appointment->date}} {{$appointment->time}}</td>
                                   </tr>
                                 @endforeach
@@ -489,4 +491,31 @@
         <p>Sorry for the inconvenience!</p>
     </div>
 <![endif]-->
+
+<script>
+        // Replace '{{ $countdownDate }}' with the countdown date passed from the controller
+        const countdownDate = new Date('{{ $countdownDate }}').getTime();
+
+        // Update the countdown every 1 second
+        const countdownTimer = setInterval(function() {
+            const now = new Date().getTime();
+            const timeRemaining = countdownDate - now;
+
+            // Calculate days, hours, minutes, and seconds
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            // Display the countdown
+            document.getElementById('countdown').innerHTML = `Countdown: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+            document.getElementById('countdownday').innerHTML = `Countdown: ${days}d`;
+            // If the countdown is over, display a message
+            if (timeRemaining < 0) {
+                clearInterval(countdownTimer);
+                document.getElementById('countdown').innerHTML = 'Countdown has ended.';
+                document.getElementById('countdownday').innerHTML = 'Countdown has ended.';
+            }
+        }, 1000);
+    </script>
 @endsection

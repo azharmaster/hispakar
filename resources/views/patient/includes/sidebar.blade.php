@@ -31,7 +31,7 @@
                     </a>
                 </li>
 
-                <!-- <li class="">
+                 <li class="">
                     <a href="/patient/medprescription" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-solid fa-calendar-check"></i>
@@ -40,7 +40,7 @@
                     </a>
                 </li>
 
-                <div class="pcoded-navigation-label">History</div>
+                <!--<div class="pcoded-navigation-label">History</div>
                 <li class="">
                     <a href="/patient/reportList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
