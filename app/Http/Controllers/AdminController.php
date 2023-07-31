@@ -14,6 +14,7 @@ use App\Models\Room;
 use App\Models\User;
 use App\Models\Medicine;
 use App\Models\MedRecord;
+use App\Models\MedService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -238,6 +239,13 @@ class AdminController extends Controller
         $departments = Department::all();
 
         return view('admin.contents.departmentList', compact('departments'));
+    }
+
+    public function viewServiceList()
+    {
+        $services = MedService::all();
+
+        return view('admin.contents.serviceList', compact('services'));
     }
 
     public function viewDoctorList()
@@ -872,5 +880,51 @@ class AdminController extends Controller
                 return redirect()->back()->with('success', 'Unsuccessful, the email already exists.');
             }
         }
+
+
+              /////////////////////////////////DEPARTMENT//////////////////////////////////////////////////////////////////
+
+      public function AddServices(Request $request)
+      {
+       
+          //insert data into nurse table
+          $service = new MedService();
+          $service->type = $request->type;
+          $service->desc = $request->desc;
+          $service->charge = $request->charge;
+          $service->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+          $service->save();
+  
+          return redirect('/admin/serviceList')->with('success', 'New service has been successfully added');
+      }
+  
+      public function EditServices(Request $request, $id)
+      {
+          $service = MedService::find($id);
+          
+          $service->type = $request->input('type');
+          $service->desc = $request->input('desc'); 
+          $service->charge = $request->input('charge'); 
+          $service->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+          $service->save();
+  
+          return redirect('/admin/serviceList')->with('success', 'Service has been updated');
+      }
+  
+      public function deleteServices($id)
+      {
+          $service = MedService::findOrFail($id);
+  
+  
+          $service->delete();
+  
+          DB::statement('SET @counter = 0;');
+          DB::statement('UPDATE medservice SET id = @counter:=@counter+1;');
+  
+  
+          return redirect('/admin/serviceList')->with('success', 'Service has been deleted');
+      }
+
+
 
 }

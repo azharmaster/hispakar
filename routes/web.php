@@ -37,6 +37,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/appointmentList', [AdminController::class, 'viewAppointmentList']);
     Route::get('/admin/departmentList', [AdminController::class, 'viewDepartmentList']);
     Route::get('/admin/medicineList', [AdminController::class, 'viewMedicineList']);
+    Route::get('/admin/serviceList', [AdminController::class, 'viewServiceList']);
     Route::get('/admin/doctorProfile/{id}', [AdminController::class, 'viewDoctorProfile']);
     Route::get('/admin/patientProfile/{id}', [AdminController::class, 'viewPatientProfile']);
 
@@ -83,6 +84,11 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::post('/admin/medicineList', [AdminController::class, 'AddMedicine']);
     Route::post('/admin/medicineList/{id}', [AdminController::class, 'EditMedicine']);
     Route::delete('/admin/medicineList/{id}', [AdminController::class, 'deleteMedicine'])->name('deleteMedicine'); 
+
+    //Manage Services
+    Route::post('/admin/serviceList', [AdminController::class, 'AddServices']);
+    Route::post('/admin/serviceList/{id}', [AdminController::class, 'EditServices']);
+    Route::delete('/admin/serviceList/{id}', [AdminController::class, 'deleteServices'])->name('deleteServices');
 });
 
 
