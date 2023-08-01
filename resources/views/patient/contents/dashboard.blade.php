@@ -182,7 +182,7 @@
                       <div class="col-xl-4 col-md-6">
                         <div class="card latest-update-card">
                           <div class="card-header">
-                            <h5>Major Issues</h5>
+                            <h5>Notifcation</h5>
                             <div class="card-header-right">
                               <ul class="list-unstyled card-option">
                                 <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
@@ -197,60 +197,18 @@
                           <div class="card-block">
                             <div class="scroll-widget">
                               <div class="latest-update-box">
+                              @foreach($notify as $notify)
                                 <div class="row p-t-20 p-b-30">
                                   <div class="col-auto text-right update-meta p-r-0">
                                     <i class="b-primary update-icon ring"></i>
                                   </div>
                                   <div class="col p-l-5">
-                                    <a href="#!"><h6>Rescheduled appointment</h6></a>
-                                    <p class="text-muted m-b-0">Lorem ipsum dolor sit amet, <a href="#!" class="text-c-blue"> More</a></p>
+                                    <a href="#!"><h6>Rescheduled appointment</h6><a href="#!" class="text-c-blue"> More</a></a>
                                   </div>
                                 </div>
-                                <div class="row p-b-30">
-                                  <div class="col-auto text-right update-meta p-r-0">
-                                    <i class="b-primary update-icon ring"></i>
-                                  </div>
-                                  <div class="col p-l-5">
-                                    <a href="#!"><h6>Referred to specialist</h6></a>
-                                    <p class="text-muted m-b-0">Lorem dolor sit amet, <a href="#!" class="text-c-blue"> More</a></p>
-                                  </div>
-                                </div>
-                                <div class="row p-b-30">
-                                  <div class="col-auto text-right update-meta p-r-0">
-                                    <i class="b-success update-icon ring"></i>
-                                  </div>
-                                  <div class="col p-l-5">
-                                    <a href="#!"><h6>Urgent Care</h6></a>
-                                    <p class="text-muted m-b-0">Lorem ipsum dolor sit ipsum amet, <a href="#!" class="text-c-green"> More</a></p>
-                                  </div>
-                                </div>
-                                <div class="row p-b-30">
-                                  <div class="col-auto text-right update-meta p-r-0">
-                                    <i class="b-danger update-icon ring"></i>
-                                  </div>
-                                  <div class="col p-l-5">
-                                    <a href="#!"><h6>Your Manager Posted.</h6></a>
-                                    <p class="text-muted m-b-0">Lorem ipsum dolor sit amet, <a href="#!" class="text-c-red"> More</a></p>
-                                  </div>
-                                </div>
-                                <div class="row p-b-30">
-                                  <div class="col-auto text-right update-meta p-r-0">
-                                    <i class="b-primary update-icon ring"></i>
-                                  </div>
-                                  <div class="col p-l-5">
-                                    <a href="#!"><h6>Showcases</h6></a>
-                                    <p class="text-muted m-b-0">Lorem dolor sit amet, <a href="#!" class="text-c-blue"> More</a></p>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-auto text-right update-meta p-r-0">
-                                    <i class="b-success update-icon ring"></i>
-                                  </div>
-                                  <div class="col p-l-5">
-                                    <a href="#!"><h6>Miscellaneous</h6></a>
-                                    <p class="text-muted m-b-0">Lorem ipsum dolor sit ipsum amet, <a href="#!" class="text-c-green"> More</a></p>
-                                  </div>
-                                </div>
+                               @endforeach
+                                
+                                
                               </div>
                             </div>
                           </div>
@@ -347,52 +305,34 @@
         <div class="modal-body">
           <div class="container-fluid">
             <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                    <label for="id" class="input-group-addon" style="font-weight:bold;">IC Number :</label>
-                    <input type="text" class="form-control" name="id" id="id" value="490912-05-1856">
-                </div>
-                <div class="form-group">
-                    <label for="name" class="input-group-addon" style="font-weight:bold;">Name :</label>
-                    <input type="text" class="form-control" name="name" id="name" value="John Doe">
-                </div>
-                <div class="form-group">
-                    <label for="gender" class="input-group-addon" style="font-weight:bold;">Gender:</label>
-                    <select class="form-control" name="gender" id="gender">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="address" class="input-group-addon" style="font-weight:bold;">Address :</label>
-                    <input type="text" class="form-control" name="address" id="address" value="Malaysia">
-                </div>
-                <div class="form-group">
-                    <label for="contact" class="input-group-addon" style="font-weight:bold;">Contact :</label>
-                    <input type="text" class="form-control" name="contact" id="contact" value="0199237856">
-                </div>  
+              <div class="col-5">
+                <img class="img-fluid" src="{{ asset('files/assets/images/V1375_generated.jpg') }}" width="350px" >
               </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                    <label for="desc" class="input-group-addon" style="font-weight:bold;">Description :</label>
-                    <input type="text" class="form-control" name="desc" id="desc" value="Fever">
-                </div>
-                <div class="form-group">
-                    <label for="doctor" class="input-group-addon" style="font-weight:bold;">Doctor In-Charge:</label>
-                    <input type="text" class="form-control" name="doctor" id="doctor" value="Dr. Nik Ahmad">
-                </div>
-                <div class="form-group">
-                    <label for="date" class="input-group-addon" style="font-weight:bold;">Appointment Date & Time :</label>
-                    <input type="datetime-local" class="form-control" name="date" id="date">
-                </div>
-                <div class="form-group">
-                    <label for="location" class="input-group-addon" style="font-weight:bold;">Location :</label>
-                    <input type="text" class="form-control" name="location" id="location" value="Room 1">
-                </div>
-                <div class="form-group">
-                    <label for="location" class="input-group-addon" style="font-weight:bold;">Level :</label>
-                    <input type="text" class="form-control" name="location" id="location" value="Level 2">
-                </div>
+              <div class="col-7">
+                <table border="0" style="font-size: 25px;">
+                @foreach($aptlatests as $aptlatest)
+                  <tr>
+                    <td>Doctor </td>
+                    <td>:</td>
+                    <td class="text-uppercase"> {{$aptlatest->doctor_name}}</td>
+                  </tr>
+                  <tr>
+                    <td>Department </td>
+                    <td>:</td>
+                    <td > {{$aptlatest->dept_name}}</td>
+                  </tr>
+                  <tr>
+                    <td>Date </td>
+                    <td>:</td>
+                    <td> {{$aptlatest->date}}</td>
+                  </tr>
+                  <tr>
+                    <td>Time </td>
+                    <td>:</td>
+                    <td> {{$aptlatest->time}}</td>
+                  </tr>
+                  @endforeach
+                </table>
               </div>
             </div>
           </div>
@@ -448,50 +388,6 @@
 @endforeach
 <!-- ./ View Medicine Modal -->
 
-<!--[if lt IE 10]>
-    <div class="ie-warning">
-        <h1>Warning!!</h1>
-        <p>You are using an outdated version of Internet Explorer, please upgrade
-            <br/>to any of the following web browsers to access this website.
-        </p>
-        <div class="iew-container">
-            <ul class="iew-download">
-                <li>
-                    <a href="http://www.google.com/chrome/">
-                        <img src="./files/assets/images/browser/chrome.png" alt="Chrome">
-                        <div>Chrome</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.mozilla.org/en-US/firefox/new/">
-                        <img src="./files/assets/images/browser/firefox.png" alt="Firefox">
-                        <div>Firefox</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://www.opera.com">
-                        <img src="./files/assets/images/browser/opera.png" alt="Opera">
-                        <div>Opera</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.apple.com/safari/">
-                        <img src="./files/assets/images/browser/safari.png" alt="Safari">
-                        <div>Safari</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                        <img src="./files/assets/images/browser/ie.png" alt="">
-                        <div>IE (9 & above)</div>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <p>Sorry for the inconvenience!</p>
-    </div>
-<![endif]-->
-
 <script>
         // Replace '{{ $countdownDate }}' with the countdown date passed from the controller
         const countdownDate = new Date('{{ $countdownDate }}').getTime();
@@ -508,13 +404,13 @@
             const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
             // Display the countdown
-            document.getElementById('countdown').innerHTML = `Countdown: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+            document.getElementById('countdown').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
             document.getElementById('countdownday').innerHTML = `Countdown: ${days}d`;
             // If the countdown is over, display a message
             if (timeRemaining < 0) {
                 clearInterval(countdownTimer);
-                document.getElementById('countdown').innerHTML = 'Countdown has ended.';
-                document.getElementById('countdownday').innerHTML = 'Countdown has ended.';
+                document.getElementById('countdown').innerHTML = 'Please create new appointments.';
+                document.getElementById('countdownday').innerHTML = 'Please create new appointments.';
             }
         }, 1000);
     </script>

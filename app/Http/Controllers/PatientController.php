@@ -19,6 +19,7 @@ use App\Models\Appointments;
 use App\Models\Medicine;
 use App\Models\MedRecord;
 use App\Models\Medprescription;
+use App\Models\Notification_user;
 
 class PatientController extends Controller
 {
@@ -26,18 +27,27 @@ class PatientController extends Controller
     
     public function index()
     {
-
+        $id=Auth()->user()->id;
         $email=Auth()->user()->email;
         $name=Auth()->user()->name;
 
-        $aptlatest =  Appointments::join('medrecord', 'appointment.id', '>', 'medrecord.aptid')
+        $countdown =  Appointments::join('medrecord', 'appointment.id', '>', 'medrecord.aptid')
         ->select('appointment.*')
         ->orderByDesc('appointment.id')
         ->first();
 
-        // $timeAgo = Carbon::parse($aptlatest->created_at)->diffForHumans();
-        // $countdownDate = Carbon::parse($aptlatest->created_at)->format('Y-m-d H:i:s');
-        $countdownDate = Carbon::parse($aptlatest->date . ' ' . $aptlatest->time)->format('Y-m-d H:i:s');
+        if(empty($countdown->date)){
+            $countdownDate = Carbon::parse('2023-08-01 00:00:00')->format('Y-m-d H:i:s');
+        }else{
+            $countdownDate = Carbon::parse($countdown->date . ' ' . $countdown->time)->format('Y-m-d H:i:s');
+        }
+
+        $aptlatests =  Appointments::join('medrecord', 'appointment.id', '>', 'medrecord.aptid')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->join('department', 'appointment.deptid', '=', 'department.id')
+        ->select('appointment.*', 'doctor.name as doctor_name', 'department.name as dept_name')
+        ->orderByDesc('appointment.id')
+        ->get();
 
         $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
@@ -62,10 +72,14 @@ class PatientController extends Controller
         ->distinct()
         ->get();
 
+        $notify = Notification_user::where('userid', '=', $id)
+        ->get();
+
+
         $detailpatients = Patient::where('email', $email)->get();
 
 
-        return view('patient.contents.dashboard', compact('name','aptlatest','countdownDate','appointments','listmedicines','detailpatients','listDoctors'));
+        return view('patient.contents.dashboard', compact('name','aptlatests','countdownDate','appointments','listmedicines','detailpatients','listDoctors','notify'));
     }
 
     public function viewAppointmentList()

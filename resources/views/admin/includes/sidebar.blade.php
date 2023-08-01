@@ -65,6 +65,15 @@
                         <span class="pcoded-mtext">Department</span>
                     </a>
                 </li>
+
+                <li class="">
+                    <a href="/admin/serviceList" class="waves-effect waves-dark">
+                        <span class="pcoded-micon">
+                            <i class="fas fa-solid fas fa-x-ray"></i>
+                        </span>
+                        <span class="pcoded-mtext">Services</span>
+                    </a>
+                </li>
                 
 <br>
                 <li class="">
