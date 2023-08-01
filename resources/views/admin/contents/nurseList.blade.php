@@ -25,9 +25,9 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="../admin/index.php"><i class="feather icon-home"></i></a>
+                            <a href="/admin/dashboard"><i class="feather icon-home"></i></a>
                         </li>
-                        <li class="breadcrumb-item"><a href="../admin/nurseList.php">Nurses</a> </li>
+                        <li class="breadcrumb-item"><a href="/admin/nurseList">Nurses</a> </li>
                     </ul>
                 </div>
             </div>
@@ -73,6 +73,9 @@
                                                         <td>{{ $nurse->phoneno }}</td>
 
                                                         <td>
+                                                            <a title="View Nurse" href="/admin/nurseProfile/{{ $nurse->id }}" >
+                                                                <i style="font-size:20px;" class="icon feather icon-eye f-w-600 f-16 m-r-15  text-c-yellow "></i>
+                                                            </a>
                                                             <a title="Edit Nurse" data-toggle="modal" data-target="#editModal-{{ $nurse->id }}">
                                                                 <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                             </a>

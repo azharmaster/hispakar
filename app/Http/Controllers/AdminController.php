@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\Medicine;
 use App\Models\MedRecord;
 use App\Models\MedService;
+use App\Models\MedPrescription;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -198,6 +199,121 @@ class AdminController extends Controller
        
     }
 
+    public function viewNurseProfile($id)
+    {
+
+        $nurse = Nurse::findOrFail($id);
+        $deptid = $nurse->deptid;
+
+        // Get the current date
+        $today = Carbon::today();
+        // Get the current month and year
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+
+        $nursedetails = Nurse::join('department', 'nurse.deptid', '=', 'department.id')
+        ->join('users', 'nurse.email', '=', 'users.email')
+        ->select('nurse.*', 'department.name as dept_name', 'users.image as image')
+        ->where('nurse.id', $id)
+        ->get();
+
+        // Total patient under nurse department // from medrecord join appointment
+        $totalpatient = MedRecord::join('appointment', function ($join) use ($deptid) {
+            $join->on('medrecord.aptid', '=', 'appointment.id')
+                ->where('appointment.deptid', '=', $deptid);
+        })
+        ->distinct('appointment.patientid')
+        ->count('appointment.patientid');
+
+        $totalapttoday = Appointments::where('deptid', $deptid)
+        ->where('status', 1)
+        ->whereDate('date', $today)
+        ->count('id');
+
+        $totalrecord = MedRecord::join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->where('appointment.deptid', $deptid)
+        ->count('medrecord.id');
+
+        $totalnextapt = Appointments::where('deptid', $deptid)
+        ->where('status', 1)
+        ->where('appointment.date', '>', $today) // Add the condition to check if the appointment date is after today
+        ->whereNotIn('id', function ($query) {
+            $query->select('aptid')
+                ->from('medrecord');
+        })
+        ->count('id');
+
+        //chart for Age
+        $ageGroups = MedRecord::select(
+            DB::raw('SUM(CASE WHEN age <= 12 THEN 1 ELSE 0 END) as children'),
+            DB::raw('SUM(CASE WHEN age BETWEEN 13 AND 19 THEN 1 ELSE 0 END) as teenage'),
+            DB::raw('SUM(CASE WHEN age BETWEEN 20 AND 64 THEN 1 ELSE 0 END) as adult'),
+            DB::raw('SUM(CASE WHEN age >= 65 THEN 1 ELSE 0 END) as older')
+        )
+        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->where('appointment.deptid', $deptid)
+        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->first();
+
+        $children = $ageGroups->children;
+        $teenage = $ageGroups->teenage;
+        $adult = $ageGroups->adult;
+        $older = $ageGroups->older;
+
+        //chart attendance statistic
+        $totalattend = [];
+        $totalcancel = [];
+
+        // Loop through the past five months and get the attendance and cancellation data
+        for ($i = 4; $i >= 0; $i--) {
+            $month = ($currentMonth - $i) % 12;
+            $year = $currentYear;
+            if ($month === 0) {
+                // If the calculated month is 0 (December), set it to 12 and adjust the year
+                $month = 12;
+                $year--;
+            }
+            
+            // Get the start and end dates of the current month
+            $startDate = "$year-$month-01";
+            $endDate = date('Y-m-t', strtotime($startDate));
+
+            // Get the total attendance count for the current month
+            $totalattend[] = MedRecord::join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+                ->where('appointment.deptid', $deptid)
+                ->whereBetween('datetime', [$startDate, $endDate])
+                ->count();
+
+            // Get the total cancellation count for the current month
+            $totalcancel[] = Appointments::where('appointment.deptid', $deptid)
+                ->leftJoin('medrecord', 'appointment.id', '=', 'medrecord.aptid')
+                ->whereNull('medrecord.aptid')
+                ->whereMonth('appointment.date', $month)
+                ->whereYear('appointment.date', $year)
+                ->count();
+        }
+
+        $medrecorddetails = MedPrescription::where('nurseid', $id)
+        ->join('medrecord', 'medrecord.id', '=', 'medprescription.aptid')
+        ->join('patient', 'patient.id', '=', 'medrecord.patientid')
+        ->select('medrecord.*', 'patient.name as patient_name')
+        ->get();
+
+        $apttodaydetails = MedPrescription::where('nurseid', $id)
+        ->join('medrecord', 'medrecord.id', '=', 'medprescription.aptid')
+        ->join('patient', 'patient.id', '=', 'medrecord.patientid')
+        ->select('medrecord.*', 'patient.name as patient_name')
+        ->get();
+
+        return view('admin.contents.nurseProfile', compact(
+            'nursedetails', 'medrecorddetails',
+            'totalpatient', 'totalapttoday','totalrecord','totalnextapt', //card
+            'totalattend', 'totalcancel', // attendance chart
+            'children', 'teenage', 'adult', 'older', // ages chart
+        ));
+       
+    }
+
     public function viewPatientProfile($id) //profile doctor
     {
 
@@ -327,6 +443,55 @@ class AdminController extends Controller
         $medicines = Medicine::all();
 
         return view('admin.contents.medicineList', compact('medicines'));
+    }
+
+    public function viewReport($id)
+    {
+       
+        $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription')
+                ->where('id', $id)
+                ->first();
+
+        // Get the previous record with the same patient ID
+        $previousRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->where('medrecord.patientid', $record->patient_id)
+        ->where('medrecord.id', '<', $id)
+        ->orderBy('medrecord.id', 'desc')
+        ->first();
+
+        //get the previous medicine for the medicine record
+        $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
+        ->where('medprescription.patientid', $record->patient_id)
+        ->where('medprescription.id', '<', $id)
+        ->orderBy('medprescription.id', 'desc')
+        ->first();
+        
+        // Join with medservice table
+        $record->load('medService');
+
+        // Join with medservice table for the previous record as well
+        if ($previousRecord) {
+            $previousRecord->load('medService');
+        }
+
+        $medicines = MedPrescription::join('medrecord', 'medrecord.aptid', '=', 'medprescription.aptid')
+        ->select('medprescription.*', 'medprescription.desc as medicine_desc')
+        ->get();
+
+        //get the medservice price based on service id
+        $servicePrice = MedRecord::join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+        ->first();
+
+        //get the medicine price based on id 
+        $medicinePrice = Medprescription::join('medicine', 'medprescription.medicineid', '=', 'medicine.id')
+        ->first();   
+
+        $rc = MedRecord::join('doctor', 'medrecord.docid', '=', 'doctor.id')
+        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->get();
+    
+
+        return view('admin.contents.report', compact('record', 'previousRecord', 'prevMedicine', 'medicines', 'servicePrice', 'medicinePrice'));
     }
 
     // Manage Doctor
