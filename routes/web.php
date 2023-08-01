@@ -139,6 +139,10 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::post('/doctor/scheduleList/{id}', [DoctorController::class, 'EditSchedule']);
     Route::delete('/doctor/scheduleList/{id}', [DoctorController::class, 'DeleteSchedule'])->name('DeleteSchedule');
 
+    //attend & absent appointment
+    Route::post('/doctor/dashboard/{appointment_id}', [DoctorController::class, 'AttendAppointment']);
+    Route::post('/doctor/cdashboard/{appointment_id}', [DoctorController::class, 'AbsentAppointment']);
+
 
 });
 

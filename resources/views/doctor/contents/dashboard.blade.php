@@ -2,6 +2,18 @@
 
 @section('content')
 
+@if(session()->has('success'))
+    <script>
+        alert("{{ session()->get('success') }}");
+    </script>
+@endif
+
+<style>
+    .btn-custom-font-size {
+        font-size: 14px; /* Adjust the font size as per your requirement */
+}
+
+</style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Start Dashboard -->
@@ -12,7 +24,7 @@
                 <div class="page-header-title">
                     <i class="feather icon-home bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>Welcome, Doctor {{ $name }}!</h5>
+                        <h5>Welcome, {{ $name }}!</h5>
                         <span>Current room: {{ $roomName }}</span>
                     </div>
                 </div>
@@ -88,7 +100,111 @@
                             </div>
                         </div>
     
-                        <div class="col-6">
+                         <!-- Start Table -->
+                         <div class="col-md-12">
+                            <div class="card table-card">
+                                <div class="card-header">
+                                    <h5>Today's Appointment / {{ $currentDate }} </h5>
+                                    <div class="card-header-right">
+                                        <ul class="list-unstyled card-option">
+                                            <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
+                                            <li><i class="feather icon-maximize full-card"></i></li>
+                                            <li><i class="feather icon-minus minimize-card"></i></li>
+                                            <li><i class="feather icon-refresh-cw reload-card"></i></li>
+                                            <li><i class="feather icon-trash close-card"></i></li>
+                                            <li><i class="feather icon-chevron-left open-card-option"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-block p-b-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover m-b-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Patient Name</th>
+                                                    <th>Date-Time</th>
+                                                    <th>Attendance</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $currentTime = \Carbon\Carbon::now('Asia/Kuala_Lumpur');
+                                                @endphp
+
+                                                @if ($aptDs->isEmpty())
+                                                    <tr>
+                                                        <td class="text-center">No appointments today</td>
+                                                    </tr>
+                                                @else
+                                                    @foreach ($aptDs as $aptD)
+                                                    @php
+                                                        // Convert the appointment time to Carbon objects for start and end times
+                                                        $startTime = \Carbon\Carbon::createFromFormat('H:i:s', $aptD->time);
+                                                        $endTime = $startTime->copy()->addMinutes(30); // Assuming each appointment is 30 minutes
+
+                                                        // Check if the appointment is in the past, ongoing, or in the future
+                                                        $isPastAppointment = $currentTime->greaterThan($endTime);
+                                                        $isCurrentTimeInRange = $currentTime->between($startTime, $endTime);
+                                                    @endphp
+
+                                                        <tr>
+                                                            <td>
+                                                                <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" 
+                                                                alt="user image" class="img-radius img-40 align-top m-r-15">
+                                                                {{ $aptD->name }}
+                                                            </td>
+                                                            <td>{{ $aptD->date }} {{ $aptD->time }}</td>
+                                                            <td>
+                                                                @if ($aptD->status === 1)
+                                                                    <span class="badge badge-success">Attend</span>
+                                                                @elseif ($aptD->status === 2)
+                                                                    <span class="badge badge-danger">Absent</span>
+                                                                @else
+                                                                    <a href="/doctor/dashboard/{{ $aptD->appointment_id }}" title="Attend Appointment" 
+                                                                        data-toggle="modal" data-target="#editModal-confirm-{{ $aptD->appointment_id }}">
+                                                                        <i style="font-size:20px;" class="fa fa-check-circle text-success f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                    </a>
+                                                                    <a href="/doctor/cdashboard/{{ $aptD->appointment_id }}" title="Absent Appointment"
+                                                                        data-toggle="modal" data-target="#absentModal-absent-{{ $aptD->appointment_id }}">
+                                                                        <i style="font-size:20px;" class="fa fa-times-circle text-danger f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                    </a>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                <a href="/doctor/appointmentReport/{{ $aptD->appointment_id }}">
+                                                                    <button class="status btn btn-sm btn-custom-font-size
+                                                                        @if ($isPastAppointment)
+                                                                            btn-danger
+                                                                        @elseif ($isCurrentTimeInRange)
+                                                                            btn-success
+                                                                        @else
+                                                                            btn-warning
+                                                                        @endif
+                                                                        mb-2 align-top">
+
+                                                                        @if ($isPastAppointment)
+                                                                            Appointment Passed
+                                                                        @elseif ($isCurrentTimeInRange)
+                                                                            Now
+                                                                        @else
+                                                                            Next: {{ $startTime->format('h:i A') }} - {{ $endTime->format('h:i A') }}
+                                                                        @endif
+                                                                    </button>               
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End table -->
+
+                        <!-- <div class="col-6">
                             <div class="card new-cust-card">
                                 <div class="card-header">
                                     <h5>Today's Appointment / {{ $currentDate }}</h5>
@@ -153,87 +269,8 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Start Table -->
-                        <!-- <div class="col-md-6">
-                            <div class="card table-card">
-                                <div class="card-header">
-                                    <h5>To Be Approved</h5>
-                                    <div class="card-header-right">
-                                        <ul class="list-unstyled card-option">
-                                            <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
-                                            <li><i class="feather icon-maximize full-card"></i></li>
-                                            <li><i class="feather icon-minus minimize-card"></i></li>
-                                            <li><i class="feather icon-refresh-cw reload-card"></i></li>
-                                            <li><i class="feather icon-trash close-card"></i></li>
-                                            <li><i class="feather icon-chevron-left open-card-option"></i></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="card-block p-b-0">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover m-b-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Patient Name</th>
-                                                    <th>Date-Time</th>
-                                                    <th>Description</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Haley Kennedy</td>
-                                                    <td>24/6/23-10:30</td>
-                                                    <td>Follow up</td>
-                                                    <td>
-                                                        <i class="fa fa-check-circle text-success"></i>
-                                                        <i class="fa fa-times-circle text-danger"></i>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Rhona Davidson</td>
-                                                    <td>24/6/23-11:00</td>
-                                                    <td>Check up</td>
-                                                    <td>
-                                                        <i class="fa fa-check-circle text-success"></i>
-                                                        <i class="fa fa-times-circle text-danger"></i>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Colleen Hurst</td>
-                                                    <td>24/6/23-11:30</td>
-                                                    <td>Check up</td>
-                                                    <td>
-                                                        <i class="fa fa-check-circle text-success"></i>
-                                                        <i class="fa fa-times-circle text-danger"></i>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Jena Gaines</td>
-                                                    <td>24/6/23-12:00</td>
-                                                    <td>Check up</td>
-                                                    <td>
-                                                        <i class="fa fa-check-circle text-success"></i>
-                                                        <i class="fa fa-times-circle text-danger"></i>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Quinn Flynn</td>
-                                                    <td>24/6/23-12:30</td>
-                                                    <td>Check up</td>
-                                                    <td>
-                                                        <i class="fa fa-check-circle text-success"></i>
-                                                        <i class="fa fa-times-circle text-danger"></i>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- End table -->
+                         -->
+                    
     
                         <div class="col-md-12 col-xl-6">
                             <div class="card sale-card  custom-card" style="height: 400px;">
@@ -249,7 +286,7 @@
                         </div>
     
     
-                        <div class="col-md-12 col-xl-6">
+                        <!-- <div class="col-md-12 col-xl-6">
                             <div class="card latest-update-card">
                                 <div class="card-header">
                                     <h5>Patients by Gender</h5>
@@ -260,7 +297,7 @@
                                         <div class="col">
                                             <canvas id="chartByGender" style="max-width: 100px"></canvas>
                                         </div>
-                                        <!-- col -->
+
                                         
                                         <div class="col mt-3">
                                             <div>
@@ -273,12 +310,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- col -->
+
                                     </div>
                                 </div>
                             </div>
-                        <!--card -->
-                        </div>
+
+                        </div> -->
 
                         <div class="col-md-12 col-xl-6">
                             <div class="card sale-card " style="height: 400px;">
@@ -378,6 +415,80 @@
 
 <div id="styleSelector">
 </div>
+
+<!-- attend apt form -->
+@foreach ($aptDs as $aptD)
+    <div class="modal fade" id="editModal-confirm-{{ $aptD->appointment_id }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Appointment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="font-size: 15px;">Are you sure this person attend the appointment?</p>
+                    <table class="table table-bordered">
+                        <tr style="font-weight: bold;">
+                            <td>Name</td>
+                            <td>IC</td>
+                        </tr>
+                        <tr style="color: green;">
+                            <td>{{ $aptD->name }}</td>
+                            <td>{{ $aptD->ic }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">No</button>
+                    <form action="/doctor/dashboard/{{ $aptD->appointment_id }}" method="POST" style="display: inline">
+                        @csrf
+                        <button type="submit" class="btn btn-success waves-effect waves-light">Yes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+<!-- end attend apt form -->
+
+<!-- absent apt form -->
+@foreach ($aptDs as $aptD)
+    <div class="modal fade" id="absentModal-absent-{{ $aptD->appointment_id }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Appointment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="font-size: 15px;">Are you sure this person absent the appointment?</p>
+                    <table class="table table-bordered">
+                        <tr style="font-weight: bold;">
+                            <td>Name</td>
+                            <td>IC</td>
+                        </tr>
+                        <tr style="color: red;">
+                            <td>{{ $aptD->name }}</td>
+                            <td>{{ $aptD->ic }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">No</button>
+                    <form action="/doctor/cdashboard/{{ $aptD->appointment_id }}" method="POST" style="display: inline">
+                        @csrf
+                        <button type="submit" class="btn btn-danger waves-effect waves-light">Yes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+<!-- end absent apt form -->
 
 <!-- View Medicine Modal -->
 @foreach ($medicines as $medicine)
