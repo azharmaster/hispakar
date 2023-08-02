@@ -104,9 +104,13 @@
                                                                 <span class="badge badge-danger">Cancel</span>
                                                                 @else
                                                                     @if($appointment->date > '2023-07-25')
-                                                                    <a href="/patient/appointmentList/{{ $appointment->id }}" title="Cancel Appointment" class="btn btn-danger" data-target="#cancelModal-{{ $appointment->id }}" data-toggle="modal">
+                                                                    <!-- <a href="/patient/appointmentList/{{ $appointment->id }}" title="Cancel Appointment" class="btn btn-danger" data-target="#cancelModal-{{ $appointment->id }}" data-toggle="modal">
+                                                                    <i class="fas fa-times"></i></a> -->
+
+                                                                    <a title="Cancel Appointment" data-toggle="modal" class="btn btn-danger" data-target="#cancelModal-{{ $appointment->id }}">
                                                                     <i class="fas fa-times"></i>
                                                                     </a>
+                                                                    
                                                                     @else
                                                                     <span class="badge badge-success">Done weh</span>
                                                                     @endif
@@ -133,33 +137,42 @@
 <!-- end content -->
 
 
-<!-- delete Patient form -->
 @foreach ($appointments as $appointment)
-    <div class="modal fade" id="cancelModal-{{ $appointment->id }}" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Appointment</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p style="font-size: 15px;">Are you sure you want to cancel this appointment?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">No</button>
-                    <form action="/patient/appointmentList/{{ $appointment->id }}" method="POST" style="display: inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger waves-effect waves-light">Yes</button>
-                    </form>
+<!-- Edit Appointments form -->
+<div class="modal fade" id="cancelModal-{{ $appointment->id }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel Appointments</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/patient/appointmentList/{{ $appointment->id }}" class="form-horizontal row-fluid" method="POST" >
+              {{csrf_field()}}
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Reason :</span>
+                        <textarea style="width:350px;" class="form-control" name="reason" rows="4" cols="50"></textarea>
+                    </div>
+                    
+                    <span style="color:red">*Please call back to create your new appointment. Thank You.</span>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+                <button  name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
+
+            </div>
+            </form>
         </div>
     </div>
+</div>
+<!-- end edit Patient form -->
 @endforeach
-<!-- end delete Patient form -->
 
 <!--script to get the doctor schedule -->
 <!-- Include jQuery -->

@@ -16,6 +16,7 @@ use App\Models\Nurse;
 use App\Models\Department;
 use App\Models\DocSchedule;
 use App\Models\Appointments;
+use App\Models\Attendance;
 use App\Models\Medicine;
 use App\Models\MedRecord;
 use App\Models\Medprescription;
@@ -93,6 +94,7 @@ class PatientController extends Controller
         ->join('department', 'appointment.deptid', '=', 'department.id')
         ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
         ->where('patient.email', $email )
+        // ->where('appointment.status', 0)
         ->get();
 
         foreach ($appointments as $appointment) { //total appointment
@@ -387,32 +389,23 @@ class PatientController extends Controller
     //     return redirect('/patient/appointmentList')->with('success', 'New Appointment has been successfully added');
     // }
 
-    // public function EditAppointment(Request $request, $id)
-    // {
-    //     $appointment = Appointments::find($id);
-        
-    //     $appointment->patientid = $request->input('patientid');
-    //     $appointment->docid = $request->input('docid');
-    //     $appointment->deptid = $request->input('deptid'); 
-    //     $appointment->date = $request->input('date'); 
-    //     $appointment->time = $request->input('time'); 
-    //     $appointment->status = $request->input('status');
-    //     $appointment->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-    //     $appointment->save();
-
-    //     return redirect('/patient/appointmentList')->with('success', 'Appointment has been updated');
-    // }
-
-    
-    public function cancelAppointment($id)
+    public function EditAppointment(Request $request, $id)
     {
-        
+        $appointment = Appointments::find($id);
 
-        $appointment = Appointments::findOrFail($id);
-        
         $appointment->status = 2;
         $appointment->save();
 
+        $attend = new Attendance();
+        $attend->aptid = $id;
+        $attend->status = 2;
+        $attend->reason = $request->input('reason');
+        $attend->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+        $attend->save();
+
+
         return redirect('/patient/appointmentList')->with('success', 'Appointment has been cancel');
     }
+
+
 }
