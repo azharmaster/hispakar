@@ -445,6 +445,20 @@ class AdminController extends Controller
         return view('admin.contents.medicineList', compact('medicines'));
     }
 
+
+    public function viewMedRecord()
+    {
+        $medrcs = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->join('doctor', 'medrecord.docid', '=', 'doctor.id')
+        ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+        ->select('medrecord.*','doctor.name as doctor_name','medservice.type as service_type','appointment.id as aptid')
+        ->get();
+
+
+        return view('admin.contents.medrecord', compact('medrcs'));
+    }
+
     public function viewReport($id)
     {
        
@@ -1047,7 +1061,7 @@ class AdminController extends Controller
         }
 
 
-              /////////////////////////////////DEPARTMENT//////////////////////////////////////////////////////////////////
+              /////////////////////////////////SERVICE//////////////////////////////////////////////////////////////////
 
       public function AddServices(Request $request)
       {
@@ -1089,6 +1103,8 @@ class AdminController extends Controller
   
           return redirect('/admin/serviceList')->with('success', 'Service has been deleted');
       }
+
+
 
 
 

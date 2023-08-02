@@ -85,7 +85,7 @@
                     </a>
                 </li>
                 <li class="">
-                    <a href="/admin/appointmentList" class="waves-effect waves-dark">
+                    <a href="/admin/medrecord" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
                             <i class="fas fa-solid fa-calendar-check"></i>
                         </span>

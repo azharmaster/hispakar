@@ -41,6 +41,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/doctorProfile/{id}', [AdminController::class, 'viewDoctorProfile']);
     Route::get('/admin/nurseProfile/{id}', [AdminController::class, 'viewNurseProfile']);
     Route::get('/admin/patientProfile/{id}', [AdminController::class, 'viewPatientProfile']);
+    Route::get('/admin/medrecord', [AdminController::class, 'viewMedRecord']);
 
     Route::get('/admin/report/{id}', [AdminController::class, 'viewReport']);
 
