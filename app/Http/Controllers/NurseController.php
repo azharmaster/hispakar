@@ -17,6 +17,7 @@ use App\Models\Medicine;
 use App\Models\Room; 
 use App\Models\Department; 
 use App\Models\Appointments;
+use App\Models\Attendance;
 use App\Models\DocSchedule;
 use App\Models\MedRecord;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,8 @@ class NurseController extends Controller
         // Get the current month and year
         $currentMonth = now()->month;
         $currentYear = now()->year;
+
+        $nurse = Nurse::where('email', Auth::user()->email)->first();
 
         //card
         $totalapt = Appointments::all()->count();
@@ -73,6 +76,21 @@ class NurseController extends Controller
         $rooms = Room::all();
         $doctors = Doctor::all();
 
+        //today's apt table
+        // Get the current date in the 'Y-m-d' format
+        $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
+
+        $aptDs = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
+        ->join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.status', 'attendance.reason') // Include the 'reason' column in the select
+        ->where('appointment.deptid', $nurse->deptid)
+        ->whereDate('appointment.date', $currentDate) 
+        ->orderBy('appointment.time', 'asc')
+        ->take(5)
+        ->get();
+
+
         return view('nurse.contents.dashboard', compact(
             // for card
             'totalpatient', 'totalroom','totaldoc','totalapt', 
@@ -84,7 +102,7 @@ class NurseController extends Controller
             'children', 'teenage', 'adult', 'older',
 
             'medicines',  
-            'appointments'));
+            'appointments', 'aptDs', 'currentDate'));
     }
 
     public function viewProfile()
@@ -520,6 +538,50 @@ class NurseController extends Controller
 
         return redirect('/nurse/appointmentList')->with('success', 'Appointment has been deleted');
     }
+
+    //status attendance
+    public function AttendAppointment($appointment_id)
+    {
+        return $this->updateAppointmentStatus($appointment_id, 1);
+    }
+
+    public function AbsentAppointment($appointment_id)
+    {
+        return $this->updateAppointmentStatus($appointment_id, 2);
+    }
+
+    private function updateAppointmentStatus($appointment_id, $status)
+    {
+        // Get the appointment record
+        $appointment = Appointments::find($appointment_id);
+
+        if (!$appointment) {
+            return redirect('/nurse/dashboard')->with('error', 'Appointment not found');
+        }
+
+        // Check if an attendance record exists for the given appointment
+        $attendance = Attendance::where('aptid', $appointment_id)->first();
+
+        if ($attendance) {
+            // If an attendance record exists, update its status
+            $attendance->status = $status;
+            $attendance->save();
+        } else {
+            // If no attendance record exists, create a new one
+            $attendance = new Attendance();
+            $attendance->aptid = $appointment_id;
+            $attendance->status = $status;
+            $attendance->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            $attendance->save();
+        }
+
+        // Update the status in the appointments table as well
+        $appointment->status = $status;
+        $appointment->save();
+
+        return redirect('/nurse/dashboard')->with('success', 'Successfully updated');
+    }
+
 
 
 

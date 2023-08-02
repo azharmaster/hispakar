@@ -97,14 +97,14 @@ class DoctorController extends Controller
         $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
 
         $aptDs = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
-        ->join('patient', 'appointment.patientid', '=', 'patient.id')
-        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.status')
-        ->where('doctor.id', $doctorId)
-        ->whereDate('appointment.date', $currentDate) 
-        ->orderBy('appointment.time', 'asc')
-        ->take(5)
-        ->get();
+            ->join('patient', 'appointment.patientid', '=', 'patient.id')
+            ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+            ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.status')
+            ->where('doctor.id', $doctorId)
+            ->whereDate('appointment.date', $currentDate) 
+            ->orderBy('appointment.time', 'asc')
+            ->take(5)
+            ->get();
    
 
     
@@ -404,7 +404,7 @@ class DoctorController extends Controller
     {
         $medicines = Medicine::all();
 
-        return view('doctor.contents.medicines', compact('medicines'));
+        return view('doctor.contents.medicineList', compact('medicines'));
     }
 
     public function viewReportList()
@@ -417,8 +417,6 @@ class DoctorController extends Controller
                         
         return view('doctor.contents.reports', compact('filteredReports'));
     }   
-
-
 
     // Manage Schedule
     public function AddSchedule(Request $request)
@@ -667,7 +665,7 @@ class DoctorController extends Controller
         $medicine->desc = $request->input('desc');
         $medicine->save();
 
-        return redirect('/doctor/medicines')->with('success', 'New medicine has been successfully added');
+        return redirect('/doctor/medicineList')->with('success', 'New medicine has been successfully added');
     }
 
     // Edit medicine
@@ -681,7 +679,7 @@ class DoctorController extends Controller
 
         $medicine->save();
 
-        return redirect('/doctor/medicines')->with('success', 'Medicine details has been updated');
+        return redirect('/doctor/medicineList')->with('success', 'Medicine details has been updated');
     }
 
     // Delete medicine
@@ -693,7 +691,7 @@ class DoctorController extends Controller
         DB::statement('SET @counter = 0;');
         DB::statement('UPDATE medicine SET id = @counter:=@counter+1;');
 
-        return redirect('/doctor/medicines')->with('success', 'Medicine has been deleted');
+        return redirect('/doctor/medicineList')->with('success', 'Medicine has been deleted');
     }
    
     //Appointment record
@@ -834,52 +832,52 @@ class DoctorController extends Controller
     }
 
     //status attendance
-    public function AttendAppointment($appointment_id)
-    {
-        return $this->updateAppointmentStatus($appointment_id, 1);
-    }
+    // public function AttendAppointment($appointment_id)
+    // {
+    //     return $this->updateAppointmentStatus($appointment_id, 1);
+    // }
 
-    public function AbsentAppointment($appointment_id)
-    {
-        return $this->updateAppointmentStatus($appointment_id, 2);
-    }
+    // public function AbsentAppointment($appointment_id)
+    // {
+    //     return $this->updateAppointmentStatus($appointment_id, 2);
+    // }
 
-    private function updateAppointmentStatus($appointment_id, $status)
-    {
-        // Get the currently logged-in doctor
-        $doctor = Doctor::where('email', Auth::user()->email)->first();
+    // private function updateAppointmentStatus($appointment_id, $status)
+    // {
+    //     // Get the currently logged-in doctor
+    //     $doctor = Doctor::where('email', Auth::user()->email)->first();
         
-        // Get the appointment record
-        $appointment = Appointments::find($appointment_id);
+    //     // Get the appointment record
+    //     $appointment = Appointments::find($appointment_id);
 
-        if (!$appointment) {
-            return redirect('/doctor/dashboard')->with('error', 'Appointment not found');
-        }
+    //     if (!$appointment) {
+    //         return redirect('/doctor/dashboard')->with('error', 'Appointment not found');
+    //     }
 
-        // Check if an attendance record exists for the given appointment
-        $attendance = Attendance::where('aptid', $appointment_id)->first();
+    //     // Check if an attendance record exists for the given appointment
+    //     $attendance = Attendance::where('aptid', $appointment_id)->first();
 
-        if ($attendance) {
-            // If an attendance record exists, update its status
-            $attendance->status = $status;
-            $attendance->save();
-        } else {
-            // If no attendance record exists, create a new one
-            $attendance = new Attendance();
-            $attendance->aptid = $appointment_id;
-            $attendance->status = $status;
-            $attendance->docid = $doctor->id;
-            $attendance->patientid = $appointment->patientid;
-            $attendance->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-            $attendance->save();
-        }
+    //     if ($attendance) {
+    //         // If an attendance record exists, update its status
+    //         $attendance->status = $status;
+    //         $attendance->save();
+    //     } else {
+    //         // If no attendance record exists, create a new one
+    //         $attendance = new Attendance();
+    //         $attendance->aptid = $appointment_id;
+    //         $attendance->status = $status;
+    //         $attendance->docid = $doctor->id;
+    //         $attendance->patientid = $appointment->patientid;
+    //         $attendance->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+    //         $attendance->save();
+    //     }
 
-        // Update the status in the appointments table as well
-        $appointment->status = $status;
-        $appointment->save();
+    //     // Update the status in the appointments table as well
+    //     $appointment->status = $status;
+    //     $appointment->save();
 
-        return redirect('/doctor/dashboard')->with('success', 'Successfully updated');
-    }
+    //     return redirect('/doctor/dashboard')->with('success', 'Successfully updated');
+    // }
 
    
 }

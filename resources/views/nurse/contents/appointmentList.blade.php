@@ -91,7 +91,14 @@
                                                             <td>{{ $appointment->dept_name }}</td>
                                                             <td>{{ $appointment->date }} {{ $appointment->time }}</td>
                                                             <td>
-                                                            @if ($appointment->status === 0) Cancel @else Confirm @endif
+                                                                @if ($appointment->status === 1) 
+                                                                    Confirm
+                                                                @elseif ($appointment->status === 2)  
+                                                                    Cancel
+                                                                @else
+                                                                    Pending
+                                                                     
+                                                                @endif
                                                             </td>
                                                              <td>
                                                              <a title="Edit Appointment" data-toggle="modal" data-target="#editModal-{{ $appointment->id }}">

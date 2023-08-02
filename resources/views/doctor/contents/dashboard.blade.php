@@ -8,12 +8,6 @@
     </script>
 @endif
 
-<style>
-    .btn-custom-font-size {
-        font-size: 14px; /* Adjust the font size as per your requirement */
-}
-
-</style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Start Dashboard -->
@@ -101,10 +95,10 @@
                         </div>
     
                          <!-- Start Table -->
-                         <div class="col-md-12">
+                         <!-- <div class="col-md-6">
                             <div class="card table-card">
                                 <div class="card-header">
-                                    <h5>Today's Appointment / {{ $currentDate }} </h5>
+                                    <h5>Patient's Attendance</h5>
                                     <div class="card-header-right">
                                         <ul class="list-unstyled card-option">
                                             <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
@@ -123,37 +117,18 @@
                                                 <tr>
                                                     <th>Patient Name</th>
                                                     <th>Date-Time</th>
-                                                    <th>Attendance</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php
-                                                    $currentTime = \Carbon\Carbon::now('Asia/Kuala_Lumpur');
-                                                @endphp
-
                                                 @if ($aptDs->isEmpty())
                                                     <tr>
-                                                        <td class="text-center">No appointments today</td>
+                                                        <td colspan="3">No data available</td>
                                                     </tr>
                                                 @else
                                                     @foreach ($aptDs as $aptD)
-                                                    @php
-                                                        // Convert the appointment time to Carbon objects for start and end times
-                                                        $startTime = \Carbon\Carbon::createFromFormat('H:i:s', $aptD->time);
-                                                        $endTime = $startTime->copy()->addMinutes(30); // Assuming each appointment is 30 minutes
-
-                                                        // Check if the appointment is in the past, ongoing, or in the future
-                                                        $isPastAppointment = $currentTime->greaterThan($endTime);
-                                                        $isCurrentTimeInRange = $currentTime->between($startTime, $endTime);
-                                                    @endphp
-
                                                         <tr>
-                                                            <td>
-                                                                <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" 
-                                                                alt="user image" class="img-radius img-40 align-top m-r-15">
-                                                                {{ $aptD->name }}
-                                                            </td>
+                                                            <td>{{ $aptD->name }}</td>
                                                             <td>{{ $aptD->date }} {{ $aptD->time }}</td>
                                                             <td>
                                                                 @if ($aptD->status === 1)
@@ -171,28 +146,6 @@
                                                                     </a>
                                                                 @endif
                                                             </td>
-                                                            <td>
-                                                                <a href="/doctor/appointmentReport/{{ $aptD->appointment_id }}">
-                                                                    <button class="status btn btn-sm btn-custom-font-size
-                                                                        @if ($isPastAppointment)
-                                                                            btn-danger
-                                                                        @elseif ($isCurrentTimeInRange)
-                                                                            btn-success
-                                                                        @else
-                                                                            btn-warning
-                                                                        @endif
-                                                                        mb-2 align-top">
-
-                                                                        @if ($isPastAppointment)
-                                                                            Appointment Passed
-                                                                        @elseif ($isCurrentTimeInRange)
-                                                                            Now
-                                                                        @else
-                                                                            Next: {{ $startTime->format('h:i A') }} - {{ $endTime->format('h:i A') }}
-                                                                        @endif
-                                                                    </button>               
-                                                                </a>
-                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 @endif
@@ -201,10 +154,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- End table -->
 
-                        <!-- <div class="col-6">
+                        <!-- Today's apt -->
+                        <div class="col-6">
                             <div class="card new-cust-card">
                                 <div class="card-header">
                                     <h5>Today's Appointment / {{ $currentDate }}</h5>
@@ -269,9 +223,7 @@
                                 </div>
                             </div>
                         </div>
-                         -->
-                    
-    
+                        
                         <div class="col-md-12 col-xl-6">
                             <div class="card sale-card  custom-card" style="height: 400px;">
                                 <div class="card-header">
