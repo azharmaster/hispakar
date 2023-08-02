@@ -323,14 +323,14 @@ class DoctorController extends Controller
     {
         // Get the currently logged-in doctor
         $doctor = Doctor::where('email', Auth::user()->email)->first();
-    
+
         if (!$doctor) {
             // Handle the case if the logged-in user is not a doctor
             // For example, redirect them to a different page or show an error message
             // You can also return an empty array of appointments if you prefer
         }
-    
-         // Get the current date
+
+        // Get the current date
         $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
 
         // Get the doctor's schedule for the current week
@@ -349,7 +349,7 @@ class DoctorController extends Controller
         $start = Carbon::parse('8:00 AM');
         $end = Carbon::parse('5:00 PM');
         $timeSlots = [];
-        
+
         while ($start < $end) {
             $timeSlots[] = $start->format('g:i A') . ' - ' . $start->addMinutes(30)->format('g:i A');
         }
@@ -359,20 +359,77 @@ class DoctorController extends Controller
             ->join('doctor', 'appointment.docid', '=', 'doctor.id')
             ->join('department', 'appointment.deptid', '=', 'department.id')
             ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+            ->where('doctor.id', $doctor->id)
+            ->where('appointment.deptid', $doctor->deptid)
+            ->where('appointment.status', 1)
+            ->get();
+
+        $patients = Patient::all();
+        $doctors = Doctor::all();
+        $departments = Department::all();
+
+        return view('doctor.contents.appointmentList', compact('appointments', 'patients', 'doctors', 'departments', 
+            'doctor', 'doctorSchedule', 'timeSlots', 'selectedDate'));
+    }
+
+    public function viewAppointmentListDate(Request $request, $date)
+    {
+        // Convert the selected date to a Carbon instance for comparison
+        $chooseDate = Carbon::parse($date);
+    
+        // Get the currently logged-in doctor
+        $doctor = Doctor::where('email', Auth::user()->email)->first();
+    
+        if (!$doctor) {
+            // Handle the case if the logged-in user is not a doctor
+            // For example, redirect them to a different page or show an error message
+            // You can also return an empty array of appointments if you prefer
+        }
+    
+        // Get the current date
+        $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
+    
+        // Get the doctor's schedule for the current week
+        $startOfWeek = Carbon::now('Asia/Kuala_Lumpur')->startOfWeek();
+        $endOfWeek = Carbon::now('Asia/Kuala_Lumpur')->endOfWeek();
+    
+        $doctorSchedule = DocSchedule::where('docid', $doctor->id)
+            ->whereBetween('date', [$startOfWeek, $endOfWeek])
+            ->pluck('date')
+            ->toArray();
+    
+        // Get the selected date from the request, or set it to the first available date if not provided
+        $selectedDate = $request->input('date', reset($doctorSchedule));
+    
+        // Set the fixed time slots from 8:00 AM to 5:00 PM with 30-minute intervals
+        $start = Carbon::parse('8:00 AM');
+        $end = Carbon::parse('5:00 PM');
+        $timeSlots = [];
+    
+        while ($start < $end) {
+            $timeSlots[] = $start->format('g:i A') . ' - ' . $start->addMinutes(30)->format('g:i A');
+        }
+    
+        // To join tables and retrieve the appointment list based on the doctor's ID
+        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+            ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+            ->join('department', 'appointment.deptid', '=', 'department.id')
+            ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
             ->where('appointment.status', 1)
             ->where('doctor.id', $doctor->id)
             ->where('appointment.deptid', $doctor->deptid)
-            ->where('appointment.date', $currentDate)
+            ->whereDate('appointment.date', $chooseDate)
+            ->orderBy('appointment.time', 'asc')
             ->get();
     
         $patients = Patient::all();
         $doctors = Doctor::all();
         $departments = Department::all();
     
-
         return view('doctor.contents.appointmentList', compact('appointments', 'patients', 'doctors', 'departments', 
-            'doctor', 'doctorSchedule', 'timeSlots', 'selectedDate'));
+            'doctor', 'doctorSchedule', 'timeSlots', 'selectedDate', 'chooseDate'));
     }
+    
 
     public function getDoctorSchedule($doctorId)
     {

@@ -213,7 +213,7 @@
                                                   data-toggle="modal" data-target="#editModal-confirm-{{ $aptD->appointment_id }}">
                                                   <i style="font-size:20px;" class="fa fa-check-circle text-success f-w-600 f-16 m-r-15 text-c-green"></i>
                                               </a>
-                                              <a href="/nurse/dashboard/{{ $aptD->appointment_id }}" title="Absent Appointment"
+                                              <a href="/nurse/cdashboard/{{ $aptD->appointment_id }}" title="Absent Appointment"
                                                   data-toggle="modal" data-target="#absentModal-absent-{{ $aptD->appointment_id }}">
                                                   <i style="font-size:20px;" class="fa fa-times-circle text-danger f-w-600 f-16 m-r-15 text-c-green"></i>
                                               </a>
@@ -552,7 +552,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">No</button>
-                    <form action="/nurse/dashboard/{{ $aptD->appointment_id }}" method="POST" style="display: inline">
+                    <form action="/nurse/cdashboard/{{ $aptD->appointment_id }}" method="POST" style="display: inline">
                         @csrf
                         <button type="submit" class="btn btn-danger waves-effect waves-light">Yes</button>
                     </form>

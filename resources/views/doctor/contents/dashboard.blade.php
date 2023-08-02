@@ -158,11 +158,11 @@
                         <!-- End table -->
 
                         <!-- Today's apt -->
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <div class="card new-cust-card">
                                 <div class="card-header">
                                     <h5>Today's Appointment / {{ $currentDate }}</h5>
-                                    <div class="card-header-right">
+                                    <!-- <div class="card-header-right">
                                         <ul class="list-unstyled card-option">
                                             <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
                                             <li><i class="feather icon-maximize full-card"></i></li>
@@ -171,7 +171,7 @@
                                             <li><i class="feather icon-trash close-card"></i></li>
                                             <li><i class="feather icon-chevron-left open-card-option"></i></li>
                                         </ul>
-                                    </div>
+                                    </div> -->
                                 </div>
     
                                 <div class="card-block">
@@ -220,6 +220,12 @@
                                             </div>
                                         @endforeach
                                     @endif
+                                </div>
+
+                                <div class="modal-footer border-0" style="position: absolute; top: 0; left: 0; right: 0;">
+                                    <a href="{{ route('doctor.appointmentList', ['date' => $currentDate]) }}" class="text-mute">
+                                        <i class="fas fa-bars m-r-10"></i>View More
+                                    </a>
                                 </div>
                             </div>
                         </div>

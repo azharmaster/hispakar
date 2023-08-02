@@ -196,28 +196,26 @@ class NurseController extends Controller
 
     public function viewAppointmentListDate($date)
     {
+        // Reuse the viewAppointmentList() function to get the initial data
+        $viewData = $this->viewAppointmentList()->getData();
+    
+        // Parse the selected date
         $selectedDate = Carbon::parse($date);
-
-        $nurse = Nurse::where('email', Auth::user()->email)->first();
-
-        $appointments = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
-                        ->join('patient', 'appointment.patientid', '=', 'patient.id')
-                        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-                        ->join('department', 'appointment.deptid', '=', 'department.id')
-                        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
-                        ->where('appointment.deptid', $nurse->deptid)
-                        ->whereDate('appointment.date', $selectedDate)
-                        ->orderBy('appointment.time', 'asc')
-                        ->get();
-
-        $doctors = Doctor::where('doctor.deptid', $nurse->deptid)
-                    ->get();
-
-        $patients = Patient::all();
-        $departments = Department::all();
-
-        // Include the $appointments variable in the compact function
-        return view('nurse.contents.appointmentList', compact('selectedDate', 'appointments', 'doctors', 'patients', 'nurse', 'departments'));
+    
+        // Filter appointments based on the selected date
+        $filteredAppointments = $viewData['appointments']->filter(function ($appointment) use ($selectedDate) {
+            return $appointment->date == $selectedDate->toDateString();
+        });
+    
+        // Pass the filtered appointments and selected date to the view
+        return view('nurse.contents.appointmentList', [
+            'nurse' => $viewData['nurse'],
+            'appointments' => $filteredAppointments,
+            'doctors' => $viewData['doctors'],
+            'patients' => $viewData['patients'],
+            'departments' => $viewData['departments'],
+            'selectedDate' => $selectedDate,
+        ]);
     }
 
     public function EditProfile(Request $request, $id)

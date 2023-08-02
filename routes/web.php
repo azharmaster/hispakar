@@ -106,6 +106,7 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::get('/doctor/medicineList', [DoctorController::class, 'viewMedicineList']);
     Route::get('/doctor/reports', [DoctorController::class, 'viewReportList']);
     Route::get('/doctor/scheduleList', [DoctorController::class, 'viewSchedule']);
+    Route::get('/doctor/appointmentList/{date}', [DoctorController::class, 'viewAppointmentListDate'])->name('doctor.appointmentList');
 
     //Manage profile
     Route::post('/doctor/profile/{id}', [DoctorController::class, 'EditProfile']);
@@ -189,7 +190,7 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
 
     //attend & absent appointment
     Route::post('/nurse/dashboard/{appointment_id}', [NurseController::class, 'AttendAppointment']);
-    Route::post('/nurse/dashboard/{appointment_id}', [NurseController::class, 'AbsentAppointment']);
+    Route::post('/nurse/cdashboard/{appointment_id}', [NurseController::class, 'AbsentAppointment']);
 
 });
 
