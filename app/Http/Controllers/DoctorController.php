@@ -10,6 +10,7 @@ use App\Models\DocSchedule;
 use App\Models\Doctor;
 use App\Models\Medicine;
 use App\Models\MedPrescription;
+use App\Models\MedInvoice;
 use App\Models\MedRecord;
 use App\Models\MedService;
 use App\Models\Nurse;
@@ -38,10 +39,12 @@ class DoctorController extends Controller
         $doctorId = $doctor->id;
 
         $drRoom = Room::join('doctor', 'room.staff_id', '=', 'doctor.staff_id')
-                ->select('room.name')
-                ->where('doctor.id', $doctorId)
-                ->first();
+        ->select('room.name')
+        ->where('doctor.id', $doctorId)
+        ->first();
 
+        $roomName = null; // Initialize $roomName to null
+        
         if ($drRoom) {
             $roomName = $drRoom->name; // Extract just the room name from the object
         }
@@ -56,11 +59,10 @@ class DoctorController extends Controller
         // ->count();
 
         $totalApt = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-                    ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-                    ->select('appointment.*', 'patient.*')
-                    ->where('doctor.id', $doctorId)
-                    ->whereDate('appointment.date', $currentDate) 
-                    ->count();
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->select('appointment.*', 'patient.*')
+        ->where('doctor.id', $doctorId)
+        ->count();
 
         // Get the most recent appointment's created_at timestamp
         $latestAppointment = Appointments::orderBy('created_at', 'desc')->first();
@@ -84,8 +86,8 @@ class DoctorController extends Controller
   
         //total nurse card
         $totalNurse = Nurse::join('doctor', 'nurse.deptid', '=', 'doctor.deptid')
-                    ->select('nurse.*')
-                    ->count();
+        ->select('nurse.*')
+        ->count();
 
         // Get the most recent nurse's created_at timestamp
         $latestNurse = Nurse::orderBy('created_at', 'desc')->first();
@@ -96,15 +98,25 @@ class DoctorController extends Controller
         // Get the current date in the 'Y-m-d' format
         $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
 
-        $aptDs = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
-        ->join('patient', 'appointment.patientid', '=', 'patient.id')
+        //appointment list today
+        $aptDs = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.status')
+        ->select('appointment.*', 'patient.*')
         ->where('doctor.id', $doctorId)
         ->whereDate('appointment.date', $currentDate) 
         ->orderBy('appointment.time', 'asc')
         ->take(5)
         ->get();
+
+        $aptDs = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
+            ->join('patient', 'appointment.patientid', '=', 'patient.id')
+            ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+            ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.status')
+            ->where('doctor.id', $doctorId)
+            ->whereDate('appointment.date', $currentDate) 
+            ->orderBy('appointment.time', 'asc')
+            ->take(5)
+            ->get();
    
 
     
@@ -404,7 +416,7 @@ class DoctorController extends Controller
     {
         $medicines = Medicine::all();
 
-        return view('doctor.contents.medicines', compact('medicines'));
+        return view('doctor.contents.medicineList', compact('medicines'));
     }
 
     public function viewReportList()
@@ -417,8 +429,6 @@ class DoctorController extends Controller
                         
         return view('doctor.contents.reports', compact('filteredReports'));
     }   
-
-
 
     // Manage Schedule
     public function AddSchedule(Request $request)
@@ -667,7 +677,7 @@ class DoctorController extends Controller
         $medicine->desc = $request->input('desc');
         $medicine->save();
 
-        return redirect('/doctor/medicines')->with('success', 'New medicine has been successfully added');
+        return redirect('/doctor/medicineList')->with('success', 'New medicine has been successfully added');
     }
 
     // Edit medicine
@@ -681,7 +691,7 @@ class DoctorController extends Controller
 
         $medicine->save();
 
-        return redirect('/doctor/medicines')->with('success', 'Medicine details has been updated');
+        return redirect('/doctor/medicineList')->with('success', 'Medicine details has been updated');
     }
 
     // Delete medicine
@@ -693,14 +703,7 @@ class DoctorController extends Controller
         DB::statement('SET @counter = 0;');
         DB::statement('UPDATE medicine SET id = @counter:=@counter+1;');
 
-        return redirect('/doctor/medicines')->with('success', 'Medicine has been deleted');
-    }
-   
-    //Appointment record
-    public function getMedicinePrice($id)
-    {
-        $medicine = Medicine::findOrFail($id);
-        return response()->json(['price' => $medicine->price]);
+        return redirect('/doctor/medicineList')->with('success', 'Medicine has been deleted');
     }
     
     public function AddAppointmentRecord(Request $request, $id)
@@ -708,48 +711,34 @@ class DoctorController extends Controller
         // Get the currently logged-in doctor
         $doctor = Doctor::where('email', Auth::user()->email)->first();
     
-        // // Insert data into medrecord table
-        // $medRec = new MedRecord();
-        // $medRec->aptid = $id;
-        // $medRec->serviceid = $request->input('serviceid');
-        // $medRec->desc = $request->input('desc')['med_record'];
-        // $medRec->datetime = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-        // $medRec->patientid = $request->input('patientid');
-        // $medRec->docid = $doctor->id;
-        // $medRec->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-        // $medRec->save();
-
-
-        // Find the existing medrecord by aptid
-        $medRec = MedRecord::where('aptid', $id)->first();
-
-        // Check if the record with the given aptid exists
-        if (!$medRec) {
-            // If the record doesn't exist, create a new instance of MedRecord
-            $medRec = new MedRecord();
-            $medRec->aptid = $id;
-        }
-
-        // Update the fields
+        // Insert data into medrecord table
+        $medRec = new MedRecord();
+        $medRec->aptid = $id;
         $medRec->serviceid = $request->input('serviceid');
         $medRec->desc = $request->input('desc')['med_record'];
         $medRec->datetime = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $medRec->patientid = $request->input('patientid');
         $medRec->docid = $doctor->id;
-
-        // Set the created_at and updated_at timestamps
-        if (!$medRec->exists) {
-            $medRec->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-        }
-        $medRec->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-
-        // Save the record to the database
+        $medRec->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $medRec->save();
+
+        if ($medRec) {
+            $medInv = new MedInvoice();
+            $medInv->medrecordid = $medRec->id; // Use the primary key from the "MedRecord" table
+            $medInv->subtotal = $request->input('subtotal'); 
+            $medInv->discount = $request->input('discount');
+            $medInv->tax = $request->input('tax'); 
+            $medInv->totalcost = $request->input('totalcost');
+            $medInv->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            $medInv->save();
+        } 
 
        //Med Prescription
         // Get the selected medicine values from the request
         $selectedMedicines = $request->input('medicines')['id'] ?? [];
+        $prices = Arr::wrap($request->input('price'));
         $quantities = Arr::wrap($request->input('qty'));
+        $totals = Arr::wrap($request->input('total'));
         $descriptions = Arr::wrap($request->input('desc')['med_prescription']);
 
         // Validate if all arrays have the same length
@@ -768,14 +757,15 @@ class DoctorController extends Controller
                     $medPres->aptid = $id;
                     $medPres->medicineid = $medicineId;
                     $medPres->name = $medicineName;
+                    $medPres->price = $prices[$i];
                     $medPres->qty = $quantities[$i];
+                    $medPres->total = $totals[$i];
                     $medPres->desc = $descriptions[$i];
                     $medPres->docid = $doctor->id;
                     $medPres->patientid = $request->input('patientid');
                     $medPres->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
                     $medPres->save();
-                } 
-                else {
+                } else {
                     // Handle the case when required data is missing or empty
                     // You can log an error or add a validation error message here
                     // depending on your application's requirements.
@@ -833,53 +823,4 @@ class DoctorController extends Controller
         return view('doctor.contents.reports', compact('filteredReports'));
     }
 
-    //status attendance
-    public function AttendAppointment($appointment_id)
-    {
-        return $this->updateAppointmentStatus($appointment_id, 1);
-    }
-
-    public function AbsentAppointment($appointment_id)
-    {
-        return $this->updateAppointmentStatus($appointment_id, 2);
-    }
-
-    private function updateAppointmentStatus($appointment_id, $status)
-    {
-        // Get the currently logged-in doctor
-        $doctor = Doctor::where('email', Auth::user()->email)->first();
-        
-        // Get the appointment record
-        $appointment = Appointments::find($appointment_id);
-
-        if (!$appointment) {
-            return redirect('/doctor/dashboard')->with('error', 'Appointment not found');
-        }
-
-        // Check if an attendance record exists for the given appointment
-        $attendance = Attendance::where('aptid', $appointment_id)->first();
-
-        if ($attendance) {
-            // If an attendance record exists, update its status
-            $attendance->status = $status;
-            $attendance->save();
-        } else {
-            // If no attendance record exists, create a new one
-            $attendance = new Attendance();
-            $attendance->aptid = $appointment_id;
-            $attendance->status = $status;
-            $attendance->docid = $doctor->id;
-            $attendance->patientid = $appointment->patientid;
-            $attendance->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-            $attendance->save();
-        }
-
-        // Update the status in the appointments table as well
-        $appointment->status = $status;
-        $appointment->save();
-
-        return redirect('/doctor/dashboard')->with('success', 'Successfully updated');
-    }
-
-   
 }

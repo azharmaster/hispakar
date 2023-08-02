@@ -32,7 +32,7 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="/doctor/medicines">Medicines</a>
+                            <a href="/doctor/medicineList">Medicines</a>
                         </li>
                     </ul>
                 </div>

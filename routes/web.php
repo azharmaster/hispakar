@@ -102,7 +102,7 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::get('/doctor/patientList', [DoctorController::class, 'viewPatientList']);
     Route::get('/doctor/appointmentList', [DoctorController::class, 'viewAppointmentList']);
     Route::get('/doctor/appointmentReport/{id}', [DoctorController::class, 'viewAppointmentReport']);
-    Route::get('/doctor/medicines', [DoctorController::class, 'viewMedicineList']);
+    Route::get('/doctor/medicineList', [DoctorController::class, 'viewMedicineList']);
     Route::get('/doctor/reports', [DoctorController::class, 'viewReportList']);
     Route::get('/doctor/scheduleList', [DoctorController::class, 'viewSchedule']);
 
@@ -122,9 +122,9 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::get('/doctor/get-time-slots', [DoctorAppointmentController::class, 'getTimeSlots']);
 
     //Manage medicine
-    Route::post('/doctor/medicines', [DoctorController::class, 'AddMedicine']);
-    Route::post('/doctor/medicines/{id}', [DoctorController::class, 'EditMedicine']);
-    Route::delete('/doctor/medicines/{id}', [DoctorController::class, 'DeleteMedicine'])->name('DeleteMedicine');
+    Route::post('/doctor/medicineList', [DoctorController::class, 'AddMedicine']);
+    Route::post('/doctor/medicineList/{id}', [DoctorController::class, 'EditMedicine']);
+    Route::delete('/doctor/medicineList/{id}', [DoctorController::class, 'DeleteMedicine'])->name('DeleteMedicine');
 
     //appointment record
     Route::post('/doctor/appointmentReport/{id}', [DoctorController::class, 'AddAppointmentRecord'])->name('doctor.addAppointmentRecord');
@@ -184,6 +184,11 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/nurse/getDoctorSchedule/{doctorId}', [NurseController::class, 'getDoctorSchedule']);
     Route::get('/nurse/getBookedAppointmentTimes/{date}', [NurseController::class, 'getBookedAppointmentTimes']);
     Route::post('/nurse/isTimeBooked', [NurseController::class, 'isTimeBooked']);
+
+    //attend & absent appointment
+    Route::post('/nurse/dashboard/{appointment_id}', [NurseController::class, 'AttendAppointment']);
+    Route::post('/nurse/dashboard/{appointment_id}', [NurseController::class, 'AbsentAppointment']);
+
 });
 
     //Patient

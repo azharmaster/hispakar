@@ -2,6 +2,18 @@
 
 @section('content')
 
+@if(session()->has('success'))
+    <script>
+        alert("{{ session()->get('success') }}");
+    </script>
+@endif
+
+<style>
+    .btn-custom-font-size {
+        font-size: 14px; /* Adjust the font size as per your requirement */
+}
+</style>
+
 <!-- script for chart -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- script for calendar -->
@@ -141,7 +153,7 @@
                     <div class="col-md-8">
                       <div class="card table-card card-outline card-border-primary custom-thinner-outline" style="height: 450px">
                         <div class="card-header">
-                        <h5>Today's Appointments</h5>
+                        <h5>Today's Appointments /  {{ $currentDate }}</h5>
                           <div class="card-header-right">
                             <ul class="list-unstyled card-option">
                             <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
@@ -158,30 +170,65 @@
                             <table id="notOverflow" class="table table-hover m-b-0">
                               <thead>
                               <tr>
-                                <th>Time</th>
-                                <th>Patient</th>
-                                <th>Doctor</th>
-                                <th>Department</th>
+                                <th>Patient Name</th>
+                                <th>Date-Time</th>
+                                <th>Attendance</th>
+                                <th>Action</th>
                               </tr>
                               </thead>
                               <tbody>
                                 @php
-                                  $today = now()->format('Y-m-d'); // date today
-                                  $todaysAppointments = $appointments->where('date', $today)->sortBy('time')->take(5);
+                                  $currentTime = \Carbon\Carbon::now('Asia/Kuala_Lumpur');
                                 @endphp
 
-                                @if ($todaysAppointments->isEmpty())
+                                @if ($aptDs->isEmpty())
                                     <tr>
-                                        <td colspan="4">No appointment today</td>
+                                        <td class="text-center">No appointments today</td>
                                     </tr>
                                 @else
-                                    @foreach ($todaysAppointments as $appointment)
-                                        <tr>
-                                            <td>{{ $appointment->time }}</td>
-                                            <td>{{ $appointment->patient->name }}</td>
-                                            <td>{{ $appointment->doctor->name }}</td>
-                                            <td>{{ $appointment->department->name }}</td>
-                                        </tr>
+                                    @foreach ($aptDs as $aptD)
+                                    @php
+                                        // Convert the appointment time to Carbon objects for start and end times
+                                        $startTime = \Carbon\Carbon::createFromFormat('H:i:s', $aptD->time);
+                                        $endTime = $startTime->copy()->addMinutes(30); // Assuming each appointment is 30 minutes
+
+                                        // Check if the appointment is in the past, ongoing, or in the future
+                                        $isPastAppointment = $currentTime->greaterThan($endTime);
+                                        $isCurrentTimeInRange = $currentTime->between($startTime, $endTime);
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" 
+                                            alt="user image" class="img-radius img-40 align-top m-r-15">
+                                            {{ $aptD->name }}
+                                        </td>
+                                        <td>{{ $aptD->date }} {{ $aptD->time }}</td>
+                                        <td>
+                                          @if ($aptD->status === 1)
+                                              <span class="badge badge-success">Attend</span>
+                                          @elseif ($aptD->status === 2)
+                                              <span class="badge badge-danger">Absent</span>
+                                          @else
+                                              <a href="/nurse/dashboard/{{ $aptD->appointment_id }}" title="Attend Appointment" 
+                                                  data-toggle="modal" data-target="#editModal-confirm-{{ $aptD->appointment_id }}">
+                                                  <i style="font-size:20px;" class="fa fa-check-circle text-success f-w-600 f-16 m-r-15 text-c-green"></i>
+                                              </a>
+                                              <a href="/nurse/dashboard/{{ $aptD->appointment_id }}" title="Absent Appointment"
+                                                  data-toggle="modal" data-target="#absentModal-absent-{{ $aptD->appointment_id }}">
+                                                  <i style="font-size:20px;" class="fa fa-times-circle text-danger f-w-600 f-16 m-r-15 text-c-green"></i>
+                                              </a>
+                                          @endif
+                                        </td>
+                                        <td>
+                                          @if ($aptD->status === 2)
+                                            <a href="/nurse/dashboard/{{ $aptD->appointment_id }}" title="Attend Appointment" 
+                                              data-toggle="modal" data-target="#viewModal-absent-{{ $aptD->appointment_id }}">
+                                              <i style="font-size:20px;" class="fa fa-eye text-warning f-w-600 f-16 m-r-15 text-c-green"></i>
+                                            </a>
+                                          @endif
+                                        </td>
+
+                                    </tr>
                                     @endforeach
                                 @endif
 
@@ -441,6 +488,135 @@
     </div>
 
   <div id="styleSelector"></div>
+
+<!-- attend apt form -->
+@foreach ($aptDs as $aptD)
+    <div class="modal fade" id="editModal-confirm-{{ $aptD->appointment_id }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Appointment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="font-size: 15px;">Are you sure this person attend the appointment?</p>
+                    <table class="table table-bordered">
+                        <tr style="font-weight: bold;">
+                            <td>Name</td>
+                            <td>IC</td>
+                        </tr>
+                        <tr style="color: green;">
+                            <td>{{ $aptD->name }}</td>
+                            <td>{{ $aptD->ic }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">No</button>
+                    <form action="/nurse/dashboard/{{ $aptD->appointment_id }}" method="POST" style="display: inline">
+                        @csrf
+                        <button type="submit" class="btn btn-success waves-effect waves-light">Yes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+<!-- end attend apt form -->
+
+<!-- absent apt form -->
+@foreach ($aptDs as $aptD)
+    <div class="modal fade" id="absentModal-absent-{{ $aptD->appointment_id }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Appointment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="font-size: 15px;">Are you sure this person absent the appointment?</p>
+                    <table class="table table-bordered">
+                        <tr style="font-weight: bold;">
+                            <td>Name</td>
+                            <td>IC</td>
+                        </tr>
+                        <tr style="color: red;">
+                            <td>{{ $aptD->name }}</td>
+                            <td>{{ $aptD->ic }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">No</button>
+                    <form action="/nurse/dashboard/{{ $aptD->appointment_id }}" method="POST" style="display: inline">
+                        @csrf
+                        <button type="submit" class="btn btn-danger waves-effect waves-light">Yes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+<!-- end absent apt form -->
+
+<!-- view absent apt form -->
+@foreach ($aptDs as $aptD)
+    <div class="modal fade" id="viewModal-absent-{{ $aptD->appointment_id }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Appointment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <p style="font-size: 15px; font-weight: bold;">
+                      {{ $aptD->name }} has absent the appointment on {{ \Carbon\Carbon::parse($aptD->date)->format('d/m/Y') }}. 
+                  </p>
+                  <p style="font-size: 15px;">
+                      Here are the details:
+                  </p>
+                  <table class="table table-bordered">
+                      <tr>
+                          <td>Name</td>
+                          <td>{{ $aptD->name }}</td>
+                      </tr>
+                      <tr>
+                          <td>IC</td>
+                          <td>{{ $aptD->ic }}</td>
+                      </tr>
+                      <tr>
+                          <td>Status</td>
+                          <td> 
+                            @if ($aptD->status === 2)
+                              Absent
+                            @endif
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Reason</td>
+                          <td>{{ $aptD->reason ?? 'No reason' }}</td>
+                      </tr>
+                  </table>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">No</button>
+                    <form action="/nurse/dashboard/{{ $aptD->appointment_id }}" method="POST" style="display: inline">
+                        @csrf
+                        <button type="submit" class="btn btn-danger waves-effect waves-light">Yes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+<!-- end view absent apt form -->
 
 <!-- View Medicine Modal -->
 @foreach ($medicines as $medicine)
