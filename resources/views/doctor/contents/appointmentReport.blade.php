@@ -156,51 +156,70 @@
                                     <span>Medicines included</span>
                                 </div>
                                 <div class="card-block">
-                                    <table class="table table-bordered" id="medTable">
+                                    <table id="itemTable" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10px"></th>
+                                                <th>Medicine Name</th>
+                                                <th>Description</th>
+                                                <th class="text-center" style="width:120px">Quantity</th>
+                                                <th class="text-center" style="width:160px">Unit Price (RM)</th>
+                                                <th class="text-center" style="width:120px">Amount (RM)</th>
+                                                <th class="text-center" style="width:10px"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            <tr>
+                                                <td id="itemNo"></td>
+                                                <td>
+                                                    <select class="form-control" name="medicines[id][]" onchange="updatePrice(this)" required>
+                                                        <option value="" selected disabled>Select Medicine</option>
+                                                        @foreach ($medicines as $medicine)
+                                                            <option value="{{ $medicine->id }}:{{ $medicine->name }}" data-price="{{ $medicine->price }}">{{ $medicine->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td><input type="text" name="desc[med_prescription][]" class="form-control rounded-0 " placeholder="Dose suggested details" required></td>
+                                                <td><input type="text" name="qty[]" class="form-control rounded-0 text-right" oninput="validateQuantity(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" ondrop="return false" placeholder="0" required ></td>
+                                                <td><input type="number" name="price[]" class="form-control rounded-0 text-right bg-white"  oninput="validateFloatInteger(this)" step="any" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46" onpaste="return false" ondrop="return false" placeholder="0.00" readonly></td>
+                                                <td><input type="number" name="total[]" value="0.00" class="form-control text-right bg-white border-0" readonly></td>
+                                                <td class="text-center"><a class="deleteRow"><i class="fas fa-trash-alt text-danger"></i></a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="" style="width: 100%">
                                         <tr>
-                                            <th>Medicine 1</th>
-                                            <td>
-                                                <select class="form-control" name="medicines[id][]">
-                                                    @foreach ($medicines as $medicine)
-                                                        <option value="{{ $medicine->id }}:{{ $medicine->name }}">{{ $medicine->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                            <td style="width: 130px">
+                                                <button id="addRowButton" name="addRow" type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right">
+                                                    Add Medicine
+                                                </button>
                                             </td>
-                                            <td>
-                                                <input type="number" class="form-control" name="qty[]" placeholder="Quantity">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="desc[med_prescription][]" placeholder="Description">
-                                            </td>
-                                            <td class="text-align-center"><span onclick="deleteRow(this)"><i class="fas fa-trash-alt text-danger"></i></span></td>
+                                            <td></td>
+                                            <td style="width: 159px"></td>
+                                        </tr>
+
+                                        
+                                        <tr class="text-right">
+                                            <td></td>
+                                            <td>Sub Total &nbsp;</td>
+                                            <td><input type="number" id="subtotal" class="form-control bg-white text-right" name="subtotal" value="0" readonly></td>
+                                        </tr>
+                                        <tr class="text-right">
+                                            <td></td>
+                                            <td>Tax &nbsp;</td>
+                                            <td><input type="number" class="form-control text-right" id="tax"  name="tax" value="0.00" placeholder="0.00" oninput="calculateTotal()" step="any" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46" onpaste="return false" ondrop="return false" required></td>
+                                        </tr>
+                                        <tr class="text-right">
+                                            <td></td>
+                                            <td>Discount &nbsp;</td>
+                                            <td><input type="number" class="form-control text-right" id="discount" name="discount" value="0.00" placeholder="0.00" oninput="calculateTotal()" step="any" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46" onpaste="return false" ondrop="return false" required></td>
+                                        </tr>
+                                        <tr class="text-right">
+                                            <td></td>
+                                            <td><b>Total </b>&nbsp;</td>
+                                            <td><input type="number" class="form-control text-right bg-white" id="totalcost" name="totalcost" value="0" readonly></td>
                                         </tr>
                                     </table>
-                                    <table style="display: none;">
-                                        <tr id="medRowTemplate">
-                                            <th>Medicine ${medNum}</th>
-                                            <td>
-                                                <select class="form-control" name="medicines[id][]">
-                                                    @foreach ($medicines as $medicine)
-                                                        <option value="{{ $medicine->id }}:{{ $medicine->name }}">{{ $medicine->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="number" class="form-control" name="qty[]" placeholder="Quantity">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="desc[med_prescription][]" placeholder="Description">
-                                            </td>
-                                            <td class="text-align-center"><span onclick="deleteRow(this)"><i class="fas fa-trash-alt text-danger"></i></span></td>
-                                        </tr>
-                                    </table>
-                                    <div class="form-group row">
-                                        <div class="col">
-                                            <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" onclick="addMedRow()">
-                                                Add Medicine
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div class="card-block">
@@ -328,6 +347,195 @@
 <!--/view details -->
 
 <script>
+    // to get medicine price based on selected input
+    function updatePrice(selectElement) {
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        var row = selectElement.parentNode.parentNode; // Get the parent row
+        var priceInput = row.querySelector("input[name='price[]']"); // Get the price input element in the same row
+        var price = selectedOption.dataset.price;
+        priceInput.value = price ? price : 0;
+
+        calculateAmount(row);
+    }
+</script>
+
+<script>
+
+    // Function to update the row count
+    function updateRowCount() {
+      var table = document.getElementById("itemTable");
+      var rowCount = table.rows.length;
+      var itemNoCells = document.querySelectorAll("td[id='itemNo']");
+    
+      itemNoCells.forEach(function(cell, index) {
+        cell.textContent = index + 1;
+      });
+    }
+
+    // Price value only integer or float
+    function validateFloatInteger(input) {
+        var value = input.value;
+        var isValid = /^\d+(\.\d+)?$/.test(value); // Check if the value is a valid integer or float
+
+        if (!isValid) {
+            // Clear the input and show an error message
+            input.value = '';
+            input.setCustomValidity('Please enter a valid number.');
+        } else {
+            // Input is valid, clear the error message
+            input.setCustomValidity('');
+            //calculate amount = qty*price
+            calculateAmount(input.closest('tr'));
+        }
+    }
+    
+    // Quantity value only integer
+    function validateQuantity(input) {
+        var value = input.value;
+        var isValid = /^\d*$/.test(value); // Check if the value contains only digits
+
+        if (!isValid) {
+            // Clear the input and show an error message
+            input.value = '';
+            input.setCustomValidity('Please enter a valid integer.');
+        } else {
+            // Input is valid, clear the error message
+            input.setCustomValidity('');
+            //calculate amount = qty*price
+            calculateAmount(input.closest('tr'));
+        }
+    }
+
+    // Function to delete a row
+    function deleteRow(row) {
+      var table = document.getElementById("itemTable");
+      if (table.rows.length > 2) {
+        table.deleteRow(row);
+        updateRowCount(); // Update the row count after deleting a row
+        calculateSubtotal(); // Recalculate the subtotal after deleting a row
+      } else {
+        // Clear input fields of the first row
+        var inputs = table.rows[1].querySelectorAll("input");
+        var selectInput = table.rows[1].querySelector("select");
+        var subtotalInput = document.querySelector("input[name='subtotal']"); // Adjust the selector to target the correct subtotal input field
+
+        inputs.forEach(function(input) {
+          input.value = "";
+        });
+        // Reset the select input to its default value (first option)
+        selectInput.selectedIndex = 0;
+
+        // Clear the subtotal input field if it exists
+        if (subtotalInput) {
+            subtotalInput.value = 0;
+        }
+        calculateAmount(row);
+        calculateSubtotal(); // Recalculate the subtotal after clearing the input fields
+      }
+    }
+
+    // Function to calculate the amount based on quantity and price
+    function calculateAmount(row) {
+      var qtyInput = row.querySelector("input[name='qty[]']");
+      var priceInput = row.querySelector("input[name='price[]']");
+      var amountInput = row.querySelector("input[name='total[]']");
+
+      var qty = parseFloat(qtyInput.value);
+      var price = parseFloat(priceInput.value);
+      var amount = qty * price;
+
+      // Set the calculated amount value
+      amountInput.value = amount.toFixed(2); // Format amount to 2 decimal places
+
+      calculateSubtotal(); // Recalculate the subtotal after updating an amount
+    }
+
+    // Call the function initially to display the row count
+    updateRowCount();
+
+    // Add event listener to delete buttons
+    var deleteButtons = document.getElementsByClassName("deleteRow");
+    for (var i = 0; i < deleteButtons.length; i++) {
+      deleteButtons[i].addEventListener("click", function() {
+        var rowIndex = this.closest("tr").rowIndex;
+        deleteRow(rowIndex);
+      });
+    }
+
+    // Add event listener to add row button
+    document.getElementById("addRowButton").addEventListener("click", function() {
+      var table = document.getElementById("itemTable");
+      var newRow = table.insertRow(table.rows.length);
+      var newRowId = table.rows.length - 1; // Assign unique ID based on row index
+
+      newRow.innerHTML = `
+        <td id="itemNo"></td>
+        <td>
+            <select class="form-control" name="medicines[id][]" onchange="updatePrice(this)" required>
+                <option value="" selected disabled>Select Medicine</option>
+                @foreach ($medicines as $medicine)
+                    <option value="{{ $medicine->id }}:{{ $medicine->name }}" data-price="{{ $medicine->price }}">{{ $medicine->name }}</option>
+                @endforeach
+            </select>
+        </td>
+        <td><input type="text" name="desc[med_prescription][]" class="form-control rounded-0 " placeholder="Dose suggested details" required></td>
+        <td><input type="text" name="qty[]" class="form-control rounded-0 text-right" oninput="validateQuantity(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" ondrop="return false" placeholder="0" required ></td>
+        <td><input type="number" name="price[]" class="form-control rounded-0 text-right bg-white" step="any" oninput="validateFloatInteger(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46" onpaste="return false" ondrop="return false" placeholder="0.00" readonly></td>
+        <td><input type="number" name="total[]" value="0.00" class="form-control text-right bg-white border-0" readonly></td>
+        <td class="text-center"><a class="deleteRow"><i class="fas fa-trash-alt text-danger"></i></a></td>
+      `;
+
+      // Set unique ID for the new row
+      newRow.id = "row_" + newRowId;
+
+      // Attach delete button event listener for the new row
+      var deleteButton = newRow.querySelector(".deleteRow");
+      deleteButton.addEventListener("click", function() {
+        var rowIndex = this.closest("tr").rowIndex;
+        deleteRow(rowIndex);
+      });
+
+      updateRowCount(); // Update the row count after adding a new row
+    });
+
+    // Function to calculate the subtotal
+    function calculateSubtotal() {
+      var amountInputs = document.querySelectorAll("input[name='total[]']");
+      var subtotalInput = document.querySelector("input[name='subtotal']");
+
+      var subtotal = 0;
+      amountInputs.forEach(function(input) {
+        subtotal += parseFloat(input.value);
+      });
+
+      // Set the calculated subtotal value
+      subtotalInput.value = subtotal.toFixed(2); // Format subtotal to 2 decimal places
+
+      calculateTotal(); // Recalculate the total after updating the subtotal
+    }
+
+    // Call the function initially to calculate the subtotal
+    calculateSubtotal();
+
+    // Function to calculate the total
+    function calculateTotal() {
+      var subtotalInput = document.getElementById("subtotal");
+      var taxInput = document.getElementById("tax");
+      var discountInput = document.getElementById("discount");
+      var totalInput = document.getElementById("totalcost");
+
+      var subtotal = parseFloat(subtotalInput.value);
+      var tax = parseFloat(taxInput.value);
+      var discount = parseFloat(discountInput.value);
+
+      var total = subtotal + tax - discount;
+
+      totalInput.value = total.toFixed(2);
+    }
+    
+</script>
+
+<script>
     var table = document.getElementById("medTable");
     let medNum = 1;
 
@@ -335,28 +543,28 @@
         medNum++;
         var row = table.insertRow(-1);
         row.innerHTML = `
-            <th>Medicine ${medNum}</th>
+            <th style="width: 130px">Medicine ${medNum}</th>
             <td>
-                <select class="form-control" name="medicines[id][]">
+                <select class="form-control" name="medicines[id][]" onchange="updatePrice(this)" required>
                     @foreach ($medicines as $medicine)
-                        <option value="{{ $medicine->id }}:{{ $medicine->name }}">{{ $medicine->name }}</option>
+                        <option value="{{ $medicine->id }}:{{ $medicine->name }}" data-price="{{ $medicine->price }}">{{ $medicine->name }}</option>
                     @endforeach
                 </select>
             </td>
             <td>
-                <input type="number" class="form-control" name="qty[]" placeholder="Quantity">
+                <input type="text" class="form-control" name="desc[med_prescription][]" placeholder="Description" required>
             </td>
             <td>
-                <input type="text" class="form-control" name="desc[med_prescription][]" placeholder="Description">
+                <input type="number" class="form-control" name="qty[]" placeholder="Quantity" onchange="calculateSubtotal()" required>
+            </td>
+            <td>
+                <input type="number" class="form-control" name="price[]"  value="{{ $medicines[0]->price ? $medicines[0]->price : 0 }}" required>
             </td>
             <td class="text-align-center"><span onclick="deleteRow(this)"><i class="fas fa-trash-alt text-danger"></i></span></td>
         `;
     }
 
-    function deleteRow(row) {
-        var i = row.parentNode.parentNode.rowIndex;
-        table.deleteRow(i);
-    }
+   
 
     function submitForm() {
         // Serialize the form data and submit the form
