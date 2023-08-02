@@ -237,7 +237,7 @@
                           </div>
                         </div>
                         <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
-                          <a href="/nurse/appointmentList" class="text-mute"><i class="fas fa-bars m-r-10"></i>View More</a>
+                          <a href="{{ route('nurse.appointmentList', ['date' => $currentDate]) }}" class="text-mute"><i class="fas fa-bars m-r-10"></i>View More</a>
 
                         </div>
                       </div>

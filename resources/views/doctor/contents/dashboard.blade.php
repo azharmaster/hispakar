@@ -193,7 +193,7 @@
                                                 $isCurrentTimeInRange = $currentTime->between($startTime, $endTime);
                                             @endphp
                                             <div class="align-middle m-b-25">
-                                                <a href="/doctor/appointmentList">
+                                                <a href="/doctor/appointmentReport/{{ $aptD->appointment_id }}">
                                                 <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
                                                     <div class="d-inline-block">
                                                         <h6>{{ $aptD->name }}</h6>

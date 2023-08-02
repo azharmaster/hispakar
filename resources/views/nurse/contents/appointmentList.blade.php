@@ -163,15 +163,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Department :</span>
-                        <select class="form-control" style="width:350px;" name="deptid">
-                            <option value="">Choose Department</option>
-                                @foreach ($departments as $department)
-                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
-                                @endforeach
-                            </select>
-                    </div>
+                    <input type="hidden" name="deptid" id="deptid" value="{{ $nurse->deptid }}">
 
                      <!-- Date Selection Dropdown -->
                      <div class="form-group input-group">

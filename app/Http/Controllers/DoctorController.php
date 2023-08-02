@@ -24,8 +24,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Session;
 
 class DoctorController extends Controller
 {
@@ -59,10 +57,11 @@ class DoctorController extends Controller
         // ->count();
 
         $totalApt = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.*', 'patient.*')
-        ->where('doctor.id', $doctorId)
-        ->count();
+                    ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+                    ->select('appointment.*', 'patient.*')
+                    ->where('doctor.id', $doctorId)
+                    ->whereDate('appointment.date', $currentDate)
+                    ->count();
 
         // Get the most recent appointment's created_at timestamp
         $latestAppointment = Appointments::orderBy('created_at', 'desc')->first();

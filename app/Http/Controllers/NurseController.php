@@ -32,9 +32,17 @@ class NurseController extends Controller
 
         $nurse = Nurse::where('email', Auth::user()->email)->first();
 
+        // Get the current date in the 'Y-m-d' format
+        $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
+
         //card
-        $totalapt = Appointments::all()->count();
-        $totaldoc = Doctor::all()->count();
+        $totalapt = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+                    ->whereDate('appointment.date', $currentDate)
+                    ->count();
+
+        $totaldoc = Doctor::where('doctor.deptid', $nurse->deptid)
+                    ->count();
+                    
         $totalpatient = Patient::all()->count();
         $totalroom = Room::all()->count();
 
@@ -168,18 +176,48 @@ class NurseController extends Controller
     {
         $nurse = Nurse::where('email', Auth::user()->email)->first();
 
-        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->join('department', 'appointment.deptid', '=', 'department.id')
-        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
-        ->where('appointment.deptid', $nurse->deptid)
-        ->get();
+        // Add $currentDate variable here
+        $currentDate = Carbon::today()->toDateString();
 
-        $doctors = Doctor::all();
+        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+                        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+                        ->join('department', 'appointment.deptid', '=', 'department.id')
+                        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+                        ->where('appointment.deptid', $nurse->deptid)
+                        ->get();    
+
+        $doctors = Doctor::where('doctor.deptid', $nurse->deptid)
+                    ->get();
         $patients = Patient::all();
         $departments = Department::all();
 
-        return view('nurse.contents.appointmentList', compact('appointments','doctors','patients','departments'));
+        return view('nurse.contents.appointmentList', compact('nurse', 'appointments', 'doctors', 'patients', 'departments', 'currentDate'));
+    }
+
+    public function viewAppointmentListDate($date)
+    {
+        $selectedDate = Carbon::parse($date);
+
+        $nurse = Nurse::where('email', Auth::user()->email)->first();
+
+        $appointments = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
+                        ->join('patient', 'appointment.patientid', '=', 'patient.id')
+                        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+                        ->join('department', 'appointment.deptid', '=', 'department.id')
+                        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+                        ->where('appointment.deptid', $nurse->deptid)
+                        ->whereDate('appointment.date', $selectedDate)
+                        ->orderBy('appointment.time', 'asc')
+                        ->get();
+
+        $doctors = Doctor::where('doctor.deptid', $nurse->deptid)
+                    ->get();
+
+        $patients = Patient::all();
+        $departments = Department::all();
+
+        // Include the $appointments variable in the compact function
+        return view('nurse.contents.appointmentList', compact('selectedDate', 'appointments', 'doctors', 'patients', 'nurse', 'departments'));
     }
 
     public function EditProfile(Request $request, $id)
