@@ -182,7 +182,7 @@
                         <span class="input-group-addon" style="width:150px;">Status :</span>
                         <select style="width:350px;" class="form-control" name="status" id="status">
                             <option value="">Status</option>
-                            <option value="0">Not Available</option>
+                            <option value="2">Not Available</option>
                             <option value="1">Available</option>
                         </select> 
                     </div>      

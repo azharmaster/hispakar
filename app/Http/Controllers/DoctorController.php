@@ -100,22 +100,23 @@ class DoctorController extends Controller
         //appointment list today
         $aptDs = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.*', 'patient.*')
+        ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.status as appointment_status','appointment.*', 'patient.*')
         ->where('doctor.id', $doctorId)
         ->whereDate('appointment.date', $currentDate) 
         ->orderBy('appointment.time', 'asc')
         ->take(5)
         ->get();
 
-        $aptDs = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
-            ->join('patient', 'appointment.patientid', '=', 'patient.id')
-            ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-            ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.status')
-            ->where('doctor.id', $doctorId)
-            ->whereDate('appointment.date', $currentDate) 
-            ->orderBy('appointment.time', 'asc')
-            ->take(5)
-            ->get();
+
+        // $aptDs = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
+        //     ->join('patient', 'appointment.patientid', '=', 'patient.id')
+        //     ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        //     ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.status')
+        //     ->where('doctor.id', $doctorId)
+        //     ->whereDate('appointment.date', $currentDate) 
+        //     ->orderBy('appointment.time', 'asc')
+        //     ->take(5)
+        //     ->get();
    
 
     
@@ -160,7 +161,7 @@ class DoctorController extends Controller
 
             $totalcancel[] = Appointments::whereMonth('date', $month)
                 ->whereYear('date', $year)
-                ->where('status', 3)
+                ->where('status', 2)
                 ->where('docid', $doctor->id)
                 ->count();
         }

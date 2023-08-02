@@ -159,7 +159,7 @@
 
                         <!-- Today's apt -->
                         <div class="col-md-6">
-                            <div class="card new-cust-card">
+                            <div class="card new-cust-card" style="height: 450px">
                                 <div class="card-header">
                                     <h5>Today's Appointment / {{ $currentDate }}</h5>
                                     <!-- <div class="card-header-right">
@@ -174,7 +174,7 @@
                                     </div> -->
                                 </div>
     
-                                <div class="card-block">
+                                <div class="card-block p-b-0">
                                     @php
                                         $currentTime = \Carbon\Carbon::now('Asia/Kuala_Lumpur');
                                     @endphp
@@ -198,23 +198,39 @@
                                                     <div class="d-inline-block">
                                                         <h6>{{ $aptD->name }}</h6>
                                                         <p class="text-muted m-b-0">Consultation</p>
-                                                        <button class="status btn btn-sm 
-                                                                    @if ($isPastAppointment)
-                                                                        btn-danger
-                                                                    @elseif ($isCurrentTimeInRange)
-                                                                        btn-success
-                                                                    @else
-                                                                        btn-warning
-                                                                    @endif
-                                                                    mb-2 align-top">
-                                                            @if ($isPastAppointment)
-                                                                Appointment Passed
-                                                            @elseif ($isCurrentTimeInRange)
-                                                                Now
-                                                            @else
-                                                                Next: {{ $startTime->format('h:i A') }} - {{ $endTime->format('h:i A') }}
-                                                            @endif
-                                                        </button>
+                                                        
+                                                        @if ($aptD->appointment_status == '2')
+                                                            <span class="status badge badge-danger mb-2 align-top" style="font-size: 11px;">Cancel</span>
+                                                        @else
+                                                            @php
+                                                                // Convert the appointment time to Carbon objects for start and end times
+                                                                $startTime = \Carbon\Carbon::createFromFormat('H:i:s', $aptD->time);
+                                                                $endTime = $startTime->copy()->addMinutes(30); // Assuming each appointment is 30 minutes
+
+                                                                // Check if the appointment is in the past, ongoing, or in the future
+                                                                $currentTime = \Carbon\Carbon::now('Asia/Kuala_Lumpur');
+                                                                $isPastAppointment = $currentTime->greaterThan($endTime);
+                                                                $isCurrentTimeInRange = $currentTime->between($startTime, $endTime);
+                                                            @endphp
+
+                                                            <button class="status btn btn-sm
+                                                                @if ($isPastAppointment)
+                                                                    btn-danger
+                                                                @elseif ($isCurrentTimeInRange)
+                                                                    btn-success
+                                                                @else
+                                                                    btn-warning
+                                                                @endif
+                                                                mb-2 align-top">
+                                                                @if ($isPastAppointment)
+                                                                    Appointment Passed
+                                                                @elseif ($isCurrentTimeInRange)
+                                                                    Now
+                                                                @else
+                                                                    Next: {{ $startTime->format('h:i A') }} - {{ $endTime->format('h:i A') }}
+                                                                @endif
+                                                            </button>
+                                                        @endif
                                                     </div>
                                                 </a>
                                             </div>
@@ -231,7 +247,7 @@
                         </div>
                         
                         <div class="col-md-12 col-xl-6">
-                            <div class="card sale-card  custom-card" style="height: 400px;">
+                            <div class="card sale-card  custom-card" style="height: 450px">
                                 <div class="card-header">
                                     <h5>Appointment Attendance Statistics</h5>
                                 </div>
@@ -276,7 +292,7 @@
                         </div> -->
 
                         <div class="col-md-12 col-xl-6">
-                            <div class="card sale-card " style="height: 400px;">
+                            <div class="card sale-card " style="height: 450px;">
                                 <div class="card-header">
                                     <h5>Patients by Age</h5>
                                 </div>
