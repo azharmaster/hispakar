@@ -19,6 +19,7 @@ use App\Models\Appointments;
 use App\Models\Attendance;
 use App\Models\Medicine;
 use App\Models\MedRecord;
+use App\Models\MedInvoice;
 use App\Models\Medprescription;
 use App\Models\Notification_user;
 
@@ -169,14 +170,17 @@ class PatientController extends Controller
         //get the medicine price based on id 
         $medicinePrice = Medprescription::join('medicine', 'medprescription.medicineid', '=', 'medicine.id')
                         ->where('medprescription.patientid', $patient->id)
-                        ->first();                    
+                        ->first();  
+                        
+        // Get the total invoice for the given medrecordid
+        $totalInvoice = MedInvoice::where('medrecordid', $id)->first();
 
         $rc = MedRecord::join('doctor', 'medrecord.docid', '=', 'doctor.id')
             ->join('patient', 'medrecord.patientid', '=', 'patient.id')
             ->get();
 
         return view('patient.contents.appointmentSummary', compact('record', 'previousRecord', 'rc', 'prevMedicine', 
-        'medicines', 'upcomingAppointment', 'servicePrice', 'medicinePrice'));
+        'medicines', 'upcomingAppointment', 'servicePrice', 'medicinePrice', 'totalInvoice'));
     }
 
     //get the doctor schedule date 

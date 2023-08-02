@@ -177,57 +177,85 @@
                                     <table class="table table-borderless">
                                         <thead>
                                             <tr>
-                                                <th>Item</th>
-                                                <th>Description</th>
-                                                <th>Unit Price (RM)</th>
-                                                <th>Price (RM)</th>
+                                                <th style="width:10px">No</th>
+                                                <th style="width:200px">Item Name</th>
+                                                <th class="text-center" style="width:120px">Quantity</th>
+                                                <th class="text-right" style="width:160px">Unit Price (RM)</th>
+                                                <th class="text-right" style="width:120px">Amount (RM)</th>
                                             </tr>
                                         </thead>
+                                        @php $counter = 1; @endphp
                                         <tbody>
                                             <tr>
-                                                <td>{{ $record->medService->type }}</td>
-                                                <td>{{ $record->desc }}</td>
-                                                <td>{{ $servicePrice->charge }}</td>
-                                                <td>{{ $servicePrice->charge }}</td>
+                                                <td>{{ $counter }}</td>
+                                                <td>{{ $record->medService->type }} &nbsp;(Service Type)</td>
+                                                <td class="text-center" >1</td>
+                                                <td class="text-right" >{{ $servicePrice->charge }}</td>
+                                                <td class="text-right" >{{ $servicePrice->charge }}</td>
                                             </tr>
+                                            @foreach ($medicines as $medicine)
                                             <tr>
-                                                <td>Medication</td>
-                                                <td colspan="3">
-                                                    <table class="table table-borderless">
-                                                        <tbody>
-                                                            @foreach ($medicines as $medicine)
-                                                                <tr>
-                                                                    <td >{{ $medicine->name }} ({{ $medicine->qty }} pcs)</td>
-                                                                    <td style="text-align: left;">{{ $medicinePrice->price }}</td>
-                                                                    <td>{{ $medicinePrice->price }}</td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </td>
+                                                <td>{{ ++$counter }}</td>
+                                                <td>{{ $medicine->name }}</td>
+                                                <td class="text-center">{{ $medicine->qty }} </td>
+                                                <td class="text-right">{{ $medicine->price }}</td>
+                                                <td class="text-right">{{ $medicine->total }}</td>
                                             </tr>
+                                            @endforeach
                                         </tbody>
-                                        <tfoot>
-                                            <tr class="border-bottom">
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr style="border-top: 1px;">
-                                                <th colspan="3" class="text-right">Tax Rate</th>
-                                                <td>60</td>
-                                            </tr>
-                                            <tr style="border-top: 1px;">
-                                                <td rowspan="2" class="text-wrap" style="width: 30%;">
-                                                    <b>NOTICE</b>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                                </td>
-                                                <th colspan="2" class="text-right">Sub Total</th>
-                                                <td>60</td>
-                                            </tr>
-                                        </tfoot>
+                                        
                                     </table>
+
+                                    <div class="row border-top">
+                                        <br><br>
+                                        <!-- accepted payments column -->
+                                        <div class="col-7">
+                                            <br>
+                                            <table class="table">
+                                                <tr>
+                                                    <th colspan=2 class ="border-0">Payment Details</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class ="border-0"style="width: 100px">
+                                                        Due Date<br>
+                                                        Method<br>
+                                                        Status
+                                                    </td>
+                                                    <td class ="border-0 text-left" >
+                                                        : &nbsp;{{ \Carbon\Carbon::parse($record->datetime)->format('Y-m-d') }}<br>
+                                                        : &nbsp;Cash / Online Banking<br>
+                                                        : &nbsp;Paid
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+            
+                                        <!-- /.col -->
+                                        <div class="col-5">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                <tr>
+                                                    <th class ="border-0"style="width:50%">Subtotal</th>
+                                                    <td class ="border-0 text-right" >{{ number_format($totalInvoice->subtotal, 2) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tax</th>
+                                                    <td class ="text-right" >{{ number_format($totalInvoice->tax, 2) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Discount</th>
+                                                    <td class ="text-right" >{{ number_format($totalInvoice->discount, 2) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Total</th>
+                                                    <td class ="text-right" >{{ number_format($totalInvoice->totalcost, 2) }}</td>
+                                                </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- /.col -->
+                                    </div>
+                                    <!-- /.row -->
 
 
                                 </div>
@@ -307,7 +335,9 @@
             dateForm.disabled = false;
         }
     }
+</script>
 
+<script>
     function removeMargin(){
         let content = document.getElementById("content");
         let checkupInfo = document.getElementById("checkup-print");
@@ -315,7 +345,5 @@
         checkupInfo.hidden = false;
         window.print();
     }
-
 </script>
-
 @endsection
