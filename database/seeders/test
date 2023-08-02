@@ -1,12 +1,17 @@
 <?php
+/*
+kalau nak run, run command ni "php artisan db:seed --class=AllUserTableSeeder"
+ni kalau nak clear database, clear table yang related dengan id lama
+*/
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class DatabaseSeeder extends Seeder
+class AllUserTableSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
     public function run(): void
     {
