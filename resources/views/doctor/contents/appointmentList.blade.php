@@ -90,9 +90,6 @@
                                                                     Confirm
 
                                                                 @elseif ($appointment->status == 2)
-                                                                    Reject
-
-                                                                @elseif ($appointment->status == 3)
                                                                     Cancel
 
                                                                 @else
