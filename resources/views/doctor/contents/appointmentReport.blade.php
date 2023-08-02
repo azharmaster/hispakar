@@ -133,11 +133,13 @@
                                         <tr>
                                             <th>Service Type</th>
                                             <td>
-                                                <select class="form-control" name="serviceid">
+                                                <select class="form-control" name="serviceid" onchange="updatePrice2(this)" required>
+                                                    <option value="" selected disabled>Select Service Type</option>
                                                     @foreach ($medservices as $medservice)
-                                                        <option value="{{ $medservice->id }}">{{ $medservice->type }}</option>
+                                                        <option value="{{ $medservice->id }}:{{ $medservice->type }}" data-price="{{ $medservice->charge }}">{{ $medservice->type }}</option>
                                                     @endforeach
                                                 </select>
+                                                <td style="width: 159px" ><input class="form-control text-right bg-white" type="number" name="serviceTypeCharge"  value="0.00" readonly></td>
                                             </td>
                                         </tr>
                                     </table>
@@ -189,18 +191,18 @@
                                     </table>
                                     <table class="" style="width: 100%">
                                         <tr>
-                                            <td style="width: 130px">
-                                                <button id="addRowButton" name="addRow" type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right">
+                                            <td>
+                                                <button id="addRowButton" name="addRow" type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-left">
                                                     Add Medicine
                                                 </button>
                                             </td>
-                                            <td></td>
+                                            <td style="width: 160px"></td>
                                             <td style="width: 159px"></td>
                                         </tr>
 
                                         
                                         <tr class="text-right">
-                                            <td></td>
+                                            <td style="font-size: 10px; color: red"> *The subtotal include service type</td>
                                             <td>Sub Total &nbsp;</td>
                                             <td><input type="number" id="subtotal" class="form-control bg-white text-right" name="subtotal" value="0" readonly></td>
                                         </tr>
@@ -357,6 +359,18 @@
 
         calculateAmount(row);
     }
+
+    // To get medicine price based on selected input
+    function updatePrice2(selectElement) {
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        var row = selectElement.parentNode.parentNode; // Get the parent row
+        var chargeInput = row.querySelector("input[name='serviceTypeCharge']"); // Get the price input element in the same row
+        var charge = selectedOption.dataset.price;
+        chargeInput.value = charge ? parseFloat(charge).toFixed(2) : "0.00";
+
+        calculateSubtotal();
+    }
+
 </script>
 
 <script>
@@ -500,19 +514,28 @@
 
     // Function to calculate the subtotal
     function calculateSubtotal() {
-      var amountInputs = document.querySelectorAll("input[name='total[]']");
-      var subtotalInput = document.querySelector("input[name='subtotal']");
+        var serviceInputs = document.querySelectorAll("input[name='serviceTypeCharge']");
+        var amountInputs = document.querySelectorAll("input[name='total[]']");
+        var subtotalInput = document.querySelector("input[name='subtotal']");
 
-      var subtotal = 0;
-      amountInputs.forEach(function(input) {
-        subtotal += parseFloat(input.value);
-      });
+        var subtotal = 0;
 
-      // Set the calculated subtotal value
-      subtotalInput.value = subtotal.toFixed(2); // Format subtotal to 2 decimal places
+        // Calculate subtotal based on amount inputs
+        amountInputs.forEach(function(input) {
+            subtotal += parseFloat(input.value);
+        });
 
-      calculateTotal(); // Recalculate the total after updating the subtotal
+        // Add service charges to the subtotal
+        serviceInputs.forEach(function(input) {
+            subtotal += parseFloat(input.value);
+        });
+
+        // Set the calculated subtotal value
+        subtotalInput.value = subtotal.toFixed(2); // Format subtotal to 2 decimal places
+
+        calculateTotal(); // Recalculate the total after updating the subtotal
     }
+
 
     // Call the function initially to calculate the subtotal
     calculateSubtotal();
