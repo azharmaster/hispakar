@@ -37,7 +37,7 @@
                 </li>
 
                 <li class="">
-                    <a href="/doctor/medicines" class="waves-effect waves-dark">
+                    <a href="/doctor/medicineList" class="waves-effect waves-dark">
                     <span class="pcoded-micon">
                     <i class="fas fa-regular fa-capsules"></i>
                     </span>
