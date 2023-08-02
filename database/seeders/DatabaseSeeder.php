@@ -10,120 +10,36 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $usersData = [
+         //dummy data
+         DB::table('users')->insert([
             [
-                'email' => 'ahmad@gmail.com',
                 'name' => 'ahmad',
-                'password' => bcrypt('12345678'),
+                'email' => 'ahmad@gmail.com',
+                'password' => '$2y$10$LFUCdZ0cpEZ8PyD2xkbyrO7z25cE32DlJ4K4EoaSe5N/M38hgAA0G', // Hashed password
                 'usertype' => 1,
-                'ic' => 100,
+                'ic' => 1,
             ],
             [
-                'email' => 'dramin@gmail.com',
-                'name' => 'amin',
-                'password' => bcrypt('12345678'),
+                'name' => 'asyraf',
+                'email' => 'drasyraf@gmail.com',
+                'password' => '$2y$10$LFUCdZ0cpEZ8PyD2xkbyrO7z25cE32DlJ4K4EoaSe5N/M38hgAA0G', // Hashed password
                 'usertype' => 2,
-                'ic' => 200,
+                'ic' => 1,
             ],
             [
-                'email' => 'aisyah@gmail.com',
                 'name' => 'aisyah',
-                'password' => bcrypt('12345678'),
+                'email' => 'aisyah@gmail.com',
+                'password' => '$2y$10$LFUCdZ0cpEZ8PyD2xkbyrO7z25cE32DlJ4K4EoaSe5N/M38hgAA0G', // Hashed password
                 'usertype' => 3,
-                'ic' => 300,
+                'ic' => 1,
             ],
             [
-                'email' => 'siti@gmail.com',
                 'name' => 'siti',
-                'password' => bcrypt('12345678'),
+                'email' => 'siti@gmail.com',
+                'password' => '$2y$10$LFUCdZ0cpEZ8PyD2xkbyrO7z25cE32DlJ4K4EoaSe5N/M38hgAA0G', // Hashed password
                 'usertype' => 4,
-                'ic' => 400,
+                'ic' => 1,
             ],
-        ];
-        
-        foreach ($usersData as $userData) {
-            $email = $userData['email'];
-            $user = DB::table('users')->where('email', $email)->first();
-        
-            if (!$user) {
-                DB::table('users')->insert($userData);
-            }
-        }
-        
-
-        // Check if the user with email 'ahmad@gmail.com' exists
-        $userAhmad = DB::table('admin')->where('email', 'ahmad@gmail.com')->first();
-        if (!$userAhmad) {
-            DB::table('admin')->insert([
-            'name' => 'ahmad',
-            'email' => 'ahmad@gmail.com',
-            'password' => bcrypt('12345678'),
-            'phoneno' => '011198392898',
-            'status' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-            ]);
-        }
-
-        // Check if the user with email 'dramin@gmail.com' exists
-        $userAmin = DB::table('doctor')->where('email', 'dramin@gmail.com')->first();
-        if (!$userAmin) {
-            DB::table('doctor')->insert([
-            'name' => 'amin',
-            'email' => 'dramin@gmail.com',
-            'password' => bcrypt('12345678'),
-            'phoneno' => '01123456754',
-            'deptid' => 1,
-            'education' => 'Respiratory Medicine PhD',
-            'experience' => 'Handle 3 lung surgeries successfully',
-            'roomid' => 1,
-            'gender' => 'male',
-            'ic' => '200',
-            'dob' => '2023-04-12',
-            'status' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-            ]);
-        }
-
-        // Check if the nurse with email 'aisyah@gmail.com' exists
-        $userAisyah = DB::table('nurse')->where('email', 'aisyah@gmail.com')->first();
-        if (!$userAisyah) {
-            DB::table('nurse')->insert([
-            'name' => 'aisyah',
-            'email' => 'aisyah@gmail.com',
-            'password' => bcrypt('12345678'),
-            'phoneno' => '011198322345',
-            'deptid' => 1,
-            'gender' => 'female',
-            'ic' => '300',
-            'dob' => '2023-04-12',
-            'status' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-            ]);
-        }
-
-        // Check if the patient with email 'siti@gmail.com' exists
-        $userSiti = DB::table('patient')->where('email', 'siti@gmail.com')->first();
-        if (!$userSiti) {
-            DB::table('patient')->insert([
-            'name' => 'siti',
-            'ic' => '400',
-            'email' => 'siti@gmail.com',
-            'password' => bcrypt('12345678'),
-            'phoneno' => '01187777826',
-            'address' => 'Shah Alam',
-            'gender' => 'female',
-            'height' => 156,
-            'weight' => 45,
-            'bloodtype' => 'O+',
-            'dob' => '2023-03-12',
-            'age' => 57,
-            'status' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-            ]);
-        }
+        ]);
     }
 }
