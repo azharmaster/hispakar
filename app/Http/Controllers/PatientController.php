@@ -109,12 +109,12 @@ class PatientController extends Controller
         return view('patient.contents.appointmentList', compact('appointments'));
     }
 
-    public function viewAppointmentSummary($id)
+    public function viewReport($id) //id medrecord
     {
         //get the details of current logged in patient
         $patient = Patient::where('email', Auth::user()->email)->first();
 
-        $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription')
+        $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
                 ->where('id', $id)
                 ->first();
         
@@ -141,7 +141,7 @@ class PatientController extends Controller
         }
 
         $medicines = MedRecord::join('medprescription', 'medrecord.aptid', '=', 'medprescription.aptid')
-                    ->where('medrecord.patientid', $patient->id)
+                    ->where('medrecord.id', $id)
                     ->get(); // Use first() instead of get()
 
                 // Now you can access the name property
@@ -161,26 +161,9 @@ class PatientController extends Controller
             ->orderBy('date')
             ->orderBy('time')
             ->first();
-        
-        //get the medservice price based on service id
-        $servicePrice = MedRecord::join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
-                        ->where('medrecord.patientid', $patient->id)
-                        ->first();
 
-        //get the medicine price based on id 
-        $medicinePrice = Medprescription::join('medicine', 'medprescription.medicineid', '=', 'medicine.id')
-                        ->where('medprescription.patientid', $patient->id)
-                        ->first();  
-                        
-        // Get the total invoice for the given medrecordid
-        $totalInvoice = MedInvoice::where('medrecordid', $id)->first();
-
-        $rc = MedRecord::join('doctor', 'medrecord.docid', '=', 'doctor.id')
-            ->join('patient', 'medrecord.patientid', '=', 'patient.id')
-            ->get();
-
-        return view('patient.contents.appointmentSummary', compact('record', 'previousRecord', 'rc', 'prevMedicine', 
-        'medicines', 'upcomingAppointment', 'servicePrice', 'medicinePrice', 'totalInvoice'));
+        return view('patient.contents.report', compact('record', 'previousRecord', 
+        'prevMedicine', 'medicines', 'upcomingAppointment'));
     }
 
     //get the doctor schedule date 

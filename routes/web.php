@@ -43,6 +43,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/patientProfile/{id}', [AdminController::class, 'viewPatientProfile']);
     Route::get('/admin/medrecord', [AdminController::class, 'viewMedRecord']);
 
+    //Report
     Route::get('/admin/report/{id}', [AdminController::class, 'viewReport']);
 
     //Manage profile
@@ -204,7 +205,8 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/patient/medprescription', [PatientController::class, 'viewMedPrescription']);
     //Route::get('/patient/appointmentSummary', [PatientController::class, 'viewAppointmentSummary']);
 
-    Route::get('/patient/appointmentSummary/{id}', [PatientController::class, 'viewAppointmentSummary']);
+    //Record
+    Route::get('/patient/report/{id}', [PatientController::class, 'viewReport']);
 
     //Manage Appoiment
     // Route::post('/patient/appointmentList', [PatientController::class, 'AddAppointment']);

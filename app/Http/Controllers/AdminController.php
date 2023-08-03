@@ -16,6 +16,7 @@ use App\Models\Medicine;
 use App\Models\MedRecord;
 use App\Models\MedService;
 use App\Models\MedPrescription;
+use App\Models\MedInvoice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -459,10 +460,10 @@ class AdminController extends Controller
         return view('admin.contents.medrecord', compact('medrcs'));
     }
 
-    public function viewReport($id)
+    public function viewReport($id) // medrecord table id
     {
        
-        $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription')
+        $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
                 ->where('id', $id)
                 ->first();
 
@@ -489,23 +490,32 @@ class AdminController extends Controller
         }
 
         $medicines = MedPrescription::join('medrecord', 'medrecord.aptid', '=', 'medprescription.aptid')
+        ->where('medrecord.id', $id)
         ->select('medprescription.*', 'medprescription.desc as medicine_desc')
         ->get();
 
-        //get the medservice price based on service id
-        $servicePrice = MedRecord::join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
-        ->first();
+        //get the next appointment record
+        $currentDateTime = Carbon::now();
 
-        //get the medicine price based on id 
-        $medicinePrice = Medprescription::join('medicine', 'medprescription.medicineid', '=', 'medicine.id')
-        ->first();   
-
-        $rc = MedRecord::join('doctor', 'medrecord.docid', '=', 'doctor.id')
-        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
-        ->get();
+        // Get patientid in this medrecord
+        $patientid = MedRecord::where('id', $id)->pluck('patientid')->first();
     
+        $upcomingAppointment = Appointments::where('patientid', $patientid)
+            ->where(function ($query) use ($currentDateTime) {
+                // Get the records that have an appointment after the current date and time
+                $query->where('date', '>', $currentDateTime->toDateString())
+                      ->orWhere(function ($query) use ($currentDateTime) {
+                          $query->where('date', '=', $currentDateTime->toDateString())
+                                ->where('time', '>', $currentDateTime->toTimeString());
+                      });
+            })
+            ->orderBy('date')
+            ->orderBy('time')
+            ->first();
 
-        return view('admin.contents.report', compact('record', 'previousRecord', 'prevMedicine', 'medicines', 'servicePrice', 'medicinePrice'));
+        return view('admin.contents.report', compact(
+            'record','previousRecord','prevMedicine','upcomingAppointment', 
+            'medicines'));
     }
 
     // Manage Doctor

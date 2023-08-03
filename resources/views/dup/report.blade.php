@@ -1,7 +1,3 @@
-@extends('layouts.patient')
-
-@section('content')
-
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -63,11 +59,7 @@
                                     </div>
                                 </div>
                                 <div class="card-block">
-                                <p>Personnel: {{ $record->attendingDoctor->name ?? 'Not Assigned' }}
-
-                                </p>
-
-
+                                    <p>Personnel: {{ $record->attendingDoctor->name ?? 'Not Assigned' }}</p>
                                 </div>
                                 <div class="card-block" id="checkup-info">
                                     <table class="table table-bordered">
@@ -126,7 +118,7 @@
                                         @foreach ($medicines as $medicine)
                                             <tr>
                                                 <th>{{ $medicine->name }}</th>
-                                                <td>{{ $medicine->qty }} pcs</td>
+                                                <td>{{ $medicine->qty }}</td>
                                                 <td colspan="2">{{ $medicine->desc }}</td>
                                             </tr>
                                         @endforeach
@@ -190,8 +182,8 @@
                                                 <td>{{ $counter }}</td>
                                                 <td>{{ $record->medService->type }} &nbsp;(Service Type)</td>
                                                 <td class="text-center" >1</td>
-                                                <td class="text-right" >{{ $servicePrice->charge }}</td>
-                                                <td class="text-right" >{{ $servicePrice->charge }}</td>
+                                                <td class="text-right" >{{ $record->medService->charge }}</td>
+                                                <td class="text-right" >{{ $record->medService->charge }}</td>
                                             </tr>
                                             @foreach ($medicines as $medicine)
                                             <tr>
@@ -213,15 +205,14 @@
                                             <br>
                                             <table class="table">
                                                 <tr>
-                                                    <th colspan=2 class ="border-0">Payment Details</th>
-                                                </tr>
-                                                <tr>
                                                     <td class ="border-0"style="width: 100px">
+                                                        <b>Notes</b><br><br>
                                                         Due Date<br>
                                                         Method<br>
                                                         Status
                                                     </td>
                                                     <td class ="border-0 text-left" >
+                                                        <br><br>
                                                         : &nbsp;{{ \Carbon\Carbon::parse($record->datetime)->format('Y-m-d') }}<br>
                                                         : &nbsp;Cash / Online Banking<br>
                                                         : &nbsp;Paid
@@ -234,22 +225,22 @@
                                         <div class="col-5">
                                             <div class="table-responsive">
                                                 <table class="table">
-                                                <tr>
-                                                    <th class ="border-0"style="width:50%">Subtotal</th>
-                                                    <td class ="border-0 text-right" >{{ number_format($totalInvoice->subtotal, 2) }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Tax</th>
-                                                    <td class ="text-right" >{{ number_format($totalInvoice->tax, 2) }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Discount</th>
-                                                    <td class ="text-right" >{{ number_format($totalInvoice->discount, 2) }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Total</th>
-                                                    <td class ="text-right" >{{ number_format($totalInvoice->totalcost, 2) }}</td>
-                                                </tr>
+                                                    <tr>
+                                                        <th class ="border-0"style="width:50%">Subtotal</th>
+                                                        <td class ="border-0 text-right" >{{ number_format($record->medInvoice->subtotal, 2) }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Tax</th>
+                                                        <td class ="text-right" >{{ number_format($record->medInvoice->tax, 2) }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Discount</th>
+                                                        <td class ="text-right" >{{ number_format($record->medInvoice->discount, 2) }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Total</th>
+                                                        <td class ="text-right" >{{ number_format($record->medInvoice->totalcost, 2) }}</td>
+                                                    </tr>
                                                 </table>
                                             </div>
                                         </div>
@@ -269,28 +260,6 @@
         </div>
     </div>
 </div>
-
-<!-- delete Patient form -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Patient</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p style="font-size: 15px;"> Are you sure want to delete this user? </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger waves-effect waves-light ">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end delete Patient form -->
 
 <script>
     var table = document.getElementById("medTable");
@@ -346,4 +315,4 @@
         window.print();
     }
 </script>
-@endsection
+

@@ -63,4 +63,9 @@ class MedRecord extends Model
         return $this->belongsTo(MedPrescription::class, 'medprescription_id');
     }
 
+    public function medInvoice()
+    {
+        return $this->hasOne(MedInvoice::class, 'medrecordid');
+    }
+
 }
