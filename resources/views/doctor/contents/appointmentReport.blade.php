@@ -136,7 +136,7 @@
                                                 <select class="form-control" name="serviceid" onchange="updatePrice2(this)" required>
                                                     <option value="" selected disabled>Select Service Type</option>
                                                     @foreach ($medservices as $medservice)
-                                                        <option value="{{ $medservice->id }}:{{ $medservice->type }}" data-price="{{ $medservice->charge }}">{{ $medservice->type }}</option>
+                                                        <option value="{{ $medservice->id }}" data-price="{{ $medservice->charge }}">{{ $medservice->type }}</option>
                                                     @endforeach
                                                 </select>
                                                 <td style="width: 159px" ><input class="form-control text-right bg-white" type="number" name="serviceTypeCharge"  value="0.00" readonly></td>
