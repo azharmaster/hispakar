@@ -193,8 +193,8 @@
                                                 $isCurrentTimeInRange = $currentTime->between($startTime, $endTime);
                                             @endphp
                                             <div class="align-middle m-b-25">
-                                                <a href="/doctor/appointmentReport/{{ $aptD->appointment_id }}">
-                                                <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                                @if ($aptD->appointment_status == '2')
+                                                    <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
                                                     <div class="d-inline-block">
                                                         <h6>{{ $aptD->name }}</h6>
                                                         <p class="text-muted m-b-0">Consultation</p>
@@ -232,7 +232,48 @@
                                                             </button>
                                                         @endif
                                                     </div>
-                                                </a>
+                                                @else
+                                                    <a href="/doctor/appointmentReport/{{ $aptD->appointment_id }}">
+                                                    <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                                        <div class="d-inline-block">
+                                                            <h6>{{ $aptD->name }}</h6>
+                                                            <p class="text-muted m-b-0">Consultation</p>
+                                                            
+                                                            @if ($aptD->appointment_status == '2')
+                                                                <span class="status badge badge-danger mb-2 align-top" style="font-size: 11px;">Cancel</span>
+                                                            @else
+                                                                @php
+                                                                    // Convert the appointment time to Carbon objects for start and end times
+                                                                    $startTime = \Carbon\Carbon::createFromFormat('H:i:s', $aptD->time);
+                                                                    $endTime = $startTime->copy()->addMinutes(30); // Assuming each appointment is 30 minutes
+
+                                                                    // Check if the appointment is in the past, ongoing, or in the future
+                                                                    $currentTime = \Carbon\Carbon::now('Asia/Kuala_Lumpur');
+                                                                    $isPastAppointment = $currentTime->greaterThan($endTime);
+                                                                    $isCurrentTimeInRange = $currentTime->between($startTime, $endTime);
+                                                                @endphp
+
+                                                                <button class="status btn btn-sm
+                                                                    @if ($isPastAppointment)
+                                                                        btn-danger
+                                                                    @elseif ($isCurrentTimeInRange)
+                                                                        btn-success
+                                                                    @else
+                                                                        btn-warning
+                                                                    @endif
+                                                                    mb-2 align-top">
+                                                                    @if ($isPastAppointment)
+                                                                        Appointment Passed
+                                                                    @elseif ($isCurrentTimeInRange)
+                                                                        Now
+                                                                    @else
+                                                                        Next: {{ $startTime->format('h:i A') }} - {{ $endTime->format('h:i A') }}
+                                                                    @endif
+                                                                </button>
+                                                            @endif
+                                                        </div>
+                                                    </a>
+                                                @endif
                                             </div>
                                         @endforeach
                                     @endif
@@ -246,6 +287,7 @@
                             </div>
                         </div>
                         
+                        <!--apt attendance statistic -->
                         <div class="col-md-12 col-xl-6">
                             <div class="card sale-card  custom-card" style="height: 450px">
                                 <div class="card-header">
@@ -258,55 +300,51 @@
                                 </div>
                             </div>
                         </div>
-    
-    
-                        <!-- <div class="col-md-12 col-xl-6">
+                        <!--/apt attendance statistic -->
+
+                       
+                        <div class="col-xl-4 col-md-6">
+                            <!-- patient by gender -->
                             <div class="card latest-update-card">
+                                @php
+                                    $totalPopulation = $totalmale + $totalfemale;
+                                    $malePercentage = intval($totalPopulation > 0 ? ($totalmale / $totalPopulation) * 100 : 0);
+                                @endphp
+
                                 <div class="card-header">
                                     <h5>Patients by Gender</h5>
                                 </div>
+
                                 <div class="card-block">
-                                    <div class="row p-t-10 p-b-10">
-                                        
-                                        <div class="col">
+                                    <div class="row">
+                                        <div class="col mb-4 text-center d-flex justify-content-center">
                                             <canvas id="chartByGender" style="max-width: 100px"></canvas>
                                         </div>
+                                    </div>
 
-                                        
-                                        <div class="col mt-3">
-                                            <div>
-                                                <div class="d-flex justify-content-between mr-4">
-                                                    <i class="fas fa-male mr-2 text-primary" style="font-size:  21px"></i> {{ $totalmale }}
-                                                </div>
-                                                <br>
-                                                <div class="d-flex justify-content-between mr-4">
-                                                    <i class="fas fa-female mr-2" style="font-size:  21px; color: #FF69B4;"></i> {{ $totalfemale }}
-                                                </div>
+                                    <div class="row">
+                                        <div class="col-6 d-flex justify-content-center">
+                                            <div class="s-caption mt-2 mr-2"><i class="fas fa-female mr-2" style="font-size:  22px; color: #FF69B4;"></i></div>
+                                            <div class="s-cont d-inline-block">
+                                                <h5 class="f-w-700 m-b-0">{{ $totalfemale }}</h5>
+                                                <p class="m-b-0">Female</p>
                                             </div>
                                         </div>
-
+                                        <div class="col-6 b-l-default d-flex justify-content-center">
+                                            <div class="s-caption mt-2 mr-2"><i class="fas fa-male mr-2 text-primary" style="font-size:  22px"></i></div>
+                                            <div class="s-cont d-inline-block">
+                                                <h5 class="f-w-700 m-b-0">{{ $totalmale }}</h5>
+                                                <p class="m-b-0">Male</p>
+                                            </div>
+                                        </div>
+                                        <!-- col -->
                                     </div>
                                 </div>
                             </div>
-
-                        </div> -->
-
-                        <div class="col-md-12 col-xl-6">
-                            <div class="card sale-card " style="height: 450px;">
-                                <div class="card-header">
-                                    <h5>Patients by Age</h5>
-                                </div>
-                                <div class="card-block">
-                                    <div>
-                                        <canvas id="chartByAge"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                       
-                        <!-- Med Supply -->
-                        <div class="col-xl-4 col-md-12">
-                            <div class="card latest-update-card card-outline card-border-primary custom-thinner-outline"  style="height: 450px">
+                            <!-- /patient by gender -->
+                            
+                            <!-- medicine -->
+                            <div class="card latest-update-card" >
                                 <div class="card-header">
                                     <h5>Medicine Supply</h5>
                                     <div class="card-header-right">
@@ -356,14 +394,27 @@
                                 </div>
                                 <!-- End card block-->
                             </div>
-                            <!-- End card -->
-                        </div>   
-                        <!-- End col Med Supply -->
-    
+                            <!-- medicine -->
+                        </div>
+                        <!-- End Latest Activity -->
 
+                        <!-- <div class="col-md-12 col-xl-6">
+                            <div class="card sale-card " style="height: 450px;">
+                                <div class="card-header">
+                                    <h5>Patients by Age</h5>
+                                </div>
+                                <div class="card-block">
+                                    <div>
+                                        <canvas id="chartByAge"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                       
+                       
                         <!-- Calendar -->
                         <div class="col-xl-8 col-md-12 ">
-                            <div class="card">
+                            <div class="card" style="min-height: 600px">
                                 <div class="card-header">
                                     <h5 class="m-b-5">Calendar</h5>
                                     <div class="card-block p-b-0">
@@ -377,7 +428,6 @@
                             </div>
                         </div>
                         <!-- End Calendar -->
-    
     
                     </div>
     
