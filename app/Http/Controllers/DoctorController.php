@@ -75,7 +75,9 @@ class DoctorController extends Controller
         // ->select('appointment.*')
         // ->count();
 
-        $totalPatient = Patient::all()->count();
+        $totalPatient = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
+        ->where('medrecord.docid', $doctor->id)
+        ->count();
 
         // Get the most recent patient's created_at timestamp
         $latestPatient = Patient::orderBy('created_at', 'desc')->first();
@@ -98,9 +100,10 @@ class DoctorController extends Controller
         $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
 
         //appointment list today
-        $aptDs = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        $aptDs = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
+        ->join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.status as appointment_status','appointment.*', 'patient.*')
+        ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.status as appointment_status','medrecord.status as medrecord_status', 'appointment.*', 'patient.*')
         ->where('doctor.id', $doctorId)
         ->whereDate('appointment.date', $currentDate) 
         ->orderBy('appointment.time', 'asc')
@@ -168,13 +171,17 @@ class DoctorController extends Controller
 
         //patient by gender
         $totalmale = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
+                    //->join('appointment', 'appointment.patientid', '=', 'patient.id')
                     ->where('patient.gender', 'male')
-                    ->where('medrecord.docid', $doctor->id)
+                     ->where('medrecord.docid', $doctor->id)
+                    //->where('appointment.deptid', $doctor->deptid)
                     ->count();
 
         $totalfemale = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
+        //->join('appointment', 'appointment.patientid', '=', 'patient.id')
                     ->where('patient.gender', 'female')
-                    ->where('medrecord.docid', $doctor->id)
+                     ->where('medrecord.docid', $doctor->id)
+                    //->where('appointment.deptid', $doctor->deptid)
                     ->count();
         
         //Age
@@ -356,10 +363,11 @@ class DoctorController extends Controller
         }
 
         // To join tables and retrieve the appointment list based on the doctor's ID
-        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        $appointments = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
+            ->join('patient', 'appointment.patientid', '=', 'patient.id')
             ->join('doctor', 'appointment.docid', '=', 'doctor.id')
             ->join('department', 'appointment.deptid', '=', 'department.id')
-            ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+            ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.status as medrecord_status')
             ->where('doctor.id', $doctor->id)
             ->where('appointment.deptid', $doctor->deptid)
             ->where('appointment.status', 1)
@@ -412,10 +420,11 @@ class DoctorController extends Controller
         }
     
         // To join tables and retrieve the appointment list based on the doctor's ID
-        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        $appointments = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
+            ->join('patient', 'appointment.patientid', '=', 'patient.id')
             ->join('doctor', 'appointment.docid', '=', 'doctor.id')
             ->join('department', 'appointment.deptid', '=', 'department.id')
-            ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+            ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.status as medrecord_status')
             ->where('appointment.status', 1)
             ->where('doctor.id', $doctor->id)
             ->where('appointment.deptid', $doctor->deptid)
@@ -771,6 +780,7 @@ class DoctorController extends Controller
         // Insert data into medrecord table
         $medRec = new MedRecord();
         $medRec->aptid = $id;
+        $medRec->status = 1;
         $medRec->serviceid = $request->input('serviceid');
         $medRec->desc = $request->input('desc')['med_record'];
         $medRec->datetime = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
@@ -864,7 +874,7 @@ class DoctorController extends Controller
             $apt->save();
         }
 
-        return redirect('/doctor/appointmentList')->with('success', 'Successfully inserted');
+        return redirect('/doctor/dashboard')->with('success', 'Successfully inserted');
     }
 
     public function filterReportList(Request $request)

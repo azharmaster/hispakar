@@ -66,7 +66,7 @@
                                                     <th>Dept Name</th>
                                                     <th>Date-Time</th>
                                                     <th>Description</th>
-                                                    <th style="width: 80px;">Action</th>
+                                                    <th style="width: 100px;">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -83,27 +83,39 @@
                                                             <td>{{ $appointment->dept_name }}</td>
                                                             <td>{{ $appointment->date }} {{ $appointment->time }}</td>
                                                             <td>
-                                                                @if($appointment->status == 0)
-                                                                    Pending
+                                                                @switch($appointment->status)
+                                                                    @case(0)
+                                                                        Pending
+                                                                        @break
+                                                                    @case(1)
+                                                                        @if ($appointment->medrecord_status == 1)
+                                                                            <span class="status badge badge-primary mb-2 align-top" style="font-size: 11px;">Done</span>
+                                                                        @else
+                                                                            Confirm
+                                                                        @endif
+                                                                        @break
+                                                                    @case(2)
+                                                                        Cancel
+                                                                        @break
+                                                                    @default
+                                                                        {{ $appointment->status }}
+                                                                @endswitch
+                                                            </td>
 
-                                                                @elseif ($appointment->status == 1)
-                                                                    Confirm
-
-                                                                @elseif ($appointment->status == 2)
-                                                                    Cancel
+                                                            <td>
+                                                                @if ($appointment->medrecord_status == 1)
+                                                                    <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="View Appointment Record">
+                                                                        <i style="font-size:20px;" class="fas fa-eye f-w-600 f-16 m-r-15 text-c-yellow"></i>
+                                                                    </a>
 
                                                                 @else
-                                                                    {{ $appointment->status }}
-                                                                    
+                                                                    <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="Add Appointment Record">
+                                                                        <i style="font-size:20px;" class="fas fa-plus f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                    </a>
+                                                                    <!-- <a href="/doctor/appointmentList/{{ $appointment->id }}" title="Delete Room" data-target="#deleteModal-{{ $appointment->id }}" data-toggle="modal">
+                                                                        <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>
+                                                                    </a> -->
                                                                 @endif
-                                                            </td>
-                                                             <td>
-                                                                <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="Add Appointment Record">
-                                                                    <i style="font-size:20px;" class="fas fa-plus f-w-600 f-16 m-r-15 text-c-green"></i>
-                                                                </a>
-                                                                <a href="/doctor/appointmentList/{{ $appointment->id }}" title="Delete Room" data-target="#deleteModal-{{ $appointment->id }}" data-toggle="modal">
-                                                                    <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>
-                                                                </a>
                                                             </td>
                                                         </tr>
                                                     @endforeach

@@ -19,7 +19,7 @@
                     <i class="feather icon-home bg-c-blue"></i>
                     <div class="d-inline">
                         <h5>Welcome, {{ $name }}!</h5>
-                        <span>Current room: {{ $roomName }}</span>
+                        <span>Room: {{ $roomName }}</span>
                     </div>
                 </div>
             </div>
@@ -42,57 +42,71 @@
                 <div class="page-body">
     
                     <div class="row">
-    
-                        <div class="col-md-4">
+                        <div class="col-md-4 mr-0 ml-0">
                             <div class="card comp-card">
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col">
-                                            <h6 class="m-b-25">Appointments</h6>
-                                            <h3 class="f-w-700 text-c-blue"> {{ $totalApt }}</h3>
-                                            <p class="m-b-0">Last Updated: {{ $timeDifference }}</p>
+                                            <h6 class="m-b-20 f-w-600">Appointments</h6>
+                                            
+                                            <div class="row d-flex justify-content-between ">
+                                                <h2 class="f-w-700 text-c-blue ml-3">{{ $totalApt }}</h2>
+                                                <i class="fas fa-calendar-check bg-c-blue" style="margin-top: -8px; margin-right: -18px"></i>
+                                            </div>
+                                            
+                                            <p class="m-b-0 mt-2">Last Updated: {{ $timeDifference }}</p>
+                
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar-check bg-c-blue"></i>
-                                        </div>
+                                        <div class="col-auto"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-    
-                        <div class="col-md-4">
+                        <!-- ./card -->
+
+                        <div class="col-md-4 mr-0 ml-0">
                             <div class="card comp-card">
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col">
-                                            <h6 class="m-b-25">Patients</h6>
-                                            <h3 class="f-w-700 text-c-green">{{ $totalPatient }}</h3>
-                                            <p class="m-b-0">Last Updated: {{ $timePDifference }}</p>
+                                            <h6 class="m-b-20 f-w-600">Patients</h6>
+                                            
+                                            <div class="row d-flex justify-content-between ">
+                                                <h2 class="f-w-700 text-c-green ml-3">{{ $totalPatient }}</h2>
+                                                <i class="fas fa-hospital-user bg-c-green" style="margin-top: -8px; margin-right: -18px"></i>
+                                            </div>
+                                            
+                                            <p class="m-b-0 mt-2">Last Updated: {{ $timePDifference }}</p>
+            
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-plus-square bg-c-green"></i>
-                                        </div>
+                                        <div class="col-auto"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-    
-                        <div class="col-md-4">
+                        <!-- ./card -->
+
+                        <div class="col-md-4 mr-0 ml-0">
                             <div class="card comp-card">
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col">
-                                            <h6 class="m-b-25">Nurses</h6>
-                                            <h3 class="f-w-700 text-c-red">{{ $totalNurse }}</h3>
-                                            <p class="m-b-0">Last Updated: {{ $timeNDifference }}</p>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-home bg-c-red"></i>
-                                        </div>
+                                            <h6 class="m-b-20 f-w-600">Nurses</h6>
+                                            
+                                            <div class="row d-flex justify-content-between ">
+                                                <h2 class="f-w-700 text-c-red ml-3">{{ $totalNurse }}</h2>
+                                                <i class="fas fa-stethoscope bg-c-red" style="margin-top: -8px; margin-right: -18px"></i>
+                                            </div>
+                                            
+                                            <p class="m-b-0 mt-2">Last Updated: {{ $timeNDifference }}</p>
+                
+                                            </div>
+                                        <div class="col-auto"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- ./card -->
     
                          <!-- Start Table -->
                          <!-- <div class="col-md-6">
@@ -162,16 +176,6 @@
                             <div class="card new-cust-card" style="height: 450px">
                                 <div class="card-header">
                                     <h5>Today's Appointment / {{ $currentDate }}</h5>
-                                    <!-- <div class="card-header-right">
-                                        <ul class="list-unstyled card-option">
-                                            <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
-                                            <li><i class="feather icon-maximize full-card"></i></li>
-                                            <li><i class="feather icon-minus minimize-card"></i></li>
-                                            <li><i class="feather icon-refresh-cw reload-card"></i></li>
-                                            <li><i class="feather icon-trash close-card"></i></li>
-                                            <li><i class="feather icon-chevron-left open-card-option"></i></li>
-                                        </ul>
-                                    </div> -->
                                 </div>
     
                                 <div class="card-block p-b-0">
@@ -193,6 +197,7 @@
                                                 $isCurrentTimeInRange = $currentTime->between($startTime, $endTime);
                                             @endphp
                                             <div class="align-middle m-b-25">
+                                                <!-- if apt status = 2 (cancel), button add apt record takde -->
                                                 @if ($aptD->appointment_status == '2')
                                                     <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
                                                     <div class="d-inline-block">
@@ -200,7 +205,7 @@
                                                         <p class="text-muted m-b-0">Consultation</p>
                                                         
                                                         @if ($aptD->appointment_status == '2')
-                                                            <span class="status badge badge-danger mb-2 align-top" style="font-size: 11px;">Cancel</span>
+                                                            <span class="status badge badge-danger mb-2 align-top" style="font-size: 12px;">Cancel</span>
                                                         @else
                                                             @php
                                                                 // Convert the appointment time to Carbon objects for start and end times
@@ -232,6 +237,18 @@
                                                             </button>
                                                         @endif
                                                     </div>
+
+                                                <!-- if medrecord status = 1 (done), Dr dah siap isi medical record & akan keluar badge done -->
+                                                @elseif ($aptD->medrecord_status == '1')
+                                                    <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                                        <div class="d-inline-block">
+                                                            <h6>{{ $aptD->name }}</h6>
+                                                            <p class="text-muted m-b-0">Consultation</p>
+                                                            
+                                                            <span class="status badge badge-primary mb-2 align-top" style="font-size: 12px;">Done</span>
+                                                        </div>
+                                                    </a>
+
                                                 @else
                                                     <a href="/doctor/appointmentReport/{{ $aptD->appointment_id }}">
                                                     <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
@@ -240,7 +257,7 @@
                                                             <p class="text-muted m-b-0">Consultation</p>
                                                             
                                                             @if ($aptD->appointment_status == '2')
-                                                                <span class="status badge badge-danger mb-2 align-top" style="font-size: 11px;">Cancel</span>
+                                                                <span class="status badge badge-danger mb-2 align-top" style="font-size: 12px;">Cancel</span>
                                                             @else
                                                                 @php
                                                                     // Convert the appointment time to Carbon objects for start and end times
@@ -389,7 +406,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
-                                        <a href="/doctor/medicines" class="btn btn-primary2 waves-effect" data-dismiss="modal">See All</a>
+                                        <a href="/doctor/medicineList" class="btn btn-primary2 waves-effect" data-dismiss="modal">See All</a>
                                     </div>
                                 </div>
                                 <!-- End card block-->

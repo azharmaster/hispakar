@@ -122,7 +122,8 @@
 
                                 <input type="hidden" name="id" value="{{ $appointment->id }}">
                                 <input type="hidden" name="patientid" value="{{ $appointment->patient->id }}">
-
+                                <input type="hidden" name="status" id="status">
+                                
                                 <div class="card-header">
                                     <h5>Check Up Description</h5>
                                     <span>Description of Patient's health </span>
@@ -238,6 +239,7 @@
                                         </div>
                                     </div>
     
+
                                     <div class="form-group row">
                                         <div class="col">
                                             <button name="submit" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right">
