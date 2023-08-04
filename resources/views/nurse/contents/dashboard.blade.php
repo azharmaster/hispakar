@@ -151,7 +151,7 @@
 
                     <!-- Start Table -->
                     <div class="col-md-8">
-                      <div class="card table-card card-outline card-border-primary custom-thinner-outline" style="height: 450px">
+                      <div class="card table-card card-outline card-border-primary custom-thinner-outline">
                         <div class="card-header">
                         <h5>Today's Appointments /  {{ $currentDate }}</h5>
                           <div class="card-header-right">

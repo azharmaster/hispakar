@@ -179,10 +179,11 @@ class NurseController extends Controller
         // Add $currentDate variable here
         $currentDate = Carbon::today()->toDateString();
 
-        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        $appointments = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
+                        ->join('patient', 'appointment.patientid', '=', 'patient.id')
                         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
                         ->join('department', 'appointment.deptid', '=', 'department.id')
-                        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+                        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.status as medrecord_status')
                         ->where('appointment.deptid', $nurse->deptid)
                         ->get();    
 

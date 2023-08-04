@@ -101,12 +101,21 @@
                                                                 @endif
                                                             </td>
                                                              <td>
-                                                             <a title="Edit Appointment" data-toggle="modal" data-target="#editModal-{{ $appointment->id }}">
-                                                                    <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
-                                                                </a>
-                                                                <a href="/admin/appointmentList/{{ $appointment->id }}" title="Delete Appointment" data-target="#deleteModal-{{ $appointment->id }}" data-toggle="modal">
-                                                                    <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>
-                                                                </a>
+                                                                @if ($appointment->medrecord_status == 1)
+                                                                    <span class="status badge badge-primary mb-2 align-top" style="font-size: 11px;">Done</span>
+
+                                                                @elseif ($appointment->status == 2)
+                                                                    <span class="status badge badge-danger mb-2 align-top" style="font-size: 11px;">Appointment Cancelled</span>
+
+                                                                @else
+                                                                    <a title="Edit Appointment" data-toggle="modal" data-target="#editModal-{{ $appointment->id }}">
+                                                                        <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                    </a>
+                                                                    <a href="/admin/appointmentList/{{ $appointment->id }}" title="Delete Appointment" data-target="#deleteModal-{{ $appointment->id }}" data-toggle="modal">
+                                                                        <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>
+                                                                    </a>
+
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach
