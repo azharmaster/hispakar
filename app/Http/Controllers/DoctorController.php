@@ -874,7 +874,7 @@ class DoctorController extends Controller
             $apt->save();
         }
 
-        return redirect('/doctor/dashboard')->with('success', 'Successfully inserted');
+        return redirect('/doctor/dashboard')->with('success', 'Medical record successfully saved!');
     }
 
     public function filterReportList(Request $request)
