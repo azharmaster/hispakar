@@ -63,7 +63,6 @@
                                     </button>
                                 </div>
                                 <div class="card-block">
-                                
                                     <div class="dt-responsive table-responsive">
                                         <table id="dataTable1" class="table table-bordered">
                                             <thead class="text-left">
@@ -71,24 +70,24 @@
                                                     <th style="width: 10px;">#</th>
                                                     <th>Doctor Name</th>
                                                     <th>Patient Name</th>
-                                                    <th>Dept Name</th>
+                                                    <th>IC</th>
                                                     <th>Date-Time</th>
                                                     <th>Status</th>
                                                     <th style="width: 10px;">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="text-left">
-                                            @if ( $appointments->isEmpty() )
-                                                        <tr>
-                                                            <td>No data available</td>
-                                                        </tr>
-                                                    @else
-                                                        @foreach($appointments as $appointment)
+                                                @if ( $appointments->isEmpty() )
+                                                    <tr>
+                                                        <td>No data available</td>
+                                                    </tr>
+                                                @else
+                                                    @foreach($appointments as $appointment)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $appointment->doctor_name }}</td>
                                                             <td>{{ $appointment->patient_name }}</td>
-                                                            <td>{{ $appointment->dept_name }}</td>
+                                                            <td>{{ $appointment->patient_ic }}</td>
                                                             <td>{{ $appointment->date }} {{ $appointment->time }}</td>
                                                             <td>
                                                                 @if ($appointment->status === 1) 
@@ -97,15 +96,18 @@
                                                                     Cancel
                                                                 @else
                                                                     Pending
-                                                                     
+                                                                        
                                                                 @endif
                                                             </td>
-                                                             <td>
+                                                            <td>
                                                                 @if ($appointment->medrecord_status == 1)
                                                                     <span class="status badge badge-primary mb-2 align-top" style="font-size: 11px;">Done</span>
 
                                                                 @elseif ($appointment->status == 2)
-                                                                    <span class="status badge badge-danger mb-2 align-top" style="font-size: 11px;">Appointment Cancelled</span>
+                                                                    <span class="status badge badge-danger mb-2 align-top" style="font-size: 11px;">Cancelled</span>
+
+                                                                @elseif ($appointment->date < $currentDate)
+                                                                    <span class="status badge badge-warning mb-2 align-top" style="font-size: 11px;">No Action</span>
 
                                                                 @else
                                                                     <a title="Edit Appointment" data-toggle="modal" data-target="#editModal-{{ $appointment->id }}">
@@ -114,13 +116,11 @@
                                                                     <a href="/admin/appointmentList/{{ $appointment->id }}" title="Delete Appointment" data-target="#deleteModal-{{ $appointment->id }}" data-toggle="modal">
                                                                         <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>
                                                                     </a>
-
                                                                 @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach
-                                            @endif
-                                                
+                                                @endif  
                                             </tbody>
                                         </table>
                                     </div>
@@ -205,7 +205,6 @@
 </div>
 <!-- end Add Appointments form -->
 
-
 @foreach ($appointments as $appointment)
 <!-- Edit Appointments form -->
 <div class="modal fade" id="editModal-{{ $appointment->id }}" tabindex="-1" role="dialog">
@@ -280,7 +279,6 @@
 </div>
 <!-- end edit Patient form -->
 @endforeach
-
 
 <!-- delete Patient form -->
 @foreach ($appointments as $appointment)

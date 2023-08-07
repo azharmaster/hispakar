@@ -95,7 +95,7 @@ class NurseController extends Controller
         ->where('appointment.deptid', $nurse->deptid)
         ->whereDate('appointment.date', $currentDate) 
         ->orderBy('appointment.time', 'asc')
-        ->take(5)
+        // ->take(5)
         ->get();
 
 
@@ -183,7 +183,7 @@ class NurseController extends Controller
                         ->join('patient', 'appointment.patientid', '=', 'patient.id')
                         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
                         ->join('department', 'appointment.deptid', '=', 'department.id')
-                        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.status as medrecord_status')
+                        ->select('appointment.*', 'patient.name as patient_name', 'patient.ic as patient_ic', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.status as medrecord_status')
                         ->where('appointment.deptid', $nurse->deptid)
                         ->get();    
 
