@@ -97,10 +97,11 @@
                                 <h6 class="m-b-25">Your Doctor</h6>
                                 <div class="row align-items-center">
                                   <div class="col-auto">
-                                    <img src="../files/assets/images/avatar-4-1.jpg" class="img-radius" style="width: 90px; height: 90px;">
+                                    <img src="{{ $listDoctor->image ? asset('storage/profilePic/' . $listDoctor->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" class="img-radius" style="width: 90px; height: 90px;">
+                                    <!-- <img src="{{ asset('storage/profilePic/avatar-4-1.jpg') }}" class="img-radius" style="width: 90px; height: 90px;"> -->
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5">{{$listDoctor->name}}</h6>
+                                    <h6 class="m-b-5">{{$listDoctor->name}} </h6>
                                     <p class="m-b-5">Contact: {{$listDoctor->phoneno}}</p>
                                     <h6 class="m-b-25"><span class="badge badge-primary">{{$listDoctor->dept_name}}</span></h6>
                                   </div>
@@ -134,10 +135,7 @@
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      <!-- Med Supply -->
-                      <div class="col-xl-4 col-md-8">
                         <div class="card latest-update-card">
                           <div class="card-header">
                             <h5>Previous Medicine</h5>
@@ -175,14 +173,34 @@
                             </div>
                           </div>
                         </div>
-                      </div>   
-                      <!-- End Med Supply -->
+                      </div>
+
+                    
+
+                       <!-- Calendar -->
+                       <div class="col-xl-8 col-md-12 ">
+                        <div class="card">
+                            <div class="card-header">
+                            <h5 class="m-b-5">Doctor's Appointments</h5>
+                              <div class="card-block p-b-0">
+                                  <div class="row m-b-50">
+                                      <div class="col">
+                                      <div id="calendar"></div>
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      <!-- End Calendar -->
+
+                     
 
                       <!-- Latest Activity -->
                       <div class="col-xl-4 col-md-6">
                         <div class="card latest-update-card">
                           <div class="card-header">
-                            <h5>Notifcation</h5>
+                            <h5>Notification</h5>
                             <div class="card-header-right">
                               <ul class="list-unstyled card-option">
                                 <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
@@ -217,7 +235,7 @@
                       <!-- End Latest Activity -->
 
                       <!-- Start Table -->
-                      <div class="col-md-6">
+                      <div class="col-md-8">
                       
 
                         <div class="card table-card history">
@@ -264,22 +282,7 @@
                       </div>
                       <!-- End table -->
 
-                      <!-- Calendar -->
-                      <div class="col-xl-6 col-md-12 ">
-                        <div class="card">
-                            <div class="card-header">
-                            <h5 class="m-b-5">Doctor's Appointments</h5>
-                              <div class="card-block p-b-0">
-                                  <div class="row m-b-50">
-                                      <div class="col">
-                                      <div id="calendar"></div>
-                                      </div>
-                                  </div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-                      <!-- End Calendar -->
+                     
                     </div>
                   </div>
                 </div>
@@ -363,14 +366,8 @@
                           <th>Name</th>
                           <td>{{ $listmedicine->name }}</td>
                         </tr>
-                        <tr>
-                          <th>Stock left</th>
-                          <td>{{ $listmedicine->stock }}</td>
-                        </tr>
-                        <tr>
-                          <th>Price per item</th>
-                          <td>RM {{ number_format($listmedicine->price, 2) }}</td>
-                        </tr>
+                        
+                       
                         <tr>
                           <th>Description</th>
                           <td>{{ $listmedicine->desc }}</td>

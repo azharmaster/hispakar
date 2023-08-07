@@ -21,11 +21,11 @@
         <div class="row align-items-end">
             <div class="col-lg-8">
                 <div class="page-header-title">
-                    <i class="fas fa-regular fa-calendar-check bg-c-blue"></i>
+                    <i class="fas fa-regular fa-history bg-c-blue"></i>
                     <!-- <i class="feather icon-home bg-c-blue"></i> -->
                     <div class="d-inline">
-                        <h5>Medical Record</h5>
-                        <span>Below is the list of all Medical Record.</span>
+                        <h5>Medical History</h5>
+                        <span>Below is the list of all Medical History.</span>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="doctor.php">Medical Record</a>
+                            <a href="doctor.php">Medical History</a>
                         </li>
                     </ul>
                 </div>
@@ -55,7 +55,7 @@
                             <!-- Start Table -->
                             <div class="card">
                                 <div class="card-header">
-                                <h5 id="tableTitle" >List of Medical Record</h5>
+                                <h5 id="tableTitle" >List of Medical History</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
                                     <!-- <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
                                         <i class="fas fa-solid fa-plus"></i>
@@ -71,9 +71,7 @@
                                                     <th>#</th>
                                                     <th>Service Type</th>
                                                     <th>Desc</th>
-                                                    <th>Img</th>
                                                     <th>Date Time</th>
-                                                    <th>Total Cost</th>
                                                     <th>Doctor</th>
                                                     <th>Action</th>
                                                     <!-- <th style="width: 80px;">Action</th> -->
@@ -91,13 +89,11 @@
                                                             
                                                             <td>{{ $medrc->service_type }}</td>
                                                             <td>{{ $medrc->desc }}</td>
-                                                            <td></td>
                                                             <td>{{ $medrc->datetime }}</td>
-                                                            <td>{{ $medrc->totalcost }}</td>
                                                             <td>{{ $medrc->doctor_name }}</td>
                                                             <td> 
-                                                                <a href="/patient/report/{{ $medrc->id }}" title="Download Appointment Record">
-                                                                    <i style="font-size:20px;" class="fas fa-download f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                <a href="/patient/report/{{ $medrc->id }}" title="Invoice Record">
+                                                                    <i style="font-size:20px;" class="fas fa-eye f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                 </a>
                                                             </td>
                                                         </tr>

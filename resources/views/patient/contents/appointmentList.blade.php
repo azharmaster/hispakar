@@ -84,6 +84,10 @@
                                                         </tr>
                                                     @else
                                                         @foreach($appointments as $appointment)
+
+                                                        @php
+                                                            $currentDate = now()->format('Y-m-d');
+                                                        @endphp
                                                         <tr style="text-align: center;">
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $appointment->doctor_name }}</td>
@@ -103,16 +107,14 @@
                                                                 @if($appointment->status === 2)
                                                                 <span class="badge badge-danger">Cancel</span>
                                                                 @else
-                                                                    @if($appointment->date > '2023-07-25')
-                                                                    <!-- <a href="/patient/appointmentList/{{ $appointment->id }}" title="Cancel Appointment" class="btn btn-danger" data-target="#cancelModal-{{ $appointment->id }}" data-toggle="modal">
-                                                                    <i class="fas fa-times"></i></a> -->
+                                                                    @if($appointment->date > $currentDate)
 
                                                                     <a title="Cancel Appointment" data-toggle="modal" class="btn btn-danger" data-target="#cancelModal-{{ $appointment->id }}">
-                                                                    <i class="fas fa-times"></i>
+                                                                    Cancel <i class="fas fa-times"></i>
                                                                     </a>
                                                                     
                                                                     @else
-                                                                    <span class="badge badge-success">Done weh</span>
+                                                                    <span class="badge badge-danger">No Action</span>
                                                                     @endif
                                                                 @endif
                                                             @endif

@@ -25,9 +25,9 @@
                 <li class="">
                     <a href="/patient/medrecord" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
-                            <i class="fas fa-solid fa-calendar-check"></i>
+                            <i class="fas fa-solid fa-history"></i>
                         </span>
-                        <span class="pcoded-mtext">Medical Record</span>
+                        <span class="pcoded-mtext">Medical History</span>
                     </a>
                 </li>
 

@@ -66,7 +66,8 @@ class PatientController extends Controller
         ->distinct()
         ->get();
 
-        $listDoctors = Doctor::select('doctor.*','department.name as dept_name')
+        $listDoctors = Doctor::select('doctor.*','department.name as dept_name','users.image as image')
+        ->join('users', 'doctor.email', '=', 'users.email')
         ->join('medrecord', 'doctor.id', '=', 'medrecord.docid')
         ->join('department', 'doctor.deptid', '=', 'department.id')
         ->join('patient', 'patient.id', '=', 'medrecord.patientid')
