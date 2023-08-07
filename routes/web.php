@@ -163,9 +163,11 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/nurse/medicineList', [NurseController::class, 'viewMedicineList']);
     Route::get('/nurse/appointmentList/{date}', [NurseController::class, 'viewAppointmentListDate'])->name('nurse.appointmentList');
 
+    //Report
+    Route::get('/nurse/medrecordList', [NurseController::class, 'viewMedRecordList']);
+    Route::get('/nurse/report/{medrc_id}', [NurseController::class, 'viewMedicalReport']);
 
     //Profile
-    //Manage patient in nurse
     Route::post('/nurse/profile/{id}', [NurseController::class, 'EditProfile']);
     
     //Manage patient in nurse

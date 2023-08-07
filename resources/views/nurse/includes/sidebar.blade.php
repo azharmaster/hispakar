@@ -36,6 +36,19 @@
                     </a>
                 </li>
 
+                
+
+                <li class="">
+                    <a href="/nurse/medicineList" class="waves-effect waves-dark">
+                        <span class="pcoded-micon">
+                        <i class="fas fa-regular fa-capsules"></i>
+                        </span>
+                        <span class="pcoded-mtext">Medicines</span>
+                    </a>
+                </li>
+
+                <br>
+
                 <li class="">
                     <a href="/nurse/appointmentList" class="waves-effect waves-dark">
                         <span class="pcoded-micon">
@@ -44,13 +57,12 @@
                         <span class="pcoded-mtext">Appointments</span>
                     </a>
                 </li>
-
                 <li class="">
-                    <a href="/nurse/medicineList" class="waves-effect waves-dark">
-                        <span class="pcoded-micon">
-                        <i class="fas fa-regular fa-capsules"></i>
-                        </span>
-                        <span class="pcoded-mtext">Medicine</span>
+                    <a href="/nurse/medrecordList" class="waves-effect waves-dark">
+                    <span class="pcoded-micon">
+                    <i class="fas fa-regular fa-file-medical"></i>
+                    </span>
+                    <span class="pcoded-mtext">Medical Records</span>
                     </a>
                 </li>
 

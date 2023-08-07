@@ -131,11 +131,12 @@
                                         <tr class="table-danger">
                                             <th colspan="2">Next Appointment</th>
                                             <td colspan="2">
-                                                @if ($upcomingAppointment)
+                                                No upcoming appointment
+                                                {{-- @if ($upcomingAppointment)
                                                     {{ $upcomingAppointment->date }} {{ $upcomingAppointment->time }}
                                                 @else
                                                     No upcoming appointment
-                                                @endif
+                                                @endif --}}
                                             </td>
 
                                         </tr>

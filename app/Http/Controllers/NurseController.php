@@ -20,6 +20,7 @@ use App\Models\Appointments;
 use App\Models\Attendance;
 use App\Models\DocSchedule;
 use App\Models\MedRecord;
+use App\Models\Medprescription;
 use Illuminate\Support\Facades\Auth;
 
 class NurseController extends Controller
@@ -170,6 +171,90 @@ class NurseController extends Controller
         $medicines = Medicine::all(); // Retrieve all medicines from the database
 
         return view('nurse.contents.medicineList', compact('medicines'));
+    }
+
+    public function viewMedRecordList()
+    {
+        // Retrieve the nurse based on the authenticated user's email
+        $nurse = Nurse::where('email', Auth::user()->email)->first();
+        $deptId = $nurse->deptId; // Check if the nurse exists and then get the deptId
+
+        //belum ikut department nurse
+        $medrcs = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->join('doctor', 'medrecord.docid', '=', 'doctor.id')
+        ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+        ->select('medrecord.*','doctor.name as doctor_name','medservice.type as service_type','appointment.id as aptid')
+        ->get();
+
+        return view('nurse.contents.medrecordList', compact('medrcs'));
+    }
+
+    public function viewMedicalReport($medrc_id) // medrecord table id
+    {
+       
+        $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
+        ->where('id', $medrc_id)
+        ->first();
+
+        // Get the previous record with the same patient ID
+        $previousRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->where('medrecord.patientid', $record->patientid)
+        ->where('medrecord.id', '<', $record->id)
+        ->orderBy('medrecord.id', 'desc')
+        ->first();
+
+        // Get the previous medicines for the medicine record
+        $prevMedicine = collect(); // Initialize an empty collection
+
+        if ($previousRecord) {
+        $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
+            ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
+            ->where('medprescription.patientid', $record->patientid)
+            ->where('medprescription.aptid', $previousRecord->aptid) // Use the aptid from the previous record
+            ->select('medprescription.name as prevMedName')
+            ->orderBy('medprescription.id', 'desc')
+            ->take(5) // Take the last 5 records
+            ->get()
+            ->reverse(); // Reverse the order to display the most recent medicine first
+        }
+        
+        // Join with medservice table
+        $record->load('medService');
+
+        // Join with medservice table for the previous record as well
+        if ($previousRecord) {
+            $previousRecord->load('medService');
+        }
+
+        $medicines = MedPrescription::join('medrecord', 'medrecord.aptid', '=', 'medprescription.aptid')
+        ->where('medrecord.id', $medrc_id)
+        ->select('medprescription.*', 'medprescription.desc as med_desc')
+        ->get();
+
+        //get the next appointment record
+        $currentDateTime = Carbon::now();
+
+        // Get patientid in this medrecord
+        $patientid = MedRecord::where('id', $medrc_id)->pluck('patientid')->first();
+    
+        $upcomingAppointment = null; // Initialize the variable to avoid potential issues
+
+        if ($patientid) {
+            $upcomingAppointment = Appointments::where('patientid', $patientid)
+                ->where(function ($query) use ($currentDateTime) {
+                    $query->where('date', '>', $currentDateTime->toDateString())
+                        ->orWhere(function ($query) use ($currentDateTime) {
+                            $query->where('date', '=', $currentDateTime->toDateString())
+                                ->where('time', '>', $currentDateTime->toTimeString());
+                        });
+                })
+                ->get();
+        }
+
+        return view('nurse.contents.report', compact(
+            'record','previousRecord','prevMedicine','upcomingAppointment', 
+            'medicines'));
     }
 
     public function viewAppointmentList()
