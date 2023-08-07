@@ -785,6 +785,7 @@ class DoctorController extends Controller
         $medRec->desc = $request->input('desc')['med_record'];
         $medRec->datetime = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $medRec->patientid = $request->input('patientid');
+        $medRec->invoice_number = random_int(1000000, 9999999);
         $medRec->docid = $doctor->id;
         $medRec->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $medRec->save();
