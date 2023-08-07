@@ -107,7 +107,7 @@ class DoctorController extends Controller
         ->where('doctor.id', $doctorId)
         ->whereDate('appointment.date', $currentDate) 
         ->orderBy('appointment.time', 'asc')
-        ->take(5)
+        // ->take(5)
         ->get();
 
 

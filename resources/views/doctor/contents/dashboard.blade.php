@@ -176,9 +176,20 @@
                             <div class="card new-cust-card" style="height: 450px">
                                 <div class="card-header">
                                     <h5>Today's Appointment / {{ $currentDate }}</h5>
+                                    <div class="card-header-right">
+                                        <ul class="list-unstyled card-option">
+                                        <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
+                                        <li><i class="feather icon-maximize full-card"></i></li>
+                                        <li><i class="feather icon-minus minimize-card"></i></li>
+                                        <li><i class="feather icon-refresh-cw reload-card"></i></li>
+                                        <li><i class="feather icon-trash close-card"></i></li>
+                                        <li><i class="feather icon-chevron-left open-card-option"></i></li>
+                                        </ul>
+                                    </div>
                                 </div>
     
                                 <div class="card-block p-b-0">
+                                <div class="scroll-widget">
                                     @php
                                         $currentTime = \Carbon\Carbon::now('Asia/Kuala_Lumpur');
                                     @endphp
@@ -296,11 +307,12 @@
                                     @endif
                                 </div>
 
-                                <div class="modal-footer border-0" style="position: absolute; top: 0; left: 0; right: 0;">
+                                <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
                                     <a href="{{ route('doctor.appointmentList', ['date' => $currentDate]) }}" class="text-mute">
                                         <i class="fas fa-bars m-r-10"></i>View More
                                     </a>
                                 </div>
+                            </div>
                             </div>
                         </div>
                         

@@ -44,4 +44,8 @@
 <script src="{{ asset('files/assets/pages/data-table/js/data-table-custom-1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('files/assets/printScript.js') }}"></script>
 
-
+<script>
+      $(document).ready(function() {
+          $('#dataTable1').DataTable();
+      });
+  </script>
