@@ -104,13 +104,17 @@
 
                                                             <td>
                                                                 @if ($appointment->medrecord_status == 1)
-                                                                    <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="View Appointment Record">
+                                                                    <a href="/doctor/report/{{ $appointment->medrc_id }}" title="View Medical Record">
                                                                         <i style="font-size:20px;" class="fas fa-eye f-w-600 f-16 m-r-15 text-c-yellow"></i>
+                                                                    </a>
+
+                                                                    <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="Edit Medical Record">
+                                                                        <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                     </a>
 
                                                                 @else
                                                                     <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="Add Appointment Record">
-                                                                        <i style="font-size:20px;" class="fas fa-plus f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                        <i style="font-size:20px;" class="fas fa-file-signature f-w-600 f-16 m-r-15 text-c-blue"></i>
                                                                     </a>
                                                                     <!-- <a href="/doctor/appointmentList/{{ $appointment->id }}" title="Delete Room" data-target="#deleteModal-{{ $appointment->id }}" data-toggle="modal">
                                                                         <i style="font-size:20px;" class="feather icon-trash-2 f-w-600 f-16 text-c-red delete-btn"></i>

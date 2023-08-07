@@ -133,6 +133,8 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::post('/doctor/appointmentReport/{id}', [DoctorController::class, 'AddAppointmentRecord'])->name('doctor.addAppointmentRecord');
     Route::get('/doctor/getMedicinePrice/{id}', [DoctorController::class, 'getMedicinePrice']);
 
+    Route::get('/doctor/report/{medrc_id}', [DoctorController::class, 'viewMedicalReport']);
+
 
     //filter record
     Route::post('/doctor/reports', [DoctorController::class, 'filterReportList'])->name('doctor.reports.filter');

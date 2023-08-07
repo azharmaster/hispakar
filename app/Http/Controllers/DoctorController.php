@@ -367,7 +367,7 @@ class DoctorController extends Controller
             ->join('patient', 'appointment.patientid', '=', 'patient.id')
             ->join('doctor', 'appointment.docid', '=', 'doctor.id')
             ->join('department', 'appointment.deptid', '=', 'department.id')
-            ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.status as medrecord_status')
+            ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.id as medrc_id', 'medrecord.status as medrecord_status')
             ->where('doctor.id', $doctor->id)
             ->where('appointment.deptid', $doctor->deptid)
             ->where('appointment.status', 1)
@@ -876,6 +876,73 @@ class DoctorController extends Controller
         }
 
         return redirect('/doctor/dashboard')->with('success', 'Medical record successfully saved!');
+    }
+
+    public function viewMedicalReport($medrc_id)
+    {
+        //get the details of current logged in patient
+        $patient = Patient::where('email', Auth::user()->email)->first();
+
+        $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
+                ->where('id', $medrc_id)
+                ->first();
+        
+       // Get the previous record with the same patient ID
+       $previousRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+       ->where('medrecord.patientid', $record->patientid)
+       ->where('medrecord.id', '<', $record->id)
+       ->orderBy('medrecord.id', 'desc')
+       ->first();
+
+       // Get the previous medicines for the medicine record
+       $prevMedicine = collect(); // Initialize an empty collection
+
+       if ($previousRecord) {
+       $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
+           ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
+           ->where('medprescription.patientid', $record->patientid)
+           ->where('medprescription.aptid', $previousRecord->aptid) // Use the aptid from the previous record
+           ->select('medprescription.name as prevMedName')
+           ->orderBy('medprescription.id', 'desc')
+           ->take(5) // Take the last 5 records
+           ->get()
+           ->reverse(); // Reverse the order to display the most recent medicine first
+       }
+
+        // Join with medservice table
+        $record->load('medService');
+
+        // Join with medservice table for the previous record as well
+        if ($previousRecord) {
+            $previousRecord->load('medService');
+        }
+
+        $medicines = MedRecord::join('medprescription', 'medrecord.aptid', '=', 'medprescription.aptid')
+                    ->where('medrecord.id', $medrc_id)
+                    ->get(); // Use first() instead of get()
+
+                // Now you can access the name property
+
+        //get the next appointment record
+        $currentDateTime = Carbon::now();
+    
+        $upcomingAppointment = null; // Initialize the variable to avoid potential issues
+
+        if ($patient) {
+            $upcomingAppointment = Appointments::where('patientid', $patient->id)
+                ->where(function ($query) use ($currentDateTime) {
+                    $query->where('date', '>', $currentDateTime->toDateString())
+                        ->orWhere(function ($query) use ($currentDateTime) {
+                            $query->where('date', '=', $currentDateTime->toDateString())
+                                ->where('time', '>', $currentDateTime->toTimeString());
+                        });
+                })
+                ->get();
+        }
+        
+
+        return view('doctor.contents.report', compact('record', 'previousRecord', 
+        'prevMedicine', 'medicines', 'upcomingAppointment'));
     }
 
     public function filterReportList(Request $request)
