@@ -121,17 +121,25 @@ class PatientController extends Controller
         
         // Get the previous record with the same patient ID
         $previousRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
-                        ->where('medrecord.patientid', $record->patient_id)
-                        ->where('medrecord.id', '<', $id)
-                        ->orderBy('medrecord.id', 'desc')
-                        ->first();
+        ->where('medrecord.patientid', $record->patientid)
+        ->where('medrecord.id', '<', $record->id)
+        ->orderBy('medrecord.id', 'desc')
+        ->first();
 
-        //get the previous medicine for the medicine record
+        // Get the previous medicines for the medicine record
+        $prevMedicine = collect(); // Initialize an empty collection
+
+        if ($previousRecord) {
         $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
-                        ->where('medprescription.patientid', $record->patient_id)
-                        ->where('medprescription.id', '<', $id)
-                        ->orderBy('medprescription.id', 'desc')
-                        ->first();
+            ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
+            ->where('medprescription.patientid', $record->patientid)
+            ->where('medprescription.aptid', $previousRecord->aptid) // Use the aptid from the previous record
+            ->select('medprescription.name as prevMedName')
+            ->orderBy('medprescription.id', 'desc')
+            ->take(5) // Take the last 5 records
+            ->get()
+            ->reverse(); // Reverse the order to display the most recent medicine first
+        }
 
         // Join with medservice table
         $record->load('medService');

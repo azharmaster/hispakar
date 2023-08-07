@@ -93,13 +93,16 @@
                                             <td colspan="3">
                                                 <ul>
                                                     @isset($prevMedicine)
-                                                        {{ $prevMedicine->name }}
+                                                        @foreach ($prevMedicine as $medicine)
+                                                            <li>{{ $medicine->prevMedName }}</li>
+                                                        @endforeach
                                                     @else
-                                                        No previous medicine available for this patient.
+                                                        <li>No previous medicine available for this patient.</li>
                                                     @endisset
                                                 </ul>
                                             </td>
                                         </tr>
+
 
                                         <tr>
                                             <th colspan="4" class="text-center">Check-Up Description</th>
