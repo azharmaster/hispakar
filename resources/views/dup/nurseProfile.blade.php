@@ -2,6 +2,53 @@
 
 <!-- script for chart -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    /* Height for screens larger than 768px / for full width */
+    @media screen and (min-width: 768px) {
+        /* add style*/
+    }
+    /* Height for screens smaller than 768px / responsive smaller screen */
+    @media screen and (max-width: 767px) {
+        .doc-pro-right {
+            height: 197px; 
+        }
+        .chartAttendance{
+            max-width: 250px;
+        }
+        .chartByAge{
+            margin-top: -1000px
+        }
+    }
+    .hr-0 {
+        border-bottom: none;
+        border-top: none;
+    }
+
+</style>
+
+<style>
+    /* Height for screens larger than 768px */
+    @media screen and (min-width: 768px) {
+
+    }
+    /* Height for screens smaller than 768px */
+    @media screen and (max-width: 767px) {
+        .doc-pro-right {
+            height: 197px; 
+        }
+        .chartAttendance{
+            max-width: 250px;
+        }
+        .chartByAge{
+            margin-top: -1000px
+        }
+    }
+    .hr-0 {
+        border-bottom: none;
+        border-top: none;
+    }
+
+</style>
 
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
@@ -12,7 +59,7 @@
                     <i class="fas fa-regular fa-user bg-c-blue"></i>
                     <!-- <i class="feather icon-home bg-c-blue"></i> -->
                     <div class="d-inline">
-                        <h5>Profile Doctor</h5>
+                        <h5>Profile Nurse</h5>
                         <span>{{ ucfirst($nursedetail->name) }}'s Profile </span>
                     </div>
                 </div>
@@ -62,7 +109,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#totalpatientModal"> 
-                                    <div class="card comp-card bg-c-blue">
+                                    <div class="card comp-card bg-c-blue doc-pro-right">
                                         <div class="card-body">
                                             <div class="row align-items-center">
                                             <div class="col">
@@ -88,7 +135,7 @@
 
                                 <div class="col-6">   
                                     <a data-toggle="modal" data-target="#todayAppointmentModal">                                    
-                                    <div class="card comp-card bg-c-green">
+                                    <div class="card comp-card bg-c-green doc-pro-right">
                                         <div class="card-body">
                                             <div class="row align-items-center">
                                             <div class="col">
@@ -99,7 +146,7 @@
                                                 <i class="fas fa-hospital bg-c-white text-success d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i>
                                                 </div>
                                                 
-                                                <p class="m-b-0 mt-3 text-white">For today</p>
+                                                <p class="m-b-0 mt-3 text-white">Total today's Appointments</p>
                 
                                             </div>
                 
@@ -114,7 +161,7 @@
                                 <!-- ./card -->
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#medicalrecordModal">                                    
-                                    <div class="card comp-card bg-c-green">
+                                    <div class="card comp-card bg-c-green doc-pro-right">
                                         <div class="card-body">
                                             <div class="row align-items-center">
                                             <div class="col">
@@ -140,7 +187,7 @@
                                 
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#nextaptModal">                                    
-                                    <div class="card comp-card">
+                                    <div class="card comp-card doc-pro-right">
                                         <div class="card-body">
                                             <div class="row align-items-center">
                                             <div class="col">
@@ -174,7 +221,7 @@
                                 <h5>Appointment Attendance Statistics</h5>
                                 </div>
                                 <div class="card-block p-4">
-                                <div style="width: 440px; height: 280px; margin: auto;">
+                                <div class="chartAttendance" style="width: 440px; height: 280px; margin: auto;">
                                     <canvas id="chartAttendance"></canvas>
                                 </div>
                                 </div>
@@ -185,25 +232,27 @@
                         <div class="col-md-12 col-xl-6">
                             <div class="card sale-card" style="height: 400px;">
                                 <div class="card-header">
-                                    <h5>Patients by Age </h5>
+                                    <h5>Patients by Age</h5>
                                 </div>
                                 <div class="card-block">
-                                    <div class="col-2 justify-content-end text-right" style="margin-left: -15px"> <!-- Updated class here -->
-                                        <div class="label-main">
-                                            <label class="label label-inverse-primary">Children</label>
+                                    <div class="row">
+                                        <div class="col-2 justify-content-end text-right" style="margin-left: -10px"> <!-- Updated class here -->
+                                            <div class="label-main">
+                                                <label class="label label-inverse-primary">Children</label>
+                                            </div>
+                                            <div class="label-main">
+                                                <label class="label label-inverse-danger">Teenage</label>
+                                            </div>
+                                            <div class="label-main">
+                                                <label class="label label-inverse-warning">Adult</label>
+                                            </div>
+                                            <div class="label-main">
+                                                <label class="label label-inverse-info">Older</label>
+                                            </div>
                                         </div>
-                                        <div class="label-main">
-                                            <label class="label label-inverse-danger">Teenage</label>
+                                        <div class="col-9 ml-3" style="margin-top: 0px">
+                                            <canvas id="chartByAge"></canvas>
                                         </div>
-                                        <div class="label-main">
-                                            <label class="label label-inverse-warning">Adult</label>
-                                        </div>
-                                        <div class="label-main">
-                                            <label class="label label-inverse-info">Older</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 ml-3" style="margin-top: -150px">
-                                        <canvas id="chartByAge"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -238,18 +287,19 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        @if ( $medrecorddetails->isEmpty() )
+                                        @if ( $totalrecorddetails->isEmpty() )
                                             <tr>
-                                                <td>No data available</td>
+                                                <td colspan="4" class="text-center">No data available</td>
                                             </tr>
                                         @else
-                                            @foreach($medrecorddetails as $medrecorddetail)
+                                        <!-- this query not for today yet -->
+                                            @foreach($totalrecorddetails as $apt)
                                             <tr style="text-align: center;">
-                                                <td>{{ \Carbon\Carbon::parse($medrecorddetail->datetime)->format('H:i:s') }}</td>
-                                                <td>{{ $medrecorddetail-> patient_name }}</td> 
-                                                <td>{{ $medrecorddetail-> desc }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($apt->datetime)->format('H:i:s') }}</td>
+                                                <td>{{ $apt->patient->name }}</td> 
+                                                <td>{{ $apt->desc }}</td>
                                                 <td> 
-                                                    <a href="/admin/report/{{ $medrecorddetail->id }}/{{ $medrecorddetail-> patient_id }}" title="View Medical Record">
+                                                    <a href="/nurse/report/{{ $apt->id }}" title="View Medical Record">
                                                         <i style="font-size:20px;" class="icon feather icon-eye f-w-600 f-16 m-r-15  text-c-yellow "></i>
                                                     </a>
                                                 </td>
@@ -257,6 +307,7 @@
                                             </tr>
                                             @endforeach
                                         @endif
+                                    </tbody>
                                 </table>
                                 </div>
                             </div>
@@ -289,28 +340,29 @@
                                 <div class="table-responsive">
                                 <table class="table table-hover m-b-0">
                                     <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Patient Name</th>
-                                        <th>Doctor Name</th>
-                                    </tr>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Time</th>
+                                            <th>Patient Name</th>
+                                            <th>Phone No</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                        @if ( $medrecorddetails->isEmpty() )
+                                        @if ( $totalapttodaydetails->isEmpty() )
                                             <tr>
-                                                <td>No data available</td>
+                                                <td colspan="4" class="text-center">No data available</td>
                                             </tr>
                                         @else
-                                            @foreach($medrecorddetails as $medrecorddetail)
-                                            <tr style="text-align: center;">
-                                                <td>{{ \Carbon\Carbon::parse($medrecorddetail->datetime)->format('H:i:s') }}</td>
-                                                <td>{{ $medrecorddetail-> patient_name }}</td> 
-                                                <td>{{ $medrecorddetail-> desc }}</td>
-                                               
-
+                                            @foreach($totalapttodaydetails as $apt)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $apt->time }}</td>
+                                                <td>{{ $apt->patient->name }}</td>
+                                                <td>{{ $apt->patient->phoneno }}</td>
                                             </tr>
                                             @endforeach
                                         @endif
+                                    </tbody>
                                 </table>
                                 </div>
                             </div>
@@ -334,19 +386,38 @@
 <!-- Total Patient Modal -->
 <div class="modal fade" id="totalpatientModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
                 <h5 class="modal-title">Patient List</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-
-
+            <div class="modal-body pb-0">
+                <table id="dataTable-1" class="table table-bordered" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($totalpatientdetails as $patient)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $patient->name }}</td>
+                            <td>{{ $patient->age }}</td>
+                            <td>{{ $patient->gender }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
                 
             </div>
         </div>
@@ -356,19 +427,38 @@
 <!-- today Appointment Modal -->
 <div class="modal fade" id="todayAppointmentModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
                 <h5 class="modal-title">Today's Appointment List</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-
-
+            <div class="modal-body pb-0">
+                <table id="dataTable-2" class="table table-bordered" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Time</th>
+                            <th>Patient Name</th>
+                            <th>Phone No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($totalapttodaydetails as $apt)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $apt->time }}</td>
+                            <td>{{ $apt->patient->name }}</td>
+                            <td>{{ $apt->patient->phoneno }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
                 
             </div>
         </div>
@@ -378,19 +468,39 @@
 <!-- Medical Record Modal -->
 <div class="modal fade" id="medicalrecordModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
                 <h5 class="modal-title">Medical Record List</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-
-
+            <div class="modal-body pb-0">
+                <table id="dataTable-3" class="table table-bordered" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Datetime</th>
+                            <th>Patient Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($totalrecorddetails as $apt)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $apt->datetime }}</td>
+                            <td>{{ $apt->patient->name }}</td>
+                            <td>{{ $apt->desc }}</td>
+                        </tr>
+                        @endforeach
+                        
+                    </tbody>
+                </table>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
                 
             </div>
         </div>
@@ -400,19 +510,39 @@
 <!-- Next Apt Modal -->
 <div class="modal fade" id="nextaptModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
                 <h5 class="modal-title">Upcoming appointment List</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-
-
+            <div class="modal-body pb-0">
+                <table id="dataTable-4" class="table table-bordered" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Time</th>
+                            <th>Patient Name</th>
+                            <th>Phone No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($totalnextaptdetails as $apt)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $apt->time }}</td>
+                            <td>{{ $apt->patient->name }}</td>
+                            <td>{{ $apt->patient->phoneno }}</td>
+                        </tr>
+                        @endforeach
+                        
+                    </tbody>
+                </table>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
                 
             </div>
         </div>
@@ -569,5 +699,55 @@
             initialView: 'dayGridMonth'
         });
         calendar.render();
+    });
+</script>
+
+<!-- Include necessary JavaScript files for DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+@php
+    $titles = [
+        1 => "Patient List",
+        2 => "Today's Appointment List",
+        3 => "Medical Record List",
+        4 => "Next Appointment List",
+    ];
+@endphp
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        @for ($i = 1; $i <= 4; $i++)
+            @if (isset($titles[$i]))
+                var title = "{{ $titles[$i] }}";
+
+                var table = $('#dataTable-{{ $i }}').DataTable({
+                    responsive: true,
+                    autoWidth: true,
+                    "dom": 'Bfrtip',
+                    "buttons": [
+                        {
+                            extend: 'print',
+                            title: title,
+                            customize: function(win) {
+                                $(win.document.body).find('h1').css('text-align', 'center');
+                                $(win.document.body).find('h1').css('margin', '50px 0');
+                                $(win.document.body).find('h1').css('font-size', '30px');
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            title: title
+                        },
+                        {
+                            extend: 'excel',
+                            title: title
+                        },
+                    ],
+                });
+
+                table.buttons().container().appendTo('#breezeBasicTable .row.col-md-6:eq(0)');
+            @endif
+        @endfor
     });
 </script>

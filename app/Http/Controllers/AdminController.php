@@ -89,10 +89,44 @@ class AdminController extends Controller
         ->where('doctor.id', $id)
         ->get();
 
-        $totalpatient = MedRecord::where('docid', $id)
-        ->distinct('patientid')
-        ->count('patientid');
+        //total patient card and modal
+        $totalPatientIds = MedRecord::where('docid', $id)
+            ->distinct('patientid')
+            ->pluck('patientid'); // This will give an array of distinct patient IDs
+        $totalpatient = count($totalPatientIds); // Count the number of distinct patient IDs
+        $totalpatientdetails = Patient::whereIn('id', $totalPatientIds)->get(); // get patient details
 
+        //total apt today card and modal
+        $totalapttodaydetails = Appointments::where('docid', $id)
+        ->where('status', 1)
+        ->whereDate('date', $today)
+        ->orderBy('time', 'desc')
+        ->with('patient')
+        ->get();
+        $totalapttoday = $totalapttodaydetails->count();
+
+        //total medical record card and modal
+        $totalrecorddetails = MedRecord::where('docid', $id)
+        ->orderBy('datetime', 'desc')
+        ->with('patient')// get patient details
+        ->get();
+        $totalrecord = $totalrecorddetails->count();
+
+        //total next apt card and modal
+        $totalnextaptdetails = Appointments::where('docid', $id)
+        ->where('status', 1)
+        ->where('appointment.date', '>', $today) // Add the condition to check if the appointment date is after today
+        ->orderBy('date', 'asc')
+        ->orderBy('time', 'asc')
+        ->with('patient')// get patient details
+        ->whereNotIn('id', function ($query) {
+            $query->select('aptid')
+                ->from('medrecord');
+        })
+        ->get();
+        $totalnextapt = $totalnextaptdetails->count();
+
+        //chart
         $totalmale = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as total_male'))
         ->join('patient', 'medrecord.patientid', '=', 'patient.id')
         ->where('medrecord.docid', $id)
@@ -105,57 +139,21 @@ class AdminController extends Controller
         ->where('patient.gender', 'female')
         ->count();
 
-        //Age
-        $children = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as children'))
+        //chart for Age
+        $ageGroups = MedRecord::select(
+            DB::raw('SUM(CASE WHEN age <= 12 THEN 1 ELSE 0 END) as children'),
+            DB::raw('SUM(CASE WHEN age BETWEEN 13 AND 19 THEN 1 ELSE 0 END) as teenage'),
+            DB::raw('SUM(CASE WHEN age BETWEEN 20 AND 64 THEN 1 ELSE 0 END) as adult'),
+            DB::raw('SUM(CASE WHEN age >= 65 THEN 1 ELSE 0 END) as older')
+        )
         ->join('patient', 'medrecord.patientid', '=', 'patient.id')
         ->where('medrecord.docid', $id)
-        ->where('age', '<=', 12)
-        ->count();
+        ->first();
 
-        $teenage = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as teenage'))
-        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
-        ->where('medrecord.docid', $id)
-        ->whereBetween('age', [13, 19])
-        ->count();
-
-        $adult = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as adult'))
-        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
-        ->where('medrecord.docid', $id)
-        ->whereBetween('age', [20, 64])
-        ->count();
-
-        $older = MedRecord::select(DB::raw('COUNT(DISTINCT patient.id) as older'))
-        ->join('patient', 'medrecord.patientid', '=', 'patient.id')
-        ->where('medrecord.docid', $id)
-        ->where('age', '>=', 65)
-        ->count();
-
-        $totalapttoday = Appointments::where('docid', $id)
-        ->where('status', 1)
-        ->whereDate('date', $today)
-        ->count('id');
-
-        $totalrecord = MedRecord::where('docid', $id)
-        ->count('id');
-
-        $totalnextapt = Appointments::where('docid', $id)
-        ->where('status', 1)
-        ->where('appointment.date', '>', $today) // Add the condition to check if the appointment date is after today
-        ->whereNotIn('id', function ($query) {
-            $query->select('aptid')
-                ->from('medrecord');
-        })
-        ->count('id');
-
-        //modal
-        $nextaptdetails = Appointments::where('docid', $id)
-        ->where('status', 1)
-        ->where('appointment.date', '>', $today) // Add the condition to check if the appointment date is after today
-        ->whereNotIn('id', function ($query) {
-            $query->select('aptid')
-                ->from('medrecord');
-        })
-        ->get();
+        $children = $ageGroups->children;
+        $teenage = $ageGroups->teenage;
+        $adult = $ageGroups->adult;
+        $older = $ageGroups->older;
 
         //chart attendance statistic
         $totalattend = [];
@@ -191,11 +189,11 @@ class AdminController extends Controller
 
         return view('admin.contents.doctorProfile', compact(
             'doctordetails',
-            'totalpatient', 'totalapttoday','totalrecord','totalnextapt', //card
+            'totalpatient','totalapttoday','totalrecord','totalnextapt', //card
+            'totalpatientdetails','totalapttodaydetails','totalrecorddetails','totalnextaptdetails', //card modal
             'totalmale', 'totalfemale', // gender chart
             'totalattend', 'totalcancel', // attendance chart
             'children', 'teenage', 'adult', 'older', // ages chart
-            'nextaptdetails', // card modal
         ));
        
     }
@@ -218,7 +216,7 @@ class AdminController extends Controller
         ->where('nurse.id', $id)
         ->get();
 
-        // Total patient under nurse department // from medrecord join appointment
+        // Total patient under nurse department 
         $totalpatient = MedRecord::join('appointment', function ($join) use ($deptid) {
             $join->on('medrecord.aptid', '=', 'appointment.id')
                 ->where('appointment.deptid', '=', $deptid);
@@ -226,23 +224,43 @@ class AdminController extends Controller
         ->distinct('appointment.patientid')
         ->count('appointment.patientid');
 
-        $totalapttoday = Appointments::where('deptid', $deptid)
-        ->where('status', 1)
-        ->whereDate('date', $today)
-        ->count('id');
+        //repair this query
+        $totalpatientdetails = MedPrescription::where('nurseid', $id)
+        ->join('medrecord', 'medrecord.id', '=', 'medprescription.aptid')
+        ->join('patient', 'patient.id', '=', 'medrecord.patientid')
+        ->with('patient')
+        ->get();
+        
+         //total apt today card and modal
+         $totalapttodaydetails = Appointments::where('deptid', $deptid)
+         ->where('status', 1)
+         ->whereDate('date', $today)
+         ->orderBy('time', 'desc')
+         ->with('patient')
+         ->get();
+         $totalapttoday = $totalapttodaydetails->count();
 
-        $totalrecord = MedRecord::join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        //total medical record card and modal
+        $totalrecorddetails = MedRecord::join('appointment', 'medrecord.aptid', '=', 'appointment.id')
         ->where('appointment.deptid', $deptid)
-        ->count('medrecord.id');
+        ->orderBy('datetime', 'desc')
+        ->with('patient')// get patient details
+        ->get();
+        $totalrecord = $totalrecorddetails->count();
 
-        $totalnextapt = Appointments::where('deptid', $deptid)
+        //total next apt card and modal
+        $totalnextaptdetails = Appointments::where('deptid', $deptid)
         ->where('status', 1)
         ->where('appointment.date', '>', $today) // Add the condition to check if the appointment date is after today
+        ->orderBy('date', 'asc')
+        ->orderBy('time', 'asc')
+        ->with('patient')// get patient details
         ->whereNotIn('id', function ($query) {
             $query->select('aptid')
                 ->from('medrecord');
         })
-        ->count('id');
+        ->get();
+        $totalnextapt = $totalnextaptdetails->count();
 
         //chart for Age
         $ageGroups = MedRecord::select(
@@ -294,21 +312,10 @@ class AdminController extends Controller
                 ->count();
         }
 
-        $medrecorddetails = MedPrescription::where('nurseid', $id)
-        ->join('medrecord', 'medrecord.id', '=', 'medprescription.aptid')
-        ->join('patient', 'patient.id', '=', 'medrecord.patientid')
-        ->select('medrecord.*', 'patient.name as patient_name')
-        ->get();
-
-        $apttodaydetails = MedPrescription::where('nurseid', $id)
-        ->join('medrecord', 'medrecord.id', '=', 'medprescription.aptid')
-        ->join('patient', 'patient.id', '=', 'medrecord.patientid')
-        ->select('medrecord.*', 'patient.name as patient_name')
-        ->get();
-
         return view('admin.contents.nurseProfile', compact(
-            'nursedetails', 'medrecorddetails',
+            'nursedetails',
             'totalpatient', 'totalapttoday','totalrecord','totalnextapt', //card
+            'totalpatientdetails','totalapttodaydetails','totalrecorddetails','totalnextaptdetails', //card modal
             'totalattend', 'totalcancel', // attendance chart
             'children', 'teenage', 'adult', 'older', // ages chart
         ));
