@@ -957,7 +957,7 @@ class DoctorController extends Controller
         $patientId = $record->patient->id;
 
         $upcomingAppointments = Appointments::where('patientid', $patientId)
-                                ->where('date', '>', now()->toDateString())
+                                ->where('date', '>', date('Y-m-d'))
                                 ->orderBy('date')
                                 ->orderBy('time')
                                 ->get();
