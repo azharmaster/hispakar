@@ -86,8 +86,6 @@
                                             </td>
                                         </tr>
 
-
-
                                         <tr>
                                             <th>Previous Medication</th>
                                             <td colspan="3">
@@ -131,14 +129,14 @@
                                         <tr class="table-danger">
                                             <th colspan="2">Next Appointment</th>
                                             <td colspan="2">
-                                                No upcoming appointment
-                                                {{-- @if ($upcomingAppointment)
-                                                    {{ $upcomingAppointment->date }} {{ $upcomingAppointment->time }}
+                                                @if ($upcomingAppointment->isNotEmpty())
+                                                    @foreach ($upcomingAppointment as $appointment)
+                                                        {{ $appointment->date }} {{ $appointment->time }}<br>
+                                                    @endforeach
                                                 @else
-                                                    No upcoming appointment
-                                                @endif --}}
+                                                    No upcoming appointments
+                                                @endif
                                             </td>
-
                                         </tr>
                                     </table>
     

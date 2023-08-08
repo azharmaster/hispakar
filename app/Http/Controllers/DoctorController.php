@@ -907,7 +907,7 @@ class DoctorController extends Controller
     public function viewMedicalReport($medrc_id)
     {
         //get the details of current logged in patient
-        $patient = Patient::where('email', Auth::user()->email)->first();
+        //$patient = Patient::where('email', Auth::user()->email)->first();
 
         $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
                 ->where('id', $medrc_id)
@@ -915,10 +915,10 @@ class DoctorController extends Controller
         
        // Get the previous record with the same patient ID
        $previousRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
-       ->where('medrecord.patientid', $record->patientid)
-       ->where('medrecord.id', '<', $record->id)
-       ->orderBy('medrecord.id', 'desc')
-       ->first();
+                        ->where('medrecord.patientid', $record->patientid)
+                        ->where('medrecord.id', '<', $record->id)
+                        ->orderBy('medrecord.id', 'desc')
+                        ->first();
 
        // Get the previous medicines for the medicine record
        $prevMedicine = collect(); // Initialize an empty collection
@@ -954,17 +954,18 @@ class DoctorController extends Controller
     
         $upcomingAppointment = null; // Initialize the variable to avoid potential issues
 
-        if ($patient) {
-            $upcomingAppointment = Appointments::where('patientid', $patient->id)
-                ->where(function ($query) use ($currentDateTime) {
-                    $query->where('date', '>', $currentDateTime->toDateString())
-                        ->orWhere(function ($query) use ($currentDateTime) {
-                            $query->where('date', '=', $currentDateTime->toDateString())
-                                ->where('time', '>', $currentDateTime->toTimeString());
-                        });
-                })
-                ->get();
-        }
+        $patientId = $record->patient->id;
+        
+        $upcomingAppointment = Appointments::where('patientid', $patientId)
+        ->where(function ($query) use ($currentDateTime) {
+            $query->where('date', '>', $currentDateTime->toDateString())
+                ->orWhere(function ($query) use ($currentDateTime) {
+                    $query->where('date', '=', $currentDateTime->toDateString())
+                        ->where('time', '>', $currentDateTime->toTimeString());
+                });
+        })
+        ->get();
+    
         
 
         return view('doctor.contents.report', compact('record', 'previousRecord', 
