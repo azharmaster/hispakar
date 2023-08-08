@@ -458,25 +458,47 @@ class DoctorController extends Controller
         $appointment = Appointments::with(['patient', 'medrecord'])
             ->where('id', $id)
             ->first();
-
-
-            if (!$appointment->patient || !$appointment->medrecord) {
-                $appointment = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-                    ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
-                    ->select('appointment.*', 'patient.*', 'medrecord.*')
-                    ->where('appointment.id', $id)
-                    ->first();
-            }
-
+    
+        if (!$appointment->patient || !$appointment->medrecord) {
+            $appointment = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+                ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
+                ->select('appointment.*', 'patient.*', 'medrecord.*')
+                ->where('appointment.id', $id)
+                ->first();
+        }
+    
         $singlePatient = $appointment->patient;
         $medservices = MedService::all();
         $patients = Patient::all(); // Add this line to fetch all patients
-
+        
         $medicines = Medicine::all();
         $medNum = 1; // Initialize the $medNum variable to 1
+    
+        // Retrieve the previous medical record based on created_at timestamp
+        $previousMedRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+            ->where('medrecord.patientid', $appointment->patientid)
+            ->where('medrecord.aptid', '<', $appointment->id)
+            ->orderBy('medrecord.id', 'desc')
+            ->first();
+        
+            // Get the previous medicines for the medicine record
+       $prevMedicine = collect(); // Initialize an empty collection
 
-        return view('doctor.contents.appointmentReport', compact('appointment', 'medicines', 'singlePatient', 'medservices', 'patients', 'medNum'));
+       if ($previousMedRecord) {
+       $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
+        //    ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
+           ->where('medprescription.patientid', $appointment->patientid)
+           ->where('medprescription.aptid', $previousMedRecord->aptid) // Use the aptid from the previous record
+           ->select('medprescription.name as prevMedName')
+           ->orderBy('medprescription.id', 'desc')
+           ->take(5) // Take the last 5 records
+           ->get()
+           ->reverse(); // Reverse the order to display the most recent medicine first
+       }
+    
+        return view('doctor.contents.appointmentReport', compact('appointment', 'medicines', 'singlePatient', 'medservices', 'patients', 'medNum', 'previousMedRecord', 'prevMedicine'));
     }
+    
 
     public function viewMedicineList()
     {
@@ -501,8 +523,10 @@ class DoctorController extends Controller
     {
         $schedule = new DocSchedule();
 
+        $selectedDate = Carbon::parse($request->date);
+
         $schedule->docid = $request->docid;
-        $schedule->day = $request->day;
+        $schedule->day = $selectedDate->dayName; //get the day name
         $schedule->date = $request->date;
         $schedule->starttime = $request->starttime;
         $schedule->endtime = $request->endtime;
@@ -518,8 +542,10 @@ class DoctorController extends Controller
     {
         $schedule = DocSchedule::find($id);
 
+        $selectedDate = Carbon::parse($request->input('date'));
+
         $schedule->docid = $request->input('docid');
-        $schedule->day = $request->input('day');
+        $schedule->day = $selectedDate->dayName; //get the day name
         $schedule->date = $request->input('date');
         $schedule->starttime = $request->input('starttime');
         $schedule->endtime = $request->input('endtime');

@@ -125,7 +125,7 @@
                    
                     <input type="hidden" value="{{ $doctorId }}" name="docid">
 
-                    <div class="form-group input-group">
+                    <!-- <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Day :</span>
                         <select class="form-control" style="width:350px;" name="day">
                             <option value="">Choose day</option>
@@ -137,7 +137,7 @@
                             <option value="Friday" {{ $currentDay === 5 ? 'selected' : '' }}>Friday</option>
                             <option value="Saturday" {{ $currentDay === 6 ? 'selected' : '' }}>Saturday</option>
                         </select>
-                    </div>  
+                    </div>   -->
 
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Date :</span>
@@ -186,7 +186,7 @@
                               
                     <input type="hidden" value="{{ $schedule->docid }}" name="docid">
 
-                    <div class="form-group input-group">
+                    <!-- <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Day :</span>
                         <select class="form-control" style="width:350px;" name="day">
                             <option value="">Choose day</option>
@@ -198,7 +198,7 @@
                             <option value="Friday" {{ $schedule->day === 'Friday' ? 'selected' : '' }}>Friday</option>
                             <option value="Saturday" {{ $schedule->day === 'Saturday' ? 'selected' : '' }}>Saturday</option>
                         </select>
-                    </div>
+                    </div> -->
 
 
                     <div class="form-group input-group">
