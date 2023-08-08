@@ -33,6 +33,8 @@ class PatientController extends Controller
         $email=Auth()->user()->email;
         $name=Auth()->user()->name;
 
+        $patient = Patient::where('email', Auth::user()->email)->first();
+
         $countdown =  Appointments::join('medrecord', 'appointment.id', '>', 'medrecord.aptid')
         ->select('appointment.*')
         ->orderByDesc('appointment.id')
@@ -82,32 +84,29 @@ class PatientController extends Controller
         $detailpatients = Patient::where('email', $email)->get();
 
 
-        //calendar
-        // Initialize an empty array to store the transformed events
         $calendarEvents = [];
 
-        // Fetch appointment data
         $apts = DB::table('appointment')
-        ->select('date', DB::raw('COUNT(*) as appointment_count'))
-        ->groupBy('date')
-        //->where('docid', 1)
-        ->get();
-
+            ->select('date', DB::raw('COUNT(*) as appointment_count'))
+            ->groupBy('date')
+            ->where('patientid', $patient->id)
+            ->get();
+    
         foreach ($apts as $apt) {
-        $appointmentDate = $apt->date;
-        $appointmentCount = $apt->appointment_count;
-
+            $appointmentDate = $apt->date;
+            $appointmentCount = $apt->appointment_count;
+    
             $calendarEvents[] = [
-                'title' => $appointmentCount . ' - Appointment',
+                'title' => $appointmentCount . ' Appointment(s)',
                 'start' => $appointmentDate,
-                'url' => url('doctor/appointmentList?date=' . $appointmentDate . '&sort=asc'),
+                'url' => url('patient/appointmentList?date=' . $appointmentDate . '&sort=asc'),
                 'backgroundColor' => '#FF9F32',
                 'borderColor' => '#FF9F32',
                 'allDay' => true,
             ];
         }
 
-
+        //dd($calendarEvents);
         return view('patient.contents.dashboard', compact('name','aptlatests','countdownDate','appointments','listmedicines',
         'detailpatients','listDoctors','notify','calendarEvents'));
     }

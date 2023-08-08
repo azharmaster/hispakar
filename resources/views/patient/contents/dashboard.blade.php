@@ -1,6 +1,7 @@
 @extends('layouts.patient')
 
 @section('content')
+
           <!-- Start Dashboard -->
           <div class="pcoded-content">
             <div class="page-header card">
@@ -437,7 +438,6 @@
             }
         }, 1000);
     </script>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
