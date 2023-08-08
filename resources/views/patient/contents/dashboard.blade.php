@@ -120,6 +120,29 @@
                                 <h6 class="m-b-25">Your Data</h6>
                                 <div class="row align-items-center">
                                   @foreach($detailpatients as $detailpatient)
+                                  @php
+                                  
+                                  $Height=$detailpatient->height;
+                                  $HeightUnit='centimeter'; //inch foot meter
+                                  $Weight=$detailpatient->weight;
+                                  $WeightUnit='kilogram'; //pound
+
+                                  $HInches = ($HeightUnit=='centimeter')?$Height*0.393701:(($HeightUnit=='foot')?$Height*12:(($HeightUnit=='meter')?$Height*39.3700787:$Height));
+                                  
+                                  $WPound = ($WeightUnit=='kilogram')?$Weight*2.2:$Weight;
+                                  $BMIIndex = round($WPound/($HInches*$HInches)* 703,2);
+
+                                 
+                                  if ($BMIIndex < 18.5) {
+                                    $Message="Underweight";
+                                  } else if ($BMIIndex <= 24.9) {
+                                    $Message="Normal";
+                                  } else if ($BMIIndex <= 29.9) {
+                                    $Message="Overweight";
+                                  } else {
+                                    $Message="Obese";
+                                  }
+                                  @endphp
                                   <div class="col">
                                     <h6 class="m-b-7"><span class="data-label">Weight</span><br> <span class="font-weight-bold"><span class="badge data-badge weight-badge">{{$detailpatient->weight}} kg</span></span></h6>
                                   </div>
@@ -127,7 +150,10 @@
                                     <h6 class="m-b-5"><span class="data-label">Height</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge">{{$detailpatient->height}} cm</span></span></h6>
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5"><span class="data-label">Blood Type</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge">{{$detailpatient->bloodtype}}</span></span></h6>
+                                    <h6 class="m-b-5"><span class="data-label">BMI</span><br> <span class="font-weight-bold"><span class="badge data-badge badge-warning">{{$Message}} </span></span></h6>
+                                  </div>
+                                  <div class="col">
+                                    <h6 class="m-b-5"><span class="data-label">Blood</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge">{{$detailpatient->bloodtype}}</span></span></h6>
                                   </div>
                                   @endforeach
                                 </div>
@@ -411,4 +437,17 @@
             }
         }, 1000);
     </script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: @json($calendarEvents) // Add the events here
+        });
+        calendar.render();
+    });
+</script>
+
 @endsection

@@ -82,7 +82,34 @@ class PatientController extends Controller
         $detailpatients = Patient::where('email', $email)->get();
 
 
-        return view('patient.contents.dashboard', compact('name','aptlatests','countdownDate','appointments','listmedicines','detailpatients','listDoctors','notify'));
+        //calendar
+        // Initialize an empty array to store the transformed events
+        $calendarEvents = [];
+
+        // Fetch appointment data
+        $apts = DB::table('appointment')
+        ->select('date', DB::raw('COUNT(*) as appointment_count'))
+        ->groupBy('date')
+        //->where('docid', 1)
+        ->get();
+
+        foreach ($apts as $apt) {
+        $appointmentDate = $apt->date;
+        $appointmentCount = $apt->appointment_count;
+
+            $calendarEvents[] = [
+                'title' => $appointmentCount . ' - Appointment',
+                'start' => $appointmentDate,
+                'url' => url('doctor/appointmentList?date=' . $appointmentDate . '&sort=asc'),
+                'backgroundColor' => '#FF9F32',
+                'borderColor' => '#FF9F32',
+                'allDay' => true,
+            ];
+        }
+
+
+        return view('patient.contents.dashboard', compact('name','aptlatests','countdownDate','appointments','listmedicines',
+        'detailpatients','listDoctors','notify','calendarEvents'));
     }
 
     public function viewAppointmentList()
