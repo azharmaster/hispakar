@@ -77,28 +77,33 @@
                                         <td>{{ $appointment->patient->height }} m</td>
                                     </tr>
                                     <tr>
-                                        <th>Medical History</th>
-                                        <td colspan="3">
-                                            @if ($appointment->medrecord->count() > 0)
-                                                @foreach ($appointment->medrecord as $medrecord)
-                                                    {{ $medrecord->desc }}<br>
-                                                @endforeach
-                                            @else
-                                                No medical history available
-                                            @endif
-                                        </td>
-                                    </tr>
+    <th>Medical History</th>
+    <td colspan="3">
+        
+            @if ($previousMedRecord)
+                {{ $previousMedRecord->desc }}<br>
+            @else
+                No previous medical history available
+            @endif
+       
+    </td>
+</tr>
+
+
+
+
                                     <tr>
                                         <th>Prescribed Medication</th>
                                         <td colspan="3">
                                             <ul>
-                                                @if ($appointment->medrecords && $appointment->medrecords->count() > 0)
-                                                    @foreach ($appointment->medrecords as $medrecord)
-                                                        <li>{{ $medrecord->medication }}</li>
-                                                    @endforeach
-                                                @else
-                                                    <li>No prescribed medication</li>
-                                                @endif
+                                                
+                                            @isset($prevMedicine)
+                                                        @foreach ($prevMedicine as $medicine)
+                                                            <li>{{ $medicine->prevMedName }}</li>
+                                                        @endforeach
+                                                    @else
+                                                        <li>No previous medicine available for this patient.</li>
+                                                    @endisset
                                             </ul>
                                         </td>
                                     </tr>
