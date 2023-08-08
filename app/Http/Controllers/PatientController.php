@@ -35,8 +35,9 @@ class PatientController extends Controller
 
         $patient = Patient::where('email', Auth::user()->email)->first();
 
-        $countdown =  Appointments::join('medrecord', 'appointment.id', '>', 'medrecord.aptid')
+        $countdown =  Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->select('appointment.*')
+        ->where('patient.email', $email )
         ->orderByDesc('appointment.id')
         ->first();
 
@@ -46,11 +47,13 @@ class PatientController extends Controller
             $countdownDate = Carbon::parse($countdown->date . ' ' . $countdown->time)->format('Y-m-d H:i:s');
         }
 
-        $aptlatests =  Appointments::join('medrecord', 'appointment.id', '>', 'medrecord.aptid')
-        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        $aptlatests =  Appointments::join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->join('department', 'appointment.deptid', '=', 'department.id')
+        ->join('patient', 'appointment.patientid', '=', 'patient.id')
         ->select('appointment.*', 'doctor.name as doctor_name', 'department.name as dept_name')
+        ->where('patient.email', $email )
         ->orderByDesc('appointment.id')
+        ->limit(1)
         ->get();
 
         $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
@@ -99,7 +102,8 @@ class PatientController extends Controller
             $calendarEvents[] = [
                 'title' => $appointmentCount . ' Appointment(s)',
                 'start' => $appointmentDate,
-                'url' => url('patient/appointmentList?date=' . $appointmentDate . '&sort=asc'),
+                //'url' => url('patient/appointmentList?date=' . $appointmentDate . '&sort=asc'),
+                'url' => url('/patient/appointmentListFilter/' . $appointmentDate . ''),
                 'backgroundColor' => '#FF9F32',
                 'borderColor' => '#FF9F32',
                 'allDay' => true,
@@ -131,6 +135,24 @@ class PatientController extends Controller
             ->join('appointment', 'appointment.id', '=', 'medrecord.aptid')
             ->count();
         }
+
+
+        return view('patient.contents.appointmentList', compact('appointments'));
+    }
+
+    public function viewAppointmentListFilter($date1) 
+    {
+
+
+        $email=Auth()->user()->email; //dapatemail dr login
+
+        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->join('department', 'appointment.deptid', '=', 'department.id')
+        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
+        ->where('patient.email', $email )
+        ->where('appointment.date', $date1)
+        ->get();
 
 
         return view('patient.contents.appointmentList', compact('appointments'));

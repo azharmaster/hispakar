@@ -110,7 +110,7 @@
                                                                     @if($appointment->date > $currentDate)
 
                                                                     <a title="Cancel Appointment" data-toggle="modal" class="btn btn-danger" data-target="#cancelModal-{{ $appointment->id }}">
-                                                                    Cancel <i class="fas fa-times"></i>
+                                                                     <i style="color:white" class="far fa-calendar-times fa-lg"></i>
                                                                     </a>
                                                                     
                                                                     @else

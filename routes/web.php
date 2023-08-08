@@ -208,7 +208,8 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/patient/medrecord', [PatientController::class, 'viewMedRecord']);
     Route::get('/patient/medprescription', [PatientController::class, 'viewMedPrescription']);
     //Route::get('/patient/appointmentSummary', [PatientController::class, 'viewAppointmentSummary']);
-
+    // Route::get('/patient/appointmentList/{date}', [PatientController::class, 'viewAppointmentListDate'])->name('patient.appointmentList');
+    Route::get('/patient/appointmentListFilter/{date1}', [PatientController::class, 'viewAppointmentListFilter']);
     //Record
     Route::get('/patient/report/{id}', [PatientController::class, 'viewReport']);
 

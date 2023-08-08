@@ -724,7 +724,7 @@ class DoctorController extends Controller
         // $endDateTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
 
         $appointment->time = $startDateTime;
-        $appointment->status = $request->status;
+        $appointment->status = 1;
         $appointment->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $appointment->save();
 
@@ -740,7 +740,7 @@ class DoctorController extends Controller
         $appointment->deptid = $request->input('deptid'); 
         $appointment->date = $request->input('date'); 
         $appointment->time = $request->input('time'); 
-        $appointment->status = $request->input('status');
+        // $appointment->status = $request->input('status');
         $appointment->save();
 
         return redirect('/doctor/appointmentList')->with('success', 'Appointment has been updated');

@@ -194,14 +194,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Status :</span>
-                        <select style="width:350px;" class="form-control" name="status" id="status">
-                            <option value="">Status</option>
-                            <option value="2">Not Available</option>
-                            <option value="1">Available</option>
-                        </select> 
-                    </div>      
+                        
                 </div>
             </div>
             <div class="modal-footer">
@@ -253,10 +246,7 @@
                         <span class="input-group-addon" style="width:150px;">Time :</span>
                         <input type="time" style="width:350px;" class="form-control" name="time" id="time" value="{{ $appointment->time }}">
                     </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Status :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="status" id="status" value="{{ $appointment->status }}">
-                    </div>
+                   
                         
                 </div>
             </div>
