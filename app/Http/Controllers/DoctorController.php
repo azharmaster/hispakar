@@ -950,26 +950,20 @@ class DoctorController extends Controller
                 // Now you can access the name property
 
         //get the next appointment record
-        $currentDateTime = Carbon::now();
+        //$currentDateTime = Carbon::now();
     
         $upcomingAppointment = null; // Initialize the variable to avoid potential issues
 
         $patientId = $record->patient->id;
-        
-        $upcomingAppointment = Appointments::where('patientid', $patientId)
-        ->where(function ($query) use ($currentDateTime) {
-            $query->where('date', '>', $currentDateTime->toDateString())
-                ->orWhere(function ($query) use ($currentDateTime) {
-                    $query->where('date', '=', $currentDateTime->toDateString())
-                        ->where('time', '>', $currentDateTime->toTimeString());
-                });
-        })
-        ->get();
-    
-        
+
+        $upcomingAppointments = Appointments::where('patientid', $patientId)
+                                ->where('date', '>', now()->toDateString())
+                                ->orderBy('date')
+                                ->orderBy('time')
+                                ->get();
 
         return view('doctor.contents.report', compact('record', 'previousRecord', 
-        'prevMedicine', 'medicines', 'upcomingAppointment'));
+        'prevMedicine', 'medicines', 'upcomingAppointments'));
     }
 
     public function filterReportList(Request $request)

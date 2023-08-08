@@ -129,8 +129,8 @@
                                         <tr class="table-danger">
                                             <th colspan="2">Next Appointment</th>
                                             <td colspan="2">
-                                                @if ($upcomingAppointment->isNotEmpty())
-                                                    @foreach ($upcomingAppointment as $appointment)
+                                                @if ($upcomingAppointments->isNotEmpty())
+                                                    @foreach ($upcomingAppointments as $appointment)
                                                         {{ $appointment->date }} {{ $appointment->time }}<br>
                                                     @endforeach
                                                 @else
