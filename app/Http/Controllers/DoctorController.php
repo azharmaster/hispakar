@@ -219,26 +219,26 @@ class DoctorController extends Controller
 
         // calendar
         $calendarEvents = [];
-        $currentYear = now()->format('Y'); // Current year
-        $today = now()->format('Y-m-d'); // Today's date
+        $cYear = Carbon::now('Asia/Kuala_Lumpur')->format('Y'); // now year
+        $today = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d'); // Today's date
 
         // Loop through each month of the year
         for ($month = 1; $month <= 12; $month++) {
-            $currentMonth = sprintf('%02d', $month); // Format the month as '01', '02', etc.
+            $cMonth = sprintf('%02d', $month); // Format the month as '01', '02', etc.
 
             // Get the last day of the current month
-            $lastDayOfMonth = Carbon::create($currentYear, $currentMonth)->endOfMonth();
+            $lastDayOfMonth = Carbon::create($cYear, $cMonth)->endOfMonth();
 
             // Loop through each day of the month
-            for ($date = Carbon::create($currentYear, $currentMonth, 1); $date <= $lastDayOfMonth; $date->addDay()) {
-                $currentDate = $date->format('Y-m-d');
+            for ($date = Carbon::create($cYear, $cMonth, 1); $date <= $lastDayOfMonth; $date->addDay()) {
+                $cDate = $date->format('Y-m-d');
 
-                if ($currentDate < $today) { // past appointment
+                if ($cDate < $today) { // past appointment
 
                     $totalAttend = 0;
                     
                     $totalDone = DB::table('appointment') // total done
-                    ->where('date', $currentDate)
+                    ->where('date', $cDate)
                     ->where('deptid', $doctor->deptid) // by user department
                     ->whereExists(function ($query) { // have medrecord
                         $query->select(DB::raw(1))
@@ -247,7 +247,7 @@ class DoctorController extends Controller
                     })->count();
 
                     $totalCancel = DB::table('appointment') // total cancel
-                    ->where('date', $currentDate)
+                    ->where('date', $cDate)
                     ->where('deptid', $doctor->deptid) // by user department
                     ->whereNotExists(function ($query) { // not have medrecord
                         $query->select(DB::raw(1))
@@ -258,7 +258,7 @@ class DoctorController extends Controller
                 } else { // today / next apt 
 
                     $totalDone = DB::table('appointment') // total done
-                    ->where('date', $currentDate)
+                    ->where('date', $cDate)
                     ->where('deptid', $doctor->deptid) // by user department
                     ->whereExists(function ($query) { // have medrecord
                         $query->select(DB::raw(1))
@@ -267,7 +267,7 @@ class DoctorController extends Controller
                     })->count();   
                     
                     $totalAttend = DB::table('appointment')
-                    ->where('date', $currentDate)
+                    ->where('date', $cDate)
                     ->where('deptid', $doctor->deptid) // by user department
                     ->where('status', 1) // status attend
                     ->whereNotExists(function ($query) { // not medrecord
@@ -277,7 +277,7 @@ class DoctorController extends Controller
                     })->count();
 
                     $totalCancel = DB::table('appointment')
-                    ->where('date', $currentDate)
+                    ->where('date', $cDate)
                     ->where('deptid', $doctor->deptid) // by user department
                     ->where('status', 2) // status cancel
                     ->count(); 
@@ -313,8 +313,8 @@ class DoctorController extends Controller
                 foreach ($events as $event) {
                     $calendarEvents[] = [
                         'title' => $event['title'],
-                        'start' => $currentDate,
-                        'url' => url('doctor/appointmentList?date=' . $currentDate . '&sort=asc'),
+                        'start' => $cDate,
+                        'url' => url('doctor/appointmentList?date=' . $cDate . '&sort=asc'),
                         'backgroundColor' => $event['color'],
                         'borderColor' => $event['borderColor'],
                         'allDay' => true,
