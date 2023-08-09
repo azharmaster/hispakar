@@ -77,7 +77,112 @@ class NurseController extends Controller
         $adult = Patient::whereBetween('age', [20, 64])->count(); // Age between 20 and 64 years
         $older = Patient::where('age', '>=', 65)->count(); // Age 65 years and above
 
-        //
+        // calendar
+        $calendarEvents = [];
+        $currentYear = now()->format('Y'); // Current year
+        $today = now()->format('Y-m-d'); // Today's date
+
+        // Loop through each month of the year
+        for ($month = 1; $month <= 12; $month++) {
+            $currentMonth = sprintf('%02d', $month); // Format the month as '01', '02', etc.
+
+            // Get the last day of the current month
+            $lastDayOfMonth = Carbon::create($currentYear, $currentMonth)->endOfMonth();
+
+            // Loop through each day of the month
+            for ($date = Carbon::create($currentYear, $currentMonth, 1); $date <= $lastDayOfMonth; $date->addDay()) {
+                $currentDate = $date->format('Y-m-d');
+
+                if ($currentDate < $today) { // past appointment
+
+                    $totalAttend = 0;
+                    
+                    $totalDone = DB::table('appointment') // total done
+                    ->where('date', $currentDate)
+                    ->where('deptid', $nurse->deptid) // by user department
+                    ->whereExists(function ($query) { // have medrecord
+                        $query->select(DB::raw(1))
+                            ->from('medrecord')
+                            ->whereColumn('medrecord.aptid', 'appointment.id');
+                    })->count();
+
+                    $totalCancel = DB::table('appointment') // total cancel
+                    ->where('date', $currentDate)
+                    ->where('deptid', $nurse->deptid) // by user department
+                    ->whereNotExists(function ($query) { // not have medrecord
+                        $query->select(DB::raw(1))
+                            ->from('medrecord')
+                            ->whereColumn('medrecord.aptid', 'appointment.id');
+                    })->count();
+
+                } else { // today / next apt 
+
+                    $totalDone = DB::table('appointment') // total done
+                    ->where('date', $currentDate)
+                    ->where('deptid', $nurse->deptid) // by user department
+                    ->whereExists(function ($query) { // have medrecord
+                        $query->select(DB::raw(1))
+                            ->from('medrecord')
+                            ->whereColumn('medrecord.aptid', 'appointment.id');
+                    })->count();   
+                    
+                    $totalAttend = DB::table('appointment')
+                    ->where('date', $currentDate)
+                    ->where('deptid', $nurse->deptid) // by user department
+                    ->where('status', 1) // status attend
+                    ->whereNotExists(function ($query) { // not medrecord
+                        $query->select(DB::raw(1))
+                            ->from('medrecord')
+                            ->whereColumn('medrecord.aptid', 'appointment.id');
+                    })->count();
+
+                    $totalCancel = DB::table('appointment')
+                    ->where('date', $currentDate)
+                    ->where('deptid', $nurse->deptid) // by user department
+                    ->where('status', 2) // status cancel
+                    ->count(); 
+                }
+
+                $events = []; // Initialize an array to store events for this day
+
+                if ($totalCancel > 0) { // event cancel apt
+                    $events[] = [
+                        'title' => $totalCancel . " - Cancel",
+                        'color' => '#DC143C',
+                        'borderColor' => '#DC2127', // adjust color if want border
+                    ];
+                }
+                
+                if ($totalAttend > 0) { // event attend but not done
+                    $events[] = [
+                        'title' => $totalAttend . " - Attend",
+                        'color' => '#FF9F32',
+                        'borderColor' => '#FF8303',
+                    ];
+                }
+                
+                if ($totalDone > 0) { // event done apt
+                    $events[] = [
+                        'title' => $totalDone . " - Done",
+                        'color' => '#51B749',
+                        'borderColor' => '#51B749',
+                    ];
+                }
+
+                // Add events for this day to the calendarEvents array
+                foreach ($events as $event) {
+                    $calendarEvents[] = [
+                        'title' => $event['title'],
+                        'start' => $currentDate,
+                        'url' => url('doctor/appointmentList?date=' . $currentDate . '&sort=asc'),
+                        'backgroundColor' => $event['color'],
+                        'borderColor' => $event['borderColor'],
+                        'allDay' => true,
+                    ];
+                }
+            }
+        } // End calendar
+
         $medicines = Medicine::all();
         $appointments = Appointments::all();
 
@@ -110,7 +215,7 @@ class NurseController extends Controller
             //for pie chart by ages
             'children', 'teenage', 'adult', 'older',
 
-            'medicines',  
+            'medicines', 'calendarEvents',  
             'appointments', 'aptDs', 'currentDate'));
     }
 
