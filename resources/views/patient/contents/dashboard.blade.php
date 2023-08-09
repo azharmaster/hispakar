@@ -2,6 +2,17 @@
 
 @section('content')
 
+<!-- script for chart -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- css for radial chart / chart patient by gender -->
+<link rel="stylesheet" href="{{ asset('files/assets/pages/chart/radial/css/radial-1.css') }}" type="text/css" media="all">
+
+<!-- Include the FullCalendar library -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+
           <!-- Start Dashboard -->
           <div class="pcoded-content">
             <div class="page-header card">

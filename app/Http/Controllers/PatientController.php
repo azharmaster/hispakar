@@ -87,30 +87,112 @@ class PatientController extends Controller
         $detailpatients = Patient::where('email', $email)->get();
 
 
+        // calendar
         $calendarEvents = [];
+        $currentYear = now()->format('Y'); // Current year
+        $today = now()->format('Y-m-d'); // Today's date
 
-        $apts = DB::table('appointment')
-            ->select('date', DB::raw('COUNT(*) as appointment_count'))
-            ->groupBy('date')
-            ->where('patientid', $patient->id)
-            ->get();
-    
-        foreach ($apts as $apt) {
-            $appointmentDate = $apt->date;
-            $appointmentCount = $apt->appointment_count;
-    
-            $calendarEvents[] = [
-                'title' => $appointmentCount . ' Appointment(s)',
-                'start' => $appointmentDate,
-                //'url' => url('patient/appointmentList?date=' . $appointmentDate . '&sort=asc'),
-                'url' => url('/patient/appointmentListFilter/' . $appointmentDate . ''),
-                'backgroundColor' => '#FF9F32',
-                'borderColor' => '#FF9F32',
-                'allDay' => true,
-            ];
-        }
+        // Loop through each month of the year
+        for ($month = 1; $month <= 12; $month++) {
+            $currentMonth = sprintf('%02d', $month); // Format the month as '01', '02', etc.
 
-        //dd($calendarEvents);
+            // Get the last day of the current month
+            $lastDayOfMonth = Carbon::create($currentYear, $currentMonth)->endOfMonth();
+
+            // Loop through each day of the month
+            for ($date = Carbon::create($currentYear, $currentMonth, 1); $date <= $lastDayOfMonth; $date->addDay()) {
+                $currentDate = $date->format('Y-m-d');
+
+                if ($currentDate < $today) { // past appointment
+
+                    $totalAttend = 0;
+                    
+                    $totalDone = DB::table('appointment') // total done
+                    ->where('date', $currentDate)
+                    ->where('patientid', $patient->id) 
+                    ->whereExists(function ($query) { // have medrecord
+                        $query->select(DB::raw(1))
+                            ->from('medrecord')
+                            ->whereColumn('medrecord.aptid', 'appointment.id');
+                    })->count();
+
+                    $totalCancel = DB::table('appointment') // total cancel
+                    ->where('date', $currentDate)
+                    ->where('patientid', $patient->id) 
+                    ->whereNotExists(function ($query) { // not have medrecord
+                        $query->select(DB::raw(1))
+                            ->from('medrecord')
+                            ->whereColumn('medrecord.aptid', 'appointment.id');
+                    })->count();
+
+                } else { // today / next apt 
+
+                    $totalDone = DB::table('appointment') // total done
+                    ->where('date', $currentDate)
+                    ->where('patientid', $patient->id) 
+                    ->whereExists(function ($query) { // have medrecord
+                        $query->select(DB::raw(1))
+                            ->from('medrecord')
+                            ->whereColumn('medrecord.aptid', 'appointment.id');
+                    })->count();   
+                    
+                    $totalAttend = DB::table('appointment')
+                    ->where('date', $currentDate)
+                    ->where('patientid', $patient->id) 
+                    ->where('status', 1) // status attend
+                    ->whereNotExists(function ($query) { // not medrecord
+                        $query->select(DB::raw(1))
+                            ->from('medrecord')
+                            ->whereColumn('medrecord.aptid', 'appointment.id');
+                    })->count();
+
+                    $totalCancel = DB::table('appointment')
+                    ->where('date', $currentDate)
+                    ->where('patientid', $patient->id) 
+                    ->where('status', 2) // status cancel
+                    ->count(); 
+                }
+
+                $events = []; // Initialize an array to store events for this day
+
+                if ($totalCancel > 0) { // event cancel apt
+                    $events[] = [
+                        'title' => $totalCancel . " - Cancel",
+                        'color' => '#DC143C',
+                        'borderColor' => '#DC2127', // adjust color if want border
+                    ];
+                }
+                
+                if ($totalAttend > 0) { // event attend but not done
+                    $events[] = [
+                        'title' => $totalAttend . " - Attend",
+                        'color' => '#FF9F32',
+                        'borderColor' => '#FF8303',
+                    ];
+                }
+                
+                if ($totalDone > 0) { // event done apt
+                    $events[] = [
+                        'title' => $totalDone . " - Done",
+                        'color' => '#51B749',
+                        'borderColor' => '#51B749',
+                    ];
+                }
+
+                // Add events for this day to the calendarEvents array
+                foreach ($events as $event) {
+                    $calendarEvents[] = [
+                        'title' => $event['title'],
+                        'start' => $currentDate,
+                        'url' => url('doctor/appointmentList?date=' . $currentDate . '&sort=asc'),
+                        'backgroundColor' => $event['color'],
+                        'borderColor' => $event['borderColor'],
+                        'allDay' => true,
+                    ];
+                }
+            }
+        } // End calendar
+
         return view('patient.contents.dashboard', compact('name','aptlatests','countdownDate','appointments','listmedicines',
         'detailpatients','listDoctors','notify','calendarEvents'));
     }
