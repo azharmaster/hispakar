@@ -473,7 +473,7 @@ class DoctorController extends Controller
                     ->join('patient', 'appointment.patientid', '=', 'patient.id')
                     ->join('doctor', 'appointment.docid', '=', 'doctor.id')
                     ->join('department', 'appointment.deptid', '=', 'department.id')
-                    ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.status as medrecord_status')
+                    ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.id as medrc_id', 'medrecord.status as medrecord_status')
                     ->where('appointment.status', 1)
                     ->where('doctor.id', $doctor->id)
                     ->where('appointment.deptid', $doctor->deptid)

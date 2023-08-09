@@ -535,11 +535,13 @@ class AdminController extends Controller
     public function viewAppointmentList()
     {
 
-        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->join('department', 'appointment.deptid', '=', 'department.id')
-        ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name')
-        ->get();
+        $appointments = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
+                    ->join('patient', 'appointment.patientid', '=', 'patient.id')
+                    ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+                    ->join('department', 'appointment.deptid', '=', 'department.id')
+                    ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name',
+                    'medrecord.id as medrc_id', 'medrecord.status as medrecord_status')
+                    ->get();
 
         $doctors = Doctor::all();
         $patients = Patient::all();
