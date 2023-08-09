@@ -1024,7 +1024,7 @@ class AdminController extends Controller
         $appointment->deptid = $request->input('deptid'); 
         $appointment->date = $request->input('date'); 
         $appointment->time = $request->input('time'); 
-        $appointment->status = $request->input('status');
+        // $appointment->status = $request->input('status');
         $appointment->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $appointment->save();
 

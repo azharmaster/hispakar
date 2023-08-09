@@ -257,14 +257,7 @@
                         <span class="input-group-addon" style="width:150px;">Time :</span>
                         <input type="time" style="width:350px;" class="form-control" name="time" id="time" value="{{ $appointment->time }}">
                     </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Status :</span>
-                         <select style="width:350px;" class="form-control" name="status">
-                            <option value="{{ $appointment->status }}" selected> @if ($appointment->status == 0) Cancel @else Confirm @endif </option>
-                            <option value="0">Cancel</option>
-                            <option value="1">Confirm</option>
-                        </select>
-                    </div>
+                    
                         
                 </div>
             </div>
