@@ -417,7 +417,7 @@
                                                 <td>{{ $apt->patient->name }}</td> 
                                                 <td>{{ $apt->desc }}</td>
                                                 <td> 
-                                                    <a href="/admin/report/{{ $apt->id }}" title="View Medical Record">
+                                                    <a href="/admin/report/{{ $apt->refnum }}" title="View Medical Record">
                                                         <i style="font-size:20px;" class="icon feather icon-eye f-w-600 f-16 m-r-15  text-c-yellow "></i>
                                                     </a>
                                                 </td>

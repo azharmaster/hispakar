@@ -121,7 +121,8 @@
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Desc :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="desc" id="desc" placeholder="Routine medical examination to assess a person's general health status.">
+                        <!-- <input type="text" style="width:350px;" class="form-control" name="desc" id="desc" > -->
+                        <textarea style="width:350px;" class="form-control" name="desc" id="desc" rows="4" cols="50" placeholder="Routine medical examination to assess a person's general health status."></textarea>
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Charge :</span>
@@ -161,7 +162,9 @@
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Desc :</span>
-                        <input type="text" style="width:350px;" class="form-control" name="desc" id="desc" value="{{ $service->desc }}" placeholder="Department specialized in the diagnosis and treatment of heart diseases.">
+                       
+                        <textarea style="width:350px;" class="form-control" name="desc" id="desc" rows="4" cols="50"  
+                        placeholder="Routine medical examination to assess a person's general health status.">{{ $service->desc }}</textarea>
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px; font-weight:bold;">Charge :</span>
