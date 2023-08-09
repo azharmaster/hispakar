@@ -37,9 +37,9 @@ class DoctorController extends Controller
         $doctorId = $doctor->id;
 
         $drRoom = Room::join('doctor', 'room.staff_id', '=', 'doctor.staff_id')
-        ->select('room.name')
-        ->where('doctor.id', $doctorId)
-        ->first();
+                ->select('room.name')
+                ->where('doctor.id', $doctorId)
+                ->first();
 
         $roomName = null; // Initialize $roomName to null
         
@@ -49,12 +49,6 @@ class DoctorController extends Controller
 
         // Get the current date in the 'Y-m-d' format
         $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
-
-        //total appointment card
-        // $totalApt = Appointments::join('doctor', 'appointment.docid', '=', 'doctor.id')
-        // ->select('appointment.*')
-        // ->where('doctor.email', $email)
-        // ->count();
 
         $totalApt = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
                     ->join('doctor', 'appointment.docid', '=', 'doctor.id')
@@ -69,15 +63,9 @@ class DoctorController extends Controller
         // Calculate the time difference between now and the appointment's created_at timestamp
         $timeDifference = $latestAppointment ? Carbon::parse($latestAppointment->created_at)->diffForHumans() : 'N/A';
 
-        //total patient card
-        // $totalPatient = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-        // ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        // ->select('appointment.*')
-        // ->count();
-
         $totalPatient = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
-        ->where('medrecord.docid', $doctor->id)
-        ->count();
+                    ->where('medrecord.docid', $doctor->id)
+                    ->count();
 
         // Get the most recent patient's created_at timestamp
         $latestPatient = Patient::orderBy('created_at', 'desc')->first();
@@ -87,8 +75,8 @@ class DoctorController extends Controller
   
         //total nurse card
         $totalNurse = Nurse::join('doctor', 'nurse.deptid', '=', 'doctor.deptid')
-        ->select('nurse.*')
-        ->count();
+                    ->select('nurse.*')
+                    ->count();
 
         // Get the most recent nurse's created_at timestamp
         $latestNurse = Nurse::orderBy('created_at', 'desc')->first();
@@ -101,40 +89,17 @@ class DoctorController extends Controller
 
         //appointment list today
         $aptDs = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
-        ->join('patient', 'appointment.patientid', '=', 'patient.id')
-        ->join('users', 'patient.email', '=', 'users.email')
-        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.id as appointment_id', 'patient.id as patient_id',
-        'appointment.status as appointment_status','medrecord.status as medrecord_status',
-        'appointment.*', 'patient.*','users.image as patient_image')
-        ->where('doctor.id', $doctorId)
-        ->whereDate('appointment.date', $currentDate) 
-        ->orderBy('appointment.time', 'asc')
-        // ->take(5)
-        ->get();
-
-
-        // $aptDs = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
-        //     ->join('patient', 'appointment.patientid', '=', 'patient.id')
-        //     ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        //     ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.status')
-        //     ->where('doctor.id', $doctorId)
-        //     ->whereDate('appointment.date', $currentDate) 
-        //     ->orderBy('appointment.time', 'asc')
-        //     ->take(5)
-        //     ->get();
-   
-
-    
-        //get list of appointment
-        // $aptList = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-        //             ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        //             ->select('appointment.*', 'patient.*')
-        //             ->where('doctor.id', $doctorId)
-        //             ->whereDate('appointment.date', $currentDate) 
-        //             ->orderBy('appointment.time', 'asc')
-        //             ->take(5)
-        //             ->all
+                ->join('patient', 'appointment.patientid', '=', 'patient.id')
+                ->join('users', 'patient.email', '=', 'users.email')
+                ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+                ->select('appointment.id as appointment_id', 'patient.id as patient_id',
+                'appointment.status as appointment_status','medrecord.status as medrecord_status',
+                'appointment.*', 'patient.*','users.image as patient_image')
+                ->where('doctor.id', $doctorId)
+                ->whereDate('appointment.date', $currentDate) 
+                ->orderBy('appointment.time', 'asc')
+                // ->take(5)
+                ->get();
 
         //medicine list card
         $medicines = Medicine::all();
@@ -189,33 +154,32 @@ class DoctorController extends Controller
         
         //Age
         $children = Patient::join('appointment', 'patient.id', '=', 'appointment.patientid')
-        ->where('patient.age', '<=', 12)
-        ->where('appointment.docid', $doctor->id)
-        ->select('patient.id') // Select only the patient IDs
-        ->distinct()
-        ->count(); // Age up to 12 years
+                    ->where('patient.age', '<=', 12)
+                    ->where('appointment.docid', $doctor->id)
+                    ->select('patient.id') // Select only the patient IDs
+                    ->distinct()
+                    ->count(); // Age up to 12 years
 
         $teenage = Patient::join('appointment', 'patient.id', '=', 'appointment.patientid')
-        ->whereBetween('age', [13, 19])
-        ->where('appointment.docid', $doctor->id)
-        ->select('patient.id') // Select only the patient IDs
-        ->distinct()
-        ->count(); // Age between 13 and 19 years
+                    ->whereBetween('age', [13, 19])
+                    ->where('appointment.docid', $doctor->id)
+                    ->select('patient.id') // Select only the patient IDs
+                    ->distinct()
+                    ->count(); // Age between 13 and 19 years
 
         $adult = Patient::join('appointment', 'patient.id', '=', 'appointment.patientid')
-        ->whereBetween('age', [20, 64])
-        ->where('appointment.docid', $doctor->id)
-        ->select('patient.id') // Select only the patient IDs
-        ->distinct()
-        ->count(); // Age between 20 and 64 years
+                ->whereBetween('age', [20, 64])
+                ->where('appointment.docid', $doctor->id)
+                ->select('patient.id') // Select only the patient IDs
+                ->distinct()
+                ->count(); // Age between 20 and 64 years
 
         $older = Patient::join('appointment', 'patient.id', '=', 'appointment.patientid')
-        ->where('age', '>=', 65)
-        ->where('appointment.docid', $doctor->id)
-        ->select('patient.id') // Select only the patient IDs
-        ->distinct()
-        ->count(); // Age 65 years and above
-
+                ->where('age', '>=', 65)
+                ->where('appointment.docid', $doctor->id)
+                ->select('patient.id') // Select only the patient IDs
+                ->distinct()
+                ->count(); // Age 65 years and above
 
         // calendar
         $calendarEvents = [];
@@ -238,49 +202,49 @@ class DoctorController extends Controller
                     $totalAttend = 0;
                     
                     $totalDone = DB::table('appointment') // total done
-                    ->where('date', $cDate)
-                    ->where('deptid', $doctor->deptid) // by user department
-                    ->whereExists(function ($query) { // have medrecord
-                        $query->select(DB::raw(1))
-                            ->from('medrecord')
-                            ->whereColumn('medrecord.aptid', 'appointment.id');
-                    })->count();
+                                ->where('date', $cDate)
+                                ->where('deptid', $doctor->deptid) // by user department
+                                ->whereExists(function ($query) { // have medrecord
+                                    $query->select(DB::raw(1))
+                                        ->from('medrecord')
+                                        ->whereColumn('medrecord.aptid', 'appointment.id');
+                                })->count();
 
                     $totalCancel = DB::table('appointment') // total cancel
-                    ->where('date', $cDate)
-                    ->where('deptid', $doctor->deptid) // by user department
-                    ->whereNotExists(function ($query) { // not have medrecord
-                        $query->select(DB::raw(1))
-                            ->from('medrecord')
-                            ->whereColumn('medrecord.aptid', 'appointment.id');
-                    })->count();
+                                ->where('date', $cDate)
+                                ->where('deptid', $doctor->deptid) // by user department
+                                ->whereNotExists(function ($query) { // not have medrecord
+                                    $query->select(DB::raw(1))
+                                        ->from('medrecord')
+                                        ->whereColumn('medrecord.aptid', 'appointment.id');
+                                })->count();
 
                 } else { // today / next apt 
 
                     $totalDone = DB::table('appointment') // total done
-                    ->where('date', $cDate)
-                    ->where('deptid', $doctor->deptid) // by user department
-                    ->whereExists(function ($query) { // have medrecord
-                        $query->select(DB::raw(1))
-                            ->from('medrecord')
-                            ->whereColumn('medrecord.aptid', 'appointment.id');
-                    })->count();   
+                                ->where('date', $cDate)
+                                ->where('deptid', $doctor->deptid) // by user department
+                                ->whereExists(function ($query) { // have medrecord
+                                    $query->select(DB::raw(1))
+                                        ->from('medrecord')
+                                        ->whereColumn('medrecord.aptid', 'appointment.id');
+                                })->count();   
                     
                     $totalAttend = DB::table('appointment')
-                    ->where('date', $cDate)
-                    ->where('deptid', $doctor->deptid) // by user department
-                    ->where('status', 1) // status attend
-                    ->whereNotExists(function ($query) { // not medrecord
-                        $query->select(DB::raw(1))
-                            ->from('medrecord')
-                            ->whereColumn('medrecord.aptid', 'appointment.id');
-                    })->count();
+                                ->where('date', $cDate)
+                                ->where('deptid', $doctor->deptid) // by user department
+                                ->where('status', 1) // status attend
+                                ->whereNotExists(function ($query) { // not medrecord
+                                    $query->select(DB::raw(1))
+                                        ->from('medrecord')
+                                        ->whereColumn('medrecord.aptid', 'appointment.id');
+                                })->count();
 
                     $totalCancel = DB::table('appointment')
-                    ->where('date', $cDate)
-                    ->where('deptid', $doctor->deptid) // by user department
-                    ->where('status', 2) // status cancel
-                    ->count(); 
+                                ->where('date', $cDate)
+                                ->where('deptid', $doctor->deptid) // by user department
+                                ->where('status', 2) // status cancel
+                                ->count(); 
                 }
 
                 $events = []; // Initialize an array to store events for this day
@@ -314,7 +278,7 @@ class DoctorController extends Controller
                     $calendarEvents[] = [
                         'title' => $event['title'],
                         'start' => $cDate,
-                        'url' => url('doctor/appointmentList?date=' . $cDate . '&sort=asc'),
+                        'url' => route('doctor.appointmentList', ['date' => $cDate]),
                         'backgroundColor' => $event['color'],
                         'borderColor' => $event['borderColor'],
                         'allDay' => true,
@@ -430,9 +394,9 @@ class DoctorController extends Controller
         $endOfWeek = Carbon::now('Asia/Kuala_Lumpur')->endOfWeek();
 
         $doctorSchedule = DocSchedule::where('docid', $doctor->id)
-            ->whereBetween('date', [$startOfWeek, $endOfWeek])
-            ->pluck('date')
-            ->toArray();
+                        ->whereBetween('date', [$startOfWeek, $endOfWeek])
+                        ->pluck('date')
+                        ->toArray();
 
         // Get the selected date from the request, or set it to the first available date if not provided
         $selectedDate = $request->input('date', reset($doctorSchedule));
@@ -448,14 +412,14 @@ class DoctorController extends Controller
 
         // To join tables and retrieve the appointment list based on the doctor's ID
         $appointments = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
-            ->join('patient', 'appointment.patientid', '=', 'patient.id')
-            ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-            ->join('department', 'appointment.deptid', '=', 'department.id')
-            ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.id as medrc_id', 'medrecord.status as medrecord_status')
-            ->where('doctor.id', $doctor->id)
-            ->where('appointment.deptid', $doctor->deptid)
-            ->where('appointment.status', 1)
-            ->get();
+                    ->join('patient', 'appointment.patientid', '=', 'patient.id')
+                    ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+                    ->join('department', 'appointment.deptid', '=', 'department.id')
+                    ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.id as medrc_id', 'medrecord.status as medrecord_status')
+                    ->where('doctor.id', $doctor->id)
+                    ->where('appointment.deptid', $doctor->deptid)
+                    ->where('appointment.status', 1)
+                    ->get();
 
         $patients = Patient::all();
         $doctors = Doctor::all();
@@ -505,16 +469,16 @@ class DoctorController extends Controller
     
         // To join tables and retrieve the appointment list based on the doctor's ID
         $appointments = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
-            ->join('patient', 'appointment.patientid', '=', 'patient.id')
-            ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-            ->join('department', 'appointment.deptid', '=', 'department.id')
-            ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.status as medrecord_status')
-            ->where('appointment.status', 1)
-            ->where('doctor.id', $doctor->id)
-            ->where('appointment.deptid', $doctor->deptid)
-            ->whereDate('appointment.date', $chooseDate)
-            ->orderBy('appointment.time', 'asc')
-            ->get();
+                    ->join('patient', 'appointment.patientid', '=', 'patient.id')
+                    ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+                    ->join('department', 'appointment.deptid', '=', 'department.id')
+                    ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.status as medrecord_status')
+                    ->where('appointment.status', 1)
+                    ->where('doctor.id', $doctor->id)
+                    ->where('appointment.deptid', $doctor->deptid)
+                    ->whereDate('appointment.date', $chooseDate)
+                    ->orderBy('appointment.time', 'asc')
+                    ->get();
     
         $patients = Patient::all();
         $doctors = Doctor::all();
@@ -524,7 +488,6 @@ class DoctorController extends Controller
             'doctor', 'doctorSchedule', 'timeSlots', 'selectedDate', 'chooseDate'));
     }
     
-
     public function getDoctorSchedule($doctorId)
     {
         $startOfWeek = now()->startOfWeek();
@@ -545,10 +508,10 @@ class DoctorController extends Controller
     
         if (!$appointment->patient || !$appointment->medrecord) {
             $appointment = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
-                ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
-                ->select('appointment.*', 'patient.*', 'medrecord.*')
-                ->where('appointment.id', $id)
-                ->first();
+                        ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
+                        ->select('appointment.*', 'patient.*', 'medrecord.*')
+                        ->where('appointment.id', $id)
+                        ->first();
         }
     
         $singlePatient = $appointment->patient;
@@ -560,10 +523,10 @@ class DoctorController extends Controller
     
         // Retrieve the previous medical record based on created_at timestamp
         $previousMedRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
-            ->where('medrecord.patientid', $appointment->patientid)
-            ->where('medrecord.aptid', '<', $appointment->id)
-            ->orderBy('medrecord.id', 'desc')
-            ->first();
+                        ->where('medrecord.patientid', $appointment->patientid)
+                        ->where('medrecord.aptid', '<', $appointment->id)
+                        ->orderBy('medrecord.id', 'desc')
+                        ->first();
         
             // Get the previous medicines for the medicine record
        $prevMedicine = collect(); // Initialize an empty collection
@@ -571,19 +534,18 @@ class DoctorController extends Controller
        if ($previousMedRecord) {
        $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
         //    ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
-           ->where('medprescription.patientid', $appointment->patientid)
-           ->where('medprescription.aptid', $previousMedRecord->aptid) // Use the aptid from the previous record
-           ->select('medprescription.name as prevMedName')
-           ->orderBy('medprescription.id', 'desc')
-           ->take(5) // Take the last 5 records
-           ->get()
-           ->reverse(); // Reverse the order to display the most recent medicine first
+                    ->where('medprescription.patientid', $appointment->patientid)
+                    ->where('medprescription.aptid', $previousMedRecord->aptid) // Use the aptid from the previous record
+                    ->select('medprescription.name as prevMedName')
+                    ->orderBy('medprescription.id', 'desc')
+                    ->take(5) // Take the last 5 records
+                    ->get()
+                    ->reverse(); // Reverse the order to display the most recent medicine first
        }
     
         return view('doctor.contents.appointmentReport', compact('appointment', 'medicines', 'singlePatient', 'medservices', 'patients', 'medNum', 'previousMedRecord', 'prevMedicine'));
     }
     
-
     public function viewMedicineList()
     {
         $medicines = Medicine::all();
@@ -650,10 +612,8 @@ class DoctorController extends Controller
         DB::statement('SET @counter = 0;');
         DB::statement('UPDATE docschedule SET id = @counter:=@counter+1;');
 
-
         return redirect('/doctor/scheduleList')->with('success', 'Schedule has been deleted');
     }
-
 
     //Edit Profile
     public function editProfile(Request $request, $id)
@@ -1009,14 +969,14 @@ class DoctorController extends Controller
 
        if ($previousRecord) {
        $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
-           ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
-           ->where('medprescription.patientid', $record->patientid)
-           ->where('medprescription.aptid', $previousRecord->aptid) // Use the aptid from the previous record
-           ->select('medprescription.name as prevMedName')
-           ->orderBy('medprescription.id', 'desc')
-           ->take(5) // Take the last 5 records
-           ->get()
-           ->reverse(); // Reverse the order to display the most recent medicine first
+                        ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
+                        ->where('medprescription.patientid', $record->patientid)
+                        ->where('medprescription.aptid', $previousRecord->aptid) // Use the aptid from the previous record
+                        ->select('medprescription.name as prevMedName')
+                        ->orderBy('medprescription.id', 'desc')
+                        ->take(5) // Take the last 5 records
+                        ->get()
+                        ->reverse(); // Reverse the order to display the most recent medicine first
        }
 
         // Join with medservice table
