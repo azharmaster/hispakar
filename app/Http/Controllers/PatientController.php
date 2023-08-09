@@ -183,8 +183,13 @@ class PatientController extends Controller
                 foreach ($events as $event) {
                     $calendarEvents[] = [
                         'title' => $event['title'],
+<<<<<<< Updated upstream
                         'start' => $cDate,
                         'url' => url('doctor/appointmentList?date=' . $cDate . '&sort=asc'),
+=======
+                        'start' => $currentDate,
+                        'url' => url('patient/appointmentListFilter/' . $currentDate . ''),
+>>>>>>> Stashed changes
                         'backgroundColor' => $event['color'],
                         'borderColor' => $event['borderColor'],
                         'allDay' => true,
@@ -242,34 +247,34 @@ class PatientController extends Controller
 
     public function viewReport($id) //id medrecord
     {
-        //get the details of current logged in patient
-        $patient = Patient::where('email', Auth::user()->email)->first();
+         //get the details of current logged in patient
+        //$patient = Patient::where('email', Auth::user()->email)->first();
 
         $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
-                ->where('id', $id)
+                ->where('refnum', $id)
                 ->first();
         
-        // Get the previous record with the same patient ID
-        $previousRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
-        ->where('medrecord.patientid', $record->patientid)
-        ->where('medrecord.id', '<', $record->id)
-        ->orderBy('medrecord.id', 'desc')
-        ->first();
+       // Get the previous record with the same patient ID
+       $previousRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+                        ->where('medrecord.patientid', $record->patientid)
+                        ->where('medrecord.id', '<', $record->id)
+                        ->orderBy('medrecord.id', 'desc')
+                        ->first();
 
-        // Get the previous medicines for the medicine record
-        $prevMedicine = collect(); // Initialize an empty collection
+       // Get the previous medicines for the medicine record
+       $prevMedicine = collect(); // Initialize an empty collection
 
-        if ($previousRecord) {
-        $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
-            ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
-            ->where('medprescription.patientid', $record->patientid)
-            ->where('medprescription.aptid', $previousRecord->aptid) // Use the aptid from the previous record
-            ->select('medprescription.name as prevMedName')
-            ->orderBy('medprescription.id', 'desc')
-            ->take(5) // Take the last 5 records
-            ->get()
-            ->reverse(); // Reverse the order to display the most recent medicine first
-        }
+       if ($previousRecord) {
+       $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
+           ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
+           ->where('medprescription.patientid', $record->patientid)
+           ->where('medprescription.aptid', $previousRecord->aptid) // Use the aptid from the previous record
+           ->select('medprescription.name as prevMedName')
+           ->orderBy('medprescription.id', 'desc')
+           ->take(5) // Take the last 5 records
+           ->get()
+           ->reverse(); // Reverse the order to display the most recent medicine first
+       }
 
         // Join with medservice table
         $record->load('medService');
@@ -286,9 +291,19 @@ class PatientController extends Controller
                 // Now you can access the name property
 
         //get the next appointment record
+<<<<<<< Updated upstream
         $upcomingAppointment = null; // Initialize the variable to avoid potential issues
 
         $upcomingAppointments = Appointments::where('patientid', $patient->id)
+=======
+        //$currentDateTime = Carbon::now();
+    
+        $upcomingAppointment = null; // Initialize the variable to avoid potential issues
+
+        $patientId = $record->patient->id;
+
+        $upcomingAppointments = Appointments::where('patientid', $patientId)
+>>>>>>> Stashed changes
                                 ->where('date', '>', date('Y-m-d'))
                                 ->orderBy('date')
                                 ->orderBy('time')
