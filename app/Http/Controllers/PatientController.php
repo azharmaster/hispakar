@@ -184,7 +184,7 @@ class PatientController extends Controller
                     $calendarEvents[] = [
                         'title' => $event['title'],
                         'start' => $currentDate,
-                        'url' => url('patient/appointmentListFilter/' . $currentDate . ''),
+                        'url' => route('patient.appointmentList', ['date1' => $currentDate]),
                         'backgroundColor' => $event['color'],
                         'borderColor' => $event['borderColor'],
                         'allDay' => true,
@@ -224,7 +224,6 @@ class PatientController extends Controller
 
     public function viewAppointmentListFilter($date1) 
     {
-
 
         $email=Auth()->user()->email; //dapatemail dr login
 

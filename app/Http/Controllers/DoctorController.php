@@ -530,7 +530,7 @@ class DoctorController extends Controller
                         ->first();
         
             // Get the previous medicines for the medicine record
-       $prevMedicine = collect(); // Initialize an empty collection
+        $prevMedicine = collect(); // Initialize an empty collection
 
        if ($previousMedRecord) {
        $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')

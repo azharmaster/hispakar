@@ -77,20 +77,17 @@
                                         <td>{{ $appointment->patient->height }} m</td>
                                     </tr>
                                     <tr>
-    <th>Medical History</th>
-    <td colspan="3">
-        
-            @if ($previousMedRecord)
-                {{ $previousMedRecord->desc }}<br>
-            @else
-                No previous medical history available
-            @endif
-       
-    </td>
-</tr>
-
-
-
+                                        <th>Medical History</th>
+                                        <td colspan="3">
+                                            
+                                                @if ($previousMedRecord)
+                                                    {{ $previousMedRecord->desc }}<br>
+                                                @else
+                                                    No previous medical history available
+                                                @endif
+                                        
+                                        </td>
+                                    </tr>
 
                                     <tr>
                                         <th>Prescribed Medication</th>
@@ -353,7 +350,40 @@
     </div>
 </div>
 @endif
-<!--/view details -->
+
+<!--/alert modal -->
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-exclamation-triangle" style="color: orange;"></i> &nbsp; Announcement</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <p style="font-size: 15px;">
+                You can only insert this form
+                <span style="font-weight: bold;">ONCE</span>.
+                <br>
+                <i style="color: red;">
+                    *Please make sure all details are correct before submitting it.
+                </i>
+            </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Show the modal when the page loads
+        $('#alertModal').modal('show');
+    });
+</script>
 
 <script>
     // to get medicine price based on selected input

@@ -83,6 +83,9 @@
                                                     </tr>
                                                 @else
                                                     @foreach($appointments as $appointment)
+                                                        @php
+                                                            $currentDate = now()->format('Y-m-d');
+                                                        @endphp
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $appointment->doctor_name }}</td>
