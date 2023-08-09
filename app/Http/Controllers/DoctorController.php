@@ -102,8 +102,11 @@ class DoctorController extends Controller
         //appointment list today
         $aptDs = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
         ->join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('users', 'patient.email', '=', 'users.email')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.status as appointment_status','medrecord.status as medrecord_status', 'appointment.*', 'patient.*')
+        ->select('appointment.id as appointment_id', 'patient.id as patient_id',
+        'appointment.status as appointment_status','medrecord.status as medrecord_status',
+        'appointment.*', 'patient.*','users.image as patient_image')
         ->where('doctor.id', $doctorId)
         ->whereDate('appointment.date', $currentDate) 
         ->orderBy('appointment.time', 'asc')

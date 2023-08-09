@@ -210,7 +210,7 @@
                                             <div class="align-middle m-b-25">
                                                 <!-- if apt status = 2 (cancel), button add apt record takde -->
                                                 @if ($aptD->appointment_status == '2')
-                                                    <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                                    <img src="{{ $aptD->patient_image ? asset('storage/profilePic/' . $aptD->patient_image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
                                                     <div class="d-inline-block">
                                                         <h6>{{ $aptD->name }}</h6>
                                                         <p class="text-muted m-b-0">Consultation</p>
