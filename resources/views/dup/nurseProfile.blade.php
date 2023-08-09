@@ -1,3 +1,16 @@
+@php
+    $user = '';
+    $userType = Auth::user()->usertype;
+    if ($userType == 1) {
+        $user = 'admin';
+    } elseif ($userType == 2) {
+        $user = 'doctor';
+    } elseif ($userType == 3) {
+        $user = 'nurse';
+    } elseif ($userType == 4) {
+        $user = 'patient';
+    }
+@endphp
 @foreach($nursedetails as $nursedetail)
 
 <!-- script for chart -->
@@ -68,9 +81,9 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="/admin/dashboard"><i class="feather icon-home"></i></a>
+                            <a href="/{{$user}}/dashboard"><i class="feather icon-home"></i></a>
                         </li>
-                        <li class="breadcrumb-item"><a href="/admin/doctorList">Doctor Details</a> </li>
+                        <li class="breadcrumb-item"><a href="/{{$user}}/doctorList">Doctor Details</a> </li>
                     </ul>
                 </div>
             </div>
@@ -299,7 +312,7 @@
                                                 <td>{{ $apt->patient->name }}</td> 
                                                 <td>{{ $apt->desc }}</td>
                                                 <td> 
-                                                    <a href="/nurse/report/{{ $apt->id }}" title="View Medical Record">
+                                                    <a href="/{{$user}}/report/{{ $apt->refnum }}" title="View Medical Record">
                                                         <i style="font-size:20px;" class="icon feather icon-eye f-w-600 f-16 m-r-15  text-c-yellow "></i>
                                                     </a>
                                                 </td>

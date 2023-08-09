@@ -299,7 +299,7 @@ class NurseController extends Controller
     {
        
         $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
-        ->where('id', $medrc_id)
+        ->where('refnum', $medrc_id)
         ->first();
 
         // Get the previous record with the same patient ID
@@ -333,7 +333,7 @@ class NurseController extends Controller
         }
 
         $medicines = MedPrescription::join('medrecord', 'medrecord.aptid', '=', 'medprescription.aptid')
-        ->where('medrecord.id', $medrc_id)
+        ->where('medrecord.id', $record->id)
         ->select('medprescription.*', 'medprescription.desc as med_desc')
         ->get();
 

@@ -104,7 +104,7 @@
 
                                                             <td>
                                                                 @if ($appointment->medrecord_status == 1)
-                                                                    <a href="/doctor/report/{{ $appointment->medrc_id }}" title="View Medical Record">
+                                                                    <a href="/doctor/report/{{ $appointment->refnum }}" title="View Medical Record">
                                                                         <i style="font-size:20px;" class="fas fa-eye f-w-600 f-16 m-r-15 text-c-yellow"></i>
                                                                     </a>
 

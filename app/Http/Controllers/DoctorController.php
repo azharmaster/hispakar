@@ -415,7 +415,8 @@ class DoctorController extends Controller
                     ->join('patient', 'appointment.patientid', '=', 'patient.id')
                     ->join('doctor', 'appointment.docid', '=', 'doctor.id')
                     ->join('department', 'appointment.deptid', '=', 'department.id')
-                    ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.id as medrc_id', 'medrecord.status as medrecord_status')
+                    ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.id as medrc_id'
+                    , 'medrecord.status as medrecord_status', 'medrecord.refnum as refnum')
                     ->where('doctor.id', $doctor->id)
                     ->where('appointment.deptid', $doctor->deptid)
                     ->where('appointment.status', 1)
@@ -954,7 +955,7 @@ class DoctorController extends Controller
         //$patient = Patient::where('email', Auth::user()->email)->first();
 
         $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
-                ->where('id', $medrc_id)
+                ->where('refnum', $medrc_id)
                 ->first();
         
        // Get the previous record with the same patient ID
