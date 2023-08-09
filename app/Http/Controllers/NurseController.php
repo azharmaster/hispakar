@@ -174,7 +174,7 @@ class NurseController extends Controller
                     $calendarEvents[] = [
                         'title' => $event['title'],
                         'start' => $cDate,
-                        'url' => url('doctor/appointmentList?date=' . $cDate . '&sort=asc'),
+                        'url' => route('nurse.appointmentList', ['date' => $cDate]),
                         'backgroundColor' => $event['color'],
                         'borderColor' => $event['borderColor'],
                         'allDay' => true,
@@ -357,7 +357,8 @@ class NurseController extends Controller
         $nurse = Nurse::where('email', Auth::user()->email)->first();
 
         // Add $currentDate variable here
-        $currentDate = Carbon::today()->toDateString();
+        //$currentDate = Carbon::today()->toDateString();
+        $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
 
         $appointments = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
                         ->join('patient', 'appointment.patientid', '=', 'patient.id')

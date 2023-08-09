@@ -106,9 +106,7 @@
                                                                 @elseif ($appointment->status == 2)
                                                                     <span class="status badge badge-danger mb-2 align-top" style="font-size: 11px;">Cancelled</span>
 
-                                                                @elseif ($appointment->date < $currentDate)
-                                                                    <span class="status badge badge-warning mb-2 align-top" style="font-size: 11px;">No Action</span>
-
+                                                                
                                                                 @else
                                                                     <a title="Edit Appointment" data-toggle="modal" data-target="#editModal-{{ $appointment->id }}">
                                                                         <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
