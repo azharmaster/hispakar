@@ -89,26 +89,26 @@ class PatientController extends Controller
 
         // calendar
         $calendarEvents = [];
-        $cYear = Carbon::now('Asia/Kuala_Lumpur')->format('Y'); // now year
-        $today = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d'); // Today's date
+        $currentYear = now()->format('Y'); // Current year
+        $today = now()->format('Y-m-d'); // Today's date
 
         // Loop through each month of the year
         for ($month = 1; $month <= 12; $month++) {
-            $cMonth = sprintf('%02d', $month); // Format the month as '01', '02', etc.
+            $currentMonth = sprintf('%02d', $month); // Format the month as '01', '02', etc.
 
             // Get the last day of the current month
-            $lastDayOfMonth = Carbon::create($cYear, $cMonth)->endOfMonth();
+            $lastDayOfMonth = Carbon::create($currentYear, $currentMonth)->endOfMonth();
 
             // Loop through each day of the month
-            for ($date = Carbon::create($cYear, $cMonth, 1); $date <= $lastDayOfMonth; $date->addDay()) {
-                $cDate = $date->format('Y-m-d');
+            for ($date = Carbon::create($currentYear, $currentMonth, 1); $date <= $lastDayOfMonth; $date->addDay()) {
+                $currentDate = $date->format('Y-m-d');
 
-                if ($cDate < $today) { // past appointment
+                if ($currentDate < $today) { // past appointment
 
                     $totalAttend = 0;
                     
                     $totalDone = DB::table('appointment') // total done
-                    ->where('date', $cDate)
+                    ->where('date', $currentDate)
                     ->where('patientid', $patient->id) 
                     ->whereExists(function ($query) { // have medrecord
                         $query->select(DB::raw(1))
@@ -117,7 +117,7 @@ class PatientController extends Controller
                     })->count();
 
                     $totalCancel = DB::table('appointment') // total cancel
-                    ->where('date', $cDate)
+                    ->where('date', $currentDate)
                     ->where('patientid', $patient->id) 
                     ->whereNotExists(function ($query) { // not have medrecord
                         $query->select(DB::raw(1))
@@ -128,7 +128,7 @@ class PatientController extends Controller
                 } else { // today / next apt 
 
                     $totalDone = DB::table('appointment') // total done
-                    ->where('date', $cDate)
+                    ->where('date', $currentDate)
                     ->where('patientid', $patient->id) 
                     ->whereExists(function ($query) { // have medrecord
                         $query->select(DB::raw(1))
@@ -137,7 +137,7 @@ class PatientController extends Controller
                     })->count();   
                     
                     $totalAttend = DB::table('appointment')
-                    ->where('date', $cDate)
+                    ->where('date', $currentDate)
                     ->where('patientid', $patient->id) 
                     ->where('status', 1) // status attend
                     ->whereNotExists(function ($query) { // not medrecord
@@ -147,7 +147,7 @@ class PatientController extends Controller
                     })->count();
 
                     $totalCancel = DB::table('appointment')
-                    ->where('date', $cDate)
+                    ->where('date', $currentDate)
                     ->where('patientid', $patient->id) 
                     ->where('status', 2) // status cancel
                     ->count(); 
@@ -183,13 +183,8 @@ class PatientController extends Controller
                 foreach ($events as $event) {
                     $calendarEvents[] = [
                         'title' => $event['title'],
-<<<<<<< Updated upstream
-                        'start' => $cDate,
-                        'url' => url('doctor/appointmentList?date=' . $cDate . '&sort=asc'),
-=======
                         'start' => $currentDate,
                         'url' => url('patient/appointmentListFilter/' . $currentDate . ''),
->>>>>>> Stashed changes
                         'backgroundColor' => $event['color'],
                         'borderColor' => $event['borderColor'],
                         'allDay' => true,
@@ -291,11 +286,6 @@ class PatientController extends Controller
                 // Now you can access the name property
 
         //get the next appointment record
-<<<<<<< Updated upstream
-        $upcomingAppointment = null; // Initialize the variable to avoid potential issues
-
-        $upcomingAppointments = Appointments::where('patientid', $patient->id)
-=======
         //$currentDateTime = Carbon::now();
     
         $upcomingAppointment = null; // Initialize the variable to avoid potential issues
@@ -303,7 +293,6 @@ class PatientController extends Controller
         $patientId = $record->patient->id;
 
         $upcomingAppointments = Appointments::where('patientid', $patientId)
->>>>>>> Stashed changes
                                 ->where('date', '>', date('Y-m-d'))
                                 ->orderBy('date')
                                 ->orderBy('time')
