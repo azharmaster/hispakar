@@ -605,26 +605,17 @@ class AdminController extends Controller
         ->get();
 
         //get the next appointment record
-        $currentDateTime = Carbon::now();
+        $upcomingAppointment = null; // Initialize the variable to avoid potential issues
+        $patientId = $record->patient->id;
 
-        // Get patientid in this medrecord
-        $patientid = MedRecord::where('id', $id)->pluck('patientid')->first();
-    
-        $upcomingAppointment = Appointments::where('patientid', $patientid)
-            ->where(function ($query) use ($currentDateTime) {
-                // Get the records that have an appointment after the current date and time
-                $query->where('date', '>', $currentDateTime->toDateString())
-                      ->orWhere(function ($query) use ($currentDateTime) {
-                          $query->where('date', '=', $currentDateTime->toDateString())
-                                ->where('time', '>', $currentDateTime->toTimeString());
-                      });
-            })
-            ->orderBy('date')
-            ->orderBy('time')
-            ->first();
+        $upcomingAppointments = Appointments::where('patientid', $patientId)
+                                ->where('date', '>', date('Y-m-d'))
+                                ->orderBy('date')
+                                ->orderBy('time')
+                                ->get();
 
         return view('admin.contents.report', compact(
-            'record','previousRecord','prevMedicine','upcomingAppointment', 
+            'record','previousRecord','prevMedicine','upcomingAppointments', 
             'medicines'));
     }
 

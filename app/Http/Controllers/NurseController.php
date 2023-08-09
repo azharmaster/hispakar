@@ -338,27 +338,17 @@ class NurseController extends Controller
         ->get();
 
         //get the next appointment record
-        $currentDateTime = Carbon::now();
-
-        // Get patientid in this medrecord
-        $patientid = MedRecord::where('id', $medrc_id)->pluck('patientid')->first();
-    
         $upcomingAppointment = null; // Initialize the variable to avoid potential issues
+        $patientId = $record->patient->id;
 
-        if ($patientid) {
-            $upcomingAppointment = Appointments::where('patientid', $patientid)
-                ->where(function ($query) use ($currentDateTime) {
-                    $query->where('date', '>', $currentDateTime->toDateString())
-                        ->orWhere(function ($query) use ($currentDateTime) {
-                            $query->where('date', '=', $currentDateTime->toDateString())
-                                ->where('time', '>', $currentDateTime->toTimeString());
-                        });
-                })
-                ->get();
-        }
+        $upcomingAppointments = Appointments::where('patientid', $patientId)
+                                ->where('date', '>', date('Y-m-d'))
+                                ->orderBy('date')
+                                ->orderBy('time')
+                                ->get();
 
         return view('nurse.contents.report', compact(
-            'record','previousRecord','prevMedicine','upcomingAppointment', 
+            'record','previousRecord','prevMedicine','upcomingAppointments', 
             'medicines'));
     }
 
