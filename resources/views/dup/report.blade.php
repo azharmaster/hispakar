@@ -1,3 +1,12 @@
+<style>
+    .center{
+        text-align: center;
+    }
+    .colored{
+        background-color: #f8f8f8;
+    }
+</style>
+
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -64,19 +73,19 @@
                                 <div class="card-block" id="checkup-info">
                                     <table class="table table-bordered">
                                         <tr>
-                                            <th>Name</th>
-                                            <td>{{ $record->patient->name }}</td>
-                                            <th>Birth Date</th>
-                                            <td>{{ $record->patient->dob }}</td>
+                                            <th style="width: 15%" class="colored">Name</th>
+                                            <td style="width: 35%">{{ $record->patient->name }}</td>
+                                            <th style="width: 15%" class="colored">Birth Date</th>
+                                            <td style="width: 35%">{{ $record->patient->dob }}</td>
                                         </tr>
                                         <tr>
-                                            <th>Weight</th>
+                                            <th class="colored">Weight</th>
                                             <td>{{ $record->patient->weight }}</td>
-                                            <th>Height</th>
+                                            <th class="colored">Height</th>
                                             <td>{{ $record->patient->height }} m</td>
                                         </tr>
                                         <tr>
-                                            <th>Previous Medical History</th>
+                                            <th class="colored">Previous Medical <br>History</th>
                                             <td colspan="3">
                                                 @isset($previousRecord)
                                                     {{ $previousRecord->desc }}
@@ -87,7 +96,7 @@
                                         </tr>
 
                                         <tr>
-                                            <th>Previous Medication</th>
+                                            <th class="colored">Medication History</th>
                                             <td colspan="3">
                                                 <ul>
                                                     @isset($prevMedicine)
@@ -102,40 +111,54 @@
                                         </tr>
 
 
-                                        <tr>
-                                            <th colspan="4" class="text-center">Check-Up Description</th>
+                                        <tr class="colored center">
+                                            <th colspan="4" >Check-Up Description</th>
                                         </tr>
                                         <tr>
-                                            <th>Service Type</th>
+                                            <th class="colored">Service Type</th>
                                             <td colspan="3">{{ $record->medService->type }}</td>
                                         </tr>
                                         <tr>
-                                            <th>Description</th>
+                                            <th class="colored">Description</th>
                                             <td colspan="3">{{ $record->desc }}</td>
                                         </tr>
-                                        <tr>
-                                            <th colspan="4" class="text-center">Medication</th>
+
+                                    </table>
+                                    
+                                    <table class="table table-bordered" style="margin-top: -17px">
+                                        <tr class="colored center">
+                                            <th colspan="4">Medication</th>
                                         </tr>
+                                        <tr class="center" >
+                                            <th style="width:10px">No</th>
+                                            <th class="text-left">Medicine Name</th>
+                                            <th >Quantity</th>
+                                            <th colspan="2">Prescription</th>
+                                        </tr>
+
                                         @foreach ($medicines as $medicine)
                                             <tr>
-                                                <th>{{ $medicine->name }}</th>
-                                                <td>{{ $medicine->qty }}</td>
+                                                <td class="center">{{ $loop->iteration }}</td>
+                                                <td> &nbsp;{{ $medicine->name }}</td>
+                                                <td class="center">{{ $medicine->qty }}</td>
                                                 <td colspan="2">{{ $medicine->desc }}</td>
                                             </tr>
                                         @endforeach
-                                    </table>
+                                        
+                                        <tr>
+                                            <th colspan="2" class="colored" >Next Appointment</th>
+                                            <td colspan="3">
+                                                @if (!empty($nextAptStatus))
+                                                    @php $firstApt = reset($nextAptStatus); // Get the first element from the array
+                                                    @endphp
 
-                                    <table class="table table-bordered">
-                                        <tr class="table-danger">
-                                            <th colspan="2">Next Appointment</th>
-                                            <td colspan="2">
-                                                @if ($upcomingAppointments->isNotEmpty())
-                                                    @foreach ($upcomingAppointments as $appointment)
-                                                        {{ $appointment->date }} {{ $appointment->time }}<br>
-                                                    @endforeach
+                                                    {{ $firstApt['appointment']->date }} {{ $firstApt['appointment']->time }}
+                                                    <span class="badge ml-2" style="{{ $firstApt['badgeStyle'] }}">{{ $firstApt['status'] }}</span><br>
+
                                                 @else
                                                     No upcoming appointments
                                                 @endif
+
                                             </td>
                                         </tr>
                                     </table>
@@ -155,7 +178,7 @@
                                 <div class="card-block">
                                     <div class="row">
                                         <div class="col">
-                                            <p>Invoice No. : 90843-2-3243</p>
+                                            <p>Invoice No. : {{ $record->invoice_number }}</p>
                                             <p>Name : {{ $record->patient->name }}</p>
                                             <p>Date: {{ $record->datetime }}</p>
                                         </div>

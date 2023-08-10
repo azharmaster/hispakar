@@ -95,7 +95,7 @@
                                                             <td>{{ $medrc->totalcost }}</td>
                                                             <td>{{ $medrc->doctor_name }}</td>
                                                             <td> 
-                                                                <a href="/admin/report/{{ $medrc->refnum }}" title="Download Appointment Record">
+                                                                <a href="/admin/report/{{ $medrc->invoice_number }}" title="Download Appointment Record">
                                                                     <i style="font-size:20px;" class="fas fa-download f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                 </a>
                                                             </td>

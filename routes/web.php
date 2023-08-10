@@ -44,7 +44,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/medrecord', [AdminController::class, 'viewMedRecord']);
 
     //Report
-    Route::get('/admin/report/{id}', [AdminController::class, 'viewReport']);
+    Route::get('/admin/report/{invoice_no}', [AdminController::class, 'viewReport']);
 
     //Manage profile
     Route::post('/admin/profile/{id}', [AdminController::class, 'EditProfile']);
