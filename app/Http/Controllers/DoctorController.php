@@ -83,9 +83,6 @@ class DoctorController extends Controller
 
         // Calculate the time difference between now and the nurse's created_at timestamp
         $timeNDifference = $latestNurse ? Carbon::parse($latestNurse->created_at)->diffForHumans() : 'N/A';
-  
-        // Get the current date in the 'Y-m-d' format
-        $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
 
         //appointment list today
         $aptDs = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
