@@ -180,7 +180,8 @@ class AdminController extends Controller
     public function viewDoctorProfile($id) //profile doctor
     {
         // Get the current date
-        $today = Carbon::today();
+        //$today = Carbon::today();
+        $today = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
         // Get the current month and year
         $currentMonth = now()->month;
         $currentYear = now()->year;
@@ -213,7 +214,15 @@ class AdminController extends Controller
         ->orderBy('datetime', 'desc')
         ->with('patient')// get patient details
         ->get();
+
         $totalrecord = $totalrecorddetails->count();
+
+        //for today's medical record card
+        $todayMedRecs = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+        ->where('medrecord.docid', $id)
+        ->whereDate('medrecord.datetime', $today)
+        ->orderBy('medrecord.datetime', 'desc')
+        ->get();
 
         //total next apt card and modal
         $totalnextaptdetails = Appointments::where('docid', $id)
@@ -293,7 +302,7 @@ class AdminController extends Controller
         return view('admin.contents.doctorProfile', compact(
             'doctordetails',
             'totalpatient','totalapttoday','totalrecord','totalnextapt', //card
-            'totalpatientdetails','totalapttodaydetails','totalrecorddetails','totalnextaptdetails', //card modal
+            'totalpatientdetails','totalapttodaydetails','totalrecorddetails','totalnextaptdetails', 'todayMedRecs', //card modal
             'totalmale', 'totalfemale', // gender chart
             'totalattend', 'totalcancel', // attendance chart
             'children', 'teenage', 'adult', 'older', // ages chart
@@ -308,7 +317,7 @@ class AdminController extends Controller
         $deptid = $nurse->deptid;
 
         // Get the current date
-        $today = Carbon::today();
+        $today = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
         // Get the current month and year
         $currentMonth = now()->month;
         $currentYear = now()->year;
@@ -349,7 +358,16 @@ class AdminController extends Controller
         ->orderBy('datetime', 'desc')
         ->with('patient')// get patient details
         ->get();
+
         $totalrecord = $totalrecorddetails->count();
+
+        //for today's med record card
+        $todayMedRecs = MedRecord::join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->where('appointment.deptid', $deptid)
+        ->whereDate('medrecord.datetime', $today)
+        ->orderBy('medrecord.datetime', 'desc')
+        ->with('patient')// get patient details
+        ->get();
 
         //total next apt card and modal
         $totalnextaptdetails = Appointments::where('deptid', $deptid)
@@ -418,7 +436,7 @@ class AdminController extends Controller
         return view('admin.contents.nurseProfile', compact(
             'nursedetails',
             'totalpatient', 'totalapttoday','totalrecord','totalnextapt', //card
-            'totalpatientdetails','totalapttodaydetails','totalrecorddetails','totalnextaptdetails', //card modal
+            'totalpatientdetails','totalapttodaydetails','totalrecorddetails','totalnextaptdetails', 'todayMedRecs', //card modal
             'totalattend', 'totalcancel', // attendance chart
             'children', 'teenage', 'adult', 'older', // ages chart
         ));

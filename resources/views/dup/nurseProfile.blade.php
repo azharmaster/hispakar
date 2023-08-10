@@ -289,39 +289,41 @@
                                 </div>
                             </div>
                             <div class="card-block p-b-0" >
-                                <div class="table-responsive">
-                                <table class="table table-hover m-b-0">
-                                    <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Patient</th>
-                                        <th>Desciption</th>
-                                        <th>Invoice</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if ( $totalrecorddetails->isEmpty() )
+                                <div class="scroll-widget">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover m-b-0">
+                                            <thead>
                                             <tr>
-                                                <td colspan="4" class="text-center">No data available</td>
+                                                <th>Time</th>
+                                                <th>Patient</th>
+                                                <th>Desciption</th>
+                                                <th>Invoice</th>
                                             </tr>
-                                        @else
-                                        <!-- this query not for today yet -->
-                                            @foreach($totalrecorddetails as $apt)
-                                            <tr style="text-align: center;">
-                                                <td>{{ \Carbon\Carbon::parse($apt->datetime)->format('H:i:s') }}</td>
-                                                <td>{{ $apt->patient->name }}</td> 
-                                                <td>{{ $apt->desc }}</td>
-                                                <td> 
-                                                    <a href="/{{$user}}/report/{{ $apt->refnum }}" title="View Medical Record">
-                                                        <i style="font-size:20px;" class="icon feather icon-eye f-w-600 f-16 m-r-15  text-c-yellow "></i>
-                                                    </a>
-                                                </td>
+                                            </thead>
+                                            <tbody>
+                                                @if ( $todayMedRecs->isEmpty() )
+                                                    <tr>
+                                                        <td colspan="4" class="text-center">No data available</td>
+                                                    </tr>
+                                                @else
+                                                <!-- this query not for today yet -->
+                                                    @foreach($todayMedRecs as $apt)
+                                                    <tr style="text-align: center;">
+                                                        <td>{{ \Carbon\Carbon::parse($apt->datetime)->format('H:i:s') }}</td>
+                                                        <td>{{ $apt->patient->name }}</td> 
+                                                        <td>{{ $apt->desc }}</td>
+                                                        <td> 
+                                                            <a href="/{{$user}}/report/{{ $apt->refnum }}" title="View Medical Record">
+                                                                <i style="font-size:20px;" class="icon feather icon-eye f-w-600 f-16 m-r-15  text-c-yellow "></i>
+                                                            </a>
+                                                        </td>
 
-                                            </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+                                                    </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
@@ -350,33 +352,35 @@
                                 </div>
                             </div>
                             <div class="card-block p-b-0" >
-                                <div class="table-responsive">
-                                <table class="table table-hover m-b-0">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Time</th>
-                                            <th>Patient Name</th>
-                                            <th>Phone No</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if ( $totalapttodaydetails->isEmpty() )
-                                            <tr>
-                                                <td colspan="4" class="text-center">No data available</td>
-                                            </tr>
-                                        @else
-                                            @foreach($totalapttodaydetails as $apt)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $apt->time }}</td>
-                                                <td>{{ $apt->patient->name }}</td>
-                                                <td>{{ $apt->patient->phoneno }}</td>
-                                            </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+                                <div class="scroll-widget">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover m-b-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Time</th>
+                                                    <th>Patient Name</th>
+                                                    <th>Phone No</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if ( $totalapttodaydetails->isEmpty() )
+                                                    <tr>
+                                                        <td colspan="4" class="text-center">No data available</td>
+                                                    </tr>
+                                                @else
+                                                    @foreach($totalapttodaydetails as $apt)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $apt->time }}</td>
+                                                        <td>{{ $apt->patient->name }}</td>
+                                                        <td>{{ $apt->patient->phoneno }}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer border-0" style="position: absolute; bottom: 0; left: 0; right: 0;">
