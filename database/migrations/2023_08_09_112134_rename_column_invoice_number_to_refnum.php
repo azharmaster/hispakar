@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -12,17 +13,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('medrecord', function (Blueprint $table) {
-            $table->renameColumn('invoice_number', 'refnum');
+            DB::statement('ALTER TABLE medrecord CHANGE COLUMN invoice_number refnum INT(11)');
         });
     }
-
+    
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
         Schema::table('medrecord', function (Blueprint $table) {
-            $table->renameColumn('refnum', 'invoice_number');
+            DB::statement('ALTER TABLE medrecord CHANGE COLUMN invoice_number refnum INT(11)');
         });
     }
 };
