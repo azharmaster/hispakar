@@ -149,7 +149,7 @@ class AdminController extends Controller
                     $calendarEvents[] = [
                         'title' => $event['title'],
                         'start' => $cDate,
-                        'url' => url('doctor/appointmentList?date=' . $cDate . '&sort=asc'),
+                        'url' => route('admin.appointmentList', ['date' => $cDate]),
                         'backgroundColor' => $event['color'],
                         'borderColor' => $event['borderColor'],
                         'allDay' => true,
@@ -534,6 +534,7 @@ class AdminController extends Controller
 
     public function viewAppointmentList()
     {
+        $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
 
         $appointments = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
                     ->join('patient', 'appointment.patientid', '=', 'patient.id')
@@ -548,7 +549,30 @@ class AdminController extends Controller
         $departments = Department::all();
         
 
-        return view('admin.contents.appointmentList', compact('appointments','doctors','patients','departments'));
+        return view('admin.contents.appointmentList', compact('appointments','doctors','patients','departments', 'currentDate'));
+    }
+
+    public function viewAppointmentListDate($date)
+    {
+        // Reuse the viewAppointmentList() function to get the initial data
+        $viewData = $this->viewAppointmentList()->getData();
+    
+        // Parse the selected date
+        $selectedDate = Carbon::parse($date);
+    
+        // Filter appointments based on the selected date
+        $filteredAppointments = $viewData['appointments']->filter(function ($appointment) use ($selectedDate) {
+            return $appointment->date == $selectedDate->toDateString();
+        });
+    
+        // Pass the filtered appointments and selected date to the view
+        return view('admin.contents.appointmentList', [
+            'appointments' => $filteredAppointments,
+            'doctors' => $viewData['doctors'],
+            'patients' => $viewData['patients'],
+            'departments' => $viewData['departments'],
+            'selectedDate' => $selectedDate,
+        ]);
     }
 
     public function viewMedicineList()

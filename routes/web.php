@@ -42,6 +42,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/nurseProfile/{id}', [AdminController::class, 'viewNurseProfile']);
     Route::get('/admin/patientProfile/{id}', [AdminController::class, 'viewPatientProfile']);
     Route::get('/admin/medrecord', [AdminController::class, 'viewMedRecord']);
+    Route::get('/admin/appointmentList/{date}', [AdminController::class, 'viewAppointmentListDate'])->name('admin.appointmentList');
 
     //Report
     Route::get('/admin/report/{invoice_no}', [AdminController::class, 'viewReport']);
