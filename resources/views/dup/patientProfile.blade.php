@@ -31,7 +31,7 @@
                                         </div>
                                         <div class="col-12 col-sm-7 text-center text-sm-left">
                                             <h3 class="pt-3 pt-sm-0 text-uppercase" style="word-wrap: break-word;" >{{ $patientdetail->name }}</h3>
-                                            <h6><span class="badge badge-warning">{{ $patientdetail->height }} CM</span> <span class="badge badge-primary">{{ $patientdetail->weight }} KG</span>
+                                            <h6><span class="badge badge-warning">{{ $patientdetail->height }} M</span> <span class="badge badge-primary">{{ $patientdetail->weight }} KG</span>
                                             <span class="badge badge-danger">{{ $patientdetail->bloodtype }} </span>
                                         </h6>
                                             <hr>
