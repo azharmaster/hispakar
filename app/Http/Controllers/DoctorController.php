@@ -948,9 +948,6 @@ class DoctorController extends Controller
 
     public function viewMedicalReport($medrc_id)
     {
-        //get the details of current logged in patient
-        //$patient = Patient::where('email', Auth::user()->email)->first();
-
         $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
                 ->where('refnum', $medrc_id)
                 ->first();
@@ -985,27 +982,89 @@ class DoctorController extends Controller
             $previousRecord->load('medService');
         }
 
-        $medicines = MedRecord::join('medprescription', 'medrecord.aptid', '=', 'medprescription.aptid')
-                    ->where('medrecord.id', $medrc_id)
-                    ->get(); // Use first() instead of get()
+        $medicines = MedPrescription::join('medrecord', 'medrecord.aptid', '=', 'medprescription.aptid')
+                    ->where('medrecord.id', $record->id)
+                    ->select('medprescription.*', 'medprescription.desc as med_desc')
+                    ->get();
 
-                // Now you can access the name property
+        // upcoming appointment
+        $nextApt = null; // Initialize the variable to avoid potential issues
 
-        //get the next appointment record
-        //$currentDateTime = Carbon::now();
-    
-        $upcomingAppointment = null; // Initialize the variable to avoid potential issues
+        $nowApt = Appointments::find($record->aptid); // get current apt
 
-        $patientId = $record->patient->id;
+        $nextApt = Appointments::where('appointment.patientid', $record->patientid)
+                    ->where('appointment.docid', $nowApt->docid)
+                    ->orderBy('date')
+                    ->orderBy('time')
+                    // next apt datetime > current apt datetime
+                    ->where(function ($query) use ($nowApt) {
+                        $query->where('date', '>', $nowApt->date)
+                            ->orWhere(function ($query) use ($nowApt) {
+                                $query->where('date', $nowApt->date)
+                                    ->where('time', '>', $nowApt->time);
+                            });
+                    })
+                    ->get();
 
-        $upcomingAppointments = Appointments::where('patientid', $patientId)
-                                ->where('date', '>', date('Y-m-d'))
-                                ->orderBy('date')
-                                ->orderBy('time')
-                                ->get();
+
+        // ni dapatkan status next apt
+        $nextAptStatus = []; // Initialize the array to store appointment status
+
+        $currentDateTime = Carbon::now('Asia/Kuala_Lumpur'); // Current datetime in the specified timezone (e.g., Kuala Lumpur)
+
+        foreach ($nextApt as $apt) {
+            $aptDateTime = $apt->date . ' ' . $apt->time;
+            $mrcDateTime = $record->date . ' ' . $record->time;
+
+            if ($aptDateTime > $mrcDateTime) {
+                $status = "";
+                $badgeStyle = ''; // Initialize the badge style
+                
+                $done = MedRecord::where('aptid', $apt->id)->exists();
+                $cancel = Appointments::where('status', 2)->where('id', $apt->id)->exists();
+                
+                // Calculate the datetime for the appointment
+                $aptDateTimeCarbon = Carbon::parse($aptDateTime);
+                
+                // Check if the appointment datetime has already passed and no medrecord exists
+                if ($aptDateTimeCarbon < $currentDateTime && !$done && !$cancel) {
+                    $absent = Appointments::where('date', $apt->date) // apt that passed now datetime
+                                ->where('time', $apt->time)
+                                ->whereNotExists(function ($query) { // have no medrecord
+                                    $query->select(DB::raw(1))
+                                        ->from('medrecord')
+                                        ->whereColumn('medrecord.aptid', 'appointment.id');
+                                })
+                                ->exists();
+                    
+                    if ($absent) {
+                        $status = "Absent";
+                        $badgeStyle = 'background-color: #DC2127; color: #ffffff; font-size: 13px; padding: 6px; font-weight: bold;';
+                    }
+
+                } elseif ($done) {
+                    $status = "Done";
+                    $badgeStyle = 'background-color: #51B749; color: #ffffff; font-size: 13px; padding: 6px;';
+
+                } elseif ($cancel) {
+                    $status = "Cancel";
+                    $badgeStyle = 'background-color: #DC2127; color: #ffffff; font-size: 13px; padding: 6px;';
+
+                } else {
+                    $status = "Please take note";
+                    $badgeStyle = 'background-color: #FFC107; font-size: 13px; padding: 6px;';
+                }
+
+                $nextAptStatus[] = [
+                    'appointment' => $apt,
+                    'status' => $status,
+                    'badgeStyle' => $badgeStyle,
+                ];
+            }
+        }// end upcoming appointment
 
         return view('doctor.contents.report', compact('record', 'previousRecord', 
-        'prevMedicine', 'medicines', 'upcomingAppointments'));
+        'prevMedicine', 'medicines', 'nextAptStatus'));
     }
 
     public function filterReportList(Request $request)

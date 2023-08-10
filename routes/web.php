@@ -45,7 +45,7 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/appointmentList/{date}', [AdminController::class, 'viewAppointmentListDate'])->name('admin.appointmentList');
 
     //Report
-    Route::get('/admin/report/{invoice_no}', [AdminController::class, 'viewReport']);
+    Route::get('/admin/report/{medrc_id}', [AdminController::class, 'viewReport']);
 
     //Manage profile
     Route::post('/admin/profile/{id}', [AdminController::class, 'EditProfile']);

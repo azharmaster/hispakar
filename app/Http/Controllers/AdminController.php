@@ -614,21 +614,19 @@ class AdminController extends Controller
         return view('admin.contents.medrecord', compact('medrcs'));
     }
 
-    public function viewReport($invoice_no) // id = invoice_number in medrecord
+    public function viewReport($medrc_id) // medrecord table id
     {
 
         $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
-                    ->where('invoice_number', $invoice_no)
+                    ->where('refnum', $medrc_id)
                     ->first();
-
-        $id = $record->id;  // get medrecord id
 
         // Get the previous record with the same patient ID
         $previousRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
-        ->where('medrecord.patientid', $record->patientid)
-        ->where('medrecord.id', '<', $record->id)
-        ->orderBy('medrecord.id', 'desc')
-        ->first();
+                            ->where('medrecord.patientid', $record->patientid)
+                            ->where('medrecord.id', '<', $record->id)
+                            ->orderBy('medrecord.id', 'desc')
+                            ->first();
 
         // Get the previous medicines for the medicine record
         $prevMedicine = collect(); // Initialize an empty collection
@@ -735,9 +733,7 @@ class AdminController extends Controller
         }// end upcoming appointment
 
         return view('admin.contents.report', compact(
-            'record','previousRecord','prevMedicine','medicines',
-            //upcoming apt with status
-            'nextAptStatus',));
+            'record','previousRecord','prevMedicine','medicines','nextAptStatus',));
     }
 
     // Manage Doctor

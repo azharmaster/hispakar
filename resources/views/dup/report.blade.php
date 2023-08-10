@@ -178,7 +178,7 @@
                                 <div class="card-block">
                                     <div class="row">
                                         <div class="col">
-                                            <p>Invoice No. : {{ $record->invoice_number }}</p>
+                                            <p>Invoice No. : {{ $record->refnum }}</p>
                                             <p>Name : {{ $record->patient->name }}</p>
                                             <p>Date: {{ $record->datetime }}</p>
                                         </div>
