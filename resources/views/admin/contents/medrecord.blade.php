@@ -66,11 +66,10 @@
                                     <div class="dt-responsive table-responsive">
                                     <table id="dataTable1" class="table table-bordered">
                                             <thead>
-                                                <tr style="text-align: center;">
+                                                <tr class="center">
                                                     <th>#</th>
                                                     <th>Service Type</th>
-                                                    <th>Desc</th>
-                                                    <th>Img</th>
+                                                    <th>Description</th>
                                                     <th>Date Time</th>
                                                     <th>Total Cost</th>
                                                     <th>Doctor</th>
@@ -85,16 +84,15 @@
                                                         </tr>
                                                     @else
                                                         @foreach($medrcs as $medrc)
-                                                        <tr style="text-align: center;">
+                                                        <tr class="left">
                                                             <td>{{ $loop->iteration }}</td>
                                                             
-                                                            <td>{{ $medrc->service_type }}</td>
+                                                            <td>{{ $medrc->medservice->type }}</td>
                                                             <td>{{ $medrc->desc }}</td>
-                                                            <td></td>
-                                                            <td>{{ $medrc->datetime }}</td>
-                                                            <td>{{ $medrc->totalcost }}</td>
-                                                            <td>{{ $medrc->doctor_name }}</td>
-                                                            <td> 
+                                                            <td class="center">{{ $medrc->datetime }}</td>
+                                                            <td>RM {{ number_format($medrc->medinvoice->totalcost, 2) }}</td>
+                                                            <td>{{ $medrc->attendingDoctor->name }}</td>
+                                                            <td class="center"> 
                                                                 <a href="/admin/report/{{ $medrc->refnum }}" title="Download Appointment Record">
                                                                     <i style="font-size:20px;" class="fas fa-download f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                 </a>

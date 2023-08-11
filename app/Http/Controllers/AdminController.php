@@ -659,14 +659,8 @@ $femaleData = array_reverse($femaleData);
 
     public function viewMedRecord()
     {
-        $medrcs = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
-        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
-        ->join('doctor', 'medrecord.docid', '=', 'doctor.id')
-        ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
-        ->select('medrecord.*','doctor.name as doctor_name','medservice.type as service_type','appointment.id as aptid')
-        ->get();
-
-
+        $medrcs = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medInvoice')->get();
+        
         return view('admin.contents.medrecord', compact('medrcs'));
     }
 

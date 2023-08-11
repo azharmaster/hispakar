@@ -282,15 +282,13 @@ class NurseController extends Controller
     {
         // Retrieve the nurse based on the authenticated user's email
         $nurse = Nurse::where('email', Auth::user()->email)->first();
-        $deptId = $nurse->deptId; // Check if the nurse exists and then get the deptId
+        $deptId = $nurse->deptid; // Check if the nurse exists and then get the deptId
 
-        //belum ikut department nurse
-        $medrcs = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
-        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
-        ->join('doctor', 'medrecord.docid', '=', 'doctor.id')
-        ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
-        ->select('medrecord.*','doctor.name as doctor_name','medservice.type as service_type','appointment.id as aptid')
-        ->get();
+        //ikut department nurse
+        $medrcs = MedRecord::with(['appointment' => function ($query) use ($deptId) {
+            $query->where('deptid', '=', $deptId);
+        }, 'patient', 'attendingDoctor', 'medInvoice'])
+        ->get();    
 
         return view('nurse.contents.medrecordList', compact('medrcs'));
     }
