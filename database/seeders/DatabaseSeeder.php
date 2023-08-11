@@ -3,11 +3,15 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+// command to run : php artisan db:seed
+
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
      */
+
+    // Boleh je kalau nak clearkan table doctor, patient, nurse, attendance, appointment, medrecord, medpres, medinvoice, room
     public function run(): void
     {
         //new department / get dept id
@@ -18,7 +22,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Primary Care',
                 'desc' => 'Department providing general medical services and routine healthcare.',
                 'created_at' => now(),
-                'updated_at' => now(),
+                'updated_at' => NULL,
             ]);
         } else {
             // Retrieve the ID of the existing "Primary Care" department
@@ -29,30 +33,30 @@ class DatabaseSeeder extends Seeder
             [
                 'email' => 'ahmad@gmail.com',
                 'name' => 'ahmad',
-                'password' => bcrypt('12345678'),
+                'password' => bcrypt('1234'),
                 'usertype' => 1,
-                'ic' => 660104110178,
+                'ic' => '660104110178',
             ],
             [
                 'email' => 'dramin@gmail.com',
                 'name' => 'amin',
-                'password' => bcrypt('12345678'),
+                'password' => bcrypt('1234'),
                 'usertype' => 2,
-                'ic' => 870804030118,
+                'ic' => '870804030118',
             ],
             [
                 'email' => 'aisyah@gmail.com',
                 'name' => 'aisyah',
-                'password' => bcrypt('12345678'),
+                'password' => bcrypt('1234'),
                 'usertype' => 3,
-                'ic' => 780507100645,
+                'ic' => '780507100645',
             ],
             [
                 'email' => 'siti@gmail.com',
                 'name' => 'siti',
-                'password' => bcrypt('12345678'),
+                'password' => bcrypt('1234'),
                 'usertype' => 4,
-                'ic' => 000507110645,
+                'ic' => '000507110645',
             ],
         ];
         
@@ -72,11 +76,11 @@ class DatabaseSeeder extends Seeder
             DB::table('admin')->insert([
             'name' => 'ahmad',
             'email' => 'ahmad@gmail.com',
-            'password' => bcrypt('12345678'),
+            'password' => '1234',
             'phoneno' => '011198392898',
             'status' => 1,
             'created_at' => now(),
-            'updated_at' => now(),
+            'updated_at' => NULL,
             ]);
         }
 
@@ -86,7 +90,7 @@ class DatabaseSeeder extends Seeder
             $docId = DB::table('doctor')->insertGetId([
                 'name' => 'amin',
                 'email' => 'dramin@gmail.com',
-                'password' => bcrypt('12345678'),
+                'password' => '1234',
                 'phoneno' => '01123456754',
                 'deptid' => $primaryCareId,
                 'education' => 'Respiratory Medicine PhD',
@@ -98,7 +102,7 @@ class DatabaseSeeder extends Seeder
                 'dob' => '1987-08-14',
                 'status' => 1,
                 'created_at' => now(),
-                'updated_at' => now(),
+                'updated_at' => NULL,
             ]);
 
             $room = DB::table('room')->where('name', 'room78')->first();
@@ -110,20 +114,9 @@ class DatabaseSeeder extends Seeder
                     'status' => 1,
                     'staff_id' => 'DR78982',
                     'created_at' => now(),
-                    'updated_at' => now(),
+                    'updated_at' => NULL,
                 ]);
             }
-
-            DB::table('docschedule')->insert([
-                'docid' => $docId,
-                'day' => 'Monday',
-                'date' => '2023-08-07',
-                'starttime' => '08:00:00',
-                'endtime' => '17:00:00',
-                'status' => NULL,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
 
         }
         else{
@@ -136,7 +129,7 @@ class DatabaseSeeder extends Seeder
             $nurseId = DB::table('nurse')->insertGetId([
                 'name' => 'aisyah',
                 'email' => 'aisyah@gmail.com',
-                'password' => bcrypt('12345678'),
+                'password' => '1234',
                 'phoneno' => '011198322345',
                 'deptid' => $primaryCareId,
                 'gender' => 'female',
@@ -145,7 +138,7 @@ class DatabaseSeeder extends Seeder
                 'staff_id' => 'NR2377',
                 'status' => 1,
                 'created_at' => now(),
-                'updated_at' => now(),
+                'updated_at' => NULL,
             ]);
 
             $room = DB::table('room')->where('name', 'room22')->first();
@@ -157,7 +150,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 1,
                 'staff_id' => 'NR2377',
                 'created_at' => now(),
-                'updated_at' => now(),
+                'updated_at' => NULL,
                 ]);
             }
 
@@ -172,7 +165,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'siti',
                 'ic' => '000507110645',
                 'email' => 'siti@gmail.com',
-                'password' => bcrypt('12345678'),
+                'password' => '1234',
                 'phoneno' => '01187777826',
                 'address' => 'Shah Alam',
                 'gender' => 'female',
@@ -183,7 +176,7 @@ class DatabaseSeeder extends Seeder
                 'age' => 57,
                 'status' => 1,
                 'created_at' => now(),
-                'updated_at' => now(),
+                'updated_at' => NULL,
             ]);
         }else{
             $patientId = DB::table('patient')->where('email', 'siti@gmail.com')->value('id');
@@ -192,87 +185,238 @@ class DatabaseSeeder extends Seeder
         // appointment / medrecord / 
         if ($patientId && $docId && $primaryCareId && $nurseId) {
 
-            // Insert record into the "appointment" table
-            $aptId = DB::table('appointment')->insertGetId([
-                'patientid' => $patientId,
+            // first medical record
+            $firstApt = DB::table('docschedule')->insert([ // for docschedule that day
                 'docid' => $docId,
-                'deptid' => $primaryCareId,
-                'date' => "2023-08-07",
-                'time' => "11:00:00",
-                'status' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'day' => 'Monday',
+                'date' => '2023-08-01',
+                'starttime' => '08:00:00',
+                'endtime' => '17:00:00',
+                'status' => NULL,
+                'created_at' => '2023-07-20 09:44:13',
+                'updated_at' => NULL,
             ]);
 
-            if ($patientId){
-                // Use the $aptId to insert a record into the "medrecord" table
-                $medrecordId = DB::table('medrecord')->insertGetId([
-                    'aptid' => $aptId,
-                    'serviceid' => 2,
-                    'desc' => "The patient reports having a fever of 101°F (38.3°C). The fever started two days ago and has been progressively getting worse. The fever has been intermittent, and the patient has been taking over-the-counter medication (Paracetamol) to reduce it.",
-                    'status' => 1, 
-                    'img' => NULL,
-                    'datetime' => "2023-08-07 11:09:31",
-                    'docid' => $docId,
+            if ($firstApt) {
+                // Insert record into the "appointment" table
+                $aptId = DB::table('appointment')->insertGetId([
                     'patientid' => $patientId,
-                    'invoice_number' => "002023989169",
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'docid' => $docId,
+                    'deptid' => $primaryCareId,
+                    'date' => "2023-08-01",
+                    'time' => "11:00:00",
+                    'status' => 1,
+                    'created_at' => '2023-07-21 10:44:13',
+                    'updated_at' => NULL,
                 ]);
 
-                if ($medrecordId){
-                    //medprecription
-                    DB::table('medprescription')->insert([
-                        'aptid' => $aptId, 
-                        'name' => "Amoxicillin", 
-                        'qty' => 2, 
-                        'desc' => "Take 2 capsules every  8 hours as needed. Finish all dont skip.", 
-                        'price' => 15.25,
-                        'total' => 30.50,
-                        'medicineid' =>  4,
-                        'nurseid' => $nurseId,
-                        'patientid' => $patientId, 
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                    DB::table('medprescription')->insert([
-                        'aptid' => $aptId, 
-                        'name' => "Paracetamol", 
-                        'qty' => 2, 
-                        'desc' => "Take 1 or 2 tablets (500mg) every 4-6 hours.", 
-                        'price' => 10.50, 
-                        'total' => 21.00,
-                        'medicineid' =>  1,
-                        'nurseid' => $nurseId,
-                        'patientid' => $patientId, 
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                    DB::table('medinvoice')->insert([
-                        'medrecordid' => $medrecordId, 
-                        'subtotal' => 101.50, 
-                        'discount' => 0.00, 
-                        'tax' => 0.00, 
-                        'totalcost' => 101.50, 
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
+                if ($aptId){
+
                     DB::table('attendance')->insert([
                         'aptid' => $aptId, 
                         'status' => 1, 
                         'reason' => NULL, 
-                        'created_at' => now(),
-                        'updated_at' => now(),
+                        'created_at' => '2023-08-01 11:09:31',
+                        'updated_at' => NULL,
                     ]);
 
+                    // Use the $aptId to insert a record into the "medrecord" table
+                    $medrecordId = DB::table('medrecord')->insertGetId([
+                        'aptid' => $aptId,
+                        'serviceid' => 2,
+                        'desc' => "The patient reports having a fever of 101°F (38.3°C). The fever started two days ago and has been progressively getting worse. The fever has been intermittent, and the patient has been taking over-the-counter medication (Paracetamol) to reduce it.",
+                        'status' => 1, 
+                        'img' => NULL,
+                        'datetime' => "2023-08-01 11:09:31",
+                        'docid' => $docId,
+                        'patientid' => $patientId,
+                        'refnum' => "002023989169",
+                        'created_at' => '2023-08-01 11:30:31',
+                        'updated_at' => NULL,
+                    ]);
+
+                    if ($medrecordId){
+                        //medprecription
+                        DB::table('medprescription')->insert([
+                            'aptid' => $aptId, 
+                            'name' => "Amoxicillin", 
+                            'qty' => 2, 
+                            'desc' => "Take 2 capsules every  8 hours as needed. Finish all dont skip.", 
+                            'price' => 15.25,
+                            'total' => 30.50,
+                            'medicineid' =>  4,
+                            'nurseid' => $nurseId,
+                            'patientid' => $patientId, 
+                            'docid' => $docId,
+                            'created_at' => '2023-08-01 11:30:00',
+                            'updated_at' => NULL,
+                        ]);
+                        DB::table('medprescription')->insert([
+                            'aptid' => $aptId, 
+                            'name' => "Paracetamol", 
+                            'qty' => 2, 
+                            'desc' => "Take 1 or 2 tablets (500mg) every 4-6 hours.", 
+                            'price' => 10.50, 
+                            'total' => 21.00,
+                            'medicineid' =>  1,
+                            'nurseid' => $nurseId,
+                            'patientid' => $patientId,
+                            'docid' => $docId, 
+                            'created_at' => '2023-08-01 11:30:00',
+                            'updated_at' => NULL,
+                        ]);
+                        //invoice
+                        DB::table('medinvoice')->insert([
+                            'medrecordid' => $medrecordId, 
+                            'subtotal' => 101.50, 
+                            'discount' => 0.00, 
+                            'tax' => 0.00, 
+                            'totalcost' => 101.50, 
+                            'created_at' => '2023-08-01 11:30:00',
+                            'updated_at' => NULL,
+                        ]);
+                    }
                 }
+            }//end
 
+            // second medical record
+            $secondApt = DB::table('docschedule')->insert([ // for docschedule that day
+                'docid' => $docId,
+                'day' => 'Saturday',
+                'date' => '2023-08-06',
+                'starttime' => '08:00:00',
+                'endtime' => '17:00:00',
+                'status' => NULL,
+                'created_at' => '2023-07-20 09:44:13',
+                'updated_at' => NULL,
+            ]);
 
+            if ($secondApt) {
+                // Insert record into the "appointment" table
+                $aptId2 = DB::table('appointment')->insertGetId([
+                    'patientid' => $patientId,
+                    'docid' => $docId,
+                    'deptid' => $primaryCareId,
+                    'date' => "2023-08-06",
+                    'time' => "12:00:00",
+                    'status' => 1,
+                    'created_at' => '2023-08-04 10:44:13',
+                    'updated_at' => NULL,
+                ]);
+
+                if ($aptId2){
+
+                    DB::table('attendance')->insert([
+                        'aptid' => $aptId2, 
+                        'status' => 1, 
+                        'reason' => NULL, 
+                        'created_at' => '2023-08-06 12:09:31',
+                        'updated_at' => NULL,
+                    ]);
+
+                    // Use the $aptId to insert a record into the "medrecord" table
+                    $medrecordId2 = DB::table('medrecord')->insertGetId([
+                        'aptid' => $aptId2,
+                        'serviceid' => 4,
+                        'desc' => "The result just okay, the patient need more rest and avoid heavy activities, the mc is given for 4 days. The patient must keep hydrated. I will schedule a follow-up appointment in 3 days.",
+                        'status' => 1, 
+                        'img' => NULL,
+                        'datetime' => "2023-08-06 12:30:31",
+                        'docid' => $docId,
+                        'patientid' => $patientId,
+                        'refnum' => "002023772356",
+                        'created_at' => '2023-08-06 12:30:31',
+                        'updated_at' => NULL,
+                    ]);
+
+                    if ($medrecordId2){
+                        //medprecription
+                        DB::table('medprescription')->insert([
+                            'aptid' => $aptId2, 
+                            'name' => "Amoxicillin", 
+                            'qty' => 2, 
+                            'desc' => "Take 2 tablets every 8 hours daily.", 
+                            'price' => 15.25,
+                            'total' => 30.50,
+                            'medicineid' =>  4,
+                            'nurseid' => $nurseId,
+                            'patientid' => $patientId, 
+                            'docid' => $docId,
+                            'created_at' => '2023-08-06 12:30:31',
+                            'updated_at' => NULL,
+                        ]);
+                        //invoice
+                        DB::table('medinvoice')->insert([
+                            'medrecordid' => $medrecordId2, 
+                            'subtotal' => 110.50, 
+                            'discount' => 0.00, 
+                            'tax' => 0.00, 
+                            'totalcost' => 110.50, 
+                            'created_at' => '2023-08-06 12:30:31',
+                            'updated_at' => NULL,
+                        ]);
+                    }
+                }
+            }//end
+
+            //untuk appointment cancel
+            $thirdApt = DB::table('docschedule')->insert([ // add docschedule for that day
+                'docid' => $docId,
+                'day' => 'Tuesday',
+                'date' => '2023-08-08',
+                'starttime' => '08:00:00',
+                'endtime' => '17:00:00',
+                'status' => NULL,
+                'created_at' => '2023-07-20 09:44:13',
+                'updated_at' => NULL,
+            ]);
+
+            if ($thirdApt) {
+                $cancelAptId = DB::table('appointment')->insertGetId([
+                    'patientid' => $patientId,
+                    'docid' => $docId,
+                    'deptid' => $primaryCareId,
+                    'date' => "2023-08-08",
+                    'time' => "09:00:00",
+                    'status' => 2,
+                    'created_at' => '2023-08-07 09:44:13',
+                    'updated_at' => NULL,
+                ]);
+    
+                DB::table('attendance')->insert([
+                    'aptid' => $cancelAptId, 
+                    'status' => 2, 
+                    'reason' => NULL, 
+                    'created_at' => '2023-08-08 09:30:00',
+                    'updated_at' => NULL,
+                ]);
+            }//end
+           
+            // untuk new apointment
+            $fourthApt = DB::table('docschedule')->insert([ // add docschedule for that day
+                'docid' => $docId,
+                'day' => now()->format('l'), // 'l' represents the full day name (e.g., "Monday")
+                'date' => now()->toDateString(),
+                'starttime' => '08:00:00',
+                'endtime' => '17:00:00',
+                'status' => NULL,
+                'created_at' => now(),
+                'updated_at' => NULL,
+            ]);
+
+            if ($fourthApt) {
+
+                $newAptId = DB::table('appointment')->insertGetId([
+                    'patientid' => $patientId,
+                    'docid' => $docId,
+                    'deptid' => $primaryCareId,
+                    'date' => now()->toDateString(),
+                    'time' => "17:30:00",
+                    'status' => 1,
+                    'created_at' => now(),
+                    'updated_at' => NULL,
+                ]);
             }
-
-
-
-
         }
     }
 }
