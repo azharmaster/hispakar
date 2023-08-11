@@ -157,13 +157,69 @@ class AdminController extends Controller
                 }
             }
         } // End calendar
+
+        ///////////////////////////////////////////////////////////
+
+        // $currentDate = Carbon::now();
+        // $labels = [];
+
+        // for ($i = 0; $i < 5; $i++) {
+        //     $labels[] = $currentDate->format('M');
+        //     $currentDate->subMonth(); // Use subMonth() to move back in time
+        // }
+
+        
+        // // Reverse the order of the array
+        //  $labels = array_reverse($labels);
+
+        
+        // // $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June'];
+        // //$maleData = [5, 4, 5, 4, 5, 4];
+        // $femaleData = [5, 1, 6, 4, 2, 7];
+
+  
+
+$currentDate = Carbon::now();
+$labels = [];
+$maleData = [];
+$femaleData = [];
+
+for ($i = 0; $i < 5; $i++) {
+    $month = $currentDate->format('M');
+    $labels[] = $month;
+
+    $maleCount = Patient::where('gender', 'male')
+        ->whereYear('created_at', $currentDate->year)
+        ->whereMonth('created_at', $currentDate->month)
+        ->count();
+
+    $femaleCount = Patient::where('gender', 'female')
+        ->whereYear('created_at', $currentDate->year)
+        ->whereMonth('created_at', $currentDate->month)
+        ->count();
+
+    $maleData[] = $maleCount;
+    $femaleData[] = $femaleCount;
+
+    $currentDate->subMonth(); // Use subMonth() to move back in time
+}
+
+// Reverse the order of the arrays
+$labels = array_reverse($labels);
+$maleData = array_reverse($maleData);
+$femaleData = array_reverse($femaleData);
+
+// print_r($labels);
+// print_r($maleData);
+// print_r($femaleData);
+
         
 
         return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totaldept',
         'totalnurse','totalpatient','totalmedicine','medicines','nurses','totalapt2','totaldoc2',
         'totalnurse2','totalpatient2','totalroom2','totaldept2','totalmedicine2',
         //calendar
-        'calendarEvents'));
+        'calendarEvents', 'labels', 'maleData', 'femaleData'));
     }
 
     public function viewProfile() //profile admin

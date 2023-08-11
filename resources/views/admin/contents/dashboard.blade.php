@@ -578,21 +578,19 @@
     });
     
     const ctx3 = document.getElementById('myChart3');
-    
+
     new Chart(ctx3, {
         type: 'line',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June'],
+            labels: {!! json_encode($labels) !!},
             datasets: [{
-                    label: '# of Male',
-                    data: [120, 130, 143, 131, 123, 132],
-                },
-    
-                {
-                    label: '# of Female',
-                    data: [132, 126, 134, 159, 156, 135]
-                }
-            ]
+                label: 'Male',
+                data: {!! json_encode($maleData) !!},
+            },
+            {
+                label: 'Female',
+                data: {!! json_encode($femaleData) !!}
+            }]
         },
         options: {
             responsive: true,
@@ -606,7 +604,7 @@
                 }
             }
         },
-    })
+    });
 </script>
 
 @endsection
