@@ -67,19 +67,8 @@ class NurseController extends Controller
             $startDate = "$year-$month-01";
             $endDate = date('Y-m-t', strtotime($startDate));
 
-            //$totalattend[] = MedRecord::whereBetween('datetime', [$startDate, $endDate])->count();
-            //$totalcancel[] = Appointments::whereMonth('date', $month)->whereYear('date', $year)->where('status', 3)->count();
-            $totalattend[] = Appointments::whereMonth('date', $month)
-                ->whereYear('date', $year)
-                ->where('status', 1)
-                ->where('deptid', $nurse->deptid)
-                ->count();
-
-            $totalcancel[] = Appointments::whereMonth('date', $month)
-                ->whereYear('date', $year)
-                ->where('status', 2)
-                ->where('deptid', $nurse->deptid)
-                ->count();
+            $totalattend[] = MedRecord::whereBetween('datetime', [$startDate, $endDate])->count();
+            $totalcancel[] = Appointments::whereMonth('date', $month)->whereYear('date', $year)->where('status', 3)->count();
         }
 
         //Age
@@ -215,13 +204,10 @@ class NurseController extends Controller
         // ->take(5)
         ->get();
 
-        // Fetch the patient's data including the user relationship
-        $patients = Patient::with('user')->whereIn('id', $aptDs->pluck('patientid'))->get();
-
 
         return view('nurse.contents.dashboard', compact(
             // for card
-            'totalpatient', 'totalroom','totaldoc','totalapt', 'patients', 
+            'totalpatient', 'totalroom','totaldoc','totalapt', 
             //for chart by gender
             'totalmale', 'totalfemale',
             //for appoinment statistic by month
