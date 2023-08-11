@@ -67,8 +67,20 @@ class NurseController extends Controller
             $startDate = "$year-$month-01";
             $endDate = date('Y-m-t', strtotime($startDate));
 
-            $totalattend[] = MedRecord::whereBetween('datetime', [$startDate, $endDate])->count();
-            $totalcancel[] = Appointments::whereMonth('date', $month)->whereYear('date', $year)->where('status', 3)->count();
+            //$totalattend[] = MedRecord::whereBetween('datetime', [$startDate, $endDate])->count();
+            //$totalcancel[] = Appointments::whereMonth('date', $month)->whereYear('date', $year)->where('status', 3)->count();
+
+            $totalattend[] = Appointments::whereMonth('date', $month)
+                ->whereYear('date', $year)
+                ->where('status', 1)
+                ->where('deptid', $nurse->deptid)
+                ->count();
+
+            $totalcancel[] = Appointments::whereMonth('date', $month)
+                ->whereYear('date', $year)
+                ->where('status', 2)
+                ->where('deptid', $nurse->deptid)
+                ->count();
         }
 
         //Age
