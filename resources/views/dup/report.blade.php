@@ -147,17 +147,22 @@
                                         
                                         <tr>
                                             <th colspan="2" class="colored" >Next Appointment</th>
-                                            <td colspan="3">
+                                            <td colspan="3" style="padding-bottom: 0;">
                                                 @if (!empty($nextAptStatus))
-                                                    @php $firstApt = reset($nextAptStatus); // Get the first element from the array
-                                                    @endphp
+                                                    @foreach ($nextAptStatus as $apt)
+                                                        {{-- Kalau status == cancel, keep display next apt --}}
+                                                        {{ $apt['appointment']->date }} {{ $apt['appointment']->time }}
+                                                        <span class="badge ml-2" style="{{ $apt['badgeStyle'] }}">{{ $apt['status'] }}</span><br><br>
 
-                                                    {{ $firstApt['appointment']->date }} {{ $firstApt['appointment']->time }}
-                                                    <span class="badge ml-2" style="{{ $firstApt['badgeStyle'] }}">{{ $firstApt['status'] }}</span><br>
-
+                                                        {{-- Kalau status != cancel, break loop --}}
+                                                        @if ($apt['status'] !== 'Cancel')
+                                                            @break
+                                                        @endif
+                                                    @endforeach
                                                 @else
                                                     No upcoming appointments
                                                 @endif
+
 
                                             </td>
                                         </tr>
