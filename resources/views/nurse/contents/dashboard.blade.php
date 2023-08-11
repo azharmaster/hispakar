@@ -230,7 +230,13 @@
                                     <tr>
                                       <td class="name-cell">
                                         <div class="profile-info">
-                                          <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                        @php
+        // Find the patient by ID in the patients collection
+        $patient = $patients->firstWhere('id', $apt->patientid);
+    @endphp
+
+    <img src="{{ $patient->user->image ? asset('storage/profilePic/' . $patient->user->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="patient image" class="img-radius img-40 align-top m-r-15">
+    
                                           <span>{{ $aptD->name }}</span>
                                         </div>
                                       </td>
