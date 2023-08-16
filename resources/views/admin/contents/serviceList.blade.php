@@ -56,7 +56,7 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Type</th>
-                                                    <th>Desc</th>
+                                                    <th>Description</th>
                                                     <th>Charge</th>
                                                     <th style="width: 80px;">Action</th>
                                                 </tr>
@@ -120,7 +120,7 @@
                         <input type="text" style="width:350px;" class="form-control" name="type" id="type" placeholder="Check-up">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Desc :</span>
+                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Description :</span>
                         <!-- <input type="text" style="width:350px;" class="form-control" name="desc" id="desc" > -->
                         <textarea style="width:350px;" class="form-control" name="desc" id="desc" rows="4" cols="50" placeholder="Routine medical examination to assess a person's general health status."></textarea>
                     </div>
@@ -161,7 +161,7 @@
                         <input type="text" style="width:350px;" class="form-control" name="type" id="type" value="{{ $service->type }}" placeholder="Cardiology">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Desc :</span>
+                        <span class="input-group-addon" style="width:150px; font-weight:bold;">Description :</span>
                        
                         <textarea style="width:350px;" class="form-control" name="desc" id="desc" rows="4" cols="50"  
                         placeholder="Routine medical examination to assess a person's general health status.">{{ $service->desc }}</textarea>
