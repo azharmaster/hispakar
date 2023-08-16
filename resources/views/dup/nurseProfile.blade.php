@@ -421,14 +421,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($totalpatientdetails as $patient)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $patient->name }}</td>
-                            <td>{{ $patient->age }}</td>
-                            <td>{{ $patient->gender }}</td>
-                        </tr>
-                        @endforeach
+                        @if ( $totalpatientdetails->isEmpty() )
+                            <tr>
+                                <td colspan="4" class="text-center">No data available</td>
+                            </tr>
+                        @else
+                            @foreach($totalpatientdetails as $patient)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $patient->name }}</td>
+                                    <td>{{ $patient->age }}</td>
+                                    <td>{{ $patient->gender }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>

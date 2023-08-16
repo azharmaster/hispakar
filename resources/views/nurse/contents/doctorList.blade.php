@@ -44,10 +44,6 @@
                                     <div class="card-header">
                                         <h5 id="tableTitle">List of Doctor</h5>
                                         <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
-                                        <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#addModal-doctor" title="Add Doctor">
-                                            <i class="fas fa-solid fa-plus"></i>
-                                                Add
-                                        </button>
                                     </div>
                                     <div class="card-block">
                                         <div class="dt-responsive table-responsive">

@@ -179,39 +179,39 @@ class AdminController extends Controller
 
   
 
-$currentDate = Carbon::now();
-$labels = [];
-$maleData = [];
-$femaleData = [];
+        $currentDate = Carbon::now();
+        $labels = [];
+        $maleData = [];
+        $femaleData = [];
 
-for ($i = 0; $i < 5; $i++) {
-    $month = $currentDate->format('M');
-    $labels[] = $month;
+        for ($i = 0; $i < 5; $i++) {
+            $month = $currentDate->format('M');
+            $labels[] = $month;
 
-    $maleCount = Patient::where('gender', 'male')
-        ->whereYear('created_at', $currentDate->year)
-        ->whereMonth('created_at', $currentDate->month)
-        ->count();
+            $maleCount = Patient::where('gender', 'male')
+                ->whereYear('created_at', $currentDate->year)
+                ->whereMonth('created_at', $currentDate->month)
+                ->count();
 
-    $femaleCount = Patient::where('gender', 'female')
-        ->whereYear('created_at', $currentDate->year)
-        ->whereMonth('created_at', $currentDate->month)
-        ->count();
+            $femaleCount = Patient::where('gender', 'female')
+                ->whereYear('created_at', $currentDate->year)
+                ->whereMonth('created_at', $currentDate->month)
+                ->count();
 
-    $maleData[] = $maleCount;
-    $femaleData[] = $femaleCount;
+            $maleData[] = $maleCount;
+            $femaleData[] = $femaleCount;
 
-    $currentDate->subMonth(); // Use subMonth() to move back in time
-}
+            $currentDate->subMonth(); // Use subMonth() to move back in time
+        }
 
-// Reverse the order of the arrays
-$labels = array_reverse($labels);
-$maleData = array_reverse($maleData);
-$femaleData = array_reverse($femaleData);
+        // Reverse the order of the arrays
+        $labels = array_reverse($labels);
+        $maleData = array_reverse($maleData);
+        $femaleData = array_reverse($femaleData);
 
-// print_r($labels);
-// print_r($maleData);
-// print_r($femaleData);
+        // print_r($labels);
+        // print_r($maleData);
+        // print_r($femaleData);
 
         
 
@@ -398,15 +398,15 @@ $femaleData = array_reverse($femaleData);
         ->join('patient', 'patient.id', '=', 'medrecord.patientid')
         ->with('patient')
         ->get();
-        
-         //total apt today card and modal
-         $totalapttodaydetails = Appointments::where('deptid', $deptid)
-         ->where('status', 1)
-         ->whereDate('date', $today)
-         ->orderBy('time', 'desc')
-         ->with('patient')
-         ->get();
-         $totalapttoday = $totalapttodaydetails->count();
+
+        //total apt today card and modal
+        $totalapttodaydetails = Appointments::where('deptid', $deptid)
+        ->where('status', 1)
+        ->whereDate('date', $today)
+        ->orderBy('time', 'desc')
+        ->with('patient')
+        ->get();
+        $totalapttoday = $totalapttodaydetails->count();
 
         //total medical record card and modal
         $totalrecorddetails = MedRecord::join('appointment', 'medrecord.aptid', '=', 'appointment.id')

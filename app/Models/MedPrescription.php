@@ -25,5 +25,14 @@ class MedPrescription extends Model
 
     public $timestamps = false;
 
+    //nurse profile for total patient details
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patientid'); // Assuming patientid is the foreign key column in medprescription table
+    }
+
+    
+
+
 
 }
