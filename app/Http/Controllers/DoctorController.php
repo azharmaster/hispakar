@@ -135,18 +135,20 @@ class DoctorController extends Controller
         }
 
         //patient by gender
-        $totalmale = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
-                    //->join('appointment', 'appointment.patientid', '=', 'patient.id')
-                    ->where('patient.gender', 'male')
-                     ->where('medrecord.docid', $doctor->id)
-                    //->where('appointment.deptid', $doctor->deptid)
+        $totalmale = Patient::where('patient.gender', 'male')
+                    ->whereIn('id', function($query) use ($doctor) {
+                        $query->select('patientid')
+                            ->from('medrecord')
+                            ->where('docid', $doctor->id);
+                    })
                     ->count();
 
-        $totalfemale = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
-        //->join('appointment', 'appointment.patientid', '=', 'patient.id')
-                    ->where('patient.gender', 'female')
-                     ->where('medrecord.docid', $doctor->id)
-                    //->where('appointment.deptid', $doctor->deptid)
+        $totalfemale = Patient::where('patient.gender', 'female')
+                    ->whereIn('id', function($query) use ($doctor) {
+                        $query->select('patientid')
+                            ->from('medrecord')
+                            ->where('docid', $doctor->id);
+                    })
                     ->count();
         
         //Age

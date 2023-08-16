@@ -345,11 +345,6 @@
                         <div class="col-xl-4 col-md-6">
                             <!-- patient by gender -->
                             <div class="card latest-update-card">
-                                @php
-                                    $totalPopulation = $totalmale + $totalfemale;
-                                    $malePercentage = intval($totalPopulation > 0 ? ($totalmale / $totalPopulation) * 100 : 0);
-                                @endphp
-
                                 <div class="card-header">
                                     <h5>Patients by Gender</h5>
                                 </div>
