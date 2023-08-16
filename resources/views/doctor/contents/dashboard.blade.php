@@ -378,7 +378,7 @@
                             <!-- /patient by gender -->
                             
                             <!-- medicine -->
-                            <div class="card latest-update-card" >
+                            <div class="card latest-update-card" style="min-height: 455px">
                                 <div class="card-header">
                                     <h5>Medicine Supply</h5>
                                     <div class="card-header-right">
