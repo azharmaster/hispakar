@@ -80,7 +80,7 @@
                                         </tr>
                                         <tr>
                                             <th class="colored">Weight</th>
-                                            <td>{{ $record->patient->weight }}</td>
+                                            <td>{{ $record->patient->weight }} kg</td>
                                             <th class="colored">Height</th>
                                             <td>{{ $record->patient->height }} m</td>
                                         </tr>
