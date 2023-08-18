@@ -8,7 +8,7 @@
     <meta name="description" content="Admindek Bootstrap admin template made using Bootstrap 4 and it has a huge amount of ready-made features, UI components, pages which completely fulfills any dashboard needs.">
     <meta name="keywords" content="flat ui, admin Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
     <meta name="author" content="colorlib">
-    <link rel="icon" href="{{ asset('files/assets/images/favicon-1.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('files/assets/images/pakar.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
@@ -89,7 +89,7 @@
                                                         <div class="row">
                                                             <!-- /.col -->
                                                             <div class="col-12 my-3">
-                                                                <button type="submit" class="btn btn-primary btn-block" name="submit" disabled>{{ __('Send Password Reset Link') }}</button>
+                                                                <button type="submit" class="btn btn-primary btn-block" name="submit">{{ __('Send Password Reset Link') }}</button>
                                                             </div>
                                                             <!-- /.col -->
                                                         </div>

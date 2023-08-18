@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ResetPasswordController extends Controller
 {
@@ -27,4 +29,20 @@ class ResetPasswordController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+
+    protected function redirectTo()
+    {
+        if( Auth()->user()->usertype == 1){
+            return route('admin.contents.dashboard');
+        }
+        elseif( Auth()->user()->usertype == 2){
+            return route('doctor.contents.dashboard');
+        }
+        elseif( Auth()->user()->usertype == 3){
+            return route('nurse.contents.dashboard');
+        }
+        elseif( Auth()->user()->usertype == 4){
+            return route('patient.contents.dashboard');
+        }
+    }
 }
