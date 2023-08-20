@@ -17,6 +17,7 @@ use App\Models\MedRecord;
 use App\Models\MedService;
 use App\Models\MedPrescription;
 use App\Models\MedInvoice;
+use App\Models\Services;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,6 +51,9 @@ class AdminController extends Controller
 
         $totalmedicine = Medicine::all()->count();
         $totalmedicine2 = Medicine::whereBetween('created_at', [$firstDay, $now])->count();
+
+        $totalservice = MedService::all()->count();
+        $totalservice2 = MedService::whereBetween('created_at', [$firstDay, $now])->count();
 
         $medicines = Medicine::all();
 
@@ -217,7 +221,7 @@ class AdminController extends Controller
 
         return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totaldept',
         'totalnurse','totalpatient','totalmedicine','medicines','nurses','totalapt2','totaldoc2',
-        'totalnurse2','totalpatient2','totalroom2','totaldept2','totalmedicine2',
+        'totalnurse2','totalpatient2','totalroom2','totaldept2','totalmedicine2', 'totalservice', 'totalservice2',
         //calendar
         'calendarEvents', 'labels', 'maleData', 'femaleData'));
     }

@@ -48,156 +48,131 @@
                     <div class="row">
 
                         <div class="col-xl-3 col-md-6">
-                            <a href="/admin/doctorList"><div class="card prod-p-card card-b-primary">
+                            <a href="/admin/doctorList"><div class="card prod-p-card card-red">
                                 <div class="card-body">
-                                    <div class="row align-items-center m-b-10">
+                                    <div class="row align-items-center m-b-30">
                                         <div class="col">
-                                            <h6 class="m-b-5">Doctors</h6>
-                                            <h2 class="m-b-0 f-w-700 mt-2">{{$totaldoc}}</h2>
+                                            <h6 class="m-b-5 text-white">Total Doctors</h6>
+                                            <h3 class="m-b-0 f-w-700 text-white">{{$totaldoc}}</h3>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-user-md text-white" style="margin-top: 15px; background-color: #4099FF"></i> 
+                                            <i class="fas fa-user-md text-c-red f-18"></i>
                                         </div>
                                     </div>
-                                    <p class="m-b-0 mt-3" style="font-size: 13px"><span class="label label-primary m-r-10">+{{$totaldoc2}}</span>From
+                                    <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totaldoc2}}</span>From
                                         Previous Month</p>
                                 </div>
                             </div></a>
                         </div>
-                        <!-- ./card -->
 
                         <div class="col-xl-3 col-md-6">
-                            <a href="/admin/nurseList"><div class="card prod-p-card card-b-danger">
+                        <a href="/admin/nurseList"><div class="card prod-p-card card-yellow">
                                 <div class="card-body">
-                                    <div class="row align-items-center m-b-10">
+                                    <div class="row align-items-center m-b-30">
                                         <div class="col">
-                                            <h6 class="m-b-5">Nurses</h6>
-                                            <h2 class="m-b-0 f-w-700 mt-2">{{$totalnurse}}</h2>
+                                            <h6 class="m-b-5 text-white">Total Nurses</h6>
+                                            <h3 class="m-b-0 f-w-700 text-white">{{$totalnurse}}</h3>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-user-nurse text-white" style="margin-top: 15px; background-color: #FF5370"></i> 
+                                            <i class="fas fa-user-nurse text-c-red f-18"></i>
                                         </div>
                                     </div>
-                                    <p class="m-b-0 mt-3" style="font-size: 13px"><span class="label label-danger m-r-10">+{{$totalnurse2}}</span>From
+                                    <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totalnurse2}}</span>From
                                         Previous Month</p>
                                 </div>
                             </div></a>
                         </div>
-                        <!-- ./card -->
 
                         <div class="col-xl-3 col-md-6">
-                            <a href="/admin/patientList"><div class="card prod-p-card card-b-success">
+                        <a href="/admin/patientList"><div class="card prod-p-card card-green">
                                 <div class="card-body">
-                                    <div class="row align-items-center m-b-10">
+                                    <div class="row align-items-center m-b-30">
                                         <div class="col">
-                                            <h6 class="m-b-5">Patients</h6>
-                                            <h2 class="m-b-0 f-w-700 mt-2">{{$totalpatient}}</h2>
+                                            <h6 class="m-b-5 text-white">Total Patients</h6>
+                                            <h3 class="m-b-0 f-w-700 text-white">{{$totalpatient}}</h3>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-user-injured text-white" style="margin-top: 15px; background-color: #2ED8B6"></i> 
+                                            <i class="fas fa-user-injured text-c-red f-18"></i>
                                         </div>
                                     </div>
-                                    <p class="m-b-0 mt-3" style="font-size: 13px"><span class="label label-success m-r-10">+{{$totalpatient2}}</span>From
+                                    <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totalpatient2}}</span>From
                                         Previous Month</p>
                                 </div>
                             </div></a>
                         </div>
-                        <!-- ./card -->
 
                         <div class="col-xl-3 col-md-6">
-                            <a href="/admin/departmentList"><div class="card prod-p-card card-b-info">
+                        <a href="/admin/departmentList"><div class="card prod-p-card card-info">
                                 <div class="card-body">
-                                    <div class="row align-items-center m-b-10">
+                                    <div class="row align-items-center m-b-30">
                                         <div class="col">
-                                            <h6 class="m-b-5">Departments</h6>
-                                            <h2 class="m-b-0 f-w-700 mt-2">{{$totaldept}}</h2>
+                                            <h6 class="m-b-5 text-white">Total Departments</h6>
+                                            <h3 class="m-b-0 f-w-700 text-white">{{$totaldept}}</h3>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-building text-white" style="margin-top: 15px; background-color: #00BCD4"></i> 
+                                            <i class="fas fa-building text-c-red f-18"></i>
                                         </div>
                                     </div>
-                                    <p class="m-b-0 mt-3" style="font-size: 13px"><span class="label label-info m-r-10">+{{$totaldept2}}</span>From
+                                    <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totaldept2}}</span>From
                                         Previous Month</p>
                                 </div>
                             </div></a>
                         </div>
-                        <!-- ./card -->
 
                         <div class="col-xl-3 col-md-6">
-                            <a href="/admin/medicineList"><div class="card prod-p-card card-b-primary">
+                        <a href="/admin/medicineList"> <div class="card prod-p-card card-primary">
                                 <div class="card-body">
-                                    <div class="row align-items-center m-b-10">
+                                    <div class="row align-items-center m-b-30">
                                         <div class="col">
-                                            <h6 class="m-b-5">Medicines</h6>
-                                            <h2 class="m-b-0 f-w-700 mt-2">{{$totalmedicine}}</h2>
+                                            <h6 class="m-b-5 text-white">Total Medicines</h6>
+                                            <h3 class="m-b-0 f-w-700 text-white">{{$totalmedicine}}</h3>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-tablets text-white" style="margin-top: 15px; background-color: #4099FF"></i> 
+                                            <i class="fas fa-tablets text-c-red f-18"></i>
                                         </div>
                                     </div>
-                                    <p class="m-b-0 mt-3" style="font-size: 13px"><span class="label label-primary m-r-10">+{{$totalmedicine2}}</span>From
+                                    <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totalmedicine2}}</span>From
                                         Previous Month</p>
                                 </div>
                             </div></a>
                         </div>
-                        <!-- ./card -->
 
                         <div class="col-xl-3 col-md-6">
-                            <a href="/admin/roomList"><div class="card prod-p-card card-b-danger">
+                        <a href="/admin/roomList"><div class="card prod-p-card card-green">
                                 <div class="card-body">
-                                    <div class="row align-items-center m-b-10">
+                                    <div class="row align-items-center m-b-30">
                                         <div class="col">
-                                            <h6 class="m-b-5">Rooms</h6>
-                                            <h2 class="m-b-0 f-w-700 mt-2">{{$totalroom}}</h2>
+                                            <h6 class="m-b-5 text-white">Total Rooms</h6>
+                                            <h3 class="m-b-0 f-w-700 text-white">{{$totalroom}}</h3>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-clinic-medical text-white" style="margin-top: 15px; background-color: #FF5370"></i> 
+                                            <i class="fas fa-clinic-medical  text-c-red f-18"></i>
                                         </div>
                                     </div>
-                                    <p class="m-b-0 mt-3" style="font-size: 13px"><span class="label label-danger m-r-10">+{{$totalroom2}}</span>From
+                                    <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totalroom2}}</span>From
                                         Previous Month</p>
                                 </div>
                             </div></a>
                         </div>
-                        <!-- ./card -->
 
                         <div class="col-xl-3 col-md-6">
-                            <a href="/admin/appointmentList"><div class="card prod-p-card card-b-success">
+                            <a href="/admin/appointmentList"><div class="card prod-p-card card-red">
                                 <div class="card-body">
-                                    <div class="row align-items-center m-b-10">
+                                    <div class="row align-items-center m-b-30">
                                         <div class="col">
-                                            <h6 class="m-b-5">Appoiments</h6>
-                                            <h2 class="m-b-0 f-w-700 mt-2">{{$totalapt}}</h2>
+                                            <h6 class="m-b-5 text-white">Total Appoiments</h6>
+                                            <h3 class="m-b-0 f-w-700 text-white">{{$totalapt}}</h3>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar-check text-white" style="margin-top: 15px; background-color: #2ED8B6"></i> 
+                                            <i class="fas fa-calendar-check  text-c-red f-18"></i>
                                         </div>
                                     </div>
-                                    <p class="m-b-0 mt-3" style="font-size: 13px"><span class="label label-success m-r-10">+{{$totalapt2}}</span>From
+                                    <p class="m-b-0 text-white"><span class="label label-danger m-r-10">+{{$totalapt2}}</span>From
                                         Previous Month</p>
                                 </div>
                             </div></a>
                         </div>
-                        <!-- ./card -->
 
-                        <div class="col-xl-3 col-md-6">
-                            <a href="/admin/serviceList"><div class="card prod-p-card card-b-info">
-                                <div class="card-body">
-                                    <div class="row align-items-center m-b-10">
-                                        <div class="col">
-                                            <h6 class="m-b-5">Medical Services</h6>
-                                            <h2 class="m-b-0 f-w-700 mt-2">{{$totalservice}}</h2>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-stethoscope text-white" style="margin-top: 15px; background-color: #00BCD4"></i> 
-                                        </div>
-                                    </div>
-                                    <p class="m-b-0 mt-3" style="font-size: 13px"><span class="label label-info m-r-10">+{{$totalservice2}}</span>From
-                                        Previous Month</p>
-                                </div>
-                            </div></a>
-                        </div>
-                        <!-- ./card -->
                       
                         <div class="col-md-12 col-xl-6">
                             <div class="card sale-card">
@@ -238,7 +213,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Med Supply -->
                         <div class="col-xl-4 col-md-12">
                             <div class="card latest-update-card">
@@ -282,8 +257,6 @@
                             </div>
                         </div>
                         <!-- End Med Supply -->
-
-                       
 
                         <!-- Start Table -->
                         <div class="col-md-8">

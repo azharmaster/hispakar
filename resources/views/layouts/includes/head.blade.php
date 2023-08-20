@@ -95,6 +95,21 @@
     }
     /* ./profile pic */
 
+    /* dashboard card style*/
+    .card-b-primary {
+        border-bottom: 2px solid #abcbee; /* Blue color */  
+    }
+    .card-b-danger {
+        border-bottom: 2px solid rgb(242, 173, 183); /* Red color */  
+    }
+    .card-b-success {
+        border-bottom: 2px solid #9de2d4; /* Green color */  
+    }
+    .card-b-info {
+        border-bottom: 2px solid #99d7df; /* Turquoise color */  
+    }
+    /* END - dashboard card style*/
+
     /* admin style */
     .data-label {
       font-size: 15px;
@@ -123,7 +138,7 @@
         grid-gap: 20px;
       }
     }
-    /* end admin style */
+    /* END - admin style */
 
     /* Text align */
     .center {
@@ -135,4 +150,36 @@
     .right {
         text-align: right;
     }
+
+    /* from nurse dashboard */
+    .btn-custom-font-size {
+      font-size: 14px; /* Adjust the font size as per your requirement */
+    }
+  
+    .name-cell {
+      max-width: 150px; /* Adjust the value based on how much width you want to allow */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 5px; /* Adjust as needed */
+    
+    }
+
+    .profile-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .profile-info img {
+      width: 40px; /* Adjust the image size as needed */
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px; /* Adjust as needed */
+    }
+
+    .profile-info span {
+      flex: 1; /* Allow the name to take up remaining space in the flex container */
+    }
+    /* END - from nurse dashboard */
 </style>
