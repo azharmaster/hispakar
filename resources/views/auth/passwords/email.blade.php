@@ -68,7 +68,7 @@
                                                         <!-- <span class="text-center" style="color:red;">Invalid Username or Password</span> -->
                                                         
                                                         @if(session('status'))
-                                                            <div class="alert alert-danger mt-2">{{ session('status') }}</div>
+                                                            <div class="alert alert-success mt-2">{{ session('status') }}</div>
                                                         @endif
 
                                                         <div class="input-group my-4">
