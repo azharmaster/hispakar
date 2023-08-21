@@ -185,7 +185,7 @@
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-10">
                                         <div class="col">
-                                            <h6 class="m-b-5">Medical Services</h6>
+                                            <h6 class="m-b-5">Services</h6>
                                             <h2 class="m-b-0 f-w-700 mt-2">{{$totalservice}}</h2>
                                         </div>
                                         <div class="col-auto">

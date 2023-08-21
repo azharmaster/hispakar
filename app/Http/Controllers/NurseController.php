@@ -305,6 +305,21 @@ class NurseController extends Controller
         return view('nurse.contents.medrecordList', compact('medrcs'));
     }
 
+    public function viewpaymentList() // by nurse department
+    {
+        // Retrieve the nurse based on the authenticated user's email
+        $nurse = Nurse::where('email', Auth::user()->email)->first();
+        $deptId = $nurse->deptid; // Check if the nurse exists and then get the deptId
+
+        //ikut department nurse
+        $medrcs = MedRecord::with(['appointment' => function ($query) use ($deptId) {
+            $query->where('deptid', '=', $deptId);
+        }, 'patient', 'attendingDoctor', 'medInvoice'])
+        ->get();    
+
+        return view('nurse.contents.paymentList', compact('medrcs'));
+    }
+
     public function viewMedicalReport($medrc_id) // medrecord table id
     {
        

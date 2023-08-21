@@ -65,6 +65,15 @@
                     <span class="pcoded-mtext">Medical Records</span>
                     </a>
                 </li>
+                
+                <li class="">
+                    <a href="/nurse/paymentList" class="waves-effect waves-dark">
+                    <span class="pcoded-micon">
+                    <i class="fas fa-file-invoice"></i>
+                    </span>
+                    <span class="pcoded-mtext">Medication & Payments</span>
+                    </a>
+                </li>
 
                 <br>
 

@@ -9,36 +9,9 @@
 @endif
 
 <style>
-  .btn-custom-font-size {
-    font-size: 14px; /* Adjust the font size as per your requirement */
+  .subtitle-color {
+    color: #A9A9A9;
   }
- 
-  .name-cell {
-    max-width: 150px; /* Adjust the value based on how much width you want to allow */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 5px; /* Adjust as needed */
-  
-  }
-
-  .profile-info {
-    display: flex;
-    align-items: center;
-  }
-
-  .profile-info img {
-    width: 40px; /* Adjust the image size as needed */
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px; /* Adjust as needed */
-  }
-
-  .profile-info span {
-    flex: 1; /* Allow the name to take up remaining space in the flex container */
-  }
-
 </style>
 
 <!-- script for chart -->
@@ -93,7 +66,7 @@
                               <h6 class="m-b-20 f-w-600">Rooms</h6>
                               
                               <div class="row d-flex justify-content-between ">
-                                <h2 class="f-w-700 text-c-yellow ml-3">{{ $totalroom }}</h2>
+                                <h2 class="f-w-700 ml-3">{{ $totalroom }}</h2>
                                 <i class="fas fas fa-door-open bg-c-yellow" style="margin-top: -8px; margin-right: -18px"></i>
                               </div>
                               
@@ -117,7 +90,7 @@
                               <h6 class="m-b-20 f-w-600">Patients</h6>
                               
                               <div class="row d-flex justify-content-between ">
-                                <h2 class="f-w-700 text-c-green ml-3">{{ $totalpatient }}</h2>
+                                <h2 class="f-w-700 ml-3">{{ $totalpatient }}</h2>
                                 <i class="fas fa-hospital-user bg-c-green" style="margin-top: -8px; margin-right: -18px"></i>
                               </div>
                               
@@ -140,11 +113,11 @@
                               <h6 class="m-b-20 f-w-600">Doctors</h6>
                               
                               <div class="row d-flex justify-content-between ">
-                                <h2 class="f-w-700 text-c-blue ml-3">{{ $totaldoc }}</h2>
+                                <h2 class="f-w-700 ml-3">{{ $totaldoc }}</h2>
                                 <i class="fas fa-stethoscope bg-c-blue" style="margin-top: -8px; margin-right: -18px"></i>
                               </div>
                               
-                              <p class="m-b-0 mt-2">Total doctors</p>
+                              <p class="m-b-0 mt-2 title-color">Total doctors</p>
  
                             </div>
                             <div class="col-auto">
@@ -163,7 +136,7 @@
                               <h6 class="m-b-20 f-w-600">Appointment</h6>
                               
                               <div class="row d-flex justify-content-between ">
-                                <h2 class="f-w-700 text-c-red ml-3">{{ $totalapt }}</h2>
+                                <h2 class="f-w-700 ml-3">{{ $totalapt }}</h2>
                                 <i class="fas fa-calendar-check bg-c-red" style="margin-top: -8px; margin-right: -18px"></i>
                               </div>
                               

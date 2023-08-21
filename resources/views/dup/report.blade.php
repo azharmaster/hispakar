@@ -177,7 +177,13 @@
                             <!-- Start Card -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>Invoice</h5>
+                                    <h5>
+                                        @if ($record->medinvoice->status == 1)
+                                            Receipt
+                                        @else  
+                                            Invoice
+                                        @endif
+                                    </h5>
                                     <span></span>
                                 </div>
                                 <div class="card-block">
@@ -237,15 +243,26 @@
                                                 <tr>
                                                     <td class ="border-0"style="width: 100px">
                                                         <b>Notes</b><br><br>
-                                                        Due Date<br>
-                                                        Method<br>
-                                                        Status
+
+                                                        @if ($record->medinvoice->status == 1) 
+                                                            Datetime<br>
+                                                            Method<br>
+                                                            Status
+                                                        @else  
+                                                            Status                                                      
+                                                        @endif
+                                                        
                                                     </td>
                                                     <td class ="border-0 text-left" >
                                                         <br><br>
-                                                        : &nbsp;{{ \Carbon\Carbon::parse($record->datetime)->format('Y-m-d') }}<br>
-                                                        : &nbsp;Cash / Online Banking<br>
-                                                        : &nbsp;Paid
+                                                        
+                                                        @if ($record->medinvoice->status == 1) 
+                                                            : &nbsp;{{ ($record->medinvoice->datetime) }}<br>
+                                                            : &nbsp;{{ $record->medinvoice->method }}<br>
+                                                            : &nbsp;{{ $record->medinvoice->status == 0 ? 'Not yet paid' : 'Paid' }}
+                                                        @else  
+                                                            : &nbsp;Not yet paid                                                        
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             </table>
