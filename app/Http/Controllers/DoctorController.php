@@ -89,10 +89,12 @@ class DoctorController extends Controller
                 ->join('patient', 'appointment.patientid', '=', 'patient.id')
                 ->join('users', 'patient.email', '=', 'users.email')
                 ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+                ->join('attendance', 'attendance.aptid', '=', 'appointment.id')
                 ->select('appointment.id as appointment_id', 'patient.id as patient_id',
-                'appointment.status as appointment_status','medrecord.status as medrecord_status',
-                'appointment.*', 'patient.*','users.image as patient_image')
+                    'appointment.status as appointment_status','medrecord.status as medrecord_status',
+                    'appointment.*', 'patient.*','users.image as patient_image')
                 ->where('doctor.id', $doctorId)
+                ->where('attendance.status', 1)
                 ->whereDate('appointment.date', $currentDate) 
                 ->orderBy('appointment.time', 'asc')
                 // ->take(5)
@@ -474,7 +476,7 @@ class DoctorController extends Controller
                     ->join('department', 'appointment.deptid', '=', 'department.id')
                     ->select('appointment.*', 'patient.name as patient_name', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.id as medrc_id', 
                     'medrecord.status as medrecord_status', 'medrecord.refnum as refnum')
-                    ->where('appointment.status', 1)
+                    //->where('appointment.status', 1)
                     ->where('doctor.id', $doctor->id)
                     ->where('appointment.deptid', $doctor->deptid)
                     ->whereDate('appointment.date', $chooseDate)

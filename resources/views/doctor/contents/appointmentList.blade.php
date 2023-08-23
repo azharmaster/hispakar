@@ -95,7 +95,8 @@
                                                                         @endif
                                                                         @break
                                                                     @case(2)
-                                                                        Cancel
+                                                                       
+                                                                        <span class="status badge badge-danger mb-2 align-top" style="font-size: 11px;">Cancel</span>
                                                                         @break
                                                                     @default
                                                                         {{ $appointment->status }}
