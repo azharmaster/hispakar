@@ -97,8 +97,10 @@
                                                         <td>
                                                             
                                                             <ul class="ml-3" style="list-style-type: disc;">
-                                                                <li>sabutamol</li>
-                                                                <li>syrup</li>
+                                                                <!-- Pickup medicine -->
+                                                                @foreach($medrc->medprescriptions as $medicine)
+                                                                    <li>{{ $medicine->name }}</li>
+                                                                @endforeach
                                                             </ul>
                                                             
                                                             
@@ -171,7 +173,7 @@
 </div>
 <!-- end content -->
 
-<!-- Add Patient Modal -->
+<!-- Confirmation Payment Modal -->
 @foreach($medrcs as $record)
 <div class="modal fade" id="editModal-invoice-{{ $record->id }}" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -201,17 +203,18 @@
                             <option value="E-wallet">E-wallet</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="form-group d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                        <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<!-- end Add Patient Modal -->
+<!-- end Payment Modal -->
 
-<!-- Add Patient Modal -->
+<!-- Confirmation Pickup Modal -->
 <div class="modal fade" id="editModal-pickup-{{ $record->id }}" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="card">
@@ -231,19 +234,40 @@
                     <input type="hidden" class="form-control" name="medstatus" value="1">
                     <input type="hidden" name="action" value="pickup">
                     <div class="form-group">
-                        list of medicine ....
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="left">
+                                    <th style="width:10px">#</th>
+                                    <th style="width:10px">Medicine Name</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($record->medprescriptions as $medicine)
+                                    <tr class="left">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $medicine->name }}</td>
+                                        <td>{{ $medicine->qty }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+
+
+
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="form-group d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                        <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
+<!-- end Pickup Medicine Modal -->
 @endforeach  
-<!-- end Add Patient Modal -->
+
 
 <!--script to get the doctor schedule -->
 <!-- Include jQuery -->

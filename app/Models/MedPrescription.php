@@ -31,8 +31,9 @@ class MedPrescription extends Model
         return $this->belongsTo(Patient::class, 'patientid'); // Assuming patientid is the foreign key column in medprescription table
     }
 
-    
-
-
+    public function medrecord() //use in paymentList page 
+    {
+        return $this->belongsTo(Medrecord::class);
+    }
 
 }

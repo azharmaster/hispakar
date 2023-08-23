@@ -68,4 +68,9 @@ class MedRecord extends Model
         return $this->hasOne(MedInvoice::class, 'medrecordid');
     }
 
+    public function medprescriptions()
+    {
+        return $this->hasMany(Medprescription::class, 'medrecordid'); // Use 'medrecordid' as the foreign key
+    }
+
 }

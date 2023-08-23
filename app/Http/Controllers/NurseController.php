@@ -312,14 +312,15 @@ class NurseController extends Controller
         $nurse = Nurse::where('email', Auth::user()->email)->first();
         $deptId = $nurse->deptid; // Check if the nurse exists and then get the deptId
 
-        //ikut department nurse
+        // ikut department nurse
         $medrcs = MedRecord::with(['appointment' => function ($query) use ($deptId) {
             $query->where('deptid', '=', $deptId);
-        }, 'patient', 'attendingDoctor', 'medInvoice'])
-        ->get();    
+        }, 'patient', 'attendingDoctor', 'medInvoice', 'medprescriptions'])
+        ->get();
 
         return view('nurse.contents.paymentList', compact('medrcs'));
     }
+
 
     public function viewMedicalReport($medrc_id) // medrecord table id
     {
