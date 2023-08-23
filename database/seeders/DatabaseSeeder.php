@@ -248,6 +248,7 @@ class DatabaseSeeder extends Seeder
                             'nurseid' => $nurseId,
                             'patientid' => $patientId, 
                             'docid' => $docId,
+                            'medrecordid' => $medrecordId,
                             'created_at' => '2023-08-01 11:30:00',
                             'updated_at' => NULL,
                         ]);
@@ -262,6 +263,7 @@ class DatabaseSeeder extends Seeder
                             'nurseid' => $nurseId,
                             'patientid' => $patientId,
                             'docid' => $docId, 
+                            'medrecordid' => $medrecordId,
                             'created_at' => '2023-08-01 11:30:00',
                             'updated_at' => NULL,
                         ]);
@@ -272,6 +274,8 @@ class DatabaseSeeder extends Seeder
                             'discount' => 0.00, 
                             'tax' => 0.00, 
                             'totalcost' => 101.50, 
+                            'medstatus' => 0, 
+                            'method' => "0", 
                             'created_at' => '2023-08-01 11:30:00',
                             'updated_at' => NULL,
                         ]);
@@ -342,6 +346,7 @@ class DatabaseSeeder extends Seeder
                             'nurseid' => $nurseId,
                             'patientid' => $patientId, 
                             'docid' => $docId,
+                            'medrecordid' => $medrecordId2,
                             'created_at' => '2023-08-06 12:30:31',
                             'updated_at' => NULL,
                         ]);
@@ -352,6 +357,8 @@ class DatabaseSeeder extends Seeder
                             'discount' => 0.00, 
                             'tax' => 0.00, 
                             'totalcost' => 110.50, 
+                            'medstatus' => 0, 
+                            'method' => "0", 
                             'created_at' => '2023-08-06 12:30:31',
                             'updated_at' => NULL,
                         ]);
