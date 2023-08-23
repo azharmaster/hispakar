@@ -14,6 +14,8 @@
     </script>
 @endif
 
+<link rel="stylesheet" type="text/css" href="{{ asset('files/assets/css/style-1.css') }}">
+
 <!-- Start Content -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -67,13 +69,13 @@
                                     <table id="dataTable1" class="table table-bordered">
                                             <thead>
                                                 <tr class="left">
-                                                    <th>#</th>
-                                                    <th>Invoice No</th>
-                                                    <th>Patient Name</th>
-                                                    <th>Medication</th>
-                                                    <th>Total Cost</th>
-                                                    <th>Method</th>
-                                                    <th>Action</th>
+                                                    <th style="width:10px">#</th>
+                                                    <th style="width:10px">Invoice No</th>
+                                                    <th>Patient Details</th>
+                                                    <th >Medication</th>
+                                                    <th style="width:10px">Total Cost</th>
+                                                    <th style="width:10px">Method</th>
+                                                    <th style="width:10px">Action</th>
                                                     <!-- <th style="width: 80px;">Action</th> -->
                                                 </tr>
                                             </thead>
@@ -87,37 +89,66 @@
                                                     <tr class="left">
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $medrc->refnum }}</td>
-                                                        <td>{{ $medrc->patient->name }}</td>
                                                         <td>
-                                                            sabutamol<br>
-                                                            syrup<br>
+                                                            {{ $medrc->patient->name }}aisyah binti zakaria<br>
+                                                            {{ $medrc->patient->ic }}<br>
+                                                        
+                                                        </td>
+                                                        <td>
+                                                            
+                                                            <ul class="ml-3" style="list-style-type: disc;">
+                                                                <li>sabutamol</li>
+                                                                <li>syrup</li>
+                                                            </ul>
+                                                            
+                                                            
                                                             <br>
                                                             
-                                                            <!-- Badge indicating payment status -->
-                                                            @if ($medrc->medinvoice->status == 1)
+                                                            <!-- Dah Ambik -->
+                                                            @if ($medrc->medinvoice->medstatus == 1)
                                                                 <span class="badge badge-primary">Received All</span>
+                                                            <!-- Belum Ambik -->
                                                             @else
-                                                                <span class="badge badge-warning">Pending Pickup</span>
+                                                                <span class="badge badge-warning">Pending Pickup</span>                                                               
                                                             @endif
                                                         </td>
                                                         <td>RM {{ number_format($medrc->medinvoice->totalcost, 2) }}</td>
+
                                                         <td>
-                                                            @if ($medrc->medinvoice->status == 1) <!-- Paid -->
-                                                                {{ $medrc->medinvoice->method}}
-                                                            @else  
+                                                            <!-- Dah Bayar -->
+                                                            @if ($medrc->medinvoice->method == "0") 
                                                                 <span class="badge badge-warning">Pending Payment</span>
+                                                            <!-- Belum Bayar -->
+                                                             @else  
+                                                                {{ $medrc->medinvoice->method}}
                                                             @endif
                                                         </td>
+
                                                         <td class="center"> 
                                                             <div class="d-flex justify-content-center">
-                                                                <!-- Edit Invoice Icon -->
-                                                                <a title="Edit" data-toggle="modal" data-target="#editModal-invoice-{{ $medrc->id }}">
-                                                                    <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
-                                                                </a>
-                                                                
+
+                                                                <!-- if Patient belum settle bayar atau pickup -->
+                                                                @if ($medrc->medinvoice->method == "0" || $medrc->medinvoice->medstatus == "0") <!-- Paid -->
+                                                                    
+                                                                    <!-- if Patient belum bayar -->
+                                                                    @if ($medrc->medinvoice->method == "0")  
+                                                                        <!-- Confirm Payment -->
+                                                                        <a title="Payment" data-toggle="modal" data-target="#editModal-invoice-{{ $medrc->id }}">
+                                                                            <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                        </a>
+
+                                                                    <!-- if Patient dah bayar -->
+                                                                    @else 
+                                                                        <!-- Confirm pickup -->
+                                                                        <a title="Pickup" data-toggle="modal" data-target="#editModal-pickup-{{ $medrc->id }}">
+                                                                            <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                @endif
+
                                                                 <!-- Download Appointment Record Icon -->
                                                                 <a href="/nurse/report/{{ $medrc->refnum }}" title="Download Appointment Record">
-                                                                    <i style="font-size:20px;" class="fas fa-download f-w-600 f-16 m-r-15 text-c-green"></i>
+                                                                    <i style="font-size:20px;" class="fas fa-download f-w-600 f-16 m-r-15 text-c-blue"></i>
                                                                 </a>
                                                             </div>
                                                         </td>
@@ -140,8 +171,79 @@
 </div>
 <!-- end content -->
 
+<!-- Add Patient Modal -->
+@foreach($medrcs as $record)
+<div class="modal fade" id="editModal-invoice-{{ $record->id }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="card">
+            <div class="card-header">
+                <h5>Payment Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>            
+            </div>
+            <div class="card-block">
+                <form action="/nurse/paymentList/{{ $record->id }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="payment">Are you confirm the patient make a payment?</label>
+                    </div>
+                    <input type="hidden" class="form-control" name="medrecordid" value="{{ $record->id }}">
+                    <div class="form-group">
+                        <input type="hidden" name="action" value="payment"><!-- this to declare form for payment -->
+        
+                        <label for="payment">Payment Method:</label>
+                        <select name="method" class="form-control" required>
+                            <option value="" disabled selected>Choose</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Online Banking">Online Banking</option>
+                            <option value="Debit / Credit Card">Debit / Credit Card</option>
+                            <option value="E-wallet">E-wallet</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end Add Patient Modal -->
 
+<!-- Add Patient Modal -->
+<div class="modal fade" id="editModal-pickup-{{ $record->id }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="card">
+            <div class="card-header">
+                <h5>Pickup Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>            
+            </div>
+            <div class="card-block">
+                <form action="/nurse/paymentList/{{ $record->id }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="payment">Are you confirm the patient already pickup all the medicines?</label>
+                    </div>
+                    <input type="hidden" class="form-control" name="medrecordid" value="{{ $record->id }}">
+                    <input type="hidden" class="form-control" name="medstatus" value="1">
+                    <input type="hidden" name="action" value="pickup">
+                    <div class="form-group">
+                        list of medicine ....
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
+@endforeach  
+<!-- end Add Patient Modal -->
 
 <!--script to get the doctor schedule -->
 <!-- Include jQuery -->

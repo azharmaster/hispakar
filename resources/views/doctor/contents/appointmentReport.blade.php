@@ -241,7 +241,9 @@
                                         </div>
                                     </div>
     
-
+                                    <td><input type="hidden" name="medstatus" value="0"></td>
+                                    <td><input type="hidden" name="method" value="0"></td>
+                                    
                                     <div class="form-group row">
                                         <div class="col">
                                             <button name="submit" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right">

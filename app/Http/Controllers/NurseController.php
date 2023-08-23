@@ -20,6 +20,7 @@ use App\Models\Appointments;
 use App\Models\Attendance;
 use App\Models\DocSchedule;
 use App\Models\MedRecord;
+use App\Models\MedInvoice;
 use App\Models\Medprescription;
 use Illuminate\Support\Facades\Auth;
 
@@ -538,6 +539,38 @@ class NurseController extends Controller
         } else {
             return redirect()->back()->with('success', 'Unsuccessful, the email already exists.');
         }
+    }
+
+    // Edit payment
+    public function EditPayment(Request $request, $medrecordid)
+    {
+        $validatedData = $request->validate([
+            'method' => 'required_if:action,payment', // Validate if action is payment
+            'medstatus' => 'required_if:action,pickup', // Validate if action is pickup
+        ]);
+
+        $medinvoice = MedInvoice::where('medrecordid', $medrecordid)->first();
+
+        if (!$medinvoice) {
+            return redirect('/nurse/paymentList')->with('error', 'MedInvoice not found');
+        }
+
+        $action = $request->input('action');
+
+        if ($action === 'payment') {
+            $medinvoice->method = $request->input('method');
+            $message = 'Payment has been made';
+        } elseif ($action === 'pickup') {
+            $medinvoice->medstatus = 1;
+            $message = 'Patient successfully picked up.';
+        } else {
+            return redirect('/nurse/paymentList')->with('error', 'Invalid action');
+        }
+
+        $medinvoice->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+        $medinvoice->save();
+
+        return redirect('/nurse/paymentList')->with('success', $message);
     }
 
 

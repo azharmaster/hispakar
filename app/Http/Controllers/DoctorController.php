@@ -870,61 +870,65 @@ class DoctorController extends Controller
             $medInv->discount = $request->input('discount');
             $medInv->tax = $request->input('tax'); 
             $medInv->totalcost = $request->input('totalcost');
+            $medInv->medstatus = $request->input('medstatus'); 
+            $medInv->method = $request->input('method');
             $medInv->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
             $medInv->save();
-        } 
+        
 
-       //Med Prescription
-        // Get the selected medicine values from the request
-        $selectedMedicines = $request->input('medicines')['id'] ?? [];
-        $prices = Arr::wrap($request->input('price'));
-        $quantities = Arr::wrap($request->input('qty'));
-        $totals = Arr::wrap($request->input('total'));
-        $descriptions = Arr::wrap($request->input('desc')['med_prescription']);
+            //Med Prescription
+            // Get the selected medicine values from the request
+            $selectedMedicines = $request->input('medicines')['id'] ?? [];
+            $prices = Arr::wrap($request->input('price'));
+            $quantities = Arr::wrap($request->input('qty'));
+            $totals = Arr::wrap($request->input('total'));
+            $descriptions = Arr::wrap($request->input('desc')['med_prescription']);
 
-        // Validate if all arrays have the same length
-        if (count($selectedMedicines) === count($quantities) && count($selectedMedicines) === count($descriptions)) {
-            $count = count($selectedMedicines);
+            // Validate if all arrays have the same length
+            if (count($selectedMedicines) === count($quantities) && count($selectedMedicines) === count($descriptions)) {
+                $count = count($selectedMedicines);
 
-            // Loop through each selected medicine
-            for ($i = 0; $i < $count; $i++) {
-                // Split the medicine into ID and name directly from the array
-                list($medicineId, $medicineName) = explode(':', $selectedMedicines[$i]);
+                // Loop through each selected medicine
+                for ($i = 0; $i < $count; $i++) {
+                    // Split the medicine into ID and name directly from the array
+                    list($medicineId, $medicineName) = explode(':', $selectedMedicines[$i]);
 
-                // Validate if the required data is not empty before saving
-                if (!empty($medicineId) && !empty($medicineName) && !empty($quantities[$i]) && !empty($descriptions[$i])) {
-                    // Insert data into medprescription table
-                    $medPres = new MedPrescription();
-                    $medPres->aptid = $id;
-                    $medPres->medicineid = $medicineId;
-                    $medPres->name = $medicineName;
-                    $medPres->price = $prices[$i];
-                    $medPres->qty = $quantities[$i];
-                    $medPres->total = $totals[$i];
-                    $medPres->desc = $descriptions[$i];
-                    $medPres->docid = $doctor->id;
-                    $medPres->patientid = $request->input('patientid');
-                    $medPres->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-                    $medPres->save();
-                } else {
-                    // Handle the case when required data is missing or empty
-                    // You can log an error or add a validation error message here
-                    // depending on your application's requirements.
-                    // For example, you can log an error message:
-                    // Log::error("Incomplete data for medicine entry $i");
-                    // Or add a validation error message to be displayed to the user:
-                    // return redirect()->back()->withErrors(['error' => "Incomplete data for medicine entry $i"]);
+                    // Validate if the required data is not empty before saving
+                    if (!empty($medicineId) && !empty($medicineName) && !empty($quantities[$i]) && !empty($descriptions[$i])) {
+                        // Insert data into medprescription table
+                        $medPres = new MedPrescription();
+                        $medPres->aptid = $id;
+                        $medPres->medrecordid = $medRec->id;
+                        $medPres->medicineid = $medicineId;
+                        $medPres->name = $medicineName;
+                        $medPres->price = $prices[$i];
+                        $medPres->qty = $quantities[$i];
+                        $medPres->total = $totals[$i];
+                        $medPres->desc = $descriptions[$i];
+                        $medPres->docid = $doctor->id;
+                        $medPres->patientid = $request->input('patientid');
+                        $medPres->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+                        $medPres->save();
+                    } else {
+                        // Handle the case when required data is missing or empty
+                        // You can log an error or add a validation error message here
+                        // depending on your application's requirements.
+                        // For example, you can log an error message:
+                        // Log::error("Incomplete data for medicine entry $i");
+                        // Or add a validation error message to be displayed to the user:
+                        // return redirect()->back()->withErrors(['error' => "Incomplete data for medicine entry $i"]);
+                    }
                 }
+            } else {
+                // Handle the case when arrays have different lengths
+                // You can log an error or add a validation error message here
+                // depending on your application's requirements.
+                // For example, you can log an error message:
+                // Log::error("Mismatched array lengths for selected medicines, quantities, and descriptions");
+                // Or add a validation error message to be displayed to the user:
+                // return redirect()->back()->withErrors(['error' => "Mismatched array lengths for selected medicines, quantities, and descriptions"]);
             }
-        } else {
-            // Handle the case when arrays have different lengths
-            // You can log an error or add a validation error message here
-            // depending on your application's requirements.
-            // For example, you can log an error message:
-            // Log::error("Mismatched array lengths for selected medicines, quantities, and descriptions");
-            // Or add a validation error message to be displayed to the user:
-            // return redirect()->back()->withErrors(['error' => "Mismatched array lengths for selected medicines, quantities, and descriptions"]);
-        }
+        } 
 
         // Check if the checkbox is checked
         if ($request->has('scheduleNext')) {

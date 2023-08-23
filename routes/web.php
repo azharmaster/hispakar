@@ -165,6 +165,9 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/nurse/medicineList', [NurseController::class, 'viewMedicineList']);
     Route::get('/nurse/appointmentList/{date}', [NurseController::class, 'viewAppointmentListDate'])->name('nurse.appointmentList');
 
+    //Invoice
+    Route::post('/nurse/paymentList/{id}', [NurseController::class, 'EditPayment']);
+
     //Report
     Route::get('/nurse/medrecordList', [NurseController::class, 'viewMedRecordList']);
     Route::get('/nurse/report/{medrc_id}', [NurseController::class, 'viewMedicalReport']);

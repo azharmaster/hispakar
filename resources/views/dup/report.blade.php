@@ -178,10 +178,10 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h5>
-                                        @if ($record->medinvoice->status == 1)
-                                            Receipt
-                                        @else  
+                                        @if ($record->medinvoice->method == "0") 
                                             Invoice
+                                        @else  
+                                            Receipt
                                         @endif
                                     </h5>
                                     <span></span>
@@ -244,25 +244,21 @@
                                                     <td class ="border-0"style="width: 100px">
                                                         <b>Notes</b><br><br>
 
-                                                        @if ($record->medinvoice->status == 1) 
+                                                        @if ($record->medinvoice->method != "0") <!-- Paid -->
                                                             Datetime<br>
-                                                            Method<br>
-                                                            Status
-                                                        @else  
-                                                            Status                                                      
+                                                            Method<br>                                                 
                                                         @endif
+                                                            Status 
                                                         
                                                     </td>
                                                     <td class ="border-0 text-left" >
                                                         <br><br>
                                                         
-                                                        @if ($record->medinvoice->status == 1) 
+                                                        @if ($record->medinvoice->method != "0") <!-- Paid --> 
                                                             : &nbsp;{{ ($record->medinvoice->datetime) }}<br>
-                                                            : &nbsp;{{ $record->medinvoice->method }}<br>
-                                                            : &nbsp;{{ $record->medinvoice->status == 0 ? 'Not yet paid' : 'Paid' }}
-                                                        @else  
-                                                            : &nbsp;Not yet paid                                                        
+                                                            : &nbsp;{{ $record->medinvoice->method }}<br> 
                                                         @endif
+                                                            : &nbsp;{{ $record->medinvoice->medstatus == 0 ? 'Not yet paid' : 'Paid' }}
                                                     </td>
                                                 </tr>
                                             </table>

@@ -25,6 +25,8 @@
 <script type="text/javascript" src="{{ asset('files/assets/pages/dashboard/custom-dashboard.min-1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('files/assets/js/script.min-1.js') }}"></script>
 
+<script type="text/javascript" src="../files/assets/js/script-1.js"></script>
+
 <!--scripts from dtScripts -->
 <script src="{{ asset('files/bower_components/datatables.net/js/jquery.dataTables.min-1.js') }}"></script>
 <script src="{{ asset('files/bower_components/datatables.net-buttons/js/dataTables.buttons.min-1.js') }}"></script>
