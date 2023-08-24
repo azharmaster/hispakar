@@ -105,6 +105,7 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::get('/doctor/patientList', [DoctorController::class, 'viewPatientList']);
     Route::get('/doctor/appointmentList', [DoctorController::class, 'viewAppointmentList']);
     Route::get('/doctor/appointmentReport/{id}', [DoctorController::class, 'viewAppointmentReport']);
+    Route::get('/doctor/eappointmentReport/{id}', [DoctorController::class, 'viewEAppointmentReport']);
     Route::get('/doctor/medicineList', [DoctorController::class, 'viewMedicineList']);
     Route::get('/doctor/reports', [DoctorController::class, 'viewReportList']);
     Route::get('/doctor/scheduleList', [DoctorController::class, 'viewSchedule']);
@@ -132,7 +133,9 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
 
     //appointment record
     Route::post('/doctor/appointmentReport/{id}', [DoctorController::class, 'AddAppointmentRecord'])->name('doctor.addAppointmentRecord');
+    Route::post('/doctor/eappointmentReport/{id}', [DoctorController::class, 'EditAppointmentRecord'])->name('doctor.editAppointmentRecord');
     Route::get('/doctor/getMedicinePrice/{id}', [DoctorController::class, 'getMedicinePrice']);
+    Route::get('/doctor/get-medicines', [DoctorController::class, 'getMedicines']);
 
     Route::get('/doctor/report/{medrc_id}', [DoctorController::class, 'viewMedicalReport']);
 

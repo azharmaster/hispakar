@@ -109,7 +109,7 @@
                                                                         <i style="font-size:20px;" class="fas fa-eye f-w-600 f-16 m-r-15 text-c-yellow"></i>
                                                                     </a>
 
-                                                                    <a href="/doctor/appointmentReport/{{ $appointment->id }}" title="Edit Medical Record">
+                                                                    <a href="/doctor/eappointmentReport/{{ $appointment->id }}" title="Edit Medical Record">
                                                                         <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                     </a>
 

@@ -548,6 +548,106 @@ class DoctorController extends Controller
     
         return view('doctor.contents.appointmentReport', compact('appointment', 'medicines', 'singlePatient', 'medservices', 'patients', 'medNum', 'previousMedRecord', 'prevMedicine'));
     }
+
+    public function viewEAppointmentReport($id)
+    {
+        $appointment = Appointments::with(['patient', 'medrecord'])
+            ->where('id', $id)
+            ->first();
+    
+        if (!$appointment->patient || !$appointment->medrecord) {
+            $appointment = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+                        ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
+                        ->select('appointment.*', 'patient.*', 'medrecord.*', 'medrecord.serviceid as med_serviceid')
+                        ->where('appointment.id', $id)
+                        ->first();
+        }
+    
+        $medPres = MedPrescription::find($id); // Fetch the MedPrescription record based on $id
+
+        $singlePatient = $appointment->patient;
+        $medservices = MedService::all();
+        $patients = Patient::all(); // Add this line to fetch all patients
+        
+        $medicines = Medicine::all();
+        $medNum = 1; // Initialize the $medNum variable to 1
+    
+        // Retrieve the previous medical record based on created_at timestamp
+        $previousMedRecord = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+                        ->where('medrecord.patientid', $appointment->patientid)
+                        ->where('medrecord.aptid', '<', $appointment->id)
+                        ->orderBy('medrecord.id', 'desc')
+                        ->first();
+        
+            // Get the previous medicines for the medicine record
+        $prevMedicine = collect(); // Initialize an empty collection
+
+       if ($previousMedRecord) {
+       $prevMedicine = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
+        //    ->join('appointment', 'medprescription.aptid', '=', 'appointment.id')
+                    ->where('medprescription.patientid', $appointment->patientid)
+                    ->where('medprescription.aptid', $previousMedRecord->aptid) // Use the aptid from the previous record
+                    ->select('medprescription.name as prevMedName')
+                    ->orderBy('medprescription.id', 'desc')
+                    ->take(5) // Take the last 5 records
+                    ->get()
+                    ->reverse(); // Reverse the order to display the most recent medicine first
+       }
+
+       $selectedServiceType = MedRecord::join('patient', 'medrecord.patientid', '=', 'patient.id')
+                            ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+                            ->where('medrecord.patientid', $appointment->patientid)
+                            ->where('medrecord.aptid', $id)
+                            ->get();
+                            //dd($selectedServiceType);
+       $selectedMedicinesData = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
+                            ->where('medprescription.patientid', $appointment->patientid)
+                            ->where('medprescription.aptid', $id)
+                            ->orderBy('medprescription.id', 'desc')
+                            ->take(5)
+                            ->get()
+                            ->reverse();
+
+        $selectedMedicines = $selectedMedicinesData->map(function ($record) {
+            return [
+                'id' => $record->medicineid,
+                'name' => $record->name,
+                'desc' => $record->desc,
+                'qty' => $record->qty,
+                'price' => $record->price,
+                'total' => $record->total,
+            ];
+        });
+
+        //$selectedMedicineId = $selectedMedicines->isEmpty() ? null : $selectedMedicines->first()['id'];
+        // $selectedMedicineId = null;
+        // $selectedMedicineName = null;
+        // $selectedMedicineDesc = null;
+        // $selectedMedicineQty = null;
+        // $selectedMedicinePrice = null;
+        // $selectedMedicineTotal = null;
+
+        // if ($selectedMedicineData->isNotEmpty()) {
+        //     $selectedMedicine = $selectedMedicineData->first();
+        //     $selectedMedicineId = $selectedMedicine->medicine_id; // Assuming there's a field 'medicine_id' in your medprescription table
+        //     $selectedMedicineName = $selectedMedicine->selectedMedName;
+        //     $selectedMedicineDesc = $selectedMedicine->desc;
+        //     $selectedMedicineQty = $selectedMedicine->qty;
+        //     $selectedMedicinePrice = $selectedMedicine->price;
+        //     $selectedMedicineTPrice = $selectedMedicine->total; // Assuming there's a field 'selectedMedPrice' in your medprescription table
+        // }
+    
+        return view('doctor.contents.eappointmentReport', compact(
+            'appointment', 'medicines', 'singlePatient', 'medservices', 'patients', 'medNum', 'previousMedRecord', 'prevMedicine',
+            'selectedMedicines', 'selectedServiceType','medPres'
+        ));
+    }     
+    
+    public function getMedicines()
+    {
+        $medicines = Medicine::all();
+        return response()->json($medicines);
+    }
     
     public function viewMedicineList()
     {
@@ -953,6 +1053,132 @@ class DoctorController extends Controller
         }
 
         return redirect('/doctor/dashboard')->with('success', 'Medical record successfully saved!');
+    }
+
+    //edit appointment record
+    public function EditAppointmentRecord(Request $request, $id)
+    {
+        // Get the currently logged-in doctor
+        $doctor = Doctor::where('email', Auth::user()->email)->first();
+    
+        // Find record & update data into medrecord table
+        $medRec = MedRecord::where('aptid', $id)->first();
+
+        if ($medRec) {
+            $medRec->aptid = $id;
+            $medRec->status = 1;
+            $medRec->serviceid = $request->input('serviceid');
+            $medRec->desc = $request->input('desc')['med_record'];
+            $medRec->datetime = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            $medRec->patientid = $request->input('patientid');
+            $medRec->refnum = random_int(1000000, 9999999);
+            $medRec->docid = $doctor->id;
+            $medRec->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            $medRec->save();
+        }
+
+        $medInv = MedInvoice::find($medRec->id); 
+
+        if ($medInv) {
+            $medInv->medrecordid = $medRec->id; // Use the primary key from the "MedRecord" table
+            $medInv->subtotal = $request->input('subtotal'); 
+            $medInv->discount = $request->input('discount');
+            $medInv->tax = $request->input('tax'); 
+            $medInv->totalcost = $request->input('totalcost');
+            $medInv->medstatus = $request->input('medstatus'); 
+            $medInv->method = $request->input('method');
+            $medInv->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            $medInv->save();
+        
+
+            //Med Prescription
+            // Get the selected medicine values from the request
+            $selectedMedicines = $request->input('medicines')['id'] ?? [];
+            $prices = Arr::wrap($request->input('price'));
+            $quantities = Arr::wrap($request->input('qty'));
+            $totals = Arr::wrap($request->input('total'));
+            $descriptions = Arr::wrap($request->input('desc')['med_prescription']);
+
+            // Validate if all arrays have the same length
+            if (count($selectedMedicines) === count($quantities) && count($selectedMedicines) === count($descriptions)) {
+                $count = count($selectedMedicines);
+
+                // Loop through each selected medicine
+                for ($i = 0; $i < $count; $i++) {
+                    // Split the medicine into ID and name directly from the array
+                    list($medicineId, $medicineName) = explode(':', $selectedMedicines[$i]);
+
+                    // Validate if the required data is not empty before saving
+                    if (!empty($medicineId) && !empty($medicineName) && !empty($quantities[$i]) && !empty($descriptions[$i])) {
+                        // Find or create record in medprescription table
+                        $existingMedPres = MedPrescription::where('aptid', $id)
+                        ->where('medicineid', $medicineId)
+                        ->first();
+
+                        if ($existingMedPres) {
+                            // Update the fields for the existing record
+                            $existingMedPres->name = $medicineName;
+                            $existingMedPres->price = $prices[$i];
+                            $existingMedPres->qty = $quantities[$i];
+                            $existingMedPres->total = $totals[$i];
+                            $existingMedPres->desc = $descriptions[$i];
+                            $existingMedPres->docid = $doctor->id;
+                            $existingMedPres->patientid = $request->input('patientid');
+                            $existingMedPres->save();
+                        } else {
+                            // Insert a new record into medprescription table
+                            $newMedPres = new MedPrescription();
+                            $newMedPres->aptid = $id;
+                            $newMedPres->medrecordid = $medRec->id;
+                            $newMedPres->medicineid = $medicineId;
+                            $newMedPres->name = $medicineName;
+                            $newMedPres->price = $prices[$i];
+                            $newMedPres->qty = $quantities[$i];
+                            $newMedPres->total = $totals[$i];
+                            $newMedPres->desc = $descriptions[$i];
+                            $newMedPres->docid = $doctor->id;
+                            $newMedPres->patientid = $request->input('patientid');
+                            $newMedPres->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+                            $newMedPres->save();
+                        }
+                    }
+                }    
+            } 
+        }
+        // Check if the checkbox is checked
+        if ($request->has('scheduleNext')) {
+            // Checkbox is checked, so insert the data into the database
+            $apt = new Appointments();
+            $apt->patientid = $request->input('patientid');
+            $apt->docid = $doctor->id;
+            $apt->deptid = $doctor->deptid;
+            $apt->status = 1;
+            $apt->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+
+            // Check if the date and time inputs are provided
+            if ($request->has('date')) {
+                $apt->date = $request->input('date');
+            }
+
+            if ($request->has('time')) {
+                $apt->time = $request->input('time');
+            }
+
+            $apt->save();
+        }
+
+        return redirect('/doctor/dashboard')->with('success', 'Medical record successfully saved!');
+    }
+
+    public function deleteMedPres($id) {
+        try {
+            $medPres = MedPrescription::findOrFail($id);
+            $medPres->delete();
+    
+            return response()->json(['message' => 'Record deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error deleting the record'], 500);
+        }
     }
 
     public function viewMedicalReport($medrc_id)

@@ -119,7 +119,7 @@
                         <div class="card">
                             <div class="card-block">
                             </div>
-                            <form id="appointmentForm" action="{{ route('doctor.addAppointmentRecord', ['id' => $appointment->id]) }}" method="POST" >
+                            <form id="appointmentForm" action="{{ route('doctor.editAppointmentRecord', ['id' => $appointment->id]) }}" method="POST" >
                                 {{csrf_field()}}
 
                                 <input type="hidden" name="id" value="{{ $appointment->id }}">
@@ -137,12 +137,17 @@
                                             <th>Service Type</th>
                                             <td>
                                                 <select class="form-control" name="serviceid" onchange="updatePrice2(this)" required>
-                                                    <option value="" selected disabled>Select Service Type</option>
+                                                    <option value="" disabled>Select Service Type</option>
                                                     @foreach ($medservices as $medservice)
-                                                        <option value="{{ $medservice->id }}" data-price="{{ $medservice->charge }}">{{ $medservice->type }}</option>
+                                                        <option value="{{ $medservice->id }}" data-price="{{ $medservice->charge }}"
+                                                            {{ $selectedServiceType->isNotEmpty() && $selectedServiceType[0]->serviceid == $medservice->id ? 'selected' : '' }}>
+                                                            {{ $medservice->type }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
-                                                <td style="width: 159px" ><input class="form-control text-right bg-white" type="number" name="serviceTypeCharge"  value="0.00" readonly></td>
+                                            </td>
+                                            <td style="width: 159px">
+                                                <input class="form-control text-right bg-white" type="number" name="serviceTypeCharge" id="serviceTypeCharge" value="{{ $selectedServiceType->isNotEmpty() ? $selectedServiceType[0]->charge : '0.00' }}" readonly>
                                             </td>
                                         </tr>
                                     </table>
@@ -151,7 +156,7 @@
                                 <div class="card-block">
                                     <div class="form-group row">
                                         <div class="col">
-                                            <textarea rows="5" cols="5" name="desc[med_record]" class="form-control" placeholder="Stomachache"></textarea>
+                                            <textarea rows="5" cols="5" name="desc[med_record]" class="form-control" placeholder="Stomachache">{{ $appointment->medrecord->first()->desc ?? '' }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -174,22 +179,41 @@
                                             </tr>
                                         </thead>
                                         <tbody >
+                                        @foreach ($selectedMedicines as $index => $selectedMedicine)
                                             <tr>
                                                 <td id="itemNo"></td>
                                                 <td>
-                                                    <select class="form-control" name="medicines[id][]" onchange="updatePrice(this)" required>
-                                                        <option value="" selected disabled>Select Medicine</option>
-                                                        @foreach ($medicines as $medicine)
-                                                            <option value="{{ $medicine->id }}:{{ $medicine->name }}" data-price="{{ $medicine->price }}">{{ $medicine->name }}</option>
-                                                        @endforeach
-                                                    </select>
+                                                <select class="form-control" name="medicines[id][]" onchange="updatePrice(this)" required>
+                                                            @foreach ($medicines as $med)
+                                                                <option value="{{ $med['id'] }}:{{ $med['name'] }}" data-price="{{ $med['price'] }}"
+                                                                    {{ $selectedMedicine['id'] == $med['id'] ? 'selected' : '' }}>
+                                                                    {{ $med['name'] }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                <td>
+                                                    <input type="text" name="desc[med_prescription][]" class="form-control rounded-0"
+                                                        value="{{ $selectedMedicine['desc'] }}" placeholder="Dose suggested details" required>
                                                 </td>
-                                                <td><input type="text" name="desc[med_prescription][]" class="form-control rounded-0 " placeholder="Dose suggested details" required></td>
-                                                <td><input type="text" name="qty[]" class="form-control rounded-0 text-right" oninput="validateQuantity(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" ondrop="return false" placeholder="0" required ></td>
-                                                <td><input type="number" name="price[]" class="form-control rounded-0 text-right bg-white"  oninput="validateFloatInteger(this)" step="any" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46" onpaste="return false" ondrop="return false" placeholder="0.00" readonly></td>
-                                                <td><input type="number" name="total[]" value="0.00" class="form-control text-right bg-white border-0" readonly></td>
+                                                <td>
+                                                    <input type="text" name="qty[]" class="form-control rounded-0 text-right"
+                                                        value="{{ $selectedMedicine['qty'] }}"
+                                                        oninput="validateQuantity(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        onpaste="return false" ondrop="return false" placeholder="0" required>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="price[]" class="form-control rounded-0 text-right bg-white"
+                                                        value="{{ $selectedMedicine['price'] }}" step="any"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46"
+                                                        onpaste="return false" ondrop="return false" placeholder="0.00" readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="total[]" value="{{ $selectedMedicine['total'] }}" class="form-control text-right bg-white border-0" readonly>
+                                                </td>
                                                 <td class="text-center"><a class="deleteRow"><i class="fas fa-trash-alt text-danger"></i></a></td>
                                             </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                     <table class="" style="width: 100%">
@@ -491,10 +515,12 @@
       newRow.innerHTML = `
         <td id="itemNo"></td>
         <td>
-            <select class="form-control" name="medicines[id][]" onchange="updatePrice(this)" required>
-                <option value="" selected disabled>Select Medicine</option>
-                @foreach ($medicines as $medicine)
-                    <option value="{{ $medicine->id }}:{{ $medicine->name }}" data-price="{{ $medicine->price }}">{{ $medicine->name }}</option>
+        <select class="form-control" name="medicines[id][]" onchange="updatePrice(this)" required>
+                @foreach ($medicines as $med)
+                    <option value="{{ $med['id'] }}:{{ $med['name'] }}" data-price="{{ $med['price'] }}"
+                        {{ $selectedMedicine['id'] == $med['id'] ? 'selected' : '' }}>
+                        {{ $med['name'] }}
+                    </option>
                 @endforeach
             </select>
         </td>
@@ -565,6 +591,7 @@
 </script>
 
 <script>
+
     var table = document.getElementById("medTable");
     let medNum = 1;
 
