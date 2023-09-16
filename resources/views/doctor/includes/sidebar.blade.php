@@ -27,6 +27,16 @@
                     </a>
                 </li>
 
+              
+                <!-- <li class="">
+                    <a href="/doctor/medicineList" class="waves-effect waves-dark">
+                    <span class="pcoded-micon">
+                    <i class="fas fa-regular fa-capsules"></i>
+                    </span>
+                    <span class="pcoded-mtext">Medicine</span>
+                    </a>
+                </li> -->
+                <br>
                 <li class="">
                     <a href="/doctor/appointmentList" class="waves-effect waves-dark">
                     <span class="pcoded-micon">
@@ -37,13 +47,14 @@
                 </li>
 
                 <li class="">
-                    <a href="/doctor/medicineList" class="waves-effect waves-dark">
-                    <span class="pcoded-micon">
-                    <i class="fas fa-regular fa-capsules"></i>
-                    </span>
-                    <span class="pcoded-mtext">Medicine</span>
+                    <a href="/doctor/medrecord" class="waves-effect waves-dark">
+                        <span class="pcoded-micon">
+                            <i class="fas fa-solid fa-calendar-check"></i>
+                        </span>
+                        <span class="pcoded-mtext">Medical Record</span>
                     </a>
                 </li>
+
 
                 <li class="">
                     <a href="/doctor/reports" class="waves-effect waves-dark">

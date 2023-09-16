@@ -57,6 +57,25 @@ class AdminController extends Controller
 
         $medicines = Medicine::all();
 
+        $doctors = Doctor::join('department', 'doctor.deptid', '=', 'department.id')
+        ->select('doctor.*', 'department.name as dept_name')
+        ->get();
+
+        $today = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d'); // Today's date
+
+        foreach ($doctors as $doctor) { //total appointment
+            // $doctor->available = DocSchedule::where('docid', $doctor->id)
+            // ->where('date', $today)
+            // ->selectRaw('CONCAT(date, " ", starttime) AS combined_datetime')
+            // ->get();
+
+            $doctor->available = DocSchedule::where('docid', $doctor->id)
+            ->where('date', $today)
+            ->select(DB::raw('CONCAT(date, " ", starttime) AS combined_datetime'))
+            ->whereRaw('CURTIME() BETWEEN starttime AND endtime')
+            ->count();
+        }
+
         $nurses = Nurse::join('department', 'nurse.deptid', '=', 'department.id')
         ->select('nurse.*', 'department.name as dept_name')
         ->get();
@@ -220,8 +239,9 @@ class AdminController extends Controller
         
 
         return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totaldept',
-        'totalnurse','totalpatient','totalmedicine','medicines','nurses','totalapt2','totaldoc2',
+        'totalnurse','totalpatient','totalmedicine','medicines','nurses','doctors','totalapt2','totaldoc2',
         'totalnurse2','totalpatient2','totalroom2','totaldept2','totalmedicine2', 'totalservice', 'totalservice2',
+        
         //calendar
         'calendarEvents', 'labels', 'maleData', 'femaleData'));
     }
@@ -806,7 +826,7 @@ class AdminController extends Controller
 
         //insert data into doctor table
         $doctor = new Doctor();
-        $doctor->staff_id = $request->staff_id;
+        // $doctor->staff_id = $request->staff_id;
         $doctor->ic = $request->ic;
         $doctor->name = $request->name;
         $doctor->gender = $request->gender;
@@ -1105,15 +1125,31 @@ class AdminController extends Controller
     public function isTimeBooked(Request $request)
     {
         $selectedDate = $request->input('date');
-        $startTime = $request->input('startTime');
-        $endTime = $request->input('endTime');
+        // $startTime = $request->input('startTime');
+        // $endTime = $request->input('endTime');
     
-        // Check if the selected time slot is booked
-        $isBooked = Appointments::where('date', $selectedDate)
-            ->where('time', '>=', $startTime)
-            ->where('time', '<', $endTime)
-            ->exists();
-    
+        // // Check if the selected time slot is booked
+        // $isBooked = Appointments::where('date', $selectedDate)
+        //     ->where('time', '>=', $startTime)
+        //     ->where('time', '<', $endTime)
+        //     ->exists();
+
+        $selectedTime=DocSchedule::where('date', $selectedDate)
+            ->select('starttime','endtime')
+            ->get();
+
+            foreach ($selectedTime as $timeSlot) {
+                $start = Carbon::parse($timeSlot->starttime);
+                $end = Carbon::parse($timeSlot->endtime);
+                
+                // Now $startTimeFormatted and $endTimeFormatted contain the formatted times 'H:i'
+                // You can use these variables as needed.
+            }
+
+
+            while ($start < $end) {
+                $isBooked[] = $start->format('H:i') . ' - ' . $start->addMinutes(30)->format('H:i');
+            }
         return response()->json(['booked' => $isBooked]);
     }    
 

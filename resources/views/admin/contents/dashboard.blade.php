@@ -285,50 +285,11 @@
 
                        
 
-                        <!-- Start Table -->
-                        <div class="col-md-8">
-                            <div class="card table-card">
-                                <div class="card-header">
-                                    <h5>Available Nurses</h5>
-                                    <div class="card-header-right">
-                                        <ul class="list-unstyled card-option">
-                                            <li class="first-opt"><i
-                                                    class="feather icon-chevron-left open-card-option"></i></li>
-                                            <li><i class="feather icon-maximize full-card"></i></li>
-                                            <li><i class="feather icon-minus minimize-card"></i></li>
-                                            <li><i class="feather icon-refresh-cw reload-card"></i></li>
-                                            <li><i class="feather icon-trash close-card"></i></li>
-                                            <li><i class="feather icon-chevron-left open-card-option"></i></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="card-block p-b-0">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover m-b-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>ID</th>
-                                                    <th>Location</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($nurses as $nurse)
-                                                <tr>
-                                                    <td>{{$nurse->name}} </td>
-                                                    <td>{{$nurse->dept_name}} </td>
-                                                    <td>#PHD001</td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End table -->
+                        
 
-                        <!-- Latest Activity -->
+                      
+
+                        <!-- Latest Activity 
                         <div class="col-xl-4 col-md-6">
                             <div class="card latest-update-card">
                                 <div class="card-header">
@@ -425,10 +386,10 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- End Latest Activity -->
+                        End Latest Activity -->
 
                         <!-- Calendar -->
-                        <div class="col-xl-8 col-md-12 ">
+                        <div class="col-xl-8 col-md-6 ">
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="m-b-5">Calendar</h5>
@@ -443,6 +404,56 @@
                             </div>
                         </div>
                         <!-- End Calendar -->
+                        <!-- Start Table -->
+                        <div class="col-md-4">
+                            <div class="card table-card">
+                                <div class="card-header">
+                                    <h5>Available Doctor</h5>
+                                    <div class="card-header-right">
+                                        <ul class="list-unstyled card-option">
+                                            <li class="first-opt"><i
+                                                    class="feather icon-chevron-left open-card-option"></i></li>
+                                            <li><i class="feather icon-maximize full-card"></i></li>
+                                            <li><i class="feather icon-minus minimize-card"></i></li>
+                                            <li><i class="feather icon-refresh-cw reload-card"></i></li>
+                                            <li><i class="feather icon-trash close-card"></i></li>
+                                            <li><i class="feather icon-chevron-left open-card-option"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-block p-b-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover m-b-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Department</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($doctors as $doctor)
+                                                        @php
+                                                            $currentDate = now()->format('Y-m-d');
+                                                        @endphp
+                                                <tr>
+                                                    <td>{{$doctor->name}} </td>
+                                                    <td>{{$doctor->dept_name}} </td>
+                                                    <td> 
+                                                        @if($doctor->available == 1)
+                                                        <span class="badge badge-success">Available</span>
+                                                        @else
+                                                        <span class="badge badge-danger">Not Available</span>
+                                                        @endif</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End table -->
 
 
 

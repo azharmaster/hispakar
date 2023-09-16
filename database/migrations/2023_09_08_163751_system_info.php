@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('apttime', function (Blueprint $table) {
+        Schema::create('systeminfo', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('time');
+            $table->string('name');
+            $table->string('shortname');
+            $table->string('logo');
+            $table->string('desc_system');
             $table->timestamps();
         });
     }
@@ -21,8 +24,8 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('apttime');
+        Schema::dropIfExists('systeminfo');
     }
 };

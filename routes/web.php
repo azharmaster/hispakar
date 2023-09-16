@@ -110,6 +110,7 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::get('/doctor/reports', [DoctorController::class, 'viewReportList']);
     Route::get('/doctor/scheduleList', [DoctorController::class, 'viewSchedule']);
     Route::get('/doctor/appointmentList/{date}', [DoctorController::class, 'viewAppointmentListDate'])->name('doctor.appointmentList');
+    Route::get('/doctor/medrecord', [DoctorController::class, 'viewMedRecord']);
 
     //Manage profile
     Route::post('/doctor/profile/{id}', [DoctorController::class, 'EditProfile']);

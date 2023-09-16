@@ -389,7 +389,7 @@ class DoctorController extends Controller
 
         // Get the current date
         $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
-
+        
         // Get the doctor's schedule for the current week
         $startOfWeek = Carbon::now('Asia/Kuala_Lumpur')->startOfWeek();
         $endOfWeek = Carbon::now('Asia/Kuala_Lumpur')->endOfWeek();
@@ -403,12 +403,29 @@ class DoctorController extends Controller
         $selectedDate = $request->input('date', reset($doctorSchedule));
 
         // Set the fixed time slots from 8:00 AM to 5:00 PM with 30-minute intervals
-        $start = Carbon::parse('8:00 AM');
-        $end = Carbon::parse('5:00 PM');
+        // $start = Carbon::parse('8:00 AM');
+        //$end = Carbon::parse('5:00 PM');
+
+        $selectedTime=DocSchedule::where('docid', $doctor->id)
+            ->where('date', $selectedDate)
+            ->select('starttime','endtime')
+            ->get();
+
+            foreach ($selectedTime as $timeSlot) {
+                $start = Carbon::parse($timeSlot->starttime);
+                $end = Carbon::parse($timeSlot->endtime);
+                
+                // Now $startTimeFormatted and $endTimeFormatted contain the formatted times 'H:i'
+                // You can use these variables as needed.
+            }
+
+        // $start = Carbon::parse('08:00');
+        // $end = Carbon::parse('17:00');
+
         $timeSlots = [];
 
         while ($start < $end) {
-            $timeSlots[] = $start->format('g:i A') . ' - ' . $start->addMinutes(30)->format('g:i A');
+            $timeSlots[] = $start->format('H:i') . ' - ' . $start->addMinutes(30)->format('H:i');
         }
 
         // To join tables and retrieve the appointment list based on the doctor's ID
@@ -501,6 +518,18 @@ class DoctorController extends Controller
             ->get();
 
         return response()->json($doctorSchedule);
+    }
+
+    public function viewMedRecord()
+    {
+        // $email=Auth()->user()->email;
+        $doctor = Doctor::where('email', Auth::user()->email)->first();
+        $doctorId = $doctor->id;
+
+        $medrcs = MedRecord::where('docid', $doctorId)
+        ->with('appointment', 'patient', 'attendingDoctor', 'medInvoice')->get();
+        
+        return view('doctor.contents.medrecord', compact('medrcs'));
     }
     
     public function viewAppointmentReport($id)
