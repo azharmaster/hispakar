@@ -105,16 +105,16 @@
                                                                 <span class="badge badge-success">Done</span>
                                                             @else 
                                                                 @if($appointment->status === 2)
-                                                                <span class="badge badge-danger">Cancel</span>
+                                                                <span class="badge badge-warning">Cancel</span>
                                                                 @else
                                                                     @if($appointment->date > $currentDate)
 
                                                                     <a title="Cancel Appointment" data-toggle="modal" class="btn btn-danger" data-target="#cancelModal-{{ $appointment->id }}">
-                                                                     <i style="color:white" class="far fa-calendar-times fa-lg"></i>
+                                                                     <i style="color:white" class="fas fa-window-close fa-lg"> Cancel</i>
                                                                     </a>
                                                                     
                                                                     @else
-                                                                    <span class="badge badge-danger">No Action</span>
+                                                                    <span class="badge badge-warning">Absent</span>
                                                                     @endif
                                                                 @endif
                                                             @endif

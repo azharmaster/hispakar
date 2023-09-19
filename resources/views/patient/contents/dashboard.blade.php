@@ -123,8 +123,6 @@
                           </div>
                         </div>
                         @endforeach
-                        
-
                         <div class="card comp-card">
                           <div class="card-body">
                             <div class="row align-items-center">
@@ -156,22 +154,47 @@
                                   }
                                   @endphp
                                   <div class="col">
-                                    <h6 class="m-b-7"><span class="data-label">Weight</span><br> <span class="font-weight-bold"><span class="badge data-badge weight-badge">{{$detailpatient->weight}} kg</span></span></h6>
+                                    <h6 class="m-b-7"><span class="data-label">Weight</span><br> <span class="font-weight-bold">{{$detailpatient->weight}} kg</span></h6>
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5"><span class="data-label">Height</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge">{{$detailpatient->height}} cm</span></span></h6>
+                                    <h6 class="m-b-5"><span class="data-label">Height</span><br> <span class="font-weight-bold">{{$detailpatient->height}} cm</span></h6>
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5"><span class="data-label">BMI</span><br> <span class="font-weight-bold"><span class="badge data-badge badge-warning">{{$Message}} </span></span></h6>
+                                    <h6 class="m-b-5"><span class="data-label">BMI</span><br> <span class="font-weight-bold">{{$Message}}</span></span></h6>
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5"><span class="data-label">Blood</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge">{{$detailpatient->bloodtype}}</span></span></h6>
+                                    <h6 class="m-b-5"><span class="data-label">Blood</span><br> <span class="font-weight-bold">{{$detailpatient->bloodtype}}</span></h6>
                                   </div>
                                   @endforeach
                                 </div>
                               </div>
                             </div>
                           </div>
+                          
+                        </div>
+
+                        <div class="card comp-card">
+                          <div class="card-body">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                <h6 class="m-b-25">Live Data</h6>
+                                <div class="row align-items-center">
+                                  <div class="col">
+                                  <h6 class="m-b-5"><span class="data-label">Sp02</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge">96%</span></span></h6>
+                                  </div>
+                                  <div class="col">
+                                    <h6 class="m-b-5"><span class="data-label">Heart Rate</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge">80</span></span></h6>
+                                  </div>
+                                  <div class="col">
+                                    <h6 class="m-b-5"><span class="data-label">Stress</span><br> <span class="font-weight-bold"><span class="badge data-badge badge-warning">43 Normal </span></span></h6>
+                                  </div>
+                                  
+                                 
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
                         </div>
 
                         <div class="card latest-update-card">
