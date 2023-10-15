@@ -166,12 +166,12 @@
                             </select>
                     </div>
 
-                    <div class="form-group input-group">
+                    <!-- <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Doctor :</span>
                         <select class="form-control" style="width:350px;" name="docid">
                             <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
                         </select>
-                    </div>
+                    </div> -->
 
                     <input type="hidden" name="deptid" id="deptid" value="{{ $doctor->deptid }}">
 

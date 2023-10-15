@@ -81,7 +81,7 @@
                                             @if ( $appointments->isEmpty() )
                                                         <tr>
                                                             <td>No data available</td>
-                                                        </tr>
+                                                        </tr> 
                                                     @else
                                                         @foreach($appointments as $appointment)
 

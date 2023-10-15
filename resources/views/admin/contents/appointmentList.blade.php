@@ -57,10 +57,10 @@
                                 <div class="card-header">
                                 <h5 id="tableTitle" >List of Appointments</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
-                                    <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
+                                    <!-- <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor"> 
                                         <i class="fas fa-solid fa-plus"></i>
                                             Add
-                                    </button>
+                                    </button>-->
                                 </div>
                                 <div class="card-block">
                                 
@@ -139,84 +139,6 @@
 </div>
 <!-- end content -->
 
-<!-- Add Appointments form -->
-<div class="modal fade" id="default-Modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Appointments</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-            <form action="/admin/appointmentList" class="form-horizontal row-fluid" method="POST" >
-              {{csrf_field()}}
-
-                <div class="container-fluid">
-                   
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Patient :</span>
-                        <select class="form-control" style="width:350px;" name="patientid">
-                        <option value="">Choose Patient</option>
-                                @foreach ($patients as $patient)
-                                    <option value="{{ $patient->id }}">{{ $patient->name }}</option>
-                                @endforeach
-                            </select>
-                    </div>
-                    <!-- Doctor Selection Dropdown -->
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Doctor :</span>
-                        <select class="form-control" style="width:350px;" name="docid" id="doctorSelect">
-                            <option value="">Choose Doctor</option>
-                            @foreach ($doctors as $doctor)
-                                <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Department :</span>
-                        <select class="form-control" style="width:350px;" name="deptid">
-                            <option value="">Choose Department</option>
-                                @foreach ($departments as $department)
-                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
-                                @endforeach
-                            </select>
-                    </div>
-
-                    <!-- Date Selection Dropdown -->
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Date :</span>
-                        <select class="form-control" style="width:350px;" name="date" id="dateSelect">
-                            <!-- Dates will be populated dynamically using JavaScript -->
-                        </select>
-                    </div>
-
-                    <!-- Add a loading spinner in the time selection dropdown -->
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Time :</span>
-                        <select class="form-control" style="width: 350px;" name="time" id="timeSelect">
-                            <!-- Times will be populated dynamically using JavaScript -->
-                            <option value=""><i class="fa fa-spinner fa-spin"></i> Loading...</option>
-                        </select>
-                    </div>
-                    
-                    
-                    <input type="hidden" name="status" id="status">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                <button  name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
-
-                    
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- end Add Appointments form -->
 
 
 @foreach ($appointments as $appointment)
@@ -317,100 +239,6 @@
 @endforeach
 <!-- end delete Patient form -->
 
-<!--script to get the doctor schedule -->
-<!-- Include jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Include Moment.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        // Event handler for doctor selection dropdown
-        $('#doctorSelect').change(function () {
-            var selectedDoctorId = $(this).val();
-
-            // Send an AJAX request to fetch the selected doctor's schedule
-            $.ajax({
-                url: '/admin/getDoctorSchedule/' + selectedDoctorId,
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Populate the date selection dropdown with the fetched dates
-                    var dateSelect = $('#dateSelect');
-                    dateSelect.empty();
-                    dateSelect.append('<option value="">Choose Date</option>');
-                    $.each(data, function (index, value) {
-                        dateSelect.append('<option value="' + value.date + '">' + value.date + '</option>');
-                    });
-                },
-                error: function () {
-                    alert('Error occurred while fetching the doctor schedule.');
-                }
-            });
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        // Event handler for date selection dropdown
-        $('#dateSelect').change(function () {
-            var selectedDate = $(this).val();
-
-            // Clear any previous options in the time selection dropdown
-            $('#timeSelect').empty();
-
-            // Show a loading indicator while waiting for the AJAX response
-            $('#timeSelect').append('<option value=""><i class="fa fa-spinner fa-spin"></i> Loading...</option>');
-
-            // Set the start and end time for the time slots
-            var startTime = moment('08:00 AM', 'hh:mm A');
-            var endTime = moment('05:00 PM', 'hh:mm A');
-
-            // Generate time slots with 30-minute intervals and add them to the time selection dropdown
-            while (startTime.isBefore(endTime)) {
-                var endTimeFormatted = moment(startTime).add(30, 'minutes');
-                var formattedTime = startTime.format('h:mm A') + ' - ' + endTimeFormatted.format('h:mm A');
-
-                // Check if the current time slot is booked
-                var isBooked = isTimeBooked(selectedDate, startTime.format('H:mm'), endTimeFormatted.format('H:mm'));
-                if (!isBooked) {
-                    $('#timeSelect').append('<option value="' + formattedTime + '">' + formattedTime + '</option>');
-                }
-
-                startTime.add(30, 'minutes');
-            }
-        });
-    });
-
-    function isTimeBooked(selectedDate, startTime, endTime) {
-        var isBooked = false;
-
-        // Send an AJAX request to check if the selected time slot is booked
-        $.ajax({
-            url: '/admin/isTimeBooked',
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                date: selectedDate,
-                startTime: startTime,
-                endTime: endTime
-            },
-            async: false,
-            success: function (data) {
-                isBooked = data.booked;
-            },
-            error: function () {
-                alert('Error occurred while checking booked appointment times.');
-            }
-        });
-
-        return isBooked;
-    }
-</script>
-
-
-<!--/script to get the doctor schedule -->
 
 @endsection
 

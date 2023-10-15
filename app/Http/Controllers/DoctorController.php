@@ -885,10 +885,15 @@ class DoctorController extends Controller
     //Manage Appointment
     public function AddAppointment(Request $request)
     {
+
+      
+
+        $doctor = Doctor::where('email', Auth::user()->email)->first();
+
         //insert data into nurse table
         $appointment = new Appointments();
         $appointment->patientid = $request->patientid;
-        $appointment->docid = $request->docid;
+        $appointment->docid = $doctor->id;
         $appointment->deptid = $request->deptid;
         $appointment->date = $request->date;
 
@@ -911,8 +916,9 @@ class DoctorController extends Controller
     {
         $appointment = Appointments::find($id);
         
+        $doctor = Doctor::where('email', Auth::user()->email)->first();
         $appointment->patientid = $request->input('patientid');
-        $appointment->docid = $request->input('docid');
+        $appointment->docid = $doctor->id;
         $appointment->deptid = $request->input('deptid'); 
         $appointment->date = $request->input('date'); 
         $appointment->time = $request->input('time'); 
