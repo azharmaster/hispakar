@@ -255,7 +255,18 @@
                       </div>
                       <!-- End Calendar -->
 
-                     
+                      <div class="col-xl-8 col-md-12 ">
+                            <div class="card sale-card">
+                                <div class="card-header">
+                                    <h5>Data Patient</h5>
+                                </div>
+                                <div class="card-block">
+                                    <div>
+                                        <canvas id="myChart3"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                       <!-- Latest Activity -->
                       <div class="col-xl-4 col-md-6">
@@ -481,6 +492,34 @@
             events: @json($calendarEvents) // Add the events here
         });
         calendar.render();
+    });
+
+
+
+    const ctx3 = document.getElementById('myChart3');
+
+    new Chart(ctx3, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($labels) !!},
+            datasets: [{
+                label: 'Heart Rate',
+                data: {!! json_encode($heartrateData) !!},
+            },
+           ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Chart.js Line Chart'
+                }
+            }
+        },
     });
 </script>
 

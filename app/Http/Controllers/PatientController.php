@@ -193,8 +193,40 @@ class PatientController extends Controller
             }
         } // End calendar
 
+        //////////////////////////////////////
+
+
+        $currentDate = Carbon::now();
+        $labels = [];
+        // $maleData = [];
+   
+
+        for ($i = 0; $i < 5; $i++) {
+            $month = $currentDate->format('M');
+            $labels[] = $month;
+
+
+            $heartrateData[] = 70+$i;
+ 
+
+            $currentDate->subMonth(); // Use subMonth() to move back in time
+        }
+
+      
+
+        // Reverse the order of the arrays
+        $labels = array_reverse($labels);
+        $heartrateData = array_reverse($heartrateData);
+       
+
+        // print_r($labels);
+        // print_r($maleData);
+        // print_r($femaleData);
+
+        ///////////////////////////
+
         return view('patient.contents.dashboard', compact('name','aptlatests','countdownDate','appointments','listmedicines',
-        'detailpatients','listDoctors','notify','calendarEvents'));
+        'detailpatients','listDoctors','notify','calendarEvents','calendarEvents', 'labels', 'heartrateData'));
     }
 
     public function viewAppointmentList()

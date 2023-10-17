@@ -67,6 +67,7 @@
                                         <i class="fas fa-cog"></i>
 
                                     </button>
+                                    
 
                                     <div class="row">
 
@@ -166,7 +167,12 @@
 
                                                         <div class="row d-flex justify-content-between mt-4">
                                                             <h2 class="f-w-700 text-white ml-3">90</h2>
-                                                            <i class="fas fa-heartbeat bg-c-white text-success d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i>
+                                                            <a type="button" data-toggle="modal" data-target="#addModal-datapatient"><i class="fas fa-heartbeat bg-c-white text-success d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i>
+                                                            <!-- <button type="button" class="btn btn-mat waves-effect waves-light  d-block mx-auto float-right" data-toggle="modal" data-target="#addModal-datapatient" title="Add Doctor">
+                                        <i class="fas fa-cog"></i> -->
+</a>
+
+                                    
                                                         </div>
 
                                                         <p class="m-b-0 mt-3 text-white">Low Risk</p>
@@ -461,6 +467,52 @@
 </div>
 <!-- end Add Patient Modal -->
 
+
+<!-- Add Patient Modal -->
+<div class="modal fade" id="addModal-datapatient" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Data Patient</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+           
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                            
+                            <div class="card sale-card">
+                                <div class="card-header">
+                                    <h5>Data Patient</h5>
+                                </div>
+                                <div class="card-block">
+                                    <div>
+                                        <canvas id="myChart3"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
+                    <button name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
+
+                </div>
+            
+        </div>
+    </div>
+</div>
+<!-- end Add Patient Modal -->
 @endforeach
 
 
@@ -505,4 +557,33 @@
             ]
         }
     })
+
+
+
+    
+    const ctx3 = document.getElementById('myChart3');
+
+    new Chart(ctx3, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($labels) !!},
+            datasets: [{
+                label: 'Heart Rate',
+                data: {!! json_encode($heartrateData) !!},
+            },
+           ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Chart.js Line Chart'
+                }
+            }
+        },
+    });
 </script>

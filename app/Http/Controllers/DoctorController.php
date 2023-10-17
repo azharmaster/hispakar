@@ -424,6 +424,11 @@ class DoctorController extends Controller
 
         $timeSlots = [];
 
+        if(empty($start)){
+            $start='00:00';
+            $end='00:00';
+        }
+
         while ($start < $end) {
             $timeSlots[] = $start->format('H:i') . ' - ' . $start->addMinutes(30)->format('H:i');
         }
@@ -886,10 +891,7 @@ class DoctorController extends Controller
     public function AddAppointment(Request $request)
     {
 
-      
-
         $doctor = Doctor::where('email', Auth::user()->email)->first();
-
         //insert data into nurse table
         $appointment = new Appointments();
         $appointment->patientid = $request->patientid;
@@ -915,8 +917,8 @@ class DoctorController extends Controller
     public function EditAppointment(Request $request, $id)
     {
         $appointment = Appointments::find($id);
-        
         $doctor = Doctor::where('email', Auth::user()->email)->first();
+        
         $appointment->patientid = $request->input('patientid');
         $appointment->docid = $doctor->id;
         $appointment->deptid = $request->input('deptid'); 
