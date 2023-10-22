@@ -584,15 +584,15 @@ new Chart(ctx3, {
 
 
 
-$.ajax({
-  url: 'https://api.fitbit.com/1/user/-/profile.json',
-  crossDomain: true,
-  headers: {
-    'accept': 'application/json',
-    'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd3JlcyB3bG9jIiwiZXhwIjoxNjk3ODA5OTQ2LCJpYXQiOjE2OTc3MjM1NDZ9.wL-EI6PD332o1bFqc8BoPrjydN7KmUoqmCDzCsLClZc'
-  }
-}).done(function(response) {
-  console.log(response);
-});
+// $.ajax({
+//   url: 'https://api.fitbit.com/1/user/-/profile.json',
+//   crossDomain: true,
+//   headers: {
+//     'accept': 'application/json',
+//     'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd3JlcyB3bG9jIiwiZXhwIjoxNjk3ODA5OTQ2LCJpYXQiOjE2OTc3MjM1NDZ9.wL-EI6PD332o1bFqc8BoPrjydN7KmUoqmCDzCsLClZc'
+//   }
+// }).done(function(response) {
+//   console.log(response);
+// });
 </script>
 @endsection
