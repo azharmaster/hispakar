@@ -217,6 +217,8 @@ class PatientController extends Controller
         // Reverse the order of the arrays
         $labels = array_reverse($labels);
         $heartrateData = array_reverse($heartrateData);
+
+        
        
 
         // print_r($labels);

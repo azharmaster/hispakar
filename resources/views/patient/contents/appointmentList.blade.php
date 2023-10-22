@@ -232,6 +232,17 @@
             }
         });
     });
+
+    $.ajax({
+        url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-16/1d.json',
+  crossDomain: true,
+  headers: {
+    'accept': 'application/json',
+    'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd3JlcyB3bG9jIiwiZXhwIjoxNjk3NjQ2NDg0LCJpYXQiOjE2OTc1NjAwODR9.DBzPrnSoU8pnSec72rerOkUfhHegvPzZRVfzilDhUgM'
+  }
+}).done(function(response) {
+  console.log(response);
+});
 </script>
 
 <!--/script to get the doctor schedule -->
