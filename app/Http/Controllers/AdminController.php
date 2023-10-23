@@ -526,7 +526,9 @@ class AdminController extends Controller
     public function viewPatientProfile($id) //profile doctor
     {
 
-        $patientdetails = Patient::where('id', $id)->get();
+        $patientdetails = Patient::where('patient.id', $id)
+        ->join('users', 'users.email', '=', 'patient.email')
+        ->get();
 
         $totaloperation = MedRecord::where('patientid', $id)
         ->count('patientid');
