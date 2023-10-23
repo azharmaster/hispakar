@@ -556,8 +556,35 @@ class AdminController extends Controller
         ->where('patient.id', $id )
         ->get();
 
+        /////////////////////////////
 
-        return view('admin.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines'));
+
+        $currentDate = Carbon::now();
+        $labels = [];
+        // $maleData = [];
+        // $femaleData = [];
+
+        for ($i = 0; $i < 5; $i++) {
+            $month = $currentDate->format('M');
+            $labels[] = $month;
+
+
+            $heartrateData[] = 70+$i;
+ 
+
+            $currentDate->subMonth(); // Use subMonth() to move back in time
+        }
+
+      
+
+        // Reverse the order of the arrays
+        $labels = array_reverse($labels);
+        $heartrateData = array_reverse($heartrateData);
+
+        /////////////////////////////
+
+
+        return view('admin.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData'));
        
     }
 
