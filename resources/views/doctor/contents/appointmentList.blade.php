@@ -2,6 +2,9 @@
 
 @section('content')
 
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+
 @if(session()->has('success'))
     <script>
         alert("{{ session()->get('success') }}");
@@ -178,9 +181,9 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Date :</span>
                         <select class="form-control" style="width:350px;" name="date" id="date" placeholder="">
-                            <option value="">Choose Date</option>
+                            <option value="0" disable selected>Choose Date</option>
                             @foreach ($doctorSchedule as $date)
-                                <option value="{{ $date }}" @if ($selectedDate === $date) selected @endif>{{ $date }}</option>
+                                <option value="{{ $date }}">{{ $date }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -189,9 +192,7 @@
                         <span class="input-group-addon" style="width:150px;">Time :</span>
                         <select class="form-control" style="width:350px;" name="time" id="time" placeholder="">
                             <option value="">Choose Time</option>
-                            @foreach ($timeSlots as $slot)
-                                <option value="{{ $slot }}">{{ $slot }}</option>
-                            @endforeach
+                         
                         </select>
                     </div>
 
@@ -292,7 +293,45 @@
 @endforeach
 <!-- end delete Patient form -->
 
+<script>
+    $(document).ready(function () {
+        $('#date').change(function () {
+            // Selected date
+            var selectedDate = $(this).val();
 
+            // Empty the time dropdown
+            $('#time').find('option').not(':first').remove();
 
+           // AJAX request
+            $.ajax({
+                url: '/doctor/getTimeSlots/' + selectedDate,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+
+                    var len = response.length;
+
+                    if (len > 0) {
+                        // Read data and create <option>
+                        for (var i = 0; i < len; i++) {
+                            var selectedTime = response[i];
+                            var option = "<option value='" + selectedTime + "'>" + selectedTime + "</option>";
+                            $("#time").append(option);
+                        }
+                    } else {
+                        // Handle the case where no time slots are returned
+                        $("#time").append("<option value=''>No time slots available</option>");
+                        // You can also disable the dropdown or take any other action based on your requirements
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching time slots:', error);
+                }
+            });
+
+        });
+    });
+
+</script>
 @endsection
-
