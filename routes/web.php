@@ -125,7 +125,7 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::post('/doctor/appointmentList/{id}', [DoctorController::class, 'EditAppointment']);
     Route::delete('/doctor/appointmentList/{id}', [DoctorController::class, 'deleteAppointment'])->name('deleteAppointment');
     Route::get('/doctor/getDoctorSchedule/{doctorId}', [DoctorController::class, 'getDoctorSchedule']);
-    Route::get('/doctor/get-time-slots', [DoctorAppointmentController::class, 'getTimeSlots']);
+    Route::get('/doctor/getTimeSlots/{selectedDate}', [DoctorController::class, 'getTimeSlots']);
 
     //Manage medicine
     Route::post('/doctor/medicineList', [DoctorController::class, 'AddMedicine']);
