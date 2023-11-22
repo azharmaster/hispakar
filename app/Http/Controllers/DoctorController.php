@@ -453,6 +453,42 @@ class DoctorController extends Controller
             'doctor', 'doctorSchedule', 'timeSlots', 'selectedDate'));
     }
 
+    public function getTimeSlots($selectedDate = 0)
+    {
+        $doctor = Doctor::where('email', Auth::user()->email)->first();
+    
+        // Assuming 'date' is the column name in your table
+        $selectedTime = DocSchedule::where('docid', $doctor->id)
+            ->where('date', $selectedDate)
+            ->select('starttime', 'endtime')
+            ->get();
+    
+        $timeSlots = [];
+    
+        // Check if any time slots were found for the selected date
+        if (!$selectedTime->isEmpty()) {
+            // Loop through each time slot
+            foreach ($selectedTime as $timeSlot) {
+                $start = Carbon::parse($timeSlot->starttime);
+                $end = Carbon::parse($timeSlot->endtime);
+    
+                // Reset the start time to the initial value
+                $startCopy = $start->copy();
+    
+                // Create time slots in 30-minute intervals
+                while ($startCopy < $end) {
+                    $timeSlots[] = $startCopy->format('H:i') . ' - ' . $startCopy->addMinutes(30)->format('H:i');
+                }
+            }
+        } else {
+            // If no time slots were found, you may want to handle this case accordingly
+            $timeSlots[] = 'No available time slots for the selected date';
+        }
+    
+        return response()->json($timeSlots);
+    }
+    
+
     public function viewAppointmentListDate(Request $request, $date)
     {
         // Convert the selected date to a Carbon instance for comparison
