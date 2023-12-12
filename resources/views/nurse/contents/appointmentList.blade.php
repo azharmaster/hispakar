@@ -360,7 +360,8 @@ $(document).ready(function () {
                     $("#date").append("<option value='' selected>No date available</option>");
 
                     // Disable the time dropdown when there are no dates
-                    $('#time').prop('disabled', true);
+                    // $('#time').prop('disabled', true);
+                    $("#time").append("<option value='' selected>No time available</option>");
                 }
             },
             error: function (xhr, status, error) {
