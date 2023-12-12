@@ -169,12 +169,12 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Doctor ID :</span>
                         <select style="width:350px;" class="form-control" id="doctor" name="docid">
+                        <option value="0" disable selected>Choose Doctor</option>
                         @foreach ($doctors as $doctor)
                             <option value="{{ $doctor->id }}"> {{ $doctor->name }} </option>
                         @endforeach   
                      </select>
                     </div>
-                    
 
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Date :</span>
@@ -323,82 +323,100 @@
 <script>
 
 $(document).ready(function () {
-        $('#doctor').change(function () {
-            // Selected date
-            var selectedDoctor = $(this).val();
+    $('#doctor').change(function () {
+        // Selected doctor
+        var selectedDoctor = $(this).val();
 
-            // Empty the date dropdown
-            $('#date').find('option').not(':first').remove();
-            $('#time').find('option').not(':first').remove();
-           // AJAX request
-            $.ajax({
-                url: '/nurse/getDateSlots/' + selectedDoctor,
-                type: 'get',
-                dataType: 'json',
-                success: function (response) {
-                    console.log(response);
+        // Empty the date and time dropdowns
+        $('#date').find('option').not(':first').remove();
+        $('#time').find('option').not(':first').remove();
 
-                    var len = response.length;
+        // AJAX request for dates
+        $.ajax({
+            url: '/nurse/getDateSlots/' + selectedDoctor,
+            type: 'get',
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
 
-                    if (len > 0) {
-                        // Read data and create <option>
-                        for (var i = 0; i < len; i++) {
-                            var selectedDate = response[i];
-                            var option = "<option value='" + selectedDate + "'>" + selectedDate + "</option>";
-                            $("#date").append(option);
-                        }
-                    } else {
-                        // Handle the case where no time slots are returned
-                        $("#date").append("<option value=''>No time slots available</option>");
-                        // You can also disable the dropdown or take any other action based on your requirements
+                var len = response.length;
+
+                // Disable the date and time dropdowns by default
+                $('#date').prop('disabled', true);
+                $('#time').prop('disabled', true);
+
+                if (len > 0) {
+                    // Read data and create <option>
+                    for (var i = 0; i < len; i++) {
+                        var selectedDate = response[i];
+                        var option = "<option value='" + selectedDate + "'>" + selectedDate + "</option>";
+                        $("#date").append(option);
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching time slots:', error);
-                }
-            });
 
+                    // Enable the date dropdown
+                    $('#date').prop('disabled', false);
+                } else {
+                    // Handle the case where no dates are available
+                    $("#date").append("<option value='' selected>No date available</option>");
+
+                    // Disable the time dropdown when there are no dates
+                    $('#time').prop('disabled', true);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching dates:', error);
+            }
         });
     });
-    
-    $(document).ready(function () {
-        $('#date').change(function () {
-            // Selected date
-            var selectedDate = $(this).val();
 
-            // Empty the time dropdown
-            $('#time').find('option').not(':first').remove();
+    // Handle change event for the date dropdown
+$('#date').change(function () {
+    // Selected date
+    var selectedDate = $(this).val();
 
-           // AJAX request
-            $.ajax({
-                url: '/nurse/getTimeSlots/' + selectedDate,
-                type: 'get',
-                dataType: 'json',
-                success: function (response) {
-                    console.log(response);
+    // Empty the time dropdown
+    $('#time').find('option').not(':first').remove();
 
-                    var len = response.length;
+    if (selectedDate) {
+        // Ensure you have the selectedDoctor value defined before using it
+        var selectedDoctor = $('#doctor').val();
 
-                    if (len > 0) {
-                        // Read data and create <option>
-                        for (var i = 0; i < len; i++) {
-                            var selectedTime = response[i];
-                            var option = "<option value='" + selectedTime + "'>" + selectedTime + "</option>";
-                            $("#time").append(option);
-                        }
-                    } else {
-                        // Handle the case where no time slots are returned
-                        $("#time").append("<option value=''>No time slots available</option>");
-                        // You can also disable the dropdown or take any other action based on your requirements
+        // AJAX request for time slots
+        $.ajax({
+            url: '/nurse/getTimeSlots/' + selectedDoctor + '/' + selectedDate,
+            type: 'get',
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+
+                var len = response.length;
+
+                // Disable the time dropdown by default
+                $('#time').prop('disabled', true);
+
+                if (len > 0) {
+                    // Read data and create <option>
+                    for (var i = 0; i < len; i++) {
+                        var selectedTime = response[i];
+                        var option = "<option value='" + selectedTime + "'>" + selectedTime + "</option>";
+                        $("#time").append(option);
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching time slots:', error);
-                }
-            });
 
+                    // Enable the time dropdown
+                    $('#time').prop('disabled', false);
+                } else {
+                    // Handle the case where no time slots are available
+                    $("#time").append("<option value='' selected>No time slots available</option>");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching time slots:', error);
+            }
         });
-    });
+    }
+});
+
+});
 
     
 

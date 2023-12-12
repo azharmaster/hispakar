@@ -458,7 +458,7 @@ class NurseController extends Controller
         $endOfWeek = Carbon::now('Asia/Kuala_Lumpur')->endOfWeek();
     
 
-        $doctorSchedule = DocSchedule::where('docid', 1)
+        $doctorSchedule = DocSchedule::where('docid', 0)
         ->whereBetween('date', [$startOfWeek, $endOfWeek])
         ->pluck('date')
         ->toArray();
@@ -481,10 +481,12 @@ class NurseController extends Controller
 
     public function getDateSlots($selectedDoctor = 0)
     {
-    
+        $startOfWeek = Carbon::now('Asia/Kuala_Lumpur')->startOfWeek();
+        $endOfWeek = Carbon::now('Asia/Kuala_Lumpur')->endOfWeek();
         // Assuming 'date' is the column name in your table
+        
         $selectedDate = DocSchedule::where('docid', $selectedDoctor)
-            ->select('date')
+            ->whereBetween('date', [$startOfWeek, $endOfWeek])
             ->get();
     
         // $timeSlots = [];
@@ -494,21 +496,22 @@ class NurseController extends Controller
             // Loop through each time slot
             foreach ( $selectedDate as $dateSlot) {
                 $dateSlots[]=$dateSlot->date;
+                
             }
         } else {
             // If no time slots were found, you may want to handle this case accordingly
-            $dateSlots[] = 'No available time slots for the selected doctor';
+            // $dateSlots[] = 'No available date for the selected doctor';
+            $dateSlots = [];
         }
     
         return response()->json($dateSlots);
     }
 
     
-    public function getTimeSlots($selectedDate = 0)
+    public function getTimeSlots($selectedDoctor = 0, $selectedDate = '')
     {
-    
         // Assuming 'date' is the column name in your table
-        $selectedTime = DocSchedule::where('docid', 1)
+        $selectedTime = DocSchedule::where('docid', $selectedDoctor)
             ->where('date', $selectedDate)
             ->select('starttime', 'endtime')
             ->get();
@@ -532,11 +535,12 @@ class NurseController extends Controller
             }
         } else {
             // If no time slots were found, you may want to handle this case accordingly
-            $timeSlots[] = 'No available time slots for the selected date';
+            $timeSlots = [];
         }
     
         return response()->json($timeSlots);
     }
+    
     
 
     public function EditProfile(Request $request, $id)
@@ -838,42 +842,45 @@ class NurseController extends Controller
 
     public function AddAppointment(Request $request)
     {
+         // Get the nurse information from the session
+        $nurse = Nurse::where('email', Auth::user()->email)->first();
+
         // Get the input data
         $patientId = $request->patientid;
         $doctorId = $request->docid;
-        $deptId = $request->deptid;
         $date = $request->date;
-        $time = $request->time;
+
+        // Retrieve deptid from the nurse model
+        $deptId = $nurse->deptid;
     
         // Convert time from '2:00 PM - 2:30 PM' to 'H:i' format
-        $timeParts = explode(' - ', $time);
-        $startTime = Carbon::createFromFormat('h:i A', $timeParts[0])->format('H:i');
-        $endTime = Carbon::createFromFormat('h:i A', $timeParts[1])->format('H:i');
     
-        // Check for overlapping appointments
+
+        $timeRange = $request->time;
+        $timeParts = explode(' - ', $timeRange);
+        $startTime = date('Y-m-d H:i:s', strtotime($timeParts[0]));
+        $endTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
+    
         $overlappingAppointments = DB::table('appointment')
-            ->where('docid', $doctorId)
-            ->where('date', $date)
-            ->where(function ($query) use ($startTime, $endTime) {
-                $query->where(function ($query) use ($startTime, $endTime) {
-                    $query->where('time', '>=', $startTime)
-                        ->where('time', '<', $endTime);
-                })
-                ->orWhere(function ($query) use ($startTime, $endTime) {
-                    $query->where('time', '<=', $startTime)
-                        ->where('time', '>', $startTime);
-                })
-                ->orWhere(function ($query) use ($startTime, $endTime) {
-                    $query->where('time', '>=', $startTime)
-                        ->where('time', '<=', $endTime);
-                });
+        ->where('docid', $doctorId)
+        ->where('date', $date)
+        ->where(function ($query) use ($startTime, $endTime) {
+            $query->where(function ($query) use ($startTime, $endTime) {
+                $query->where('time', '>=', $startTime)
+                    ->where('time', '<', $endTime);
             })
-            ->count();
-    
+            ->orWhere(function ($query) use ($startTime, $endTime) {
+                $query->where('time', '<=', $startTime)
+                    ->where('time', '>=', $endTime);
+            });
+        })
+        ->count();
+
         // If there are overlapping appointments, display an alert
         if ($overlappingAppointments > 0) {
             return redirect()->back()->with('error', 'The selected time slot is already booked. Please choose another time.');
         }
+
     
         // If the time slot is available, save the new appointment
         $appointment = new Appointments();

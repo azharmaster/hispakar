@@ -199,8 +199,8 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::post('/nurse/appointmentList/{id}', [NurseController::class, 'EditAppointment']);
     Route::delete('/nurse/appointmentList/{id}', [NurseController::class, 'deleteAppointment'])->name('deleteAppointment');
     Route::get('/nurse/getDoctorSchedule/{doctorId}', [NurseController::class, 'getDoctorSchedule']);
-    Route::get('/nurse/getDateSlots/{selectedDate}', [NurseController::class, 'getDateSlots']);
-    Route::get('/nurse/getTimeSlots/{selectedDate}', [NurseController::class, 'getTimeSlots']);
+    Route::get('/nurse/getDateSlots/{selectedDoctor}', [NurseController::class, 'getDateSlots']);
+    Route::get('/nurse/getTimeSlots/{selectedDoctor}/{selectedDate}', [NurseController::class, 'getTimeSlots']);
 
     //attend & absent appointment
     Route::post('/nurse/dashboard/{appointment_id}', [NurseController::class, 'AttendAppointment']);
