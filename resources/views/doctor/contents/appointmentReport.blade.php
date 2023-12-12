@@ -2,6 +2,8 @@
 
 @section('content')
 
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
 <!-- Success Alert -->
 @if(session()->has('success'))
     <script>
@@ -234,10 +236,20 @@
                                             <label class="col-form-label" for="scheduleNext">Schedule Next Appointment</label>
                                         </div>
                                         <div class="col-sm-3">
-                                            <input class="form-control" type="date" id="dateInput" name="date" disabled>
+                                            <!-- <input class="form-control" type="date" id="dateInput" name="date" disabled> -->
+                                            <select class="form-control" style="width:230px;" name="date" id="dateInput" placeholder="" disabled>
+                                                <option value="0" disable selected>Choose Date</option>
+                                                @foreach ($doctorSchedule as $date)
+                                                    <option value="{{ $date }}">{{ $date }}</option>
+                                                @endforeach
+                                            </select>
+
                                         </div>
                                         <div class="col-sm-3">
-                                            <input class="form-control" type="time" id="timeInput" name="time" disabled>
+                                            <!-- <input class="form-control" type="time" id="timeInput" name="time" disabled> -->
+                                            <select class="form-control" style="width:200px;" name="time" id="timeInput" placeholder="" disabled>
+                                                <option value="">Choose Time</option>
+                                            </select>
                                         </div>
                                     </div>
     
@@ -628,6 +640,48 @@
             }
         });
     });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#dateInput').change(function () {
+            // Selected date
+            var selectedDate = $(this).val();
+
+            // Empty the time dropdown
+            $('#timeInput').find('option').not(':first').remove();
+
+           // AJAX request
+            $.ajax({
+                url: '/doctor/getTimeSlots/' + selectedDate,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+
+                    var len = response.length;
+
+                    if (len > 0) {
+                        // Read data and create <option>
+                        for (var i = 0; i < len; i++) {
+                            var selectedTime = response[i];
+                            var option = "<option value='" + selectedTime + "'>" + selectedTime + "</option>";
+                            $("#timeInput").append(option);
+                        }
+                    } else {
+                        // Handle the case where no time slots are returned
+                        $("#timeInput").append("<option value=''>No time slots available</option>");
+                        // You can also disable the dropdown or take any other action based on your requirements
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching time slots:', error);
+                }
+            });
+
+        });
+    });
+
 </script>
 
 @include('dup.patientModal')

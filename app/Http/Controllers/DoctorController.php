@@ -573,7 +573,7 @@ class DoctorController extends Controller
         return view('doctor.contents.medrecord', compact('medrcs'));
     }
     
-    public function viewAppointmentReport($id)
+    public function viewAppointmentReport($id, Request $request)
     {
         $appointment = Appointments::with(['patient', 'medrecord'])
             ->where('id', $id)
@@ -615,8 +615,64 @@ class DoctorController extends Controller
                     ->get()
                     ->reverse(); // Reverse the order to display the most recent medicine first
        }
+
+        // Get the currently logged-in doctor
+        $doctor = Doctor::where('email', Auth::user()->email)->first();
+
+        if (!$doctor) {
+            // Handle the case if the logged-in user is not a doctor
+            // For example, redirect them to a different page or show an error message
+            // You can also return an empty array of appointments if you prefer
+        }
+
+        // Get the current date
+        $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
+        
+        // Get the doctor's schedule for the current week
+        $startOfWeek = Carbon::now('Asia/Kuala_Lumpur')->startOfWeek();
+        $endOfWeek = Carbon::now('Asia/Kuala_Lumpur')->endOfWeek();
+
+        $doctorSchedule = DocSchedule::where('docid', $doctor->id)
+                        ->whereBetween('date', [$startOfWeek, $endOfWeek])
+                        ->pluck('date')
+                        ->toArray();
+
+        // Get the selected date from the request, or set it to the first available date if not provided
+        $selectedDate = $request->input('date', reset($doctorSchedule));
+
+        // Set the fixed time slots from 8:00 AM to 5:00 PM with 30-minute intervals
+        // $start = Carbon::parse('8:00 AM');
+        //$end = Carbon::parse('5:00 PM');
+
+        $selectedTime=DocSchedule::where('docid', $doctor->id)
+            ->where('date', $selectedDate)
+            ->select('starttime','endtime')
+            ->get();
+
+            foreach ($selectedTime as $timeSlot) {
+                $start = Carbon::parse($timeSlot->starttime);
+                $end = Carbon::parse($timeSlot->endtime);
+                
+                // Now $startTimeFormatted and $endTimeFormatted contain the formatted times 'H:i'
+                // You can use these variables as needed.
+            }
+
+        // $start = Carbon::parse('08:00');
+        // $end = Carbon::parse('17:00');
+
+        $timeSlots = [];
+
+        if(empty($start)){
+            $start='00:00';
+            $end='00:00';
+        }
+
+        while ($start < $end) {
+            $timeSlots[] = $start->format('H:i') . ' - ' . $start->addMinutes(30)->format('H:i');
+        }
     
-        return view('doctor.contents.appointmentReport', compact('appointment', 'medicines', 'singlePatient', 'medservices', 'patients', 'medNum', 'previousMedRecord', 'prevMedicine'));
+        return view('doctor.contents.appointmentReport', compact('appointment', 'medicines', 'singlePatient', 'medservices', 
+        'patients', 'medNum', 'previousMedRecord', 'prevMedicine', 'doctor', 'doctorSchedule', 'timeSlots', 'selectedDate'));
     }
 
     public function viewEAppointmentReport($id)
@@ -1117,9 +1173,14 @@ class DoctorController extends Controller
             if ($request->has('date')) {
                 $apt->date = $request->input('date');
             }
+            $timeRange = $request->time;
+            $timeParts = explode(' - ', $timeRange);
+            $startDateTime = date('Y-m-d H:i:s', strtotime($timeParts[0]));
 
             if ($request->has('time')) {
-                $apt->time = $request->input('time');
+                // $apt->time = $request->input('time');
+
+                $apt->time = $startDateTime;
             }
 
             $apt->save();
