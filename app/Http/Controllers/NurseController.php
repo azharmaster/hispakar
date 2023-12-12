@@ -454,6 +454,15 @@ class NurseController extends Controller
         //$currentDate = Carbon::today()->toDateString();
         $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
 
+        $startOfWeek = Carbon::now('Asia/Kuala_Lumpur')->startOfWeek();
+        $endOfWeek = Carbon::now('Asia/Kuala_Lumpur')->endOfWeek();
+    
+
+        $doctorSchedule = DocSchedule::where('docid', 1)
+        ->whereBetween('date', [$startOfWeek, $endOfWeek])
+        ->pluck('date')
+        ->toArray();
+
         $appointments = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
                         ->join('patient', 'appointment.patientid', '=', 'patient.id')
                         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
@@ -467,32 +476,68 @@ class NurseController extends Controller
         $patients = Patient::all();
         $departments = Department::all();
 
-        return view('nurse.contents.appointmentList', compact('nurse', 'appointments', 'doctors', 'patients', 'departments', 'currentDate'));
+        return view('nurse.contents.appointmentList', compact('nurse', 'appointments', 'doctors', 'patients', 'departments', 'currentDate', 'doctorSchedule'));
     }
 
-    public function viewAppointmentListDate($date)
+    public function getDateSlots($selectedDoctor = 0)
     {
-        // Reuse the viewAppointmentList() function to get the initial data
-        $viewData = $this->viewAppointmentList()->getData();
     
-        // Parse the selected date
-        $selectedDate = Carbon::parse($date);
+        // Assuming 'date' is the column name in your table
+        $selectedDate = DocSchedule::where('docid', $selectedDoctor)
+            ->select('date')
+            ->get();
     
-        // Filter appointments based on the selected date
-        $filteredAppointments = $viewData['appointments']->filter(function ($appointment) use ($selectedDate) {
-            return $appointment->date == $selectedDate->toDateString();
-        });
+        // $timeSlots = [];
     
-        // Pass the filtered appointments and selected date to the view
-        return view('nurse.contents.appointmentList', [
-            'nurse' => $viewData['nurse'],
-            'appointments' => $filteredAppointments,
-            'doctors' => $viewData['doctors'],
-            'patients' => $viewData['patients'],
-            'departments' => $viewData['departments'],
-            'selectedDate' => $selectedDate,
-        ]);
+        // Check if any time slots were found for the selected date
+        if (! $selectedDate->isEmpty()) {
+            // Loop through each time slot
+            foreach ( $selectedDate as $dateSlot) {
+                $dateSlots[]=$dateSlot->date;
+            }
+        } else {
+            // If no time slots were found, you may want to handle this case accordingly
+            $dateSlots[] = 'No available time slots for the selected doctor';
+        }
+    
+        return response()->json($dateSlots);
     }
+
+    
+    public function getTimeSlots($selectedDate = 0)
+    {
+    
+        // Assuming 'date' is the column name in your table
+        $selectedTime = DocSchedule::where('docid', 1)
+            ->where('date', $selectedDate)
+            ->select('starttime', 'endtime')
+            ->get();
+    
+        $timeSlots = [];
+    
+        // Check if any time slots were found for the selected date
+        if (!$selectedTime->isEmpty()) {
+            // Loop through each time slot
+            foreach ($selectedTime as $timeSlot) {
+                $start = Carbon::parse($timeSlot->starttime);
+                $end = Carbon::parse($timeSlot->endtime);
+    
+                // Reset the start time to the initial value
+                $startCopy = $start->copy();
+    
+                // Create time slots in 30-minute intervals
+                while ($startCopy < $end) {
+                    $timeSlots[] = $startCopy->format('H:i') . ' - ' . $startCopy->addMinutes(30)->format('H:i');
+                }
+            }
+        } else {
+            // If no time slots were found, you may want to handle this case accordingly
+            $timeSlots[] = 'No available time slots for the selected date';
+        }
+    
+        return response()->json($timeSlots);
+    }
+    
 
     public function EditProfile(Request $request, $id)
     {

@@ -164,43 +164,44 @@
                                 @endforeach
                             </select>
                     </div>
-                    <!-- Doctor Selection Dropdown -->
+
+                   
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Doctor :</span>
-                        <select class="form-control" style="width:350px;" name="docid" id="doctorSelect">
-                            <option value="">Choose Doctor</option>
-                            @foreach ($doctors as $doctor)
-                                <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                        <span class="input-group-addon" style="width:150px;">Doctor ID :</span>
+                        <select style="width:350px;" class="form-control" id="doctor" name="docid">
+                        @foreach ($doctors as $doctor)
+                            <option value="{{ $doctor->id }}"> {{ $doctor->name }} </option>
+                        @endforeach   
+                     </select>
+                    </div>
+                    
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:150px;">Date :</span>
+                        <select class="form-control" style="width:350px;" name="date" id="date" placeholder="">
+                            <option value="0" disable selected>Choose Date</option>
+                            @foreach ($doctorSchedule as $date)
+                                <option value="{{ $date }}">{{ $date }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    <input type="hidden" name="deptid" id="deptid" value="{{ $nurse->deptid }}">
-
-                     <!-- Date Selection Dropdown -->
-                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Date :</span>
-                        <select class="form-control" style="width:350px;" name="date" id="dateSelect">
-                            <!-- Dates will be populated dynamically using JavaScript -->
-                        </select>
-                    </div>
-
-                    <!-- Add a loading spinner in the time selection dropdown -->
                     <div class="form-group input-group">
-                        <span class="input-group-addon" style="width: 150px;">Time :</span>
-                        <select class="form-control" style="width: 350px;" name="time" id="timeSelect">
-                            <!-- Times will be populated dynamically using JavaScript -->
-                            <option value="">Loading...</option>
+                        <span class="input-group-addon" style="width:150px;">Time :</span>
+                        <select class="form-control" style="width:350px;" name="time" id="time" placeholder="">
+                            <option value="">Choose Time</option>
+                         
                         </select>
                     </div>
 
-                    <input type="hidden" name="status" id="status">
-                    
+                        
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
                 <button  name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
+
+                    
             </div>
             </form>
         </div>
@@ -317,92 +318,91 @@
 <!-- Include Moment.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        // Event handler for doctor selection dropdown
-        $('#doctorSelect').change(function () {
-            var selectedDoctorId = $(this).val();
 
-            // Send an AJAX request to fetch the selected doctor's schedule
+
+<script>
+
+$(document).ready(function () {
+        $('#doctor').change(function () {
+            // Selected date
+            var selectedDoctor = $(this).val();
+
+            // Empty the date dropdown
+            $('#date').find('option').not(':first').remove();
+            $('#time').find('option').not(':first').remove();
+           // AJAX request
             $.ajax({
-                url: '/nurse/getDoctorSchedule/' + selectedDoctorId,
-                type: 'GET',
+                url: '/nurse/getDateSlots/' + selectedDoctor,
+                type: 'get',
                 dataType: 'json',
-                success: function (data) {
-                    // Populate the date selection dropdown with the fetched dates
-                    var dateSelect = $('#dateSelect');
-                    dateSelect.empty();
-                    dateSelect.append('<option value="">Choose Date</option>');
-                    $.each(data, function (index, value) {
-                        dateSelect.append('<option value="' + value.date + '">' + value.date + '</option>');
-                    });
+                success: function (response) {
+                    console.log(response);
+
+                    var len = response.length;
+
+                    if (len > 0) {
+                        // Read data and create <option>
+                        for (var i = 0; i < len; i++) {
+                            var selectedDate = response[i];
+                            var option = "<option value='" + selectedDate + "'>" + selectedDate + "</option>";
+                            $("#date").append(option);
+                        }
+                    } else {
+                        // Handle the case where no time slots are returned
+                        $("#date").append("<option value=''>No time slots available</option>");
+                        // You can also disable the dropdown or take any other action based on your requirements
+                    }
                 },
-                error: function () {
-                    alert('Error occurred while fetching the doctor schedule.');
+                error: function (xhr, status, error) {
+                    console.error('Error fetching time slots:', error);
                 }
             });
+
         });
     });
-</script>
-
-<script>
+    
     $(document).ready(function () {
-        // Event handler for date selection dropdown
-        $('#dateSelect').change(function () {
+        $('#date').change(function () {
+            // Selected date
             var selectedDate = $(this).val();
 
-            // Clear any previous options in the time selection dropdown
-            $('#timeSelect').empty();
+            // Empty the time dropdown
+            $('#time').find('option').not(':first').remove();
 
-            // Show a loading indicator while waiting for the AJAX response
-            $('#timeSelect').append('<option value="">Loading...</option>');
+           // AJAX request
+            $.ajax({
+                url: '/nurse/getTimeSlots/' + selectedDate,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-            // Set the start and end time for the time slots
-            var startTime = moment('08:00 AM', 'hh:mm A');
-            var endTime = moment('05:00 PM', 'hh:mm A');
+                    var len = response.length;
 
-            // Generate time slots with 30-minute intervals and add them to the time selection dropdown
-            while (startTime.isBefore(endTime)) {
-                var endTimeFormatted = moment(startTime).add(30, 'minutes');
-                var formattedTime = startTime.format('h:mm A') + ' - ' + endTimeFormatted.format('h:mm A');
-
-                // Check if the current time slot is booked
-                var isBooked = isTimeBooked(selectedDate, startTime.format('H:mm'), endTimeFormatted.format('H:mm'));
-                if (!isBooked) {
-                    $('#timeSelect').append('<option value="' + formattedTime + '">' + formattedTime + '</option>');
+                    if (len > 0) {
+                        // Read data and create <option>
+                        for (var i = 0; i < len; i++) {
+                            var selectedTime = response[i];
+                            var option = "<option value='" + selectedTime + "'>" + selectedTime + "</option>";
+                            $("#time").append(option);
+                        }
+                    } else {
+                        // Handle the case where no time slots are returned
+                        $("#time").append("<option value=''>No time slots available</option>");
+                        // You can also disable the dropdown or take any other action based on your requirements
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching time slots:', error);
                 }
+            });
 
-                startTime.add(30, 'minutes');
-            }
         });
     });
 
-    function isTimeBooked(selectedDate, startTime, endTime) {
-        var isBooked = false;
+    
 
-        // Send an AJAX request to check if the selected time slot is booked
-        $.ajax({
-            url: '/nurse/isTimeBooked',
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                date: selectedDate,
-                startTime: startTime,
-                endTime: endTime
-            },
-            async: false,
-            success: function (data) {
-                isBooked = data.booked;
-            },
-            error: function () {
-                alert('Error occurred while checking booked appointment times.');
-            }
-        });
-
-        return isBooked;
-    }
 </script>
-
 <!--/script to get the doctor schedule -->
 
 @endsection
