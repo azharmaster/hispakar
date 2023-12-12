@@ -74,7 +74,7 @@
                                         <th>Weight</th>
                                         <td>{{ $appointment->patient->weight }} kg</td>
                                         <th>Height</th>
-                                        <td>{{ $appointment->patient->height }} m</td>
+                                        <td>{{ $appointment->patient->height }} cm</td>
                                     </tr>
                                     <tr>
                                         <th>Medical History</th>
