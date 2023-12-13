@@ -543,13 +543,14 @@
 var d = (new Date()).toISOString().split('T')[0];
 console.log(d);
 $.ajax({
-    url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
+  url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
   crossDomain: true,
   headers: {
     'accept': 'application/json',
-    'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd3JlcyB3bG9jIiwiZXhwIjoxNjk3ODA5OTQ2LCJpYXQiOjE2OTc3MjM1NDZ9.wL-EI6PD332o1bFqc8BoPrjydN7KmUoqmCDzCsLClZc'
+    'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd2xvYyB3cmVzIiwiZXhwIjoxNzAyNTI2NzYyLCJpYXQiOjE3MDI0NDAzNjJ9.q_tdbcegG1VwQlFsGqtgcyRJtNjlyqIz3fGO4HNp5Zs'
   }
 }).done(function(response) {
+
     
   var data1 = response['activities-heart-intraday']['dataset'];
   data1 = data1.slice(-10);
