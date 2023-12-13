@@ -82,7 +82,7 @@
                                             <th class="colored">Weight</th>
                                             <td>{{ $record->patient->weight }} kg</td>
                                             <th class="colored">Height</th>
-                                            <td>{{ $record->patient->height }} m</td>
+                                            <td>{{ $record->patient->height }} cm</td>
                                         </tr>
                                         <tr>
                                             <th class="colored">Previous Medical <br>History</th>
