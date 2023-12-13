@@ -264,11 +264,18 @@ class NurseController extends Controller
 
     public function viewDoctorList()
     {
-        $doctors = Doctor::all();
-        $departments = Department::all();
+        // Get the nurse information from the session
+        $nurse = Nurse::where('email', Auth::user()->email)->first();
+    
+        // Retrieve deptid from the nurse model
+        $deptId = $nurse->deptid;
 
+        $doctors = Doctor::where('deptid', $deptId)->get();
+        $departments = Department::all();
+    
         return view('nurse.contents.doctorList', compact('doctors', 'departments'));
     }
+    
 
     public function viewPatientList()
     {
