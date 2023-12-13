@@ -355,7 +355,23 @@
         let checkupInfo = document.getElementById("checkup-print");
         content.classList.add("ml-0");
         checkupInfo.hidden = false;
+        // Store the current title
+        let currentTitle = document.title;
+
+        // Set a temporary title for the PDF (e.g., "icnumber_today'sdate")
+        let icNumber = '<?php echo $record->patient->ic ?? ""; ?>';
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0
+        let yyyy = today.getFullYear();
+        let formattedDate = dd + mm + yyyy;
+        let temporaryTitle = icNumber + '_' + formattedDate;
+        document.title = temporaryTitle;
+
         window.print();
+
+        // Revert back to the original title
+        document.title = currentTitle;
     }
 </script>
 
