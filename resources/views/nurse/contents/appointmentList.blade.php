@@ -155,7 +155,7 @@
 
                 <div class="container-fluid">
                    
-                    <div class="form-group input-group">
+                    <!-- <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Patient :</span>
                         <select class="form-control" style="width:350px;" name="patientid">
                         <option value="">Choose Patient</option>
@@ -163,9 +163,22 @@
                                     <option value="{{ $patient->id }}">{{ $patient->name }}</option>
                                 @endforeach
                             </select>
+                    </div> -->
+                    <div class="form-group input-group">
+                        <input type="text" class="form-control" id="icSearch" style="width:150px;" placeholder="Search Patient IC">
                     </div>
 
-                   
+                    <div class="patient-dropdown" style="display: none;">
+                        <select class="form-control" id="patientDropdown">
+                            @foreach ($patients as $patient)
+                                <option value="{{ $patient->id }}">{{ $patient->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <input type="hidden" id="selectedPatientId" name="patientid" value="">
+                    <br>
+                    
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Doctor ID :</span>
                         <select style="width:350px;" class="form-control" id="doctor" name="docid">
@@ -184,7 +197,7 @@
                                 <option value="{{ $date }}">{{ $date }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> 
 
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Time :</span>
@@ -193,8 +206,6 @@
                          
                         </select>
                     </div>
-
-                        
                 </div>
             </div>
             <div class="modal-footer">
@@ -418,11 +429,69 @@ $('#date').change(function () {
 });
 
 });
-
-    
-
 </script>
 <!--/script to get the doctor schedule -->
+
+<script>
+    $(document).ready(function () {
+        var selecting = false; // Flag to track if the user is actively selecting an option
+
+        $('#icSearch').on('input', function () {
+            var partialIC = $(this).val().trim().toLowerCase();
+            var patientDropdown = $('#patientDropdown');
+
+            // Clear previous options
+            patientDropdown.empty();
+
+            if (partialIC.length > 0) {
+                // Filter patients based on partial IC
+                var matchingPatients = <?php echo json_encode($patients->toArray()); ?>;
+
+                matchingPatients = matchingPatients.filter(function (patient) {
+                    return patient.ic.toLowerCase().startsWith(partialIC);
+                });
+
+                // Display matching patients in the dropdown
+                if (matchingPatients.length > 0) {
+                    for (var i = 0; i < matchingPatients.length; i++) {
+                        var option = '<option value="' + matchingPatients[i].id + '">' +
+                                        matchingPatients[i].name +
+                                     '</option>';
+                        patientDropdown.append(option);
+                    }
+
+                    // Show the dropdown
+                    $('.patient-dropdown').show();
+                    selecting = true; // Enable selecting when dropdown is shown
+
+                    // Automatically select the first suggestion
+                    var selectedId = matchingPatients[0].id;
+                    $('#selectedPatientId').val(selectedId);
+                } else {
+                    // Add "Not Available" option when no matches are found
+                    patientDropdown.append('<option value="Not Available">Not Available</option>');
+                    selecting = false; // Disable selecting when no matches are found
+                }
+            } else {
+                // Hide the dropdown if the search bar is empty
+                $('.patient-dropdown').hide();
+                selecting = false; // Disable selecting when search bar is empty
+            }
+        });
+
+        // Handle selection from the dropdown
+        $('#patientDropdown').mousedown(function () {
+            selecting = true;
+        }).change(function () {
+            if (selecting) {
+                var selectedId = $(this).val();
+                // Set the selected patient ID in the hidden input field
+                $('#selectedPatientId').val(selectedId);
+                selecting = false;
+            }
+        });
+    });
+</script>
 
 @endsection
 
