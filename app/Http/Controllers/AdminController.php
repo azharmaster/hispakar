@@ -409,12 +409,10 @@ class AdminController extends Controller
         ->get();
 
         // Total patient under nurse department 
-        $totalpatient = MedRecord::join('appointment', function ($join) use ($deptid) {
-            $join->on('medrecord.aptid', '=', 'appointment.id')
-                ->where('appointment.deptid', '=', $deptid);
-        })
-        ->distinct('appointment.patientid')
-        ->count('appointment.patientid');
+        $totalpatient = MedPrescription::where('nurseid', $id)
+        ->join('medrecord', 'medrecord.id', '=', 'medprescription.aptid')
+        ->join('patient', 'patient.id', '=', 'medrecord.patientid')
+        ->count('patient.id');
 
         //repair this query
         $totalpatientdetails = MedPrescription::where('nurseid', $id)

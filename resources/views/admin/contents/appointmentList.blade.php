@@ -33,12 +33,12 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="index.html">
+                            <a href="/">
                                 <i class="feather icon-home"></i>
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="doctor.php">Appointments</a>
+                            <a href="#!">Appointments</a>
                         </li>
                     </ul>
                 </div>
