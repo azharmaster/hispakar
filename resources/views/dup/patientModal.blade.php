@@ -63,15 +63,15 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Age :</label>
-                            <input type="float" class="form-control" name="age" id="contact" placeholder="20">
+                            <input type="text" class="form-control" name="age" id="contact" placeholder="20">
                         </div> 
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Weight :</label>
-                            <input type="float" class="form-control" name="weight" id="contact" placeholder="47.5">
+                            <input type="text" class="form-control" name="weight" id="contact" placeholder="47.5">
                         </div> 
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Height :</label>
-                            <input type="float" class="form-control" name="height" id="contact" placeholder="1.77">
+                            <input type="text" class="form-control" name="height" id="contact" placeholder="1.77">
                         </div> 
 
                         <div class="form-group">
@@ -94,7 +94,7 @@
                         </div>
                         <div class="form-group">
                             <label for="name" class="input-group-addon" style="font-weight:bold;">Password :</label>
-                            <input type="password" class="form-control" name="password" id="name" value="1234" readonly>
+                            <input type="password" class="form-control" name="password" id="name" value="12345678" readonly>
                         </div>
                         <input type="hidden" style="width:350px;" class="form-control" name="usertype" value="4">
                         <input type="hidden" style="width:350px;" class="form-control" name="status" value="1">
