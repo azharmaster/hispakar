@@ -1,3 +1,9 @@
+@php
+    $userType = Auth::check() ? Auth::user()->usertype : null;
+@endphp
+
+@extends($userType == 2 ? 'layouts.doctor' : ($userType == 3 ? 'layouts.nurse' : ($userType == 1 ? 'layouts.admin' : '')))
+
 <style>
     /* Height for screens larger than 768px / for full width */
     @media screen and (min-width: 768px) {
