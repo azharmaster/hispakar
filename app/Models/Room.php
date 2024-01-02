@@ -20,4 +20,11 @@ class Room extends Model
     ];
 
     public $timestamps = false;
+
+    // Room.php
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'staff_id');
+    }
+
 }
