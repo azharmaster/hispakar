@@ -71,7 +71,7 @@
                         </div> 
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Height :</label>
-                            <input type="float" class="form-control" name="height" id="contact" placeholder="1.77">
+                            <input type="float" class="form-control" name="height" id="contact" placeholder="170">
                         </div> 
 
                         <div class="form-group">
@@ -155,12 +155,17 @@
                                 <label for="name" class="input-group-addon" style="font-weight:bold;">Date of Birth :</label>
                                 <input type="date" class="form-control" name="dob" id="dob" value="{{ $patient->dob }}">
                             </div>
+
+                            <div class="form-group">
+                                <label for="contact" class="input-group-addon" style="font-weight:bold;">Address :</label>
+                                <input type="text" class="form-control" name="address" id="address" value="{{ $patient->address }}">
+                            </div> 
                         </div>
                         
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="contact" class="input-group-addon" style="font-weight:bold;">Address :</label>
-                                <input type="text" class="form-control" name="address" id="address" value="{{ $patient->address }}">
+                                <label for="contact" class="input-group-addon" style="font-weight:bold;">Age :</label>
+                                <input type="float" class="form-control" name="age" id="contact" value="{{ $patient->age }}">
                             </div> 
                             
                             <div class="form-group">
