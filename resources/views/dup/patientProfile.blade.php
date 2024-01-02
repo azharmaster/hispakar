@@ -2,7 +2,7 @@
     /* Height for screens larger than 768px / for full width */
     @media screen and (min-width: 768px) {
         .doc-pro-left {
-            max-height: 372px;
+            max-height: 500px;
         }
     }
 
@@ -27,7 +27,11 @@
     }
 </style>
 
+
+
 @foreach($patientdetails as $patientdetail)
+
+
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -45,10 +49,17 @@
             <div class="col-lg-4">
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
-                        <li class="breadcrumb-item">
-                            <a href="/admin/dashboard"><i class="feather icon-home"></i></a>
-                        </li>
-                        <li class="breadcrumb-item"><a href="/admin/patientList">Patient Details</a> </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ Auth::user()->usertype == 1 ? '/admin/dashboard' : (Auth::user()->usertype == 3 ? '/nurse/dashboard' : '/doctor/dashboard') }}">
+                            <i class="feather icon-home"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ Auth::user()->usertype == 1 ? '/admin/patientList' : (Auth::user()->usertype == 3 ? '/nurse/patientList' : '/doctor/patientList') }}">
+                            Patient Details
+                        </a>
+                    </li>
+
                     </ul>
                 </div>
             </div>
@@ -68,35 +79,43 @@
 
                                     </button>
                                     
-
-                                    <div class="row">
-
-                                        <div class="col-6 mx-auto d-block col-sm-4">
-                                            <!--profile picture -->
-                                            <div class="parent-container2" style="width: 140px; height: 140px;">
-                                                <div class="pic-holder" style="background-image: url({{ $patientdetail->image ? asset('storage/profilePic/' . $patientdetail->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
-                                                </div>
-                                            </div>
+                                   <div class="d-flex flex-column align-items-center text-center mr-10">
+                                   <div class="parent-container2 mr-10" style="width: 135px; height: 135px; ">
+                                            <div class="pic-holder" style="background-image: url({{ $patientdetail->image ? asset('storage/profilePic/' . $patientdetail->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;"></div>
+                                    </div>                                        
+                                        <div class="mt-3">
+                                        <h4 class="font-weight-bold">{{ $patientdetail->name }}</h4>
+                                            <p class="text-secondary mb-1">{{ $patientdetail->phoneno }}</p>
+                                            <p class="text-muted font-size-sm">{{ $patientdetail->email }}</p>
+                                            <p class="text-muted font-size-sm">{{ $patientdetail->address }}</p>
                                         </div>
-                                        <div class="col-12 col-sm-7 text-center text-sm-left">
-                                            <h3 class="pt-3 mb-2 pt-sm-0 text-uppercase" style="word-wrap: break-word;">{{ $patientdetail->name }}</h3>
-                                            <p><span class="badge badge-warning">{{ $patientdetail->height }} M</span> <span class="badge badge-primary">{{ $patientdetail->weight }} KG</span>
-                                                <span class="badge badge-danger">{{ $patientdetail->bloodtype }} </span>
-                                            </p>
-                                            <hr>
-                                            <h6><i class="fas fa-phone mr-3 text-primary"></i>{{ $patientdetail->phoneno }}</h6>
-                                            <hr>
-                                            <i class="far fa-envelope mr-3 text-primary"></i><span>{{ $patientdetail->email }}</span>
-
-
-                                        </div>
-
                                     </div>
                                     <div class="row">
+                                        
                                         <div class="col-12 text-center text-sm-left">
-                                            <hr>
-                                            <h6 class="font-weight-bold" style="margin-top: px"><i title="experience" class="fas fa-medkit text-primary mr-3"></i>Address</h6>
-                                            <p style="height: 60px; overflow: auto;">{{ $patientdetail->address }} </p>
+                                            
+                                            <ul class="list-group">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                    <h6 class="bg-c-white text-success d-none d-sm-block me-12">
+                                                        <i class="fas fa-ruler-vertical" style="margin-right: 10px;"></i> Height
+                                                    </h6>
+                                                    
+                                                    <span class="text-success">{{ $patientdetail->height }} cm</span>
+                                                </li>
+
+                                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <h6 class="bg-c-white text-primary d-none d-sm-block">
+                                                    <i class="fas fa-weight ml-10" style="margin-right: 4px;"></i> Weight
+                                                </h6>
+                                                    <span class="text-primary" >{{ $patientdetail->weight }} kg</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <h6 class="bg-c-white text-danger d-none d-sm-block">
+                                                    <i class="fas fa-id-card" style="margin-right: 4px;"></i> Blood Type
+                                                </h6>                                                    
+                                                <span class="text-danger">{{ $patientdetail->bloodtype }} </span>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -110,16 +129,14 @@
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col">
-                                                        <h6 class="m-b-20 f-w-600 text-white ">Height
-
-                                                        </h6>
+                                                        <h6 class="m-b-20 f-w-600 text-white ">Past Appointments</h6>
 
                                                         <div class="row d-flex justify-content-between mt-4">
-                                                            <h2 class="f-w-700 text-white ml-3">166</h2>
-                                                            <i class="fas fa-ruler-vertical bg-c-white text-primary d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i>
+                                                            <h2 class="f-w-700 text-white ml-3">{{ $totalPastAppointments  }}</h2>
+                                                            <a type="button" data-toggle="modal" data-target="#addModal-pastappt"><i class="fas fa-file-alt bg-c-white text-primary d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i></a>
                                                         </div>
 
-                                                        <p class="m-b-0 mt-3 text-white">Height Record</p>
+                                                        <p class="m-b-0 mt-3 text-white">Total Past Appointments</p>
 
                                                     </div>
 
@@ -132,7 +149,7 @@
                                 </div>
                                 <!-- ./card -->
 
-                                <div class="col-6">
+                                <div class="col-6" hidden>
                                     <a data-toggle="modal" data-target="#todayAppointmentModal">
                                         <div class="card comp-card bg-c-green doc-pro-right ">
                                             <div class="card-body">
@@ -275,7 +292,7 @@
                         </div>
 
                         <!-- Start Table -->
-                        <div class="col-md-12">
+                        <!-- <div class="col-md-12">
 
 
                             <div class="card table-card history">
@@ -318,8 +335,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- </div> -->
-                        </div>
+                        </div> -->
 
 
                     </div>
@@ -506,26 +522,51 @@
     </div>
 </div>
 <!-- end Add Patient Modal -->
+
+<div class="modal fade" id="addModal-pastappt" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">Past Appointments</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-1" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>Doctor</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($appointments as $appointment)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$appointment->doctor_name}}</td>
+                                    <td>{{ ucfirst($appointment->descs) }}</td>
+                                    <td>{{$appointment->date}} {{$appointment->time}}</td>
+                            </tr>
+                            @endforeach
+
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end Add Patient Modal -->
 @endforeach
 
-
-
-
-
-
-
 @include('doctor.includes.dtScripts')
-
-
-
-
-
-
-
-
-
-
-
 
 <script>
 
@@ -647,10 +688,49 @@ new Chart(ctx3, {
         }
     })
 
-
-
-    
-  
-
-
 </script>
+
+@php
+    $titles = [
+        1 => "Past Appointments",
+    ];
+@endphp
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        @for ($i = 1; $i <= 4; $i++)
+            @if (isset($titles[$i]))
+                var title = "{{ $titles[$i] }}";
+
+                var table = $('#dataTable-{{ $i }}').DataTable({
+                    responsive: true,
+                    autoWidth: true,
+                    "dom": 'Bfrtip',
+                    "buttons": [
+                        {
+                            extend: 'print',
+                            title: title,
+                            customize: function(win) {
+                                $(win.document.body).find('h1').css('text-align', 'center');
+                                $(win.document.body).find('h1').css('margin', '50px 0');
+                                $(win.document.body).find('h1').css('font-size', '30px');
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            title: title
+                        },
+                        {
+                            extend: 'excel',
+                            title: title
+                        },
+                    ],
+                });
+
+                table.buttons().container().appendTo('#breezeBasicTable .row.col-md-6:eq(0)');
+            @endif
+        @endfor
+    });
+</script>
+
+

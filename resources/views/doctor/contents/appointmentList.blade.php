@@ -170,20 +170,14 @@
                     </div> -->
 
                     <div class="form-group input-group">
-                        <input type="text" class="form-control" id="icSearch" style="width:150px;" placeholder="Search Patient IC">
+                    <span class="input-group-addon" style="width:150px;">Patient ID :</span>
+                    <select class="js-example-data-array" id="patientDropdown" style="width:450px;" name="patientid">
+                        <option value="0" disabled selected>Search Patient IC</option>
+                        @foreach ($patients as $patient)
+                            <option value="{{ $patient->id }}">{{ $patient->name }} - {{ $patient->ic }}</option>
+                        @endforeach
+                    </select>
                     </div>
-
-                    <div class="patient-dropdown" style="display: none;">
-                        <select class="form-control" id="patientDropdown">
-                            @foreach ($patients as $patient)
-                                <option value="{{ $patient->id }}">{{ $patient->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <input type="hidden" id="selectedPatientId" name="patientid" value="">
-
-                    <br>
 
                     <!-- <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Doctor :</span>

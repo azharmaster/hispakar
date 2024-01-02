@@ -43,3 +43,7 @@
 <script type="text/javascript" src="{{ asset('files/assets/js/script-1.js') }}"></script>
 
 <script type="text/javascript" src="{{ asset('files/assets/printScript.js') }}"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
