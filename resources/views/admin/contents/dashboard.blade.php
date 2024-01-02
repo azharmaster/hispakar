@@ -31,7 +31,7 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="index.html"><i class="feather icon-home"></i></a>
+                            <a href="/admin/dashboard"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item"><a href="#!">Dashboard</a> </li>
                     </ul>
@@ -166,7 +166,7 @@
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-10">
                                         <div class="col">
-                                            <h6 class="m-b-5">Appoiments</h6>
+                                            <h6 class="m-b-5">Appointments</h6>
                                             <h2 class="m-b-0 f-w-700 mt-2">{{$totalapt}}</h2>
                                         </div>
                                         <div class="col-auto">

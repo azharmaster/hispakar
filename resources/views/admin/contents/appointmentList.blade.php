@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
@@ -58,13 +58,13 @@
                                 <div class="card-header">
                                 <h5 id="tableTitle" >List of Appointments</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
-                                    <!-- <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor"> 
+                                    <!-- <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
                                         <i class="fas fa-solid fa-plus"></i>
                                             Add
                                     </button>-->
                                 </div>
                                 <div class="card-block">
-                                
+
                                     <div class="dt-responsive table-responsive">
                                         <table id="dataTable1" class="table table-bordered">
                                             <thead>
@@ -99,7 +99,7 @@
                                                             @if ($appointment->status === 0) Pending
                                                             @elseif ($appointment->status === 1) Confirm
                                                             @elseif ($appointment->status === 2) Reject
-                                                            @else cancel  
+                                                            @else cancel
                                                             @endif
                                                             </td>
                                                              <td>
@@ -124,7 +124,7 @@
                                                         </tr>
                                                     @endforeach
                                             @endif
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -180,17 +180,17 @@
                             <option value="0" disabled selected>Choose Doctor</option>
                             @foreach ($doctors as $doctor)
                             <option value="{{ $doctor->id }}" {{ ( $doctor->id == $appointment->docid) ? 'selected' : '' }}> {{ $doctor->name }} </option>
-                            @endforeach   
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Department ID :</span>
-                       
+
                         <select style="width:350px;" class="form-control" name="deptid">
                         <option>Select Department</option>
                         @foreach ($departments as $department)
                             <option value="{{ $department->id }}" {{ ( $department->id == $appointment->deptid) ? 'selected' : '' }}> {{ $department->name }} </option>
-                        @endforeach   
+                        @endforeach
                      </select>
                     </div>
                     <div class="form-group input-group">
@@ -201,8 +201,8 @@
                         <span class="input-group-addon" style="width:150px;">Time :</span>
                         <input type="time" style="width:350px;" class="form-control" name="time" id="time" value="{{ $appointment->time }}">
                     </div>
-                    
-                        
+
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -315,4 +315,3 @@
 </script>
 
 @endsection
-

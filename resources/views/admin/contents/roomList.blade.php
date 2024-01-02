@@ -24,9 +24,9 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="../admin/index.php"><i class="feather icon-home"></i></a>
+                            <a href="/admin/dashboard"><i class="feather icon-home"></i></a>
                         </li>
-                        <li class="breadcrumb-item"><a href="../admin/roomList.php">Rooms</a> </li>
+                        <li class="breadcrumb-item"><a href="#">Rooms</a> </li>
                     </ul>
                 </div>
             </div>

@@ -27,7 +27,7 @@
             <li class="breadcrumb-item">
               <a href="/admin/dashboard"><i class="feather icon-home"></i></a>
             </li>
-            <li class="breadcrumb-item"><a href="/admin/profile">Profile</a> </li>
+            <li class="breadcrumb-item"><a href="#">Profile</a> </li>
           </ul>
         </div>
       </div>
