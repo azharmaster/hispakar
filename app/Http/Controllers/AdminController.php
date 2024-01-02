@@ -556,6 +556,12 @@ class AdminController extends Controller
         ->where('patient.id', $id )
         ->get();
 
+        $totalPastAppointments = MedRecord::join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
+        ->where('appointment.patientid', $id)
+        ->whereDate('appointment.date', '<', now()) // Filter past appointments based on the current date
+        ->count('appointment.id');
+
         /////////////////////////////
 
 
@@ -584,7 +590,7 @@ class AdminController extends Controller
         /////////////////////////////
 
 
-        return view('admin.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData'));
+        return view('admin.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData', 'totalPastAppointments'));
        
     }
 
@@ -650,6 +656,24 @@ class AdminController extends Controller
         }
 
         return view('admin.contents.patientList', compact('patients'));
+    }
+
+    public function viewPatientMonitor()
+    {
+        $patients = Patient::all();
+
+        // Calculate total patients
+        $totalPatients = $patients->count();
+
+        // Calculate average age of patients
+        $totalAge = $patients->sum('age');
+        $averageAge = $totalPatients > 0 ? $totalAge / $totalPatients : 0;
+
+        // Calculate average gender
+        $genderCounts = $patients->groupBy('gender')->map->count();
+        $mostCommonGender = $genderCounts->sortDesc()->keys()->first();
+
+        return view('admin.contents.patientMonitor', compact('patients', 'totalPatients', 'averageAge', 'mostCommonGender'));
     }
 
     public function viewRoomList()

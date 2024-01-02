@@ -210,7 +210,7 @@ class NurseController extends Controller
         $aptDs = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
         ->join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
-        ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.status', 'attendance.reason') // Include the 'reason' column in the select
+        ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.status', 'attendance.reason', 'attendance.queueid') // Include the 'reason' column in the select
         ->where('appointment.deptid', $nurse->deptid)
         ->whereDate('appointment.date', $currentDate) 
         ->orderBy('appointment.time', 'asc')
@@ -284,11 +284,108 @@ class NurseController extends Controller
         return view('nurse.contents.patientList', compact('patients'));
     }
 
+    public function viewPatientProfile($id) //profile doctor
+    {
+
+        $patientdetails = Patient::where('patient.id', $id)
+        ->join('users', 'users.email', '=', 'patient.email')
+        ->get();
+
+        $totaloperation = MedRecord::where('patientid', $id)
+        ->count('patientid');
+
+        $totalapt = Appointments::where('patientid', $id)
+        ->where('status', 1)
+        ->count('id');
+
+        $doctors = MedRecord::where('patientid', $id)
+        ->select(DB::raw('(SELECT name FROM doctor WHERE id = docid) as doctor'))
+        ->distinct()
+        ->get();
+
+        $listmedicines = Medicine::select('medicine.*')
+        ->join('medprescription', 'medicine.id', '=', 'medprescription.medicineid')
+        ->where('medprescription.patientid', '=', $id)
+        ->distinct()
+        ->get();
+
+
+        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
+        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'doctor.name as doctor_name', 'medrecord.desc as descs')
+        ->where('patient.id', $id )
+        ->get();
+
+        $totalPastAppointments = MedRecord::join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
+        ->where('appointment.patientid', $id)
+        ->whereDate('appointment.date', '<', now()) // Filter past appointments based on the current date
+        ->count('appointment.id');
+
+        /////////////////////////////
+
+
+        $currentDate = Carbon::now();
+        $labels = [];
+        // $maleData = [];
+        // $femaleData = [];
+
+        for ($i = 0; $i < 5; $i++) {
+            $month = $currentDate->format('M');
+            $labels[] = $month;
+
+
+            $heartrateData[] = 70+$i;
+ 
+
+            $currentDate->subMonth(); // Use subMonth() to move back in time
+        }
+
+      
+
+        // Reverse the order of the arrays
+        $labels = array_reverse($labels);
+        $heartrateData = array_reverse($heartrateData);
+
+        /////////////////////////////
+
+
+        return view('nurse.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData', 'totalPastAppointments'));
+       
+    }
+
+
+    public function viewPatientMonitor()
+    {
+        $patients = Patient::all();
+
+        // Calculate total patients
+        $totalPatients = $patients->count();
+
+        // Calculate average age of patients
+        $totalAge = $patients->sum('age');
+        $averageAge = $totalPatients > 0 ? $totalAge / $totalPatients : 0;
+
+        // Calculate average gender
+        $genderCounts = $patients->groupBy('gender')->map->count();
+        $mostCommonGender = $genderCounts->sortDesc()->keys()->first();
+
+        return view('nurse.contents.patientMonitor', compact('patients', 'totalPatients', 'averageAge', 'mostCommonGender'));
+    }
+
     public function viewRoomList()
     {
+        // Get the nurse information from the session
+        $nurse = Nurse::where('email', Auth::user()->email)->first();
+
         $rooms = Room::all(); // Retrieve all rooms from the database
 
-        return view('nurse.contents.roomList', compact('rooms'));
+        // Retrieve deptid from the nurse model
+        $deptId = $nurse->deptid;
+
+        $doctors = Doctor::where('deptid', $deptId)->get();
+        return view('nurse.contents.roomList', compact('rooms', 'doctors'));
     }
 
     public function viewMedicineList()
@@ -486,6 +583,55 @@ class NurseController extends Controller
         return view('nurse.contents.appointmentList', compact('nurse', 'appointments', 'doctors', 'patients', 'departments', 'currentDate', 'doctorSchedule'));
     }
 
+    public function viewAppointmentListDate(Request $request, $date)
+    {
+        // Convert the selected date to a Carbon instance for comparison
+        $chooseDate = Carbon::parse($date);
+
+        $nurse = Nurse::where('email', Auth::user()->email)->first();
+
+        // Get the current date
+        $currentDate = Carbon::now('Asia/Kuala_Lumpur')->toDateString();
+
+        // Get the doctor's schedule for the current week
+        $startOfWeek = Carbon::now('Asia/Kuala_Lumpur')->startOfWeek();
+        $endOfWeek = Carbon::now('Asia/Kuala_Lumpur')->endOfWeek();
+
+        $doctorSchedule = DocSchedule::where('docid', 0)
+            ->whereBetween('date', [$startOfWeek, $endOfWeek])
+            ->pluck('date')
+            ->toArray();
+
+        // Get the selected date from the request, or set it to the first available date if not provided
+        $selectedDate = $request->input('date', reset($doctorSchedule));
+
+        // Set the fixed time slots from 8:00 AM to 5:00 PM with 30-minute intervals
+        $start = Carbon::parse('8:00 AM');
+        $end = Carbon::parse('5:00 PM');
+        $timeSlots = [];
+
+        while ($start < $end) {
+            $timeSlots[] = $start->format('g:i A') . ' - ' . $start->addMinutes(30)->format('g:i A');
+        }
+
+        // To join tables and retrieve the appointment list based on the nurse's department and selected date
+        $appointments = Appointments::leftJoin('medrecord', 'medrecord.aptid', '=', 'appointment.id')
+            ->join('patient', 'appointment.patientid', '=', 'patient.id')
+            ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+            ->join('department', 'appointment.deptid', '=', 'department.id')
+            ->select('appointment.*', 'patient.name as patient_name', 'patient.ic as patient_ic', 'doctor.name as doctor_name', 'department.name as dept_name', 'medrecord.status as medrecord_status')
+            ->where('appointment.deptid', $nurse->deptid)
+            ->whereDate('appointment.date', $chooseDate)
+            ->orderBy('appointment.time', 'asc')
+            ->get();
+
+        $doctors = Doctor::where('doctor.deptid', $nurse->deptid)->get();
+        $patients = Patient::all();
+        $departments = Department::all();
+
+        return view('nurse.contents.appointmentList', compact('nurse', 'appointments', 'doctors', 'patients', 'departments', 'currentDate', 'doctorSchedule', 'timeSlots', 'selectedDate'));
+    }
+
     public function getDateSlots($selectedDoctor = 0)
     {
         $startOfWeek = Carbon::now('Asia/Kuala_Lumpur')->startOfWeek();
@@ -547,8 +693,6 @@ class NurseController extends Controller
     
         return response()->json($timeSlots);
     }
-    
-    
 
     public function EditProfile(Request $request, $id)
     {
@@ -769,7 +913,7 @@ class NurseController extends Controller
         $room->name = $request->name;
         $room->type = $request->type;
         $room->desc = $request->desc;
-        $room->staff_id = $request->staff_id;
+        $room->staff_id = $request->docid;
         $room->status = $request->status;
         $room->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $room->save();
@@ -786,7 +930,7 @@ class NurseController extends Controller
         $room->type = $request->input('type');
         $room->desc = $request->input('desc'); 
         $room->status = $request->input('status');
-        $room->staff_id = $request->input('staff_id');
+        $room->staff_id = $request->input('docid');
         $room->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $room->save();
 
@@ -975,6 +1119,16 @@ class NurseController extends Controller
             $attendance->aptid = $appointment_id;
             $attendance->status = $status;
             $attendance->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+
+            // Determine the starting point for queueid
+            $startingQueueId = 1000;
+
+            // Get the maximum existing queueid in the Attendance table
+            $maxQueueId = Attendance::max('queueid');
+
+            // If no records exist, set the initial value to 1000, otherwise increment the maximum value
+            $attendance->queueid = $maxQueueId ? $maxQueueId + 1 : $startingQueueId;
+
             $attendance->save();
         }
 

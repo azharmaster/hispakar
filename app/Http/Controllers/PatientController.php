@@ -46,7 +46,21 @@ class PatientController extends Controller
         }else{
             $countdownDate = Carbon::parse($countdown->date . ' ' . $countdown->time)->format('Y-m-d H:i:s');
         }
+        
+        $todayDate = Carbon::now()->format('Y-m-d');
 
+        
+
+        $aptDs = Appointments::leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
+        ->join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->join('room', 'doctor.id', '=', 'room.staff_id') 
+        ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.queueid', 'room.name as room_name' ) 
+        ->where('patient.email', $email)
+        ->whereDate('appointment.date', $todayDate)
+        ->get();
+        
+    
         $aptlatests =  Appointments::join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->join('department', 'appointment.deptid', '=', 'department.id')
         ->join('patient', 'appointment.patientid', '=', 'patient.id')
@@ -60,7 +74,8 @@ class PatientController extends Controller
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
         ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
-        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'medservice.type as type_service', 'doctor.name as doctor_name', 'medrecord.desc as descs')
+        ->leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
+        ->select('appointment.*', 'attendance.queueid', 'patient.id as patient_id','patient.name as patient_name', 'medservice.type as type_service', 'doctor.name as doctor_name', 'medrecord.desc as descs')
         ->where('patient.email', $email )
         ->get();
 
@@ -228,7 +243,7 @@ class PatientController extends Controller
         ///////////////////////////
 
         return view('patient.contents.dashboard', compact('name','aptlatests','countdownDate','appointments','listmedicines',
-        'detailpatients','listDoctors','notify','calendarEvents','calendarEvents', 'labels', 'heartrateData'));
+        'detailpatients','listDoctors','notify','calendarEvents','calendarEvents', 'labels', 'heartrateData', 'aptDs'));
     }
 
     public function viewAppointmentList()
