@@ -44,6 +44,8 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::get('/admin/medrecord', [AdminController::class, 'viewMedRecord']);
     Route::get('/admin/appointmentList/{date}', [AdminController::class, 'viewAppointmentListDate'])->name('admin.appointmentList');
 
+    Route::get('/admin/patientMonitor', [AdminController::class, 'viewPatientMonitor']);
+
     //Report
     Route::get('/admin/report/{medrc_id}', [AdminController::class, 'viewReport']);
 
@@ -111,6 +113,10 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     Route::get('/doctor/scheduleList', [DoctorController::class, 'viewSchedule']);
     Route::get('/doctor/appointmentList/{date}', [DoctorController::class, 'viewAppointmentListDate'])->name('doctor.appointmentList');
     Route::get('/doctor/medrecord', [DoctorController::class, 'viewMedRecord']);
+    Route::get('/doctor/patientProfile/{id}', [DoctorController::class, 'viewPatientProfile']);
+
+    Route::get('/doctor/patientMonitor', [DoctorController::class, 'viewPatientMonitor']);
+
 
     //Manage profile
     Route::post('/doctor/profile/{id}', [DoctorController::class, 'EditProfile']);
@@ -168,6 +174,11 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::get('/nurse/paymentList', [NurseController::class, 'viewPaymentList']);
     Route::get('/nurse/medicineList', [NurseController::class, 'viewMedicineList']);
     Route::get('/nurse/appointmentList/{date}', [NurseController::class, 'viewAppointmentListDate'])->name('nurse.appointmentList');
+
+    Route::get('/nurse/patientMonitor', [NurseController::class, 'viewPatientMonitor']);
+
+    Route::get('/nurse/patientProfile/{id}', [NurseController::class, 'viewPatientProfile']);
+
 
     //Invoice
     Route::post('/nurse/paymentList/{id}', [NurseController::class, 'EditPayment']);
@@ -231,4 +242,4 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
 
 });
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('patient.contents.dashboard');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
