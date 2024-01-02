@@ -22,7 +22,7 @@
   @else
   <div class="navbar-wrapper">
     <div class="navbar-logo">
-      <a href="{{ url('index.php') }}">
+      <a href="{{ url('nurse/dashboard') }}">
         <img class="img-fluid" src="{{ asset('files/assets/images/pakar3.png') }}" width="150px" alt="Theme-Logo">
       </a>
       <a class="mobile-menu" id="mobile-collapse" href="#!">

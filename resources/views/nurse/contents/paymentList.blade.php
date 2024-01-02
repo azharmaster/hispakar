@@ -90,7 +90,7 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $medrc->refnum }}</td>
                                                         <td>
-                                                            {{ $medrc->patient->name }}aisyah binti zakaria<br>
+                                                            {{ $medrc->patient->name }}<br>
                                                             {{ $medrc->patient->ic }}<br>
                                                         
                                                         </td>
