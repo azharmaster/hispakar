@@ -17,6 +17,7 @@ class Attendance extends Model
         'docid',
         'patientid',
         'status',
+        'queueid',
     ];
 
     public $timestamps = false;
