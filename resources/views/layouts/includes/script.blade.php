@@ -1,9 +1,14 @@
 <!---- common script ------>
-<script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min-1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script data-cfasync="false" src="{{ asset('cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min-1.js') }}"></script>
+<script type="text/javascript" src="{{ asset('files/assets/js/script.min-1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('files/bower_components/jquery/js/jquery.min-1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('files/bower_components/jquery-ui/js/jquery-ui.min-1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('files/bower_components/popper.js/js/popper.min-1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('files/bower_components/bootstrap/js/bootstrap.min-1.js') }}"></script>
+<script type="text/javascript" src="{{ asset('files/bower_components/select2/js/select2.full.min-1.js') }}"></script>
+
 
 <script src="{{ asset('files/assets/pages/waves/js/waves.min-1.js') }}"></script>
 
@@ -20,12 +25,13 @@
 <script src="{{ asset('files/assets/pages/widget/amchart/serial-1.js') }}"></script>
 <script src="{{ asset('files/assets/pages/widget/amchart/light-1.js') }}"></script>
 
+<script type="text/javascript" src="{{ asset('files/assets/js/script-1.js') }}"></script>
+<script type="text/javascript" src="{{ asset('files/assets/pages/advance-elements/select2-custom-1.js') }}"></script>
+
 <script src="{{ asset('files/assets/js/pcoded.min-1.js') }}"></script>
 <script src="{{ asset('files/assets/js/vertical/vertical-layout.min-1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('files/assets/pages/dashboard/custom-dashboard.min-1.js') }}"></script>
-<script type="text/javascript" src="{{ asset('files/assets/js/script.min-1.js') }}"></script>
 
-<script type="text/javascript" src="../files/assets/js/script-1.js"></script>
 
 <!--scripts from dtScripts -->
 <script src="{{ asset('files/bower_components/datatables.net/js/jquery.dataTables.min-1.js') }}"></script>

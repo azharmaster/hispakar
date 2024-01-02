@@ -3,6 +3,9 @@
 
 <head>
     <title>PAKAR HIS | Admin</title>
+    <link rel="stylesheet" href="{{ asset('files/bower_components/select2/css/select2.min-1.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('files/assets/css/style-1.css') }}">
+
     @include('layouts.includes.head')
 </head>
 

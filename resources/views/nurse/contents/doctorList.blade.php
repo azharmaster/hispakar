@@ -71,7 +71,7 @@
                                                         <td>{{ $doctor->phoneno }}</td>
                                                         <td>{{ $doctor->email }}</td>
                                                         <td>{{ $doctor->specialization }}</td>
-                                                        <td>{{ $doctor->gender}}</td>
+                                                        <td>{{ ucfirst($doctor->gender)}}</td>
                                                     </tr>
                                                     @endforeach
                                                 @endif
