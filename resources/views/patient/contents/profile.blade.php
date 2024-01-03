@@ -53,7 +53,10 @@
                 <h4 class="profile-username text-center text-uppercase">{{$name}}</h4>
                 
                 @foreach($detailpatients as $detailpatient)
-                <p class="text-muted text-center"><span class="badge data-badge weight-badge">{{$detailpatient->weight}} KG</span> <span class="badge data-badge height-badge">{{$detailpatient->height}} CM</span></p>
+                <p class="text-muted text-center">
+                  <span class="badge data-badge weight-badge">{{$detailpatient->weight}} KG</span> 
+                  <span class="badge data-badge height-badge">{{$detailpatient->height}} CM</span>
+                </p>
                 <p class="text-muted text-center"><span class="badge data-badge blood-badge">{{$detailpatient->bloodtype}}</span></p>
                 <a data-toggle="modal" title="Edit Profile" href="#edit-profile" class="btn btn-mat waves-effect waves-light btn-info mx-auto"><i class="fas fa-pencil-alt"></i>&nbsp;<b>Edit Profile</b></a>
                 @endforeach
