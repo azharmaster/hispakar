@@ -1014,8 +1014,32 @@ class DoctorController extends Controller
         $timeRange = $request->time;
         $timeParts = explode(' - ', $timeRange);
         $startDateTime = date('Y-m-d H:i:s', strtotime($timeParts[0]));
+        $endTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
+    
+
+        
         // If you need to use the end time as well, you can convert it in a similar way.
         // $endDateTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
+
+        // Check for overlapping appointments
+        $overlappingAppointments = Appointments::where('docid', $doctor->id)
+            ->where('date', $request->date)
+            ->where(function ($query) use ($startDateTime, $endTime) {
+                $query->where(function ($query) use ($startDateTime, $endTime) {
+                    $query->where('time', '>=', $startDateTime)
+                        ->where('time', '<', $endTime);
+                })
+                ->orWhere(function ($query) use ($startDateTime, $endTime) {
+                    $query->where('time', '<=', $startDateTime)
+                        ->where('time', '>=', $endTime);
+                });
+            })
+            ->count();
+
+        if ($overlappingAppointments) {
+            return redirect('/doctor/appointmentList')
+                ->with('error', 'The selected time slot is already booked. Please choose another time.');
+        }
 
         $appointment->time = $startDateTime;
         $appointment->status = 1;
