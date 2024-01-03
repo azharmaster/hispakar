@@ -31,6 +31,11 @@
         border-bottom: none;
         border-top: none;
     }
+
+    .list-group-no-border .list-group-item {
+        border: none;
+    }
+
 </style>
 
 
@@ -79,7 +84,7 @@
                     <div class="row">
                         <div class="col-12 col-sm-6">
                             <div class="card doc-pro-left">
-                                <div class="card-block">
+                                <div class="card-block" style="margin-left: 30px;">
                                     <button type="button" class="btn btn-mat waves-effect waves-light  d-block mx-auto float-right" data-toggle="modal" data-target="#addModal-patient" title="Add Doctor">
                                         <i class="fas fa-cog"></i>
 
@@ -90,40 +95,68 @@
                                             <div class="pic-holder" style="background-image: url({{ $patientdetail->image ? asset('storage/profilePic/' . $patientdetail->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;"></div>
                                     </div>                                        
                                         <div class="mt-3">
-                                        <h4 class="font-weight-bold">{{ $patientdetail->name }}</h4>
+                                        <h4 class="font-weight-bold" style="margin-left: 5px;">{{ $patientdetail->name }}</h4>
                                             <p class="text-secondary mb-1">{{ $patientdetail->phoneno }}</p>
                                             <p class="text-muted font-size-sm">{{ $patientdetail->email }}</p>
                                             <p class="text-muted font-size-sm">{{ $patientdetail->address }}</p>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        
-                                        <div class="col-12 text-center text-sm-left">
-                                            
-                                            <ul class="list-group">
+                                        <div class="col-12 text-center text-sm-left" style="margin-left: 3px;">
+                                            <ul class="list-group list-group-no-border list-group-horizontal">
                                                 <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="bg-c-white text-success d-none d-sm-block me-12">
-                                                        <i class="fas fa-ruler-vertical" style="margin-right: 10px;"></i> Height
+                                                        <i class="fas fa-ruler-vertical" style="margin-right: 4px;"></i>
+                                                        <span class="badge data-badge height-badge">{{$patientdetail->height}} cm</span>
                                                     </h6>
-                                                    
-                                                    <span class="text-success">{{ $patientdetail->height }} cm</span>
                                                 </li>
 
-                                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                                <h6 class="bg-c-white text-primary d-none d-sm-block">
-                                                    <i class="fas fa-weight ml-10" style="margin-right: 4px;"></i> Weight
-                                                </h6>
-                                                    <span class="text-primary" >{{ $patientdetail->weight }} kg</span>
+                                                <li class="list-group-item justify-content-between align-items-center">
+                                                    <h6 class="bg-c-white text-primary d-none d-sm-block">
+                                                        <i class="fas fa-weight mb-10" style="margin-right: 4px;"></i>
+                                                        <span class="badge data-badge weight-badge">{{$patientdetail->weight}} kg</span> 
+                                                    </h6>
                                                 </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                                <h6 class="bg-c-white text-danger d-none d-sm-block">
-                                                    <i class="fas fa-id-card" style="margin-right: 4px;"></i> Blood Type
-                                                </h6>                                                    
-                                                <span class="text-danger">{{ $patientdetail->bloodtype }} </span>
+
+                                                <li class="list-group-item justify-content-between align-items-center">
+                                                    <h6 class="bg-c-white text-danger d-none d-sm-block">
+                                                        <i class="fas fa-id-card" style="margin-right: 4px;"></i>                
+                                                        <span class="text-muted text-center"><span class="badge data-badge blood-badge">{{$patientdetail->bloodtype}}</span>
+                                                    </h6>                                                    
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-12 text-center text-sm-left" style="margin-right: 10px; margin-left: -10px;">
+                                            <ul class="list-group list-group-no-border list-group-horizontal">
+
+                                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                    <h6 class="bg-c-white text-info d-none d-sm-block me-12">
+                                                        <i class="fas fa-heartbeat"  style="margin-right: 4px;"></i>
+                                                        <span class="badge data-badge bpm-badge">90 bpm</span>
+                                                    </h6>
+                                                </li>
+
+                                                <li class="list-group-item justify-content-between align-items-center">
+                                                    <h6 class="bg-c-white sptext-badge d-none d-sm-block">
+                                                        <i class="fas fa-thumbs-up mb-10" style="margin-right: 4px;"></i>
+                                                        <span class="badge data-badge sp-badge">90 Sp02</span> 
+                                                    </h6>
+                                                </li>
+
+                                                <li class="list-group-item justify-content-between align-items-center">
+                                                    <h6 class="bg-c-white stresstext-badge d-none d-sm-block">
+                                                        <i class="fas fa-heart mb-10" style="margin-right: 4px;"></i>
+                                                        <span class="badge data-badge stress-badge">Low</span> 
+                                                    </h6>
+                                                </li>
+
+                                            
+                                            </ul>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -213,18 +246,69 @@
 
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#nextaptModal">
-                                        <div class="card comp-card doc-pro-right">
+                                        <div class="card comp-card doc-pro-right" style="height:223px">
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+
+                                                    <div class="col">
+                                                        <h6 class="m-b-20 f-w-600">Doctor In-Charge</h6>
+
+                                                        <div class="d-flex flex-row justify-content-between mt-4">
+                                                            <div class="row d-flex align-items-center">
+                                                            @foreach ($doctorNames as $doctorName)
+
+                                                                <h2 class="f-w-700 text-success ml-3" style="font-size: 20px; max-height: 80px;">{{$doctorName}}</h2>
+                                                                @endforeach
+
+                                                            </div>
+                                                            <div class="d-flex align-items-center">
+                                                                <i class="fas fa-user-md bg-c-green d-none d-sm-block" style="margin-top: -8px; margin-left: 30px;"></i>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <p class="m-b-0 mt-3" style="margin-top: 50px;">Appointed Doctor</p>
+
+                                                    </div>
+
+                                                    <div class="col-auto">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                </div>
+
+
+                                <div class="col-6">
+                                    <a data-toggle="modal" data-target="#totalpatientModal">
+                                        <div class="card comp-card bg-c-blue doc-pro-right"  style="height:223px">
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col">
-                                                        <h6 class="m-b-20 f-w-600">Sp02</h6>
+                                                        <h6 class="m-b-20 f-w-600 text-white ">Medical Service</h6>
 
-                                                        <div class="row d-flex justify-content-between mt-4">
-                                                            <h2 class="f-w-700 text-success ml-3">99</h2>
-                                                            <i class="fas fa-thumbs-up bg-c-green d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i>
+                                                
+
+                                                        <div class="d-flex flex-row justify-content-between mt-4">
+                                                            <div class="row d-flex align-items-center">
+                                                            @if ($medRecords)
+
+                                                            <h2 class="f-w-700 text-white ml-3" style="font-size: 20px; max-height: 80px;">{{ optional($medRecords->medservice)->type }}</h2>
+                                                            
+                                                            @else
+                                                                <p>N/A</p>
+                                                            @endif
+
+                                                            </div>
+
+                                                            <div class="d-flex align-items-center">
+                                                                <i class="fas fa-hand-holding-medical bg-c-white text-primary d-none d-sm-block" style="margin-top: -8px; margin-left: 80px;"></i>
+                                                            </div>
                                                         </div>
-
-                                                        <p class="m-b-0 mt-3">Sp02 Record</p>
+                                                        <p class="m-b-0 mt-3 text-white">Previous Medical Service</p>
 
                                                     </div>
 
@@ -235,6 +319,7 @@
                                         </div>
                                     </a>
                                 </div>
+
                                 <!-- ./card -->
 
                             </div>
@@ -285,7 +370,7 @@
                         <!--chart -->
 
                         <div class="col-md-12 col-xl-6">
-                            <div class="card sale-card">
+                            <div class="card sale-card" style="height:390px;">
                                 <div class="card-header">
                                     <h5>Operations per Month</h5>
                                 </div>
@@ -298,7 +383,7 @@
                         </div>
 
                         <!-- Start Table -->
-                        <!-- <div class="col-md-12">
+                        <div class="col-md-12">
 
 
                             <div class="card table-card history">
@@ -341,7 +426,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
 
                     </div>
