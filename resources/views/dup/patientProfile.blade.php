@@ -164,7 +164,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#totalpatientModal">
-                                        <div class="card comp-card bg-c-blue doc-pro-right">
+                                        <div class="card comp-card bg-c-blue doc-pro-right" style="height:190px">
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col">
@@ -215,7 +215,7 @@
                                 <!-- ./card -->
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#medicalrecordModal">
-                                        <div class="card comp-card bg-c-green doc-pro-right">
+                                        <div class="card comp-card bg-c-green doc-pro-right" style="height:190px">
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col">
@@ -246,7 +246,7 @@
 
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#nextaptModal">
-                                        <div class="card comp-card doc-pro-right" style="height:223px">
+                                        <div class="card comp-card doc-pro-right" style="height:203px;">
                                             <div class="card-body">
                                                 <div class="row align-items-center">
 
@@ -282,33 +282,32 @@
                                 </div>
 
 
-                                <div class="col-6">
-                                    <a data-toggle="modal" data-target="#totalpatientModal">
-                                        <div class="card comp-card bg-c-blue doc-pro-right"  style="height:223px">
+                                <div class="col-6" >
+                                    <a data-toggle="modal" data-target="#todayAppointmentModal">
+                                        <div class="card comp-card bg-c-blue doc-pro-right " style="height:203px;">
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col">
-                                                        <h6 class="m-b-20 f-w-600 text-white ">Medical Service</h6>
+                                                        <h6 class="m-b-20 f-w-600 text-white">Medical Service</h6>
 
-                                                
-
-                                                        <div class="d-flex flex-row justify-content-between mt-4">
-                                                            <div class="row d-flex align-items-center">
-                                                            @if ($medRecords)
-
-                                                            <h2 class="f-w-700 text-white ml-3" style="font-size: 20px; max-height: 80px;">{{ optional($medRecords->medservice)->type }}</h2>
-                                                            
-                                                            @else
-                                                                <p>N/A</p>
-                                                            @endif
-
+                                                        <div class="row d-flex justify-content-between mt-4">
+                                                        <div class="row d-flex align-items-center">
+                                                            <div class="col-9">
+                                                                @if ($medRecords)
+                                                                    <h2 class="f-w-700 text-white ml-3" style="font-size: 18px; max-height: 80px; margin-bottom: 0;">
+                                                                        {{ optional($medRecords->medservice)->type }}
+                                                                    </h2>
+                                                                @else
+                                                                    <h2 class="f-w-700 text-white ml-3">N/A</h2>
+                                                                @endif
                                                             </div>
-
-                                                            <div class="d-flex align-items-center">
-                                                                <i class="fas fa-hand-holding-medical bg-c-white text-primary d-none d-sm-block" style="margin-top: -8px; margin-left: 80px;"></i>
+                                                            <div class="col-3 text-right">
+                                                                <i class="fas fa-hand-holding-medical bg-c-white text-primary d-none d-sm-block" style="margin-top: 10px; margin-right: 100px;"></i>
                                                             </div>
                                                         </div>
-                                                        <p class="m-b-0 mt-3 text-white">Previous Medical Service</p>
+                                                        </div>
+
+                                                        <p class="m-b-0 mt-3 text-white">Previous Medical Record</p>
 
                                                     </div>
 
