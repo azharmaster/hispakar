@@ -128,19 +128,22 @@
       color: #fff;
     }
     .bpm-badge {
-      background-color: #17a2b8;
+      font-family:Arial, Helvetica, sans-serif;
+
       color: #fff;
     }
     .sp-badge {
-      background-color: #20c997;
       color: #fff;
+      font-family:Arial, Helvetica, sans-serif;
     }
     .sptext-badge {
       color: #20c997;
     }
     .stress-badge {
-      background-color: #4979a9;
-      color: #fff;    }
+      color: #fff;    
+      font-family:Arial, Helvetica, sans-serif;
+
+    }
     .stresstext-badge {
       color: #4979a9;
     }

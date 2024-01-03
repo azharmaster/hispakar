@@ -133,22 +133,16 @@
 
                                                 <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="bg-c-white text-info d-none d-sm-block me-12">
-                                                        <i class="fas fa-heartbeat"  style="margin-right: 4px;"></i>
-                                                        <span class="badge data-badge bpm-badge">90 bpm</span>
                                                     </h6>
                                                 </li>
 
                                                 <li class="list-group-item justify-content-between align-items-center">
                                                     <h6 class="bg-c-white sptext-badge d-none d-sm-block">
-                                                        <i class="fas fa-thumbs-up mb-10" style="margin-right: 4px;"></i>
-                                                        <span class="badge data-badge sp-badge">90 Sp02</span> 
                                                     </h6>
                                                 </li>
 
                                                 <li class="list-group-item justify-content-between align-items-center">
                                                     <h6 class="bg-c-white stresstext-badge d-none d-sm-block">
-                                                        <i class="fas fa-heart mb-10" style="margin-right: 4px;"></i>
-                                                        <span class="badge data-badge stress-badge">Low</span> 
                                                     </h6>
                                                 </li>
 
@@ -162,9 +156,83 @@
                         </div>
                         <div class="col-12 col-md-6 p-0">
                             <div class="row">
+                            <div class="col-6">
+                                    <a data-toggle="modal" data-target="#nextaptModal">
+                                        <div class="card comp-card doc-pro-right" style="height:203px;">
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+
+                                                    <div class="col">
+                                                        <h6 class="m-b-20 f-w-600">Doctor In-Charge</h6>
+
+                                                        <div class="d-flex flex-row justify-content-between mt-4">
+                                                            <div class="row d-flex align-items-center">
+                                                            @foreach ($doctorNames as $doctorName)
+
+                                                                <h2 class="f-w-700 text-success ml-3" style="font-size: 20px; max-height: 80px;">{{$doctorName}}</h2>
+                                                                @endforeach
+
+                                                            </div>
+                                                            <div class="d-flex align-items-center">
+                                                                <i class="fas fa-user-md bg-c-green d-none d-sm-block" style="margin-top: -8px; margin-left: 30px;"></i>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <p class="m-b-0 mt-3" style="margin-top: 50px;">Appointed Doctor</p>
+
+                                                    </div>
+
+                                                    <div class="col-auto">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                </div>
+
+                                <div class="col-6" >
+                                    <a data-toggle="modal" data-target="#todayAppointmentModal">
+                                        <div class="card comp-card bg-c-blue doc-pro-right " style="height:203px;">
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+                                                    <div class="col">
+                                                        <h6 class="m-b-20 f-w-600 text-white">Medical Service</h6>
+
+                                                        <div class="row d-flex justify-content-between mt-4">
+                                                        <div class="row d-flex align-items-center">
+                                                            <div class="col-9">
+                                                                @if ($medRecords)
+                                                                    <h2 class="f-w-700 text-white ml-3" style="font-size: 18px; max-height: 80px; margin-bottom: 0;">
+                                                                        {{ optional($medRecords->medservice)->type }}
+                                                                    </h2>
+                                                                @else
+                                                                    <h2 class="f-w-700 text-white ml-3">N/A</h2>
+                                                                @endif
+                                                            </div>
+                                                            <div class="col-3">
+                                                                <i class="fas fa-hand-holding-medical bg-c-white text-primary d-none d-sm-block"></i>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+
+                                                        <p class="m-b-0 mt-3 text-white">Previous Medical Record</p>
+
+                                                    </div>
+
+                                                    <div class="col-auto">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#totalpatientModal">
-                                        <div class="card comp-card bg-c-blue doc-pro-right" style="height:190px">
+                                        <div class="card comp-card bg-c-blue doc-pro-right" style="height:170px">
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col">
@@ -215,23 +283,34 @@
                                 <!-- ./card -->
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#medicalrecordModal">
-                                        <div class="card comp-card bg-c-green doc-pro-right" style="height:190px">
+                                        <div class="card comp-card bg-c-green doc-pro-right" style="height:170px">
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col">
-                                                        <h6 class="m-b-20 f-w-600 text-white">Heart Rate (BPM)</h6>
+                                                        <h6 class="m-b-20 f-w-600 text-white mb-0">Health Status</h6>
 
-                                                        <div class="row d-flex justify-content-between mt-4">
-                                                            <h2 class="f-w-700 text-white ml-3">90</h2>
-                                                            <a type="button" data-toggle="modal" data-target="#addModal-datapatient"><i class="fas fa-heartbeat bg-c-white text-success d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i>
-                                                            <!-- <button type="button" class="btn btn-mat waves-effect waves-light  d-block mx-auto float-right" data-toggle="modal" data-target="#addModal-datapatient" title="Add Doctor">
-                                        <i class="fas fa-cog"></i> -->
-</a>
+                                                        <div class="row justify-content-between align-items-center" style="margin-left:-15px;">
+                                                            <a href="#" data-toggle="modal" data-target="#addModal-datapatient">
+                                                                <i class="fas fa-heartbeat text-white" >
+                                                                    <span class="badge data-badge bpm-badge">90 bpm</span>
+                                                                </i>
+                                                            </a>
+                                                            
+                                                            <span>
 
-                                    
+                                                            <i class="fas fa-thumbs-up mb-10" >
+                                                                <span class="badge data-badge sp-badge">90 SpO2</span>
+                                                            </i>
+                                                            </span>
+
+                                                            <span>
+                                                            <i class="fas fa-heart mb-10">
+                                                                <span class="badge data-badge stress-badge">Low</span>
+                                                            </i>
+                                                            </span>
+                                                         
                                                         </div>
-
-                                                        <p class="m-b-0 mt-3 text-white">Low Risk</p>
+                                                        <p class="m-b-0 mt-3 text-white">Heart rate, Oxygen Saturation, Stress Level</p>
 
                                                     </div>
 
@@ -244,80 +323,7 @@
                                 </div>
                                 <!-- ./card -->
 
-                                <div class="col-6">
-                                    <a data-toggle="modal" data-target="#nextaptModal">
-                                        <div class="card comp-card doc-pro-right" style="height:203px;">
-                                            <div class="card-body">
-                                                <div class="row align-items-center">
-
-                                                    <div class="col">
-                                                        <h6 class="m-b-20 f-w-600">Doctor In-Charge</h6>
-
-                                                        <div class="d-flex flex-row justify-content-between mt-4">
-                                                            <div class="row d-flex align-items-center">
-                                                            @foreach ($doctorNames as $doctorName)
-
-                                                                <h2 class="f-w-700 text-success ml-3" style="font-size: 20px; max-height: 80px;">{{$doctorName}}</h2>
-                                                                @endforeach
-
-                                                            </div>
-                                                            <div class="d-flex align-items-center">
-                                                                <i class="fas fa-user-md bg-c-green d-none d-sm-block" style="margin-top: -8px; margin-left: 30px;"></i>
-                                                            </div>
-                                                        </div>
-
-
-                                                        <p class="m-b-0 mt-3" style="margin-top: 50px;">Appointed Doctor</p>
-
-                                                    </div>
-
-                                                    <div class="col-auto">
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                </div>
-
-
-                                <div class="col-6" >
-                                    <a data-toggle="modal" data-target="#todayAppointmentModal">
-                                        <div class="card comp-card bg-c-blue doc-pro-right " style="height:203px;">
-                                            <div class="card-body">
-                                                <div class="row align-items-center">
-                                                    <div class="col">
-                                                        <h6 class="m-b-20 f-w-600 text-white">Medical Service</h6>
-
-                                                        <div class="row d-flex justify-content-between mt-4">
-                                                        <div class="row d-flex align-items-center">
-                                                            <div class="col-9">
-                                                                @if ($medRecords)
-                                                                    <h2 class="f-w-700 text-white ml-3" style="font-size: 18px; max-height: 80px; margin-bottom: 0;">
-                                                                        {{ optional($medRecords->medservice)->type }}
-                                                                    </h2>
-                                                                @else
-                                                                    <h2 class="f-w-700 text-white ml-3">N/A</h2>
-                                                                @endif
-                                                            </div>
-                                                            <div class="col-3 text-right">
-                                                                <i class="fas fa-hand-holding-medical bg-c-white text-primary d-none d-sm-block" style="margin-top: 10px; margin-right: 100px;"></i>
-                                                            </div>
-                                                        </div>
-                                                        </div>
-
-                                                        <p class="m-b-0 mt-3 text-white">Previous Medical Record</p>
-
-                                                    </div>
-
-                                                    <div class="col-auto">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
+                            
 
                                 <!-- ./card -->
 
