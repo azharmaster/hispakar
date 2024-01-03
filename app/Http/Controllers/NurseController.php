@@ -928,7 +928,7 @@ class NurseController extends Controller
 
         if ($existingRoom) {
             // Room with the same name already exists, display an alert or return an error message
-            return redirect('/nurse/roomList')->with('error', 'Room with the same name already exists');
+            return redirect('/nurse/roomList')->with('error', 'Room is already occupied by other doctor.');
         }
      
         //insert data into room table
