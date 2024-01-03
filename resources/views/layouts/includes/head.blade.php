@@ -127,6 +127,23 @@
       background-color: #28a745;
       color: #fff;
     }
+    .bpm-badge {
+      background-color: #17a2b8;
+      color: #fff;
+    }
+    .sp-badge {
+      background-color: #20c997;
+      color: #fff;
+    }
+    .sptext-badge {
+      color: #20c997;
+    }
+    .stress-badge {
+      background-color: #4979a9;
+      color: #fff;    }
+    .stresstext-badge {
+      color: #4979a9;
+    }
     .blood-badge {
       background-color: #dc3545;
       color: #fff;
