@@ -217,7 +217,6 @@ class NurseController extends Controller
         // ->take(5)
         ->get();
 
-
         return view('nurse.contents.dashboard', compact(
             // for card
             'totalpatient', 'totalroom','totaldoc','totalapt', 
@@ -303,6 +302,11 @@ class NurseController extends Controller
         ->distinct()
         ->get();
 
+        $doctorpatient = MedRecord::select(DB::raw('(SELECT name FROM doctor WHERE id = docid) as doctor'))
+        ->where('patientid', $id)
+        ->distinct()
+        ->get();
+
         $listmedicines = Medicine::select('medicine.*')
         ->join('medprescription', 'medicine.id', '=', 'medprescription.medicineid')
         ->where('medprescription.patientid', '=', $id)
@@ -313,15 +317,27 @@ class NurseController extends Controller
         $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
         ->join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
-        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'doctor.name as doctor_name', 'medrecord.desc as descs')
-        ->where('patient.id', $id )
+        ->select('appointment.*', 'patient.id as patient_id', 'patient.name as patient_name', 'doctor.name as doctor_name', 'medrecord.desc as descs')
+        ->where('patient.id', $id)
         ->get();
 
+        // Get unique doctor names from the collection
+        $doctorNames = $appointments->pluck('doctor_name')->unique();
+    
         $totalPastAppointments = MedRecord::join('appointment', 'medrecord.aptid', '=', 'appointment.id')
         ->leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
         ->where('appointment.patientid', $id)
         ->whereDate('appointment.date', '<', now()) // Filter past appointments based on the current date
         ->count('appointment.id');
+
+        $medRecords = MedRecord::with('medservice')
+        ->where('patientid', $id)
+        ->orderByDesc('created_at')
+        ->first();
+    
+
+
+        
 
         /////////////////////////////
 
@@ -351,7 +367,7 @@ class NurseController extends Controller
         /////////////////////////////
 
 
-        return view('nurse.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData', 'totalPastAppointments'));
+        return view('nurse.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData', 'totalPastAppointments', 'doctorpatient', 'medRecords', 'doctorNames'));
        
     }
 
@@ -907,6 +923,13 @@ class NurseController extends Controller
 
     public function AddRoom(Request $request) // Add room
     {
+         // Check if a room with the same name already exists
+        $existingRoom = Room::where('name', $request->name)->first();
+
+        if ($existingRoom) {
+            // Room with the same name already exists, display an alert or return an error message
+            return redirect('/nurse/roomList')->with('error', 'Room with the same name already exists');
+        }
      
         //insert data into room table
         $room = new Room();
