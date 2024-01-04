@@ -1229,7 +1229,7 @@ class DoctorController extends Controller
             $apt->save();
         }
 
-        return redirect('/doctor/dashboard')->with('success', 'Medical record successfully saved!');
+        return redirect('/doctor/appointmentList')->with('success', 'Medical record successfully saved!');
     }
 
     //edit appointment record
@@ -1530,6 +1530,15 @@ class DoctorController extends Controller
         ->where('appointment.patientid', $id)
         ->whereDate('appointment.date', '<', now()) // Filter past appointments based on the current date
         ->count('appointment.id');
+
+         // Get unique doctor names from the collection
+         $doctorNames = $appointments->pluck('doctor_name')->unique();
+
+         $medRecords = MedRecord::with('medservice')
+        ->where('patientid', $id)
+        ->orderByDesc('created_at')
+        ->first();
+    
     
         $currentDate = Carbon::now();
         $labels = [];
@@ -1556,7 +1565,7 @@ class DoctorController extends Controller
         /////////////////////////////
 
 
-        return view('doctor.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData','totalPastAppointments'));
+        return view('doctor.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData','totalPastAppointments', 'medRecords', 'doctorNames'));
        
     }
 
