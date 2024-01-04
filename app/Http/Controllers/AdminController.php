@@ -560,6 +560,15 @@ class AdminController extends Controller
         ->whereDate('appointment.date', '<', now()) // Filter past appointments based on the current date
         ->count('appointment.id');
 
+         // Get unique doctor names from the collection
+         $doctorNames = $appointments->pluck('doctor_name')->unique();
+
+         $medRecords = MedRecord::with('medservice')
+        ->where('patientid', $id)
+        ->orderByDesc('created_at')
+        ->first();
+    
+
         /////////////////////////////
 
 
@@ -588,7 +597,7 @@ class AdminController extends Controller
         /////////////////////////////
 
 
-        return view('admin.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData', 'totalPastAppointments'));
+        return view('admin.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData', 'totalPastAppointments', 'medRecords', 'doctorNames'));
        
     }
 
