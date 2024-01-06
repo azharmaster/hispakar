@@ -17,7 +17,10 @@ use App\Models\MedRecord;
 use App\Models\MedService;
 use App\Models\MedPrescription;
 use App\Models\MedInvoice;
-use App\Models\Services;
+use App\Models\bpm;
+use App\Models\spo2;
+use App\Models\pi;
+use App\Models\fuzzyres;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -244,6 +247,29 @@ class AdminController extends Controller
         
         //calendar
         'calendarEvents', 'labels', 'maleData', 'femaleData'));
+    }
+
+    public function getLiveData()
+    {
+        // Fetch data from the 'bpm' table
+        $bpmData = Bpm::select('id', 'Value', 'Date_created')
+            ->orderBy('Date_created', 'desc')
+            ->limit(20)
+            ->get();
+
+        // Fetch data from the 'spo2' table
+        $spo2Data = Spo2::select('id', 'Value', 'Date_created')
+            ->orderBy('Date_created', 'desc')
+            ->limit(20)
+            ->get();
+
+        // Fetch data from the 'pi' table
+        $piData = Pi::select('id', 'Value', 'Date_created')
+            ->orderBy('Date_created', 'desc')
+            ->limit(20)
+            ->get();
+
+        return response()->json(['bpm' => $bpmData, 'spo2' => $spo2Data, 'pi' => $piData]);
     }
 
     public function viewProfile() //profile admin

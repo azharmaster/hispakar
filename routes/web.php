@@ -66,7 +66,8 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::post('/admin/patientList', [AdminController::class, 'AddPatient']);
     Route::post('/admin/patientList/{id}', [AdminController::class, 'EditPatient']);
     Route::delete('/admin/patientList/{id}', [AdminController::class, 'deletePatient'])->name('deletePatient');
-
+    Route::get('/admin/patientList/get-live-data', [AdminController::class, 'getLiveData']);
+    
 
     //Manage Room
     Route::post('/admin/roomList', [AdminController::class, 'AddRooms']);
