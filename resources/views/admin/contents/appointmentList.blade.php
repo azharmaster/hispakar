@@ -2,6 +2,7 @@
 
 @section('content')
 
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 
 @if(session()->has('success'))
     <script>
@@ -33,7 +34,7 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="/">
+                            <a href="/admin/dashboard">
                                 <i class="feather icon-home"></i>
                             </a>
                         </li>
@@ -45,7 +46,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
@@ -57,13 +58,13 @@
                                 <div class="card-header">
                                 <h5 id="tableTitle" >List of Appointments</h5>
                                     <span>Lets say you want to sort the fourth column (3) descending and the first column (0) ascending: your order: would look like this: order: [[ 3, 'desc' ], [ 0, 'asc' ]]</span>
-                                    <!-- <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor"> 
+                                    <!-- <button type="button" class="btn btn-mat waves-effect waves-light btn-primary d-block mx-auto float-right" data-toggle="modal" data-target="#default-Modal" title="Add Doctor">
                                         <i class="fas fa-solid fa-plus"></i>
                                             Add
                                     </button>-->
                                 </div>
                                 <div class="card-block">
-                                
+
                                     <div class="dt-responsive table-responsive">
                                         <table id="dataTable1" class="table table-bordered">
                                             <thead>
@@ -98,7 +99,7 @@
                                                             @if ($appointment->status === 0) Pending
                                                             @elseif ($appointment->status === 1) Confirm
                                                             @elseif ($appointment->status === 2) Reject
-                                                            @else cancel  
+                                                            @else cancel
                                                             @endif
                                                             </td>
                                                              <td>
@@ -123,7 +124,7 @@
                                                         </tr>
                                                     @endforeach
                                             @endif
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -147,7 +148,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Appointments</h5>
+                <h5 class="modal-title">Edit Appointment</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -157,33 +158,39 @@
             <div class="modal-body">
                 <div class="container-fluid">
 
-                <div class="form-group input-group">
-                        <span class="input-group-addon" style="width:150px;">Patient ID :</span>
-                        <select style="width:350px;" class="form-control" name="patientid">
-                        <option>Select Patient</option>
-                        @foreach ($patients as $patient)
-                            <option value="{{ $patient->id }}" {{ ( $patient->id == $appointment->patientid) ? 'selected' : '' }}> {{ $patient->name }} </option>
-                        @endforeach   
-                     </select>
-                        
+                    <div class="form-group input-group">
+                        <input type="text" class="form-control icSearch" style="width:150px;" placeholder="Search Patient IC">
                     </div>
+
+                    <div class="patient-dropdown">
+                        <select style="width:435px;" class="form-control patientDropdown" name="patientid">
+                            @foreach ($patients as $patient)
+                                <option value="{{ $patient->id }}" {{ ( $patient->id == $appointment->patientid) ? 'selected' : '' }}> {{ $patient->name }} </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <input type="hidden" class="selectedPatientId" name="selectedPatientId" value="">
+
+                    <br>
+
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Doctor ID :</span>
-                        <select style="width:350px;" class="form-control" name="docid">
-                        <option>Select Doctor</option>
-                        @foreach ($doctors as $doctor)
+                        <select class="js-example-data-array" style="width:450px;" name="docid">
+                            <option value="0" disabled selected>Choose Doctor</option>
+                            @foreach ($doctors as $doctor)
                             <option value="{{ $doctor->id }}" {{ ( $doctor->id == $appointment->docid) ? 'selected' : '' }}> {{ $doctor->name }} </option>
-                        @endforeach   
-                     </select>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="width:150px;">Department ID :</span>
-                       
+
                         <select style="width:350px;" class="form-control" name="deptid">
                         <option>Select Department</option>
                         @foreach ($departments as $department)
                             <option value="{{ $department->id }}" {{ ( $department->id == $appointment->deptid) ? 'selected' : '' }}> {{ $department->name }} </option>
-                        @endforeach   
+                        @endforeach
                      </select>
                     </div>
                     <div class="form-group input-group">
@@ -194,8 +201,8 @@
                         <span class="input-group-addon" style="width:150px;">Time :</span>
                         <input type="time" style="width:350px;" class="form-control" name="time" id="time" value="{{ $appointment->time }}">
                     </div>
-                    
-                        
+
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -217,13 +224,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete Room</h5>
+                    <h5 class="modal-title">Delete Appointment</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p style="font-size: 15px;">Are you sure you want to delete this room?</p>
+                    <p style="font-size: 15px;">Are you sure you want to delete this appointment?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
@@ -239,6 +246,72 @@
 @endforeach
 <!-- end delete Patient form -->
 
+<script>
+    $(document).ready(function () {
+        var selecting = false; // Flag to track if the user is actively selecting an option
+
+        $('.icSearch').on('input change', function () {
+            var partialIC = $(this).val().trim();
+            var patientDropdown = $(this).closest('.modal-body').find('.patientDropdown');
+            var selectedPatientId = $(this).closest('.modal-body').find('.selectedPatientId');
+
+            // Clear previous options
+            patientDropdown.empty();
+
+            if (partialIC.length > 0) {
+                // Filter patients based on partial IC
+                var matchingPatients = <?php echo json_encode($patients->toArray()); ?>;
+
+                matchingPatients = matchingPatients.filter(function (patient) {
+                    return patient.ic.startsWith(partialIC);
+                });
+
+                // Display matching patients in the dropdown
+                if (matchingPatients.length > 0) {
+                    for (var i = 0; i < matchingPatients.length; i++) {
+                        var option = '<option value="' + matchingPatients[i].id + '">' +
+                                        matchingPatients[i].name +
+                                     '</option>';
+                        patientDropdown.append(option);
+                    }
+
+                    // Show the dropdown
+                    $('.patient-dropdown').show();
+                    selecting = true; // Enable selecting when dropdown is shown
+
+                    // Automatically select the first suggestion
+                    var selectedId = matchingPatients[0].id;
+                    selectedPatientId.val(selectedId);
+                } else {
+                    // Add "Not Available" option when no matches are found
+                    patientDropdown.append('<option value="Not Available">Not Available</option>');
+                    selecting = false; // Disable selecting when no matches are found
+                }
+            } else {
+                // Do not hide the dropdown if the search bar is empty
+                selecting = false; // Disable selecting when search bar is empty
+
+               // Check if there is a selected patient
+                 if (selectedPatientId.val()) {
+                    // Display the selected patient's name in the input field
+                    var selectedPatientName = patientDropdown.find('option:selected').text();
+                    $(this).val(selectedPatientName);
+                }
+            }
+        });
+
+        // Handle selection from the dropdown
+        $('.patientDropdown').mousedown(function () {
+            selecting = true;
+        }).change(function () {
+            if (selecting) {
+                var selectedId = $(this).val();
+                // Set the selected patient ID in the hidden input field
+                $(this).closest('.modal-body').find('.selectedPatientId').val(selectedId);
+                selecting = false;
+            }
+        });
+    });
+</script>
 
 @endsection
-

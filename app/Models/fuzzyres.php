@@ -5,20 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Attendance extends Model
+class fuzzyres extends Model
 {
     use HasFactory;
 
     protected $primaryKey = 'id';
-    protected $table = 'attendance';
+    protected $table = 'fuzzyres';
 
     protected $fillable = [
-        'aptid',
-        'docid',
-        'patientid',
-        'status',
-        'queueid',
+        'Value1',
+        'Value2',
+        'Value3',
+        'Date_created',
     ];
-
-    public $timestamps = false;
 }

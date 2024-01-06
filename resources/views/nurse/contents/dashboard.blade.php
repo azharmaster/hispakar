@@ -42,7 +42,7 @@
               <div class="page-header-breadcrumb">
                   <ul class="breadcrumb breadcrumb-title">
                       <li class="breadcrumb-item">
-                          <a href="index.html"><i class="feather icon-home"></i></a>
+                          <a href="{{ url('nurse/dashboard') }}"><i class="feather icon-home"></i></a>
                       </li>
                       <li class="breadcrumb-item">
                           <a href="#!">Dashboard</a>
@@ -177,7 +177,10 @@
                                 <th>IC</th>
                                 <th>Date-Time</th>
                                 <th>Attendance</th>
+                                <th>Queue No</th>
                                 <th>Reason</th>
+                              
+                               
                               </tr>
                               </thead>
                               <tbody>
@@ -227,6 +230,8 @@
                                             </a>
                                         @endif
                                       </td>
+                                      <td>{{ $aptD->queueid }}</td>
+
                                       <td>
                                         @if ($aptD->status === 2)
                                           <a href="/nurse/dashboard/{{ $aptD->appointment_id }}" title="Attend Appointment" 
@@ -235,7 +240,6 @@
                                           </a>
                                         @endif
                                       </td>
-
                                     </tr>
                                     @endforeach
                                 @endif

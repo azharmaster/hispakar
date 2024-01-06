@@ -37,7 +37,7 @@ class MedRecord extends Model
 
     public function medservice()
     {
-        return $this->belongsTo(Medservice::class, 'serviceid');
+        return $this->belongsTo(MedService::class, 'serviceid');
     }
     
     // Assuming MedRecord has a relationship with the Appointment model
@@ -70,7 +70,7 @@ class MedRecord extends Model
 
     public function medprescriptions()
     {
-        return $this->hasMany(Medprescription::class, 'medrecordid'); // Use 'medrecordid' as the foreign key
+        return $this->hasMany(MedPrescription::class, 'medrecordid'); // Use 'medrecordid' as the foreign key
     }
 
 }

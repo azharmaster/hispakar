@@ -127,6 +127,26 @@
       background-color: #28a745;
       color: #fff;
     }
+    .bpm-badge {
+      font-family:Arial, Helvetica, sans-serif;
+
+      color: #fff;
+    }
+    .sp-badge {
+      color: #fff;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+    .sptext-badge {
+      color: #20c997;
+    }
+    .stress-badge {
+      color: #fff;    
+      font-family:Arial, Helvetica, sans-serif;
+
+    }
+    .stresstext-badge {
+      color: #4979a9;
+    }
     .blood-badge {
       background-color: #dc3545;
       color: #fff;

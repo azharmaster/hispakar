@@ -41,8 +41,13 @@
                         <textarea rows="2" style="width: 350px;" class="form-control" name="desc" id="desc" placeholder="Enter description.." required></textarea>
                     </div>
                     <div class="form-group input-group">
-                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Staff ID :</label>
-                        <input type="text" style="width:350px;" class="form-control" name="staff_id" id="staff_id" placeholder="N1234" required>
+                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Doctor ID :</label>
+                        <select class="js-example-data-array" id="patientDropdown" style="width:450px;" name="docid">
+                        <option value="0" disabled selected>Choose Doctor</option>
+                        @foreach ($doctors as $doctor)
+                                <option value="{{ $doctor->id }}"> {{ $doctor->name }} </option>
+                        @endforeach   
+                    </select>
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon" style="width:150px; font-weight:bold;">Status :</label>
@@ -90,10 +95,16 @@
                         <label class="input-group-addon" style="width:150px; font-weight:bold;">Description :</label>
                         <textarea rows="2" style="width: 350px;" class="form-control" name="desc" id="desc" placeholder="Enter description.." required>{{ $room->desc }}</textarea>
                     </div>
+
                     <div class="form-group input-group">
-                        <label class="input-group-addon" style="width:150px; font-weight:bold;">Staff ID :</label>
-                        <input type="text" style="width:350px;" class="form-control" name="staff_id" id="staff_id" value="{{ $room->staff_id }}" placeholder="N1234" required>
+                        <span class="input-group-addon" style="width:150px;">Doctor ID :</span>
+                        <select class="js-example-data-array" style="width:450px;" name="docid">
+                            @foreach ($doctors as $doctor)
+                            <option value="{{ $doctor->id }}" {{ ( $doctor->id == $room->staff_id) ? 'selected' : '' }}> {{ $doctor->name }} </option>
+                            @endforeach   
+                        </select>
                     </div>
+                   
                     <div class="form-group input-group">
                         <label class="input-group-addon" style="width:150px; font-weight:bold;">Status :</label>
                         <select style="width:350px;" class="form-control" name="status" id="status">

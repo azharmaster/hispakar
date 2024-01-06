@@ -75,7 +75,7 @@
                                                             <td>{{ $doctor->phoneno }}</td>
                                                             <td>{{ $doctor->email }}</td>
                                                             <td>{{ $doctor->dept_name }}</td>
-                                                            <td>{{ $doctor->gender }}</td>
+                                                            <td>{{ ucfirst($doctor->gender)}}</td>
                                                             <td>
                                                                
                                                                 <a href="/admin/doctorProfile/{{ $doctor->id }}" >

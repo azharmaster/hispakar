@@ -31,8 +31,8 @@
                                 <i class="feather icon-home"></i>
                             </a>
                         </li>
-                        <li class="/nurse/patientList">
-                            <a href="doctor.php">Patients</a>
+                        <li class="breadcrumb-item">
+                            <a href="/nurse/patientList">Patients</a>
                         </li>
                     </ul>
                 </div>
@@ -85,9 +85,12 @@
                                                             <td>{{ $patient->phoneno }}</td>
                                                             <td>{{ $patient->email }}</td>
                                                             <td>{{ $patient->age }}</td>
-                                                            <td>{{ $patient->gender }}</td>
+                                                            <td>{{ ucfirst($patient->gender) }}</td>
                                                             <td>
                                                                 <div class="d-flex justify-content-center">
+                                                                <a href="/nurse/patientProfile/{{ $patient->id }}" >
+                                                                    <i style="font-size:20px;" class="feather icon-eye f-w-600 f-16 m-r-15 text-c-yellow "></i>
+                                                                </a>
                                                                     <!-- Edit Room -->
                                                                     <a title="Edit Patient" data-toggle="modal" data-target="#editModal-patient-{{ $patient->id }}">
                                                                         <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>

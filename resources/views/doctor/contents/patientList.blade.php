@@ -79,8 +79,10 @@
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $patient->name }}</td>
                                                             <td>{{ $patient->phoneno }}</td>
-                                                            <td>{{ $patient->gender }}</td>
+                                                            <td>{{ ucfirst($patient->gender) }}</td>
                                                             <td>
+                                                                <a href="/doctor/patientProfile/{{ $patient->id }}" title="View Patient">
+                                                                    <i style="font-size:20px;" class="feather icon-eye f-w-600 f-16 m-r-15 text-c-yellow "></i>
                                                                 <a title="Edit Patient" data-toggle="modal" data-target="#editModal-patient-{{ $patient->id }}">
                                                                     <i style="font-size:20px;" class="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                 </a>

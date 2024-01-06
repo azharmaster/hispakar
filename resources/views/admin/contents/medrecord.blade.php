@@ -37,14 +37,14 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="#">Medical Record</a>
+                            <a href="/admin/medrecord">Medical Record</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
@@ -62,7 +62,7 @@
                                     </button> -->
                                 </div>
                                 <div class="card-block">
-                                
+
                                     <div class="dt-responsive table-responsive">
                                     <table id="dataTable1" class="table table-bordered">
                                             <thead>
@@ -86,13 +86,13 @@
                                                         @foreach($medrcs as $medrc)
                                                         <tr class="left">
                                                             <td>{{ $loop->iteration }}</td>
-                                                            
+
                                                             <td>{{ $medrc->medservice->type }}</td>
                                                             <td>{{ $medrc->desc }}</td>
                                                             <td class="center">{{ $medrc->datetime }}</td>
                                                             <td>RM {{ number_format($medrc->medinvoice->totalcost, 2) }}</td>
                                                             <td>{{ $medrc->attendingDoctor->name }}</td>
-                                                            <td class="center"> 
+                                                            <td class="center">
                                                                 <a href="/admin/report/{{ $medrc->refnum }}" title="Download Appointment Record">
                                                                     <i style="font-size:20px;" class="fas fa-download f-w-600 f-16 m-r-15 text-c-green"></i>
                                                                 </a>
@@ -100,7 +100,7 @@
                                                         </tr>
                                                     @endforeach
                                             @endif
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -180,4 +180,3 @@
 <!--/script to get the doctor schedule -->
 
 @endsection
-

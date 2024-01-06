@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Contact No :</label>
                             <input type="text" class="form-control" name="phoneno" id="contact" placeholder="0199237856">
-                        </div> 
+                        </div>
                         <div class="form-group">
                             <label for="name" class="input-group-addon" style="font-weight:bold;">Date of Birth :</label>
                             <input type="date" class="form-control" name="dob" id="name">
@@ -57,22 +57,22 @@
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Address :</label>
                             <input type="text" class="form-control" name="address" id="contact" placeholder="K-238, Taman Pandan, Puncak Alam">
-                        </div> 
-                        
+                        </div>
+
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Age :</label>
                             <input type="text" class="form-control" name="age" id="contact" placeholder="20">
-                        </div> 
+                        </div>
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Weight :</label>
                             <input type="text" class="form-control" name="weight" id="contact" placeholder="47.5">
-                        </div> 
+                        </div>
                         <div class="form-group">
                             <label for="contact" class="input-group-addon" style="font-weight:bold;">Height :</label>
-                            <input type="text" class="form-control" name="height" id="contact" placeholder="1.77">
-                        </div> 
+                            <input type="float" class="form-control" name="height" id="contact" placeholder="170">
+                        </div>
 
                         <div class="form-group">
                             <label for="doctor" class="input-group-addon" style="font-weight:bold;">Blood Type :</label>
@@ -150,27 +150,32 @@
                             <div class="form-group">
                                 <label for="contact" class="input-group-addon" style="font-weight:bold;">Contact No :</label>
                                 <input type="text" class="form-control" name="phoneno" id="phoneno" value="{{ $patient->phoneno }}">
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label for="name" class="input-group-addon" style="font-weight:bold;">Date of Birth :</label>
                                 <input type="date" class="form-control" name="dob" id="dob" value="{{ $patient->dob }}">
                             </div>
-                        </div>
-                        
-                        <div class="col-md-6">
+
                             <div class="form-group">
                                 <label for="contact" class="input-group-addon" style="font-weight:bold;">Address :</label>
                                 <input type="text" class="form-control" name="address" id="address" value="{{ $patient->address }}">
-                            </div> 
-                            
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="contact" class="input-group-addon" style="font-weight:bold;">Age :</label>
+                                <input type="float" class="form-control" name="age" id="contact" value="{{ $patient->age }}">
+                            </div>
+
                             <div class="form-group">
                                 <label for="contact" class="input-group-addon" style="font-weight:bold;">Weight :</label>
                                 <input type="float" class="form-control" name="weight" id="weight" value="{{ $patient->weight }}">
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label for="contact" class="input-group-addon" style="font-weight:bold;">Height :</label>
                                 <input type="float" class="form-control" name="height" id="height" value="{{ $patient->height }}">
-                            </div> 
+                            </div>
 
                             <div class="form-group">
                                 <label for="doctor" class="input-group-addon" style="font-weight:bold;">Blood Type:</label>

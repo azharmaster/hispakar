@@ -421,7 +421,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="card-block p-b-0">
+                                <div class="card-block p-b-0" style="height: 648px; overflow-y: auto;">
                                     <div class="table-responsive">
                                         <table class="table table-hover m-b-0">
                                             <thead>

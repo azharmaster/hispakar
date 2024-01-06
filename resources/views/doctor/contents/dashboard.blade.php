@@ -29,7 +29,8 @@
                     <i class="feather icon-home bg-c-blue"></i>
                     <div class="d-inline">
                         <h5>Welcome, Doctor {{ $name }}!</h5>
-                        <span>Room: {{ $roomName }}</span>
+                        
+                        <span>Room: {{ $roomName ?? 'N/A' }}</span>
                     </div>
                 </div>
             </div>

@@ -5,20 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Attendance extends Model
+class spo2 extends Model
 {
     use HasFactory;
 
     protected $primaryKey = 'id';
-    protected $table = 'attendance';
+    protected $table = 'spo2';
 
     protected $fillable = [
-        'aptid',
-        'docid',
-        'patientid',
-        'status',
-        'queueid',
+        'Value',
+        'Date_created',
     ];
 
-    public $timestamps = false;
 }

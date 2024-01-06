@@ -27,6 +27,14 @@
                     </a>
                 </li>
 
+                <li class="">
+                    <a href="/doctor/patientMonitor" class="waves-effect waves-dark">
+                        <span class="pcoded-micon">
+                            <i class="fas fa-regular fa-heartbeat"></i></span>
+                        <span class="pcoded-mtext">Patients Monitoring</span>
+                    </a>
+                </li>
+
               
                 <!-- <li class="">
                     <a href="/doctor/medicineList" class="waves-effect waves-dark">

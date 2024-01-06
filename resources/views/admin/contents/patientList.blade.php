@@ -96,7 +96,7 @@
                                                             <td>{{ $patient->phoneno }}</td>
                                                             <td>{{ $patient->email }}</td>
                                                             <td>{{ $patient->age }}</td>
-                                                            <td>{{ $patient->gender }}</td>
+                                                            <td>{{ ucfirst($patient->gender) }}</td>
                                                             <td>
                                                                 <a href="/admin/patientProfile/{{ $patient->id }}" >
                                                                     <i style="font-size:20px;" class="feather icon-eye f-w-600 f-16 m-r-15 text-c-yellow "></i>

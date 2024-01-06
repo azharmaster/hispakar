@@ -36,7 +36,7 @@ class DoctorController extends Controller
 
         $doctorId = $doctor->id;
 
-        $drRoom = Room::join('doctor', 'room.staff_id', '=', 'doctor.staff_id')
+        $drRoom = Room::join('doctor', 'room.staff_id', '=', 'doctor.id')
                 ->select('room.name')
                 ->where('doctor.id', $doctorId)
                 ->first();
@@ -75,8 +75,9 @@ class DoctorController extends Controller
   
         //total nurse card
         $totalNurse = Nurse::join('doctor', 'nurse.deptid', '=', 'doctor.deptid')
-                    ->select('nurse.*')
-                    ->count();
+        ->where('doctor.id', $doctorId)
+        ->select('nurse.*')
+        ->count();
 
         // Get the most recent nurse's created_at timestamp
         $latestNurse = Nurse::orderBy('created_at', 'desc')->first();
@@ -374,6 +375,24 @@ class DoctorController extends Controller
         $patients = Patient::all();
 
         return view('doctor.contents.patientList', compact('patients'));
+    }
+
+    public function viewPatientMonitor()
+    {
+        $patients = Patient::all();
+
+        // Calculate total patients
+        $totalPatients = $patients->count();
+
+        // Calculate average age of patients
+        $totalAge = $patients->sum('age');
+        $averageAge = $totalPatients > 0 ? $totalAge / $totalPatients : 0;
+
+        // Calculate average gender
+        $genderCounts = $patients->groupBy('gender')->map->count();
+        $mostCommonGender = $genderCounts->sortDesc()->keys()->first();
+
+        return view('doctor.contents.patientMonitor', compact('patients', 'totalPatients', 'averageAge', 'mostCommonGender'));
     }
 
     public function viewAppointmentList(Request $request)
@@ -995,8 +1014,32 @@ class DoctorController extends Controller
         $timeRange = $request->time;
         $timeParts = explode(' - ', $timeRange);
         $startDateTime = date('Y-m-d H:i:s', strtotime($timeParts[0]));
+        $endTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
+    
+
+        
         // If you need to use the end time as well, you can convert it in a similar way.
         // $endDateTime = date('Y-m-d H:i:s', strtotime($timeParts[1]));
+
+        // Check for overlapping appointments
+        $overlappingAppointments = Appointments::where('docid', $doctor->id)
+            ->where('date', $request->date)
+            ->where(function ($query) use ($startDateTime, $endTime) {
+                $query->where(function ($query) use ($startDateTime, $endTime) {
+                    $query->where('time', '>=', $startDateTime)
+                        ->where('time', '<', $endTime);
+                })
+                ->orWhere(function ($query) use ($startDateTime, $endTime) {
+                    $query->where('time', '<=', $startDateTime)
+                        ->where('time', '>=', $endTime);
+                });
+            })
+            ->count();
+
+        if ($overlappingAppointments) {
+            return redirect('/doctor/appointmentList')
+                ->with('error', 'The selected time slot is already booked. Please choose another time.');
+        }
 
         $appointment->time = $startDateTime;
         $appointment->status = 1;
@@ -1186,7 +1229,7 @@ class DoctorController extends Controller
             $apt->save();
         }
 
-        return redirect('/doctor/dashboard')->with('success', 'Medical record successfully saved!');
+        return redirect('/doctor/appointmentList')->with('success', 'Medical record successfully saved!');
     }
 
     //edit appointment record
@@ -1447,6 +1490,83 @@ class DoctorController extends Controller
                         ->get();
 
         return view('doctor.contents.reports', compact('filteredReports'));
+    }
+
+    public function viewPatientProfile($id) //profile doctor
+    {
+
+        $patientdetails = Patient::where('patient.id', $id)
+        ->join('users', 'users.email', '=', 'patient.email')
+        ->get();
+
+        $totaloperation = MedRecord::where('patientid', $id)
+        ->count('patientid');
+
+        $totalapt = Appointments::where('patientid', $id)
+        ->where('status', 1)
+        ->count('id');
+
+        $doctors = MedRecord::where('patientid', $id)
+        ->select(DB::raw('(SELECT name FROM doctor WHERE id = docid) as doctor'))
+        ->distinct()
+        ->get();
+
+        $listmedicines = Medicine::select('medicine.*')
+        ->join('medprescription', 'medicine.id', '=', 'medprescription.medicineid')
+        ->where('medprescription.patientid', '=', $id)
+        ->distinct()
+        ->get();
+
+
+        $appointments = Appointments::join('patient', 'appointment.patientid', '=', 'patient.id')
+        ->join('doctor', 'appointment.docid', '=', 'doctor.id')
+        ->join('medrecord', 'appointment.id', '=', 'medrecord.aptid')
+        ->select('appointment.*', 'patient.id as patient_id','patient.name as patient_name', 'doctor.name as doctor_name', 'medrecord.desc as descs')
+        ->where('patient.id', $id )
+        ->get();
+
+        $totalPastAppointments = MedRecord::join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->leftJoin('attendance', 'appointment.id', '=', 'attendance.aptid')
+        ->where('appointment.patientid', $id)
+        ->whereDate('appointment.date', '<', now()) // Filter past appointments based on the current date
+        ->count('appointment.id');
+
+         // Get unique doctor names from the collection
+         $doctorNames = $appointments->pluck('doctor_name')->unique();
+
+         $medRecords = MedRecord::with('medservice')
+        ->where('patientid', $id)
+        ->orderByDesc('created_at')
+        ->first();
+    
+    
+        $currentDate = Carbon::now();
+        $labels = [];
+        // $maleData = [];
+        // $femaleData = [];
+
+        for ($i = 0; $i < 5; $i++) {
+            $month = $currentDate->format('M');
+            $labels[] = $month;
+
+
+            $heartrateData[] = 70+$i;
+ 
+
+            $currentDate->subMonth(); // Use subMonth() to move back in time
+        }
+
+      
+
+        // Reverse the order of the arrays
+        $labels = array_reverse($labels);
+        $heartrateData = array_reverse($heartrateData);
+
+        /////////////////////////////
+
+
+        return view('doctor.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData','totalPastAppointments', 'medRecords', 'doctorNames'));
+       
     }
 
 }
