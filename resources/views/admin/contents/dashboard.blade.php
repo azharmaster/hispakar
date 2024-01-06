@@ -558,7 +558,7 @@
         data: {
             labels: ['Newborn', 'Infant', 'Child', 'Adolescent', 'Old Age'],
             datasets: [{
-                    data: [12, 19, 3, 5, 2, 3],
+                    data: [{{$newborns}}, {{$infants}}, {{$children}}, {{$adolescents}}, {{$oldAge}}],
                     borderWidth: 1,
                     backgroundColor: ['#FFB1C1', '#7FB5B5', '#EC7C26', '#3E5F8A', '#1E5945', '#57A639'],
                 },
