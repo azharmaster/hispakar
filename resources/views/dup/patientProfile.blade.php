@@ -488,135 +488,95 @@
 
 
 <!-- Add Patient Modal -->
-<div class="modal fade" id="addModal-patient" tabindex="-1" role="dialog">
+<div class="modal fade" id="addModal-datapatient" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Setting Restband</h5>
+                <h5 class="modal-title">Patient BPM</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
-            <form class="form-horizontal row-fluid" method="POST">
-                {{csrf_field()}}
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12">
-
-                                <div class="form-group">
-                                    <div class="checkbox-fade fade-in-primary">
-                                        <label>
-                                            <input type="checkbox" value="">
-                                            <span class="cr">
-                                                <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
-                                            </span>
-                                            <span>Heart Rate</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="checkbox-fade fade-in-primary">
-                                        <label>
-                                            <input type="checkbox" value="">
-                                            <span class="cr">
-                                                <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
-                                            </span>
-                                            <span>Height</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="checkbox-fade fade-in-primary">
-                                        <label>
-                                            <input type="checkbox" value="">
-                                            <span class="cr">
-                                                <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
-                                            </span>
-                                            <span>Weight</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="checkbox-fade fade-in-primary">
-                                        <label>
-                                            <input type="checkbox" value="">
-                                            <span class="cr">
-                                                <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
-                                            </span>
-                                            <span>Sp02</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="checkbox-fade fade-in-primary">
-                                        <label>
-                                            <input type="checkbox" value="">
-                                            <span class="cr">
-                                                <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
-                                            </span>
-                                            <span>BMI</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
+            <div class="modal-body">
+                <!-- Dropdown button -->
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="timePeriodDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Today 
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="timePeriodDropdown">
+                        <a class="dropdown-item" href="#" id="today-option">Today</a>
+                        <a class="dropdown-item" href="#" id="week-option">This Week</a>
+                        <a class="dropdown-item" href="#" id="month-option">This Month</a>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                    <button name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
 
+                <!-- Content for Today -->
+                <div id="today-content" class="content">
+                    <canvas id="bpmChartToday"></canvas>
                 </div>
-            </form>
+
+                <!-- Content for This Week -->
+                <div id="week-content" class="content" style="display: none;">
+                    <canvas id="bpmChartWeek"></canvas>
+                </div>
+
+                <!-- Content for This Month -->
+                <div id="month-content" class="content" style="display: none;">
+                    <canvas id="bpmChartMonth"></canvas>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
 <!-- end Add Patient Modal -->
 
 
 <!-- Add Patient Modal -->
 <div class="modal fade" id="addModal-datapatient" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Data Patient</h5>
+                <h5 class="modal-title">Patient BPM</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
-           
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12">
-
-                            
-                            <canvas id="combinedChart" width="400" height="200"></canvas>
-                        
-
-                            </div>
-
-                        </div>
+            <div class="modal-body">
+                <!-- Dropdown button -->
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="timePeriodDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select Time Period
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="timePeriodDropdown">
+                        <a class="dropdown-item" href="#" id="today-option">Today</a>
+                        <a class="dropdown-item" href="#" id="week-option">This Week</a>
+                        <a class="dropdown-item" href="#" id="month-option">This Month</a>
                     </div>
                 </div>
-                <!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-                    <button name="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
 
-                </div> -->
-            
+                <!-- Content for Today -->
+                <div id="today-content" class="content" style="display: none;">
+                    <canvas id="bpmChartToday"></canvas>
+                </div>
+
+                <!-- Content for This Week -->
+                <div id="week-content" class="content" style="display: none;">
+                    <canvas id="bpmChartWeek"></canvas>
+                </div>
+
+                <!-- Content for This Month -->
+                <div id="month-content" class="content" style="display: none;">
+                    <canvas id="bpmChartMonth"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 <!-- end Add Patient Modal -->
 
 <div class="modal fade" id="addModal-pastappt" tabindex="-1" role="dialog">
@@ -664,96 +624,90 @@
 
 @include('doctor.includes.dtScripts')
 
-
-
-  <script >
-
-var ctx = document.getElementById('combinedChart').getContext('2d');
-var combinedChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [
-      {
-        label: 'BPM (Beats Per Minute)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 2,
-        data: [],
-      },
-      {
-        label: 'SpO2',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 2,
-        data: [],
-      },
-      {
-        label: 'PI',
-        borderColor: 'rgba(255, 205, 86, 1)',
-        borderWidth: 2,
-        data: [],
-      },
-    ],
-  },
-  options: {
-    scales: {
-      xAxes: [
-        {
-          type: 'linear',
-          position: 'bottom',
-        },
-      ],
-    },
-  },
-});
-
-function fetchLiveData() {
-  $.ajax({
-    type: 'GET',
-    url: '/get-live-data',
-    success: function(data) {
-      updateCombinedChart(data);
-    },
-    error: function(error) {
-      console.error('Error fetching live data:', error);
-    }
-  });
-}
-
-// Function to update the combined chart with the fetched data
-function updateCombinedChart(data) {
-  updateDataset(combinedChart, data.bpm, 0, 'BPM');
-  updateDataset(combinedChart, data.spo2, 1, 'SpO2');
-  updateDataset(combinedChart, data.pi, 2, 'PI');
-}
-
-// Function to update a specific dataset with the fetched data
-function updateDataset(chart, data, datasetIndex, label) {
-  var values = data.map(entry => entry.Value);
-  var dateCreatedValues = data.map(entry => entry.Date_created);
-
-  // Update the chart data
-  chart.data.labels = dateCreatedValues;
-
-  if (chart.data.datasets[datasetIndex].data.length === 0) {
-    // Initialize the dataset if empty
-    chart.data.datasets[datasetIndex].data = values;
-  } else {
-    // Update existing data
-    for (var i = 0; i < values.length; i++) {
-      chart.data.datasets[datasetIndex].data[i] = values[i];
-    }
-  }
-
-  // Update the chart
-  chart.update();
-}
-
-// Fetch live data initially and then set an interval to keep updating
-fetchLiveData();
-setInterval(fetchLiveData, 2000); // Update every 2 seconds (adjust as needed)
-  </script>
 <script>
 
+// $.ajax({
+//   url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
+//   crossDomain: true,
+//   headers: {
+//     'accept': 'application/json',
+//     'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd3JlcyB3bG9jIiwiZXhwIjoxNjk3NjQ2NDg0LCJpYXQiOjE2OTc1NjAwODR9.DBzPrnSoU8pnSec72rerOkUfhHegvPzZRVfzilDhUgM'
+//   }
+// }).done(function(response) {
+//   console.log(response);
+// });
+
+var d = (new Date()).toISOString().split('T')[0];
+console.log(d);
+$.ajax({
+  url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
+  crossDomain: true,
+  headers: {
+    'accept': 'application/json',
+    'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd2xvYyB3cmVzIiwiZXhwIjoxNzAyNTI2NzYyLCJpYXQiOjE3MDI0NDAzNjJ9.q_tdbcegG1VwQlFsGqtgcyRJtNjlyqIz3fGO4HNp5Zs'
+  }
+}).done(function(response) {
+
+    
+  var data1 = response['activities-heart-intraday']['dataset'];
+  data1 = data1.slice(-10);
+  console.log(data1);
+  
+  console.log(data1[data1.length-1]['time']);
+
+  var datax1 = data1[0]['value'];
+  var datax2 = data1[1]['value'];
+  var datax3 = data1[2]['value'];
+  var datax4 = data1[3]['value'];
+  var datax5 = data1[4]['value'];
+  var datax6 = data1[5]['value'];
+  var datax7 = data1[6]['value'];
+  var datax8 = data1[7]['value'];
+  var datax9 = data1[8]['value'];
+  var datax10 = data1[9]['value'];
+
+  var datay1 = data1[0]['time'];
+  var datay2 = data1[1]['time'];
+  var datay3 = data1[2]['time'];
+  var datay4 = data1[3]['time'];
+  var datay5 = data1[4]['time'];
+  var datay6 = data1[5]['time'];
+  var datay7 = data1[6]['time'];
+  var datay8 = data1[7]['time'];
+  var datay9 = data1[8]['time'];
+  var datay10 = data1[9]['time'];
+    
+    var datas = [datax1,datax2,datax3,datax4,datax5,datax6,datax7,datax8,datax9,datax10];
+    var datasy = [datay1,datay2,datay3,datay4,datay5,datay6,datay7,datay8,datay9,datay10];
+
+
+    const ctx3 = document.getElementById('myChart3');
+
+new Chart(ctx3, {
+    type: 'line',
+    data: {
+        labels: datasy,
+        datasets: [{
+            label: 'Heart Rate',
+            data: datas,
+        },
+       ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Data Patient'
+            }
+        }
+    },
+});
+
+});
 
 
     const ctx = document.getElementById('myChart');
@@ -834,5 +788,246 @@ setInterval(fetchLiveData, 2000); // Update every 2 seconds (adjust as needed)
         @endfor
     });
 </script>
+
+<script>
+
+// Function to display BPM data for today in a chart and open the modal
+function displayBpmDataToday() {
+    // Make an AJAX request to fetch BPM data for today
+    $.ajax({
+        url: '/admin/getBpmData',
+        method: 'GET',
+        data: {
+            timePeriod: 'today',
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                var datas = response.data.map(entry => entry.bpm);
+                var datasy = response.data.map(entry => entry.Date_created);
+
+                const ctx = document.getElementById('bpmChartToday').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: datasy,
+                        datasets: [{
+                            label: 'Heart Rate',
+                            data: datas,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Patient BPM Chart (Today)'
+                            }
+                        }
+                    },
+                });
+
+                // Show the modal containing the chart
+                $('#addModal-datapatient').modal('show');
+            } else {
+                // Handle error
+                alert('Error: ' + response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX Error: ' + status, error);
+        }
+    });
+}
+
+// Click event for the icon
+$('a[data-toggle="modal"]').click(function () {
+    // Show the content for Today
+    $('#today-content').show();
+    // Trigger your function to display BPM data for Today
+    displayBpmDataToday();
+    // Open the modal
+    $('#addModal-datapatient').modal('show');
+});
+
+
+
+// Function to display BPM data for the current week in a chart and open the modal
+function displayBpmDataWeek() {
+    // Make an AJAX request to fetch BPM data for the current week
+    $.ajax({
+        url: '/admin/getBpmData', // Update this route to your BPM data endpoint
+        method: 'GET',
+        data: {
+            timePeriod: 'week',
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                var datas = response.data.map(entry => entry.bpm);
+                var datasy = response.data.map(entry => entry.Date_created);
+
+                const ctx = document.getElementById('bpmChartWeek').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: datasy,
+                        datasets: [{
+                            label: 'Heart Rate',
+                            data: datas,
+                            borderColor: 'rgba(0, 123, 255, 1)', // Change color to primary (blue)
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Patient BPM Chart (This Week)'
+                            }
+                        }
+                    },
+                });
+
+                // Show the modal containing the chart
+                $('#addModal-datapatient').modal('show');
+            } else {
+                // Handle error
+                alert('Error: ' + response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX Error: ' + status, error);
+        }
+    });
+}
+
+function displayBpmDataMonth() {
+    // Make an AJAX request to fetch BPM data for the current week
+    $.ajax({
+        url: '/admin/getBpmData', // Update this route to your BPM data endpoint
+        method: 'GET',
+        data: {
+            timePeriod: 'month',
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                var datas = response.data.map(entry => entry.bpm);
+                var datasy = response.data.map(entry => entry.Date_created);
+
+                const ctx = document.getElementById('bpmChartMonth').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: datasy,
+                        datasets: [{
+                            label: 'Heart Rate',
+                            data: datas,
+                            borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Patient BPM Chart (This Month)'
+                            }
+                        }
+                    },
+                });
+
+                // Show the modal containing the chart
+                $('#addModal-datapatient').modal('show');
+            } else {
+                // Handle error
+                alert('Error: ' + response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX Error: ' + status, error);
+        }
+    });
+}
+
+
+$(document).ready(function () { 
+
+// Handle dropdown item click events
+$('#today-option').click(function () {
+    // Hide all content
+    $('.content').hide();
+    // Show the content for Today
+    $('#today-content').show();
+    // Trigger your function to display BPM data for Today
+    displayBpmDataToday();
+    // Open the modal
+    $('#addModal-datapatient').modal('show');
+});
+
+$('#week-option').click(function () {
+    // Hide all content
+    $('.content').hide();
+    // Show the content for This Week
+    $('#week-content').show();
+    // Trigger your function to display BPM data for This Week
+    displayBpmDataWeek();
+    // Open the modal
+    $('#addModal-datapatient').modal('show');
+});
+
+$('#month-option').click(function () {
+    // Hide all content
+    $('.content').hide();
+    // Show the content for This Month
+    $('#month-content').show();
+    // Trigger your function to display BPM data for This Month
+    displayBpmDataMonth();
+    // Open the modal
+    $('#addModal-datapatient').modal('show');
+});
+});
+
+// Update dropdown text based on user selection
+$('.dropdown-item').on('click', function () {
+var selectedText = $(this).text();
+$('#timePeriodDropdown').text(selectedText);
+
+// Handle chart display based on user selection
+if ($(this).attr('id') === 'today-option') {
+    displayBpmDataToday();
+} else if ($(this).attr('id') === 'week-option') {
+    displayBpmDataWeek();
+} else if ($(this).attr('id') === 'month-option') {
+    displayBpmDataMonth();
+}
+
+// Open the modal
+$('#addModal-datapatient').modal('show');
+});
+
+
+</script>
+
 
 

@@ -1515,6 +1515,39 @@ class AdminController extends Controller
           return redirect('/admin/serviceList')->with('success', 'Service has been deleted');
       }
 
+      public function getBpmData(Request $request)
+    {
+        try {
+            $timePeriod = $request->input('timePeriod');
+    
+            // Assuming you have a 'bpm' table with 'Date_created', 'value', and 'time' columns
+            $query = DB::table('datapatient');
+    
+            // Filter data based on the selected time period
+            if ($timePeriod === 'today') {
+                $query->whereDate('Date_created', now()->toDateString());
+            } elseif ($timePeriod === 'week') {
+                $query->whereBetween('Date_created', [now()->startOfWeek(), now()->endOfWeek()]);
+            } elseif ($timePeriod === 'month') {
+                $query->whereMonth('Date_created', now()->month);
+            }
+    
+           // Select 'Date_created' and 'value' columns
+            $result = $query->select('Date_created', 'bpm')->get();
+    
+            return response()->json([
+                'status' => 'success',
+                'data' => $result,
+            ]);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Internal Server Error',
+            ], 500);
+        }
+    }
+
 
 
 

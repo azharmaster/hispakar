@@ -98,6 +98,10 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::post('/admin/serviceList', [AdminController::class, 'AddServices']);
     Route::post('/admin/serviceList/{id}', [AdminController::class, 'EditServices']);
     Route::delete('/admin/serviceList/{id}', [AdminController::class, 'deleteServices'])->name('deleteServices');
+
+    // get gpm data
+    Route::get('/admin/getBpmData', [AdminController::class, 'getBpmData']);
+
 });
 
 
@@ -159,6 +163,10 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
     //attend & absent appointment
     Route::post('/doctor/dashboard/{appointment_id}', [DoctorController::class, 'AttendAppointment']);
     Route::post('/doctor/cdashboard/{appointment_id}', [DoctorController::class, 'AbsentAppointment']);
+
+    // get bpm data
+    Route::get('/doctor/getBpmData', [DoctorController::class, 'getBpmData']);
+
 
 
 });
