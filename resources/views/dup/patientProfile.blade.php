@@ -797,58 +797,73 @@ new Chart(ctx3, {
 <script>
 // Function to display BPM data for today in a chart and open the modal
 function displayBpmDataToday(userType) {
-    
-    // Make an AJAX request to fetch BPM data for today
-    $.ajax({
-        url: '/' + userType + '/getBpmData', // Assuming the user type is passed as a parameter
-        method: 'GET',
+    // Initial chart creation
+    const ctx = document.getElementById('bpmChartToday').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'line',
         data: {
-            timePeriod: 'today',
+            labels: [],
+            datasets: [{
+                label: 'Heart Rate',
+                data: [],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                fill: false,
+            }]
         },
-        success: function (response) {
-            if (response.status === 'success') {
-                var datas = response.data.map(entry => entry.bpm);
-                var datasy = response.data.map(entry => entry.Date_created);
-
-                const ctx = document.getElementById('bpmChartToday').getContext('2d');
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: datasy,
-                        datasets: [{
-                            label: 'Heart Rate',
-                            data: datas,
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 2,
-                            fill: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Patient BPM Chart (Today)'
-                            }
-                        }
-                    },
-                });
-
-                // Show the modal containing the chart
-                $('#addModal-datapatient').modal('show');
-            } else {
-                // Handle error
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Patient BPM Chart (Today)'
+                }
             }
         },
-        error: function (xhr, status, error) {
-            // Handle AJAX error
-            console.error('AJAX Error: ' + status, error);
-        }
     });
+
+    // Function to update chart data
+    function updateChart(response) {
+        if (response.status === 'success') {
+            var datas = response.data.map(entry => entry.bpm);
+            var datasy = response.data.map(entry => entry.Date_created);
+
+            // Update the chart data
+            myChart.data.labels = datasy;
+            myChart.data.datasets[0].data = datas;
+            myChart.update();
+        } else {
+            // Handle error
+        }
+    }
+
+    // Make an AJAX request to fetch BPM data for today
+    function fetchData() {
+        $.ajax({
+            url: '/' + userType + '/getBpmData',
+            method: 'GET',
+            data: {
+                timePeriod: 'today',
+            },
+            success: updateChart,
+            error: function (xhr, status, error) {
+                // Handle AJAX error
+                console.error('AJAX Error: ' + status, error);
+            }
+        });
+    }
+
+    // Display initial data
+    fetchData();
+
+    // Set interval to update the chart every second
+    setInterval(fetchData, 1000);
+
+    // Show the modal containing the chart
+    $('#addModal-datapatient').modal('show');
 }
 
 // Function to display BPM data for the current week in a chart and open the modal
