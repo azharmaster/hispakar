@@ -223,6 +223,10 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     Route::post('/nurse/dashboard/{appointment_id}', [NurseController::class, 'AttendAppointment']);
     Route::post('/nurse/cdashboard/{appointment_id}', [NurseController::class, 'AbsentAppointment']);
 
+    // get bpm data
+    Route::get('/nurse/getBpmData', [NurseController::class, 'getBpmData']);
+
+
 });
 
     //Patient
