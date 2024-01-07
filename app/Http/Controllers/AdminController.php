@@ -1515,7 +1515,7 @@ class AdminController extends Controller
           return redirect('/admin/serviceList')->with('success', 'Service has been deleted');
       }
 
-      public function getBpmData(Request $request)
+    public function getBpmData(Request $request)
     {
         try {
             $timePeriod = $request->input('timePeriod');
@@ -1533,7 +1533,7 @@ class AdminController extends Controller
             }
     
            // Select 'Date_created' and 'value' columns
-            $result = $query->select('Date_created', 'bpm')->get();
+           $result = $query->select('Date_created', 'bpm', 'spo2')->get();
     
             return response()->json([
                 'status' => 'success',
@@ -1547,9 +1547,4 @@ class AdminController extends Controller
             ], 500);
         }
     }
-
-
-
-
-
 }

@@ -240,7 +240,7 @@
 
                                                         <div class="row d-flex justify-content-between mt-4">
                                                             <h2 class="f-w-700 text-white ml-3">{{ $totalPastAppointments  }}</h2>
-                                                            <a type="button" data-toggle="modal" data-target="#addModal-pastappt"><i class="fas fa-file-alt bg-c-white text-primary d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i></a>
+                                                            <a type="button"  class="past-appt-modal-trigger" data-toggle="modal" data-target="#addModal-pastappt"><i class="fas fa-file-alt bg-c-white text-primary d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i></a>
                                                         </div>
 
                                                         <p class="m-b-0 mt-3 text-white">Total Past Appointments</p>
@@ -290,17 +290,20 @@
                                                         <h6 class="m-b-20 f-w-600 text-white mb-0">Health Status</h6>
 
                                                         <div class="row justify-content-between align-items-center" style="margin-left:-15px;">
-                                                            <a href="#" data-toggle="modal" data-target="#addModal-datapatient">
+                                                            <a href="#" class="bpm-modal-trigger" data-toggle="modal" data-target="#addModal-datapatient">
                                                                 <i class="fas fa-heartbeat text-white" >
                                                                     <span class="badge data-badge bpm-badge">90 bpm</span>
                                                                 </i>
                                                             </a>
                                                             
                                                             <span>
+                                                            <a href="#" class="sp-modal-trigger" data-toggle="modal" data-target="#addModal-dataoxygen">
 
-                                                            <i class="fas fa-thumbs-up mb-10" >
-                                                                <span class="badge data-badge sp-badge">90 SpO2</span>
-                                                            </i>
+                                                                <i class="fas fa-thumbs-up mb-10" >
+                                                                    <span class="badge data-badge sp-badge">90 SpO2</span>
+                                                                </i>
+
+                                                                </a>
                                                             </span>
 
                                                             <span>
@@ -505,9 +508,9 @@
                     Today 
                     </button>
                     <div class="dropdown-menu" aria-labelledby="timePeriodDropdown">
-                        <a class="dropdown-item" href="#" id="today-option">Today</a>
-                        <a class="dropdown-item" href="#" id="week-option">This Week</a>
-                        <a class="dropdown-item" href="#" id="month-option">This Month</a>
+                    <a class="dropdown-item bpm-dropdown-item" href="#" id="today-option">Today</a>
+                    <a class="dropdown-item bpm-dropdown-item" href="#" id="week-option">This Week</a>
+                    <a class="dropdown-item bpm-dropdown-item" href="#" id="month-option">This Month</a>
                     </div>
                 </div>
 
@@ -533,13 +536,11 @@
 
 <!-- end Add Patient Modal -->
 
-
-<!-- Add Patient Modal -->
-<div class="modal fade" id="addModal-datapatient" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-xl" role="document">
+<div class="modal fade" id="addModal-dataoxygen" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Patient BPM</h5>
+                <h5 class="modal-title">Patient SpO2</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -548,34 +549,36 @@
             <div class="modal-body">
                 <!-- Dropdown button -->
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="timePeriodDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Select Time Period
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="spo2-timePeriodDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Today 
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="timePeriodDropdown">
-                        <a class="dropdown-item" href="#" id="today-option">Today</a>
-                        <a class="dropdown-item" href="#" id="week-option">This Week</a>
-                        <a class="dropdown-item" href="#" id="month-option">This Month</a>
+                    <div class="dropdown-menu" aria-labelledby="spo2-timePeriodDropdown">
+                    <a class="dropdown-item spo2-dropdown-item" href="#" id="spo2-today-option">Today</a>
+                    <a class="dropdown-item spo2-dropdown-item" href="#" id="spo2-week-option">This Week</a>
+                    <a class="dropdown-item spo2-dropdown-item" href="#" id="spo2-month-option">This Month</a>
                     </div>
                 </div>
-
                 <!-- Content for Today -->
-                <div id="today-content" class="content" style="display: none;">
-                    <canvas id="bpmChartToday"></canvas>
+              
+                <div id="spo2-today-content" class="content">
+                    <canvas id="spChartToday"></canvas>
                 </div>
 
                 <!-- Content for This Week -->
-                <div id="week-content" class="content" style="display: none;">
-                    <canvas id="bpmChartWeek"></canvas>
+                <div id="spo2-week-content" class="content" style="display: none;">
+                    <canvas id="spChartWeek"></canvas>
                 </div>
 
                 <!-- Content for This Month -->
-                <div id="month-content" class="content" style="display: none;">
-                    <canvas id="bpmChartMonth"></canvas>
+                <div id="spo2-month-content" class="content" style="display: none;">
+                    <canvas id="spChartMonth"></canvas>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+
 
 <!-- end Add Patient Modal -->
 
@@ -744,6 +747,8 @@ new Chart(ctx3, {
         }
     })
 
+    
+
 </script>
 
 @php
@@ -790,12 +795,12 @@ new Chart(ctx3, {
 </script>
 
 <script>
-
 // Function to display BPM data for today in a chart and open the modal
-function displayBpmDataToday() {
+function displayBpmDataToday(userType) {
+    
     // Make an AJAX request to fetch BPM data for today
     $.ajax({
-        url: '/admin/getBpmData',
+        url: '/' + userType + '/getBpmData', // Assuming the user type is passed as a parameter
         method: 'GET',
         data: {
             timePeriod: 'today',
@@ -837,7 +842,6 @@ function displayBpmDataToday() {
                 $('#addModal-datapatient').modal('show');
             } else {
                 // Handle error
-                alert('Error: ' + response.message);
             }
         },
         error: function (xhr, status, error) {
@@ -847,23 +851,11 @@ function displayBpmDataToday() {
     });
 }
 
-// Click event for the icon
-$('a[data-toggle="modal"]').click(function () {
-    // Show the content for Today
-    $('#today-content').show();
-    // Trigger your function to display BPM data for Today
-    displayBpmDataToday();
-    // Open the modal
-    $('#addModal-datapatient').modal('show');
-});
-
-
-
 // Function to display BPM data for the current week in a chart and open the modal
-function displayBpmDataWeek() {
+function displayBpmDataWeek(userType) {
     // Make an AJAX request to fetch BPM data for the current week
     $.ajax({
-        url: '/admin/getBpmData', // Update this route to your BPM data endpoint
+        url: '/' + userType + '/getBpmData', // Assuming the user type is passed as a parameter
         method: 'GET',
         data: {
             timePeriod: 'week',
@@ -904,8 +896,7 @@ function displayBpmDataWeek() {
                 // Show the modal containing the chart
                 $('#addModal-datapatient').modal('show');
             } else {
-                // Handle error
-                alert('Error: ' + response.message);
+                
             }
         },
         error: function (xhr, status, error) {
@@ -915,10 +906,10 @@ function displayBpmDataWeek() {
     });
 }
 
-function displayBpmDataMonth() {
+function displayBpmDataMonth(userType) {
     // Make an AJAX request to fetch BPM data for the current week
     $.ajax({
-        url: '/admin/getBpmData', // Update this route to your BPM data endpoint
+        url: '/' + userType + '/getBpmData', // Assuming the user type is passed as a parameter
         method: 'GET',
         data: {
             timePeriod: 'month',
@@ -959,8 +950,228 @@ function displayBpmDataMonth() {
                 // Show the modal containing the chart
                 $('#addModal-datapatient').modal('show');
             } else {
+              
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX Error: ' + status, error);
+        }
+    });
+}
+
+$('.bpm-modal-trigger').click(function () {
+    // Hide all content
+    $('.content').hide();
+
+    // Show the content for Today
+    $('#today-content').show();
+
+    // Trigger your function to display BPM data for Today
+    displayBpmDataToday('admin');
+    displayBpmDataToday('doctor');
+
+    // Open the modal
+    $('#addModal-datapatient').modal('show');
+
+    // Set the default dropdown option to "Today"
+    $('#timePeriodDropdown').text('Today');
+    $('#timePeriodDropdown').data('selected-option-id', 'today');
+
+    // Trigger a click event on the "Today" dropdown item to make it selected by default
+    $('#today-option').click();
+});
+
+// Handle dropdown item click events
+$('.bpm-dropdown-item').on('click', function () {
+    var selectedText = $(this).text();
+    $('#timePeriodDropdown').text(selectedText);
+
+    // Store the selected option ID in the data attribute
+    var selectedOptionId = $(this).attr('id').replace('-option', '');
+    $('#timePeriodDropdown').data('selected-option-id', selectedOptionId);
+
+    // Hide all content
+    $('.content').hide();
+
+    // Show the appropriate content based on the selected option
+    $('#' + selectedOptionId + '-content').show();
+
+    // Handle chart display based on user selection
+    if (selectedOptionId === 'today') {
+        displayBpmDataToday('admin');
+        displayBpmDataToday('doctor');
+    } else if (selectedOptionId === 'week') {
+        displayBpmDataWeek('admin');
+        displayBpmDataWeek('doctor');
+    } else if (selectedOptionId === 'month') {
+        displayBpmDataMonth('admin');
+        displayBpmDataMonth('doctor');
+    }
+
+    // Open the modal
+    $('#addModal-datapatient').modal('show');
+});
+</script>
+
+<!-- display sp02 -->
+<script>
+function displaySpDataToday(userType) {
+    // Make an AJAX request to fetch SpO2 data for today
+    $.ajax({
+        url: '/' + userType + '/getBpmData',
+        method: 'GET',
+        data: {
+            timePeriod: 'today',
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                var spo2Data = response.data.map(entry => entry.spo2);
+                var dateData = response.data.map(entry => entry.Date_created);
+
+                const ctx = document.getElementById('spChartToday').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dateData,
+                        datasets: [{
+                            label: 'SpO2',
+                            data: spo2Data,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Patient SpO2 Chart (Today)'
+                            }
+                        }
+                    },
+                });
+
+                // Show the modal containing the chart
+                $('#addModal-dataoxygen').modal('show');
+            } else {
                 // Handle error
-                alert('Error: ' + response.message);
+                console.error('Error fetching SpO2 data:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX Error: ' + status, error);
+        }
+    });
+}
+
+function displaySpDataWeek(userType) {
+    // Make an AJAX request to fetch SpO2 data for today
+    $.ajax({
+        url: '/' + userType + '/getBpmData',
+        method: 'GET',
+        data: {
+            timePeriod: 'week',
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                var spo2Data = response.data.map(entry => entry.spo2);
+                var dateData = response.data.map(entry => entry.Date_created);
+
+                const ctx = document.getElementById('spChartWeek').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dateData,
+                        datasets: [{
+                            label: 'SpO2',
+                            data: spo2Data,
+                            borderColor: 'rgba(0, 123, 255, 1)', // Change color to primary (blue)
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Patient SpO2 Chart (This Week)'
+                            }
+                        }
+                    },
+                });
+
+                // Show the modal containing the chart
+                $('#addModal-dataoxygen').modal('show');
+            } else {
+                // Handle error
+                console.error('Error fetching SpO2 data:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX Error: ' + status, error);
+        }
+    });
+}
+
+function displaySpDataMonth(userType) {
+    // Make an AJAX request to fetch SpO2 data for today
+    $.ajax({
+        url: '/' + userType + '/getBpmData',
+        method: 'GET',
+        data: {
+            timePeriod: 'month',
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                var spo2Data = response.data.map(entry => entry.spo2);
+                var dateData = response.data.map(entry => entry.Date_created);
+
+                const ctx = document.getElementById('spChartMonth').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dateData,
+                        datasets: [{
+                            label: 'SpO2',
+                            data: spo2Data,
+                            borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Patient SpO2 Chart (This Month)'
+                            }
+                        }
+                    },
+                });
+
+                // Show the modal containing the chart
+                $('#addModal-dataoxygen').modal('show');
+            } else {
+                // Handle error
+                console.error('Error fetching SpO2 data:', response.message);
             }
         },
         error: function (xhr, status, error) {
@@ -971,60 +1182,75 @@ function displayBpmDataMonth() {
 }
 
 
-$(document).ready(function () { 
+
+$('.sp-modal-trigger').click(function () {
+    // Hide all content
+    $('.content').hide();
+
+    // Show the content for Today
+    $('#spo2-today-content').show();
+
+    // Trigger your function to display BPM data for Today
+    displaySpDataToday('admin');
+    displaySpDataToday('doctor');
+
+    // Open the modal
+    $('#addModal-dataoxygen').modal('show');
+
+    // Set the default dropdown option to "Today"
+    $('#spo2-timePeriodDropdown').text('Today');
+    $('#spo2-timePeriodDropdown').data('selected-option-id', 'today');
+
+    // Trigger a click event on the "Today" dropdown item to make it selected by default
+    $('#spo2-today-option').click();
+});
 
 // Handle dropdown item click events
-$('#today-option').click(function () {
+// SpO2 Today Option Click Event
+$('#spo2-today-option').on('click', function () {
+    handleSpo2DropdownClick('today');
+});
+
+// SpO2 Week Option Click Event
+$('#spo2-week-option').on('click', function () {
+    handleSpo2DropdownClick('week');
+});
+
+// SpO2 Month Option Click Event
+$('#spo2-month-option').on('click', function () {
+    handleSpo2DropdownClick('month');
+});
+
+function handleSpo2DropdownClick(selectedOption) {
+    $('#spo2-timePeriodDropdown').text(capitalizeFirstLetter(selectedOption));
+    $('#spo2-timePeriodDropdown').data('selected-option-id', selectedOption);
+
     // Hide all content
     $('.content').hide();
-    // Show the content for Today
-    $('#today-content').show();
-    // Trigger your function to display BPM data for Today
-    displayBpmDataToday();
+
+    // Show the appropriate content based on the selected option
+    $('#spo2-' + selectedOption + '-content').show();
+
+    // Handle chart display based on user selection
+    if (selectedOption === 'today') {
+        displaySpDataToday('admin');
+        displaySpDataToday('doctor');
+    } else if (selectedOption === 'week') {
+        displaySpDataWeek('admin');
+        displaySpDataWeek('doctor');
+    } else if (selectedOption === 'month') {
+        displaySpDataMonth('admin');
+        displaySpDataMonth('doctor');
+    }
+
     // Open the modal
-    $('#addModal-datapatient').modal('show');
-});
-
-$('#week-option').click(function () {
-    // Hide all content
-    $('.content').hide();
-    // Show the content for This Week
-    $('#week-content').show();
-    // Trigger your function to display BPM data for This Week
-    displayBpmDataWeek();
-    // Open the modal
-    $('#addModal-datapatient').modal('show');
-});
-
-$('#month-option').click(function () {
-    // Hide all content
-    $('.content').hide();
-    // Show the content for This Month
-    $('#month-content').show();
-    // Trigger your function to display BPM data for This Month
-    displayBpmDataMonth();
-    // Open the modal
-    $('#addModal-datapatient').modal('show');
-});
-});
-
-// Update dropdown text based on user selection
-$('.dropdown-item').on('click', function () {
-var selectedText = $(this).text();
-$('#timePeriodDropdown').text(selectedText);
-
-// Handle chart display based on user selection
-if ($(this).attr('id') === 'today-option') {
-    displayBpmDataToday();
-} else if ($(this).attr('id') === 'week-option') {
-    displayBpmDataWeek();
-} else if ($(this).attr('id') === 'month-option') {
-    displayBpmDataMonth();
+    $('#addModal-dataoxygen').modal('show');
 }
 
-// Open the modal
-$('#addModal-datapatient').modal('show');
-});
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 
 </script>

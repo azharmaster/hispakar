@@ -166,9 +166,6 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
 
     // get bpm data
     Route::get('/doctor/getBpmData', [DoctorController::class, 'getBpmData']);
-
-
-
 });
 
 //Nurse
