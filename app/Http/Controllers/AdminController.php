@@ -1534,7 +1534,7 @@ class AdminController extends Controller
               }
       
               // Select 'Date_created', 'bpm', and 'spo2' columns
-              $result = $query->select('Date_created', 'bpm', 'spo2')->get();
+              $result = $query->select('Date_created', 'bpm', 'spo2', 'pi')->get();
       
               return response()->json([
                   'status' => 'success',

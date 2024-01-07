@@ -22,6 +22,8 @@ use App\Models\DocSchedule;
 use App\Models\MedRecord;
 use App\Models\MedInvoice;
 use App\Models\Medprescription;
+use App\Models\DataPatient;
+
 use Illuminate\Support\Facades\Auth;
 
 class NurseController extends Controller
@@ -302,11 +304,6 @@ class NurseController extends Controller
         ->distinct()
         ->get();
 
-        $doctorpatient = MedRecord::select(DB::raw('(SELECT name FROM doctor WHERE id = docid) as doctor'))
-        ->where('patientid', $id)
-        ->distinct()
-        ->get();
-
         $listmedicines = Medicine::select('medicine.*')
         ->join('medprescription', 'medicine.id', '=', 'medprescription.medicineid')
         ->where('medprescription.patientid', '=', $id)
@@ -367,7 +364,7 @@ class NurseController extends Controller
         /////////////////////////////
 
 
-        return view('nurse.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData', 'totalPastAppointments', 'doctorpatient', 'medRecords', 'doctorNames'));
+        return view('nurse.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData', 'totalPastAppointments', 'medRecords', 'doctorNames'));
        
     }
 
@@ -1160,6 +1157,39 @@ class NurseController extends Controller
         $appointment->save();
 
         return redirect('/nurse/dashboard')->with('success', 'Successfully updated');
+    }
+
+    public function getBpmData(Request $request)
+    {
+        try {
+            $timePeriod = $request->input('timePeriod');
+    
+            // Start with the DataPatient model
+            $query = DataPatient::query();
+    
+            // Filter data based on the selected time period
+            if ($timePeriod === 'today') {
+                $query->whereDate('Date_created', now()->toDateString());
+            } elseif ($timePeriod === 'week') {
+                $query->whereBetween('Date_created', [now()->startOfWeek(), now()->endOfWeek()]);
+            } elseif ($timePeriod === 'month') {
+                $query->whereMonth('Date_created', now()->month);
+            }
+    
+            // Select 'Date_created', 'bpm', and 'spo2' columns
+            $result = $query->select('Date_created', 'bpm', 'spo2', 'pi')->get();
+    
+            return response()->json([
+                'status' => 'success',
+                'data' => $result,
+            ]);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Internal Server Error',
+            ], 500);
+        }
     }
 
 

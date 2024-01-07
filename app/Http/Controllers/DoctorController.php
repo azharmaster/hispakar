@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+
 
 use App\Models\Appointments;
 use App\Models\Attendance;
@@ -13,6 +15,8 @@ use App\Models\MedPrescription;
 use App\Models\MedInvoice;
 use App\Models\MedRecord;
 use App\Models\MedService;
+use App\Models\DataPatient;
+
 use App\Models\Nurse;
 use App\Models\Patient;
 use App\Models\Room;
@@ -707,9 +711,7 @@ class DoctorController extends Controller
                         ->where('appointment.id', $id)
                         ->first();
         }
-    
-        $medPres = MedPrescription::find($id); // Fetch the MedPrescription record based on $id
-
+        
         $singlePatient = $appointment->patient;
         $medservices = MedService::all();
         $patients = Patient::all(); // Add this line to fetch all patients
@@ -745,7 +747,7 @@ class DoctorController extends Controller
                             ->where('medrecord.aptid', $id)
                             ->get();
                             //dd($selectedServiceType);
-       $selectedMedicinesData = Medprescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
+       $selectedMedicinesData = MedPrescription::join('patient', 'medprescription.patientid', '=', 'patient.id')
                             ->where('medprescription.patientid', $appointment->patientid)
                             ->where('medprescription.aptid', $id)
                             ->orderBy('medprescription.id', 'desc')
@@ -761,8 +763,21 @@ class DoctorController extends Controller
                 'qty' => $record->qty,
                 'price' => $record->price,
                 'total' => $record->total,
+                'medPrescriptionId' => $record->id, 
             ];
         });
+
+        $existingMedPres = MedPrescription::where('aptid', $id)
+        ->where('id')
+        ->first();
+        
+        // Pass $medPrescriptionId and other retrieved attributes to the view
+        return view('doctor.contents.eappointmentReport', compact(
+            'appointment', 'medicines', 'singlePatient', 'medservices', 'patients', 'medNum', 'previousMedRecord', 'prevMedicine',
+            'selectedMedicines', 'selectedServiceType','existingMedPres'
+        ));
+        
+    
 
         //$selectedMedicineId = $selectedMedicines->isEmpty() ? null : $selectedMedicines->first()['id'];
         // $selectedMedicineId = null;
@@ -784,7 +799,7 @@ class DoctorController extends Controller
     
         return view('doctor.contents.eappointmentReport', compact(
             'appointment', 'medicines', 'singlePatient', 'medservices', 'patients', 'medNum', 'previousMedRecord', 'prevMedicine',
-            'selectedMedicines', 'selectedServiceType','medPres'
+            'selectedMedicines', 'selectedServiceType','medPrescription'
         ));
     }     
     
@@ -1293,6 +1308,7 @@ class DoctorController extends Controller
                         ->first();
 
                         if ($existingMedPres) {
+
                             // Update the fields for the existing record
                             $existingMedPres->name = $medicineName;
                             $existingMedPres->price = $prices[$i];
@@ -1301,7 +1317,8 @@ class DoctorController extends Controller
                             $existingMedPres->desc = $descriptions[$i];
                             $existingMedPres->docid = $doctor->id;
                             $existingMedPres->patientid = $request->input('patientid');
-                            $existingMedPres->save();
+                            $existingMedPres->update();
+
                         } else {
                             // Insert a new record into medprescription table
                             $newMedPres = new MedPrescription();
@@ -1319,7 +1336,18 @@ class DoctorController extends Controller
                             $newMedPres->save();
                         }
                     }
-                }    
+
+                    // Handle deletions
+                    $deletedMedicineIds = explode(',', $request->input('deleted_medicine_ids'));
+                    foreach ($deletedMedicineIds as $deletedMedicineId) {
+                        if (!empty($deletedMedicineId)) {
+                            $existingMedPres = MedPrescription::find($deletedMedicineId);
+                            if ($existingMedPres) {
+                                $existingMedPres->delete();
+                            }
+                        }
+                    }
+                }   
             } 
         }
         // Check if the checkbox is checked
@@ -1344,20 +1372,16 @@ class DoctorController extends Controller
             $apt->save();
         }
 
-        return redirect('/doctor/dashboard')->with('success', 'Medical record successfully saved!');
+        return redirect('/doctor/appointmentList')->with('success', 'Medical record successfully saved!');
     }
 
-    public function deleteMedPres($id) {
-        try {
-            $medPres = MedPrescription::findOrFail($id);
-            $medPres->delete();
+    public function destroy($id)
+    {
+        $existingMedPres = MedPrescription::find($id);
+        $existingMedPres->delete();
+        return redirect()->back()->with('status','Medicine Prescription deleted successfully');
+    }
     
-            return response()->json(['message' => 'Record deleted successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error deleting the record'], 500);
-        }
-    }
-
     public function viewMedicalReport($medrc_id)
     {
         $record = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medPrescription', 'medInvoice')
@@ -1568,5 +1592,40 @@ class DoctorController extends Controller
         return view('doctor.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData','totalPastAppointments', 'medRecords', 'doctorNames'));
        
     }
+
+    public function getBpmData(Request $request)
+    {
+        try {
+            $timePeriod = $request->input('timePeriod');
+    
+            // Start with the DataPatient model
+            $query = DataPatient::query();
+    
+            // Filter data based on the selected time period
+            if ($timePeriod === 'today') {
+                $query->whereDate('Date_created', now()->toDateString());
+            } elseif ($timePeriod === 'week') {
+                $query->whereBetween('Date_created', [now()->startOfWeek(), now()->endOfWeek()]);
+            } elseif ($timePeriod === 'month') {
+                $query->whereMonth('Date_created', now()->month);
+            }
+    
+            // Select 'Date_created', 'bpm', and 'spo2' columns
+            $result = $query->select('Date_created', 'bpm', 'spo2', 'pi')->get();
+    
+            return response()->json([
+                'status' => 'success',
+                'data' => $result,
+            ]);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Internal Server Error',
+            ], 500);
+        }
+    }
+    
+
 
 }

@@ -307,9 +307,12 @@
                                                             </span>
 
                                                             <span>
+                                                            <a href="" class="pi-modal-trigger" data-toggle="modal" data-target="#addModal-dataindex">
+
                                                             <i class="fas fa-heart mb-10">
-                                                                <span class="badge data-badge stress-badge">Low</span>
+                                                                <span class="badge data-badge stress-badge">50 Pi</span>
                                                             </i>
+                                                            </a>
                                                             </span>
                                                          
                                                         </div>
@@ -572,6 +575,49 @@
                 <!-- Content for This Month -->
                 <div id="spo2-month-content" class="content" style="display: none;">
                     <canvas id="spChartMonth"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addModal-dataindex" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Patient PI</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Dropdown button -->
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="pi-timePeriodDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Today 
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="spo2-timePeriodDropdown">
+                    <a class="dropdown-item pi-dropdown-item" href="#" id="pi-today-option">Today</a>
+                    <a class="dropdown-item pi-dropdown-item" href="#" id="pi-week-option">This Week</a>
+                    <a class="dropdown-item pi-dropdown-item" href="#" id="pi-month-option">This Month</a>
+                    </div>
+                </div>
+                <!-- Content for Today -->
+              
+                <div id="pi-today-content" class="content">
+                    <canvas id="piChartToday"></canvas>
+                </div>
+
+                <!-- Content for This Week -->
+                <div id="pi-week-content" class="content" style="display: none;">
+                    <canvas id="piChartWeek"></canvas>
+                </div>
+
+                <!-- Content for This Month -->
+                <div id="pi-month-content" class="content" style="display: none;">
+                    <canvas id="piChartMonth"></canvas>
                 </div>
             </div>
 
@@ -985,6 +1031,8 @@ $('.bpm-modal-trigger').click(function () {
     // Trigger your function to display BPM data for Today
     displayBpmDataToday('admin');
     displayBpmDataToday('doctor');
+    displayBpmDataToday('nurse');
+
 
     // Open the modal
     $('#addModal-datapatient').modal('show');
@@ -1016,12 +1064,18 @@ $('.bpm-dropdown-item').on('click', function () {
     if (selectedOptionId === 'today') {
         displayBpmDataToday('admin');
         displayBpmDataToday('doctor');
+        displayBpmDataToday('nurse');
+
     } else if (selectedOptionId === 'week') {
         displayBpmDataWeek('admin');
         displayBpmDataWeek('doctor');
+        displayBpmDataWeek('nurse');
+
     } else if (selectedOptionId === 'month') {
         displayBpmDataMonth('admin');
         displayBpmDataMonth('doctor');
+        displayBpmDataMonth('nurse');
+
     }
 
     // Open the modal
@@ -1208,6 +1262,8 @@ $('.sp-modal-trigger').click(function () {
     // Trigger your function to display BPM data for Today
     displaySpDataToday('admin');
     displaySpDataToday('doctor');
+    displaySpDataToday('nurse');
+
 
     // Open the modal
     $('#addModal-dataoxygen').modal('show');
@@ -1250,16 +1306,268 @@ function handleSpo2DropdownClick(selectedOption) {
     if (selectedOption === 'today') {
         displaySpDataToday('admin');
         displaySpDataToday('doctor');
+        displaySpDataToday('nurse');
+
     } else if (selectedOption === 'week') {
         displaySpDataWeek('admin');
         displaySpDataWeek('doctor');
+        displaySpDataWeek('nurse');
+
     } else if (selectedOption === 'month') {
         displaySpDataMonth('admin');
         displaySpDataMonth('doctor');
+        displaySpDataMonth('nurse');
+
     }
 
     // Open the modal
     $('#addModal-dataoxygen').modal('show');
+}
+
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+
+</script>
+
+<script>
+    function displayPiDataToday(userType) {
+    // Make an AJAX request to fetch SpO2 data for today
+    $.ajax({
+        url: '/' + userType + '/getBpmData',
+        method: 'GET',
+        data: {
+            timePeriod: 'today',
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                var piData = response.data.map(entry => entry.pi);
+                var dateData = response.data.map(entry => entry.Date_created);
+
+                const ctx = document.getElementById('piChartToday').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dateData,
+                        datasets: [{
+                            label: 'Pi',
+                            data: piData,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Patient Pi Chart (Today)'
+                            }
+                        }
+                    },
+                });
+
+                // Show the modal containing the chart
+                $('#addModal-dataindex').modal('show');
+            } else {
+                // Handle error
+                console.error('Error fetching Pi data:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX Error: ' + status, error);
+        }
+    });
+}
+
+function displayPiDataWeek(userType) {
+    // Make an AJAX request to fetch SpO2 data for today
+    $.ajax({
+        url: '/' + userType + '/getBpmData',
+        method: 'GET',
+        data: {
+            timePeriod: 'week',
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                var piData = response.data.map(entry => entry.pi);
+                var dateData = response.data.map(entry => entry.Date_created);
+
+                const ctx = document.getElementById('piChartWeek').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dateData,
+                        datasets: [{
+                            label: 'Pi',
+                            data: piData,
+                            borderColor: 'rgba(0, 123, 255, 1)', // Change color to primary (blue)
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Patient Pi Chart (This Week)'
+                            }
+                        }
+                    },
+                });
+
+                // Show the modal containing the chart
+                $('#addModal-dataindex').modal('show');
+            } else {
+                // Handle error
+                console.error('Error fetching Pi data:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX Error: ' + status, error);
+        }
+    });
+}
+
+function displayPiDataMonth(userType) {
+    // Make an AJAX request to fetch SpO2 data for today
+    $.ajax({
+        url: '/' + userType + '/getBpmData',
+        method: 'GET',
+        data: {
+            timePeriod: 'month',
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                var piData = response.data.map(entry => entry.pi);
+                var dateData = response.data.map(entry => entry.Date_created);
+
+                const ctx = document.getElementById('piChartMonth').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dateData,
+                        datasets: [{
+                            label: 'Pi',
+                            data: piData,
+                            borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
+                            borderWidth: 2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Patient Pi Chart (This Month)'
+                            }
+                        }
+                    },
+                });
+
+                // Show the modal containing the chart
+                $('#addModal-dataindex').modal('show');
+            } else {
+                // Handle error
+                console.error('Error fetching Pi data:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX Error: ' + status, error);
+        }
+    });
+}
+
+$('.pi-modal-trigger').click(function () {
+    // Hide all content
+    $('.content').hide();
+
+    // Show the content for Today
+    $('#pi-today-content').show();
+
+    // Trigger your function to display BPM data for Today
+    displayPiDataToday('admin');
+    displayPiDataToday('doctor');
+    displayPiDataToday('nurse');
+
+
+    // Open the modal
+    $('#addModal-dataindex').modal('show');
+
+    // Set the default dropdown option to "Today"
+    $('#pi-timePeriodDropdown').text('Today');
+    $('#pi-timePeriodDropdown').data('selected-option-id', 'today');
+
+    // Trigger a click event on the "Today" dropdown item to make it selected by default
+    $('#pi-today-option').click();
+});
+
+// Handle dropdown item click events
+// SpO2 Today Option Click Event
+$('#pi-today-option').on('click', function () {
+    handlePiDropdownClick('today');
+});
+
+// SpO2 Week Option Click Event
+$('#pi-week-option').on('click', function () {
+    handlePiDropdownClick('week');
+});
+
+// SpO2 Month Option Click Event
+$('#pi-month-option').on('click', function () {
+    handlePiDropdownClick('month');
+});
+
+function handlePiDropdownClick(selectedOption) {
+    $('#pi-timePeriodDropdown').text(capitalizeFirstLetter(selectedOption));
+    $('#pi-timePeriodDropdown').data('selected-option-id', selectedOption);
+
+    // Hide all content
+    $('.content').hide();
+
+    // Show the appropriate content based on the selected option
+    $('#pi-' + selectedOption + '-content').show();
+
+    // Handle chart display based on user selection
+    if (selectedOption === 'today') {
+        displayPiDataToday('admin');
+        displayPiDataToday('doctor');
+        displayPiDataToday('nurse');
+
+    } else if (selectedOption === 'week') {
+        displayPiDataWeek('admin');
+        displayPiDataWeek('doctor');
+        displayPiDataWeek('nurse');
+
+    } else if (selectedOption === 'month') {
+        displayPiDataMonth('admin');
+        displayPiDataMonth('doctor');
+        displayPiDataMonth('nurse');
+
+    }
+
+    // Open the modal
+    $('#addModal-dataindex').modal('show');
 }
 
 
