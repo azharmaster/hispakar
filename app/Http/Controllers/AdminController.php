@@ -21,6 +21,7 @@ use App\Models\bpm;
 use App\Models\spo2;
 use App\Models\pi;
 use App\Models\fuzzyres;
+use App\Models\DataPatient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -1515,36 +1516,36 @@ class AdminController extends Controller
           return redirect('/admin/serviceList')->with('success', 'Service has been deleted');
       }
 
-    public function getBpmData(Request $request)
-    {
-        try {
-            $timePeriod = $request->input('timePeriod');
-    
-            // Assuming you have a 'bpm' table with 'Date_created', 'value', and 'time' columns
-            $query = DB::table('datapatient');
-    
-            // Filter data based on the selected time period
-            if ($timePeriod === 'today') {
-                $query->whereDate('Date_created', now()->toDateString());
-            } elseif ($timePeriod === 'week') {
-                $query->whereBetween('Date_created', [now()->startOfWeek(), now()->endOfWeek()]);
-            } elseif ($timePeriod === 'month') {
-                $query->whereMonth('Date_created', now()->month);
-            }
-    
-           // Select 'Date_created' and 'value' columns
-           $result = $query->select('Date_created', 'bpm', 'spo2')->get();
-    
-            return response()->json([
-                'status' => 'success',
-                'data' => $result,
-            ]);
-        } catch (\Exception $e) {
-            // Handle exceptions
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Internal Server Error',
-            ], 500);
-        }
-    }
+      public function getBpmData(Request $request)
+      {
+          try {
+              $timePeriod = $request->input('timePeriod');
+      
+              // Start with the DataPatient model
+              $query = DataPatient::query();
+      
+              // Filter data based on the selected time period
+              if ($timePeriod === 'today') {
+                  $query->whereDate('Date_created', now()->toDateString());
+              } elseif ($timePeriod === 'week') {
+                  $query->whereBetween('Date_created', [now()->startOfWeek(), now()->endOfWeek()]);
+              } elseif ($timePeriod === 'month') {
+                  $query->whereMonth('Date_created', now()->month);
+              }
+      
+              // Select 'Date_created', 'bpm', and 'spo2' columns
+              $result = $query->select('Date_created', 'bpm', 'spo2')->get();
+      
+              return response()->json([
+                  'status' => 'success',
+                  'data' => $result,
+              ]);
+          } catch (\Exception $e) {
+              // Handle exceptions
+              return response()->json([
+                  'status' => 'error',
+                  'message' => 'Internal Server Error',
+              ], 500);
+          }
+      }
 }
