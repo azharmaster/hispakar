@@ -250,6 +250,9 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
     //managedetailsuser
     Route::post('/patient/profile/{id}', [PatientController::class, 'EditProfile']);
 
+
+    Route::get('/patient/getBpmData', [PatientController::class, 'getBpmData']);
+
 });
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);

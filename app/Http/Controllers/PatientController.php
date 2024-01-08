@@ -12,7 +12,7 @@ use App\Models\User;
 use App\Models\Patient; 
 use App\Models\Doctor;
 use App\Models\Nurse; 
-
+use App\Models\DataPatient; 
 use App\Models\Department;
 use App\Models\DocSchedule;
 use App\Models\Appointments;
@@ -639,4 +639,38 @@ class PatientController extends Controller
     }
 
 
+    public function getBpmData(Request $request)
+    {
+        try {
+            $timePeriod = $request->input('timePeriod');
+
+            // Start with the DataPatient model
+            $query = DataPatient::query();
+
+            // Filter data based on the selected time period
+            if ($timePeriod === 'today') {
+                $query->whereDate('Date_created', now()->toDateString());
+            } elseif ($timePeriod === 'week') {
+                $query->whereBetween('Date_created', [now()->startOfWeek(), now()->endOfWeek()]);
+            } elseif ($timePeriod === 'month') {
+                $query->whereMonth('Date_created', now()->month);
+            }
+
+            // Select 'Date_created', 'bpm', and 'spo2' columns
+            $result = $query->select('Date_created', 'bpm', 'spo2', 'pi')->get();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $result,
+            ]);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Internal Server Error',
+            ], 500);
+        }
+    }
+
 }
+
