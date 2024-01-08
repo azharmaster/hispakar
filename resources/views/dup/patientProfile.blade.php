@@ -1513,7 +1513,7 @@ function capitalizeFirstLetter(string) {
                     // Update content inside the Spo2 badge
                     $('.sp-badge').text(response.data.latestSpo2 + ' SpO2');
 
-                    $('.stress-badge').text(response.data.latestSpo2 + ' Pi');
+                    $('.stress-badge').text(response.data.latestPi + ' Pi');
 
                 } else {
                     // Handle error or no data scenario
