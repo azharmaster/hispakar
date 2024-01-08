@@ -99,8 +99,13 @@ Route::group(['middleware'=>['isAdmin', 'auth']], function(){
     Route::post('/admin/serviceList/{id}', [AdminController::class, 'EditServices']);
     Route::delete('/admin/serviceList/{id}', [AdminController::class, 'deleteServices'])->name('deleteServices');
 
-    // get gpm data
+    // get bpm data
     Route::get('/admin/getBpmData', [AdminController::class, 'getBpmData']);
+
+    // get latest data
+    Route::get('/admin/getLatestData', [AdminController::class, 'getLatestData']);
+
+
 
 });
 
@@ -166,6 +171,10 @@ Route::group(['middleware'=>['isDoctor', 'auth']], function(){
 
     // get bpm data
     Route::get('/doctor/getBpmData', [DoctorController::class, 'getBpmData']);
+
+    // get latest data
+    Route::get('/doctor/getLatestData', [DoctorController::class, 'getLatestData']);
+
 });
 
 //Nurse
@@ -225,6 +234,10 @@ Route::group(['middleware'=>['isNurse', 'auth']], function(){
 
     // get bpm data
     Route::get('/nurse/getBpmData', [NurseController::class, 'getBpmData']);
+
+    // get latest data
+    Route::get('/nurse/getLatestData', [NurseController::class, 'getLatestData']);
+
 
 
 });

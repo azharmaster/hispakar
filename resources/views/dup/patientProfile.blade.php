@@ -292,7 +292,7 @@
                                                         <div class="row justify-content-between align-items-center" style="margin-left:-15px;">
                                                             <a href="#" class="bpm-modal-trigger" data-toggle="modal" data-target="#addModal-datapatient">
                                                                 <i class="fas fa-heartbeat text-white" >
-                                                                    <span class="badge data-badge bpm-badge">90 bpm</span>
+                                                                    <span class="badge data-badge bpm-badge"></span>
                                                                 </i>
                                                             </a>
                                                             
@@ -300,7 +300,7 @@
                                                             <a href="#" class="sp-modal-trigger" data-toggle="modal" data-target="#addModal-dataoxygen">
 
                                                                 <i class="fas fa-thumbs-up mb-10" >
-                                                                    <span class="badge data-badge sp-badge">90 SpO2</span>
+                                                                    <span class="badge data-badge sp-badge"></span>
                                                                 </i>
 
                                                                 </a>
@@ -310,7 +310,7 @@
                                                             <a href="" class="pi-modal-trigger" data-toggle="modal" data-target="#addModal-dataindex">
 
                                                             <i class="fas fa-heart mb-10">
-                                                                <span class="badge data-badge stress-badge">50 Pi</span>
+                                                                <span class="badge data-badge stress-badge"></span>
                                                             </i>
                                                             </a>
                                                             </span>
@@ -675,90 +675,6 @@
 
 <script>
 
-// $.ajax({
-//   url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
-//   crossDomain: true,
-//   headers: {
-//     'accept': 'application/json',
-//     'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd3JlcyB3bG9jIiwiZXhwIjoxNjk3NjQ2NDg0LCJpYXQiOjE2OTc1NjAwODR9.DBzPrnSoU8pnSec72rerOkUfhHegvPzZRVfzilDhUgM'
-//   }
-// }).done(function(response) {
-//   console.log(response);
-// });
-
-var d = (new Date()).toISOString().split('T')[0];
-console.log(d);
-$.ajax({
-  url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
-  crossDomain: true,
-  headers: {
-    'accept': 'application/json',
-    'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd2xvYyB3cmVzIiwiZXhwIjoxNzAyNTI2NzYyLCJpYXQiOjE3MDI0NDAzNjJ9.q_tdbcegG1VwQlFsGqtgcyRJtNjlyqIz3fGO4HNp5Zs'
-  }
-}).done(function(response) {
-
-    
-  var data1 = response['activities-heart-intraday']['dataset'];
-  data1 = data1.slice(-10);
-  console.log(data1);
-  
-  console.log(data1[data1.length-1]['time']);
-
-  var datax1 = data1[0]['value'];
-  var datax2 = data1[1]['value'];
-  var datax3 = data1[2]['value'];
-  var datax4 = data1[3]['value'];
-  var datax5 = data1[4]['value'];
-  var datax6 = data1[5]['value'];
-  var datax7 = data1[6]['value'];
-  var datax8 = data1[7]['value'];
-  var datax9 = data1[8]['value'];
-  var datax10 = data1[9]['value'];
-
-  var datay1 = data1[0]['time'];
-  var datay2 = data1[1]['time'];
-  var datay3 = data1[2]['time'];
-  var datay4 = data1[3]['time'];
-  var datay5 = data1[4]['time'];
-  var datay6 = data1[5]['time'];
-  var datay7 = data1[6]['time'];
-  var datay8 = data1[7]['time'];
-  var datay9 = data1[8]['time'];
-  var datay10 = data1[9]['time'];
-    
-    var datas = [datax1,datax2,datax3,datax4,datax5,datax6,datax7,datax8,datax9,datax10];
-    var datasy = [datay1,datay2,datay3,datay4,datay5,datay6,datay7,datay8,datay9,datay10];
-
-
-    const ctx3 = document.getElementById('myChart3');
-
-new Chart(ctx3, {
-    type: 'line',
-    data: {
-        labels: datasy,
-        datasets: [{
-            label: 'Heart Rate',
-            data: datas,
-        },
-       ]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'Data Patient'
-            }
-        }
-    },
-});
-
-});
-
-
     const ctx = document.getElementById('myChart');
     //const label = Utils.months({count: 7});
 
@@ -888,6 +804,8 @@ function displayBpmDataToday(userType) {
 
     // Make an AJAX request to fetch BPM data for today
     function fetchData() {
+        console.log('AJAX URL:', url); // Add this line for debugging
+
         $.ajax({
             url: '/' + userType + '/getBpmData',
             method: 'GET',
@@ -1577,6 +1495,51 @@ function capitalizeFirstLetter(string) {
 
 
 </script>
+
+<script>
+    function updateBadges(userType) {
+        // Make an AJAX request
+        $.ajax({
+            url: '/' + userType + '/getLatestData',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                console.log("AJAX Success:", response);
+
+                if (response.status === 'success') {
+                    // Update content inside the BPM badge
+                    $('.bpm-badge').text(response.data.latestBpm + ' bpm');
+
+                    // Update content inside the Spo2 badge
+                    $('.sp-badge').text(response.data.latestSpo2 + ' SpO2');
+
+                    $('.stress-badge').text(response.data.latestSpo2 + ' Pi');
+
+                } else {
+                    // Handle error or no data scenario
+                    $('.bpm-badge').text('N/A');
+                    $('.sp-badge').text('N/A');
+                    $('.stress-badge').text('N/A');
+
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle AJAX error
+                console.error("AJAX Error:", textStatus, errorThrown);
+                console.log("Response Text:", jqXHR.responseText);
+
+              
+            }
+        });
+    }
+
+    // Call the function when needed for different user types
+    updateBadges('admin');
+    updateBadges('doctor');
+    updateBadges('nurse');
+</script>
+
+
 
 
 

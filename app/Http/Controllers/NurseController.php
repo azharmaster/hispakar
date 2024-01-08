@@ -1192,6 +1192,42 @@ class NurseController extends Controller
         }
     }
 
+    public function getLatestData(Request $request)
+      {
+          try {
+              // Start with the DataPatient model
+              $query = DataPatient::query();
+      
+              // Select the latest record
+              $latestRecord = $query->latest('Date_created')->first();
+      
+              // Check if any data was found
+              if ($latestRecord) {                 
+      
+                  return response()->json([
+                      'status' => 'success',
+                      'data' => [
+                          'latestBpm' => $latestRecord->bpm,
+                          'latestSpo2' => $latestRecord->spo2,
+                          'latestPi' => $latestRecord->pi,
+                          'latestDate' => $latestRecord->Date_created,
+                      ],
+                  ]);
+              } else {
+                  // Handle the case where no data is found
+                  return response()->json([
+                      'status' => 'error',
+                      'message' => 'No data available',
+                  ]);
+              }
+          } catch (\Exception $e) {
+              // Handle exceptions
+              return response()->json([
+                  'status' => 'error',
+                  'message' => 'Internal Server Error',
+              ], 500);
+          }
+      }
 
 
 
