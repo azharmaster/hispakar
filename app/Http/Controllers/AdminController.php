@@ -719,9 +719,11 @@ class AdminController extends Controller
 
     public function viewRoomList()
     {
-        $rooms = Room::all();
 
-        return view('admin.contents.roomList', compact('rooms'));
+        $rooms = Room::all(); // Retrieve all rooms from the database
+
+        $doctors = Doctor::all();
+        return view('admin.contents.roomList', compact('rooms', 'doctors'));
     }
 
     public function viewAppointmentList()
@@ -1149,15 +1151,23 @@ class AdminController extends Controller
     public function AddRooms(Request $request)
     {
      
-        //insert data into nurse table
-        $room = new Room();
-        $room->name = $request->name;
-        $room->type = $request->type;
-        $room->desc = $request->desc;
-        $room->staff_id = $request->staff_id;
-        $room->status = $request->status;
-        $room->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
-        $room->save();
+          // Check if a room with the same name already exists
+          $existingRoom = Room::where('name', $request->name)->first();
+
+          if ($existingRoom) {
+              // Room with the same name already exists, display an alert or return an error message
+              return redirect('/admin/roomList')->with('error', 'Room is already occupied by other doctor.');
+          }
+       
+          //insert data into room table
+          $room = new Room();
+          $room->name = $request->name;
+          $room->type = $request->type;
+          $room->desc = $request->desc;
+          $room->staff_id = $request->docid;
+          $room->status = $request->status;
+          $room->created_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+          $room->save();
 
         return redirect('/admin/roomList')->with('success', 'New Rooms has been successfully added');
     }
@@ -1170,7 +1180,7 @@ class AdminController extends Controller
         $room->type = $request->input('type');
         $room->desc = $request->input('desc'); 
         $room->status = $request->input('status');
-        $room->staff_id = $request->input('staff_id');
+        $room->staff_id = $request->input('docid');
         $room->updated_at = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
         $room->save();
 
