@@ -308,10 +308,7 @@
                                     <h5>Data Patient</h5>
                                 </div>
                                 <div class="card-block">
-                                    <div>
-                                        <canvas id="myChart3"></canvas>
-                                       
-                                    </div>
+                                <canvas id="bpmChartToday"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -486,8 +483,6 @@
                           <th>Name</th>
                           <td>{{ $listmedicine->name }}</td>
                         </tr>
-                        
-                       
                         <tr>
                           <th>Description</th>
                           <td>{{ $listmedicine->desc }}</td>
@@ -545,100 +540,97 @@
 
 
 </script>
+
+
 <script>
-// $.ajax({
-//   url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
-//   crossDomain: true,
-//   headers: {
-//     'accept': 'application/json',
-//     'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd3JlcyB3bG9jIiwiZXhwIjoxNjk3NjQ2NDg0LCJpYXQiOjE2OTc1NjAwODR9.DBzPrnSoU8pnSec72rerOkUfhHegvPzZRVfzilDhUgM'
-//   }
-// }).done(function(response) {
-//   console.log(response);
-// });
+    // Function to display BPM data for today in a chart and open the modal
 
-var d = (new Date()).toISOString().split('T')[0];
-console.log(d);
-$.ajax({
-    url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
-  crossDomain: true,
-  headers: {
-    'accept': 'application/json',
-    'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd2xvYyB3cmVzIiwiZXhwIjoxNzAyNTI2NzYyLCJpYXQiOjE3MDI0NDAzNjJ9.q_tdbcegG1VwQlFsGqtgcyRJtNjlyqIz3fGO4HNp5Zs'
-  }
-}).done(function(response) {
-    
-  var data1 = response['activities-heart-intraday']['dataset'];
-  data1 = data1.slice(-10);
-  console.log(data1);
-  
-  console.log(data1[data1.length-1]['time']);
-
-  var datax1 = data1[0]['value'];
-  var datax2 = data1[1]['value'];
-  var datax3 = data1[2]['value'];
-  var datax4 = data1[3]['value'];
-  var datax5 = data1[4]['value'];
-  var datax6 = data1[5]['value'];
-  var datax7 = data1[6]['value'];
-  var datax8 = data1[7]['value'];
-  var datax9 = data1[8]['value'];
-  var datax10 = data1[9]['value'];
-
-  var datay1 = data1[0]['time'];
-  var datay2 = data1[1]['time'];
-  var datay3 = data1[2]['time'];
-  var datay4 = data1[3]['time'];
-  var datay5 = data1[4]['time'];
-  var datay6 = data1[5]['time'];
-  var datay7 = data1[6]['time'];
-  var datay8 = data1[7]['time'];
-  var datay9 = data1[8]['time'];
-  var datay10 = data1[9]['time'];
-    
-    var datas = [datax1,datax2,datax3,datax4,datax5,datax6,datax7,datax8,datax9,datax10];
-    var datasy = [datay1,datay2,datay3,datay4,datay5,datay6,datay7,datay8,datay9,datay10];
-
-
-    const ctx3 = document.getElementById('myChart3');
-
-new Chart(ctx3, {
-    type: 'line',
-    data: {
-        labels: datasy,
-        datasets: [{
-            label: 'Heart Rate',
-            data: datas,
+    // Initial chart creation
+    const ctx = document.getElementById('bpmChartToday').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'BPM',
+                    data: [],
+                    borderColor: 'rgba(236, 112, 99)',
+                    borderWidth: 2,
+                    fill: false,
+                },
+                {
+                    label: 'SPO2',
+                    data: [],
+                    borderColor: 'rgba(84, 153, 199)',
+                    borderWidth: 2,
+                    fill: false,
+                },
+                {
+                    label: 'PI',
+                    data: [],
+                    borderColor: 'rgba(88, 214, 141)',
+                    borderWidth: 2,
+                    fill: false,
+                }
+            ]
         },
-       ]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'Data Patient'
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Live Data Patient'
+                }
             }
+        },
+    });
+
+    // Function to update chart data
+    function updateChart(response) {
+        if (response.status === 'success') {
+            // Consider only the last 10 entries
+            var latestData = response.data.slice(-10);
+            var bpmData = latestData.map(entry => entry.bpm);
+            var spo2Data = latestData.map(entry => entry.spo2);
+            var piData = latestData.map(entry => entry.pi);
+            var datasy = latestData.map(entry => entry.Date_created);
+
+            // Update the chart data
+            myChart.data.labels = datasy;
+            myChart.data.datasets[0].data = bpmData;
+            myChart.data.datasets[1].data = spo2Data;
+            myChart.data.datasets[2].data = piData;
+            myChart.update();
+        } else {
+            // Handle error
         }
-    },
-});
+    }
 
-});
+    // Make an AJAX request to fetch BPM data for today
+    function fetchData() {
+        $.ajax({
+            url: '/patient/getBpmData',
+            method: 'GET',
+            data: {
+                timePeriod: 'today',
+            },
+            success: updateChart,
+            error: function (xhr, status, error) {
+                // Handle AJAX error
+                console.error('AJAX Error: ' + status, error);
+            }
+        });
+    }
 
+    // Display initial data
+    fetchData();
 
-
-// $.ajax({
-//   url: 'https://api.fitbit.com/1/user/-/profile.json',
-//   crossDomain: true,
-//   headers: {
-//     'accept': 'application/json',
-//     'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd3JlcyB3bG9jIiwiZXhwIjoxNjk3ODA5OTQ2LCJpYXQiOjE2OTc3MjM1NDZ9.wL-EI6PD332o1bFqc8BoPrjydN7KmUoqmCDzCsLClZc'
-//   }
-// }).done(function(response) {
-//   console.log(response);
-// });
+    // Set interval to update the chart every second
+    setInterval(fetchData, 1000);
 </script>
+
 @endsection
