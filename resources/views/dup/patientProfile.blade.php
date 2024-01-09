@@ -292,7 +292,7 @@
                                                         <div class="row justify-content-between align-items-center" style="margin-left:-15px;">
                                                             <a href="#" class="bpm-modal-trigger" data-toggle="modal" data-target="#addModal-datapatient">
                                                                 <i class="fas fa-heartbeat text-white" >
-                                                                    <span class="badge data-badge bpm-badge"></span>
+                                                                    <span class="badge data-badge bpm-badge">90 bpm</span>
                                                                 </i>
                                                             </a>
                                                             
@@ -300,7 +300,7 @@
                                                             <a href="#" class="sp-modal-trigger" data-toggle="modal" data-target="#addModal-dataoxygen">
 
                                                                 <i class="fas fa-thumbs-up mb-10" >
-                                                                    <span class="badge data-badge sp-badge"></span>
+                                                                    <span class="badge data-badge sp-badge">90 SpO2</span>
                                                                 </i>
 
                                                                 </a>
@@ -310,7 +310,7 @@
                                                             <a href="" class="pi-modal-trigger" data-toggle="modal" data-target="#addModal-dataindex">
 
                                                             <i class="fas fa-heart mb-10">
-                                                                <span class="badge data-badge stress-badge"></span>
+                                                                <span class="badge data-badge stress-badge">50 Pi</span>
                                                             </i>
                                                             </a>
                                                             </span>
@@ -675,6 +675,90 @@
 
 <script>
 
+// $.ajax({
+//   url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
+//   crossDomain: true,
+//   headers: {
+//     'accept': 'application/json',
+//     'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd3JlcyB3bG9jIiwiZXhwIjoxNjk3NjQ2NDg0LCJpYXQiOjE2OTc1NjAwODR9.DBzPrnSoU8pnSec72rerOkUfhHegvPzZRVfzilDhUgM'
+//   }
+// }).done(function(response) {
+//   console.log(response);
+// });
+
+var d = (new Date()).toISOString().split('T')[0];
+console.log(d);
+$.ajax({
+  url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
+  crossDomain: true,
+  headers: {
+    'accept': 'application/json',
+    'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd2xvYyB3cmVzIiwiZXhwIjoxNzAyNTI2NzYyLCJpYXQiOjE3MDI0NDAzNjJ9.q_tdbcegG1VwQlFsGqtgcyRJtNjlyqIz3fGO4HNp5Zs'
+  }
+}).done(function(response) {
+
+    
+  var data1 = response['activities-heart-intraday']['dataset'];
+  data1 = data1.slice(-10);
+  console.log(data1);
+  
+  console.log(data1[data1.length-1]['time']);
+
+  var datax1 = data1[0]['value'];
+  var datax2 = data1[1]['value'];
+  var datax3 = data1[2]['value'];
+  var datax4 = data1[3]['value'];
+  var datax5 = data1[4]['value'];
+  var datax6 = data1[5]['value'];
+  var datax7 = data1[6]['value'];
+  var datax8 = data1[7]['value'];
+  var datax9 = data1[8]['value'];
+  var datax10 = data1[9]['value'];
+
+  var datay1 = data1[0]['time'];
+  var datay2 = data1[1]['time'];
+  var datay3 = data1[2]['time'];
+  var datay4 = data1[3]['time'];
+  var datay5 = data1[4]['time'];
+  var datay6 = data1[5]['time'];
+  var datay7 = data1[6]['time'];
+  var datay8 = data1[7]['time'];
+  var datay9 = data1[8]['time'];
+  var datay10 = data1[9]['time'];
+    
+    var datas = [datax1,datax2,datax3,datax4,datax5,datax6,datax7,datax8,datax9,datax10];
+    var datasy = [datay1,datay2,datay3,datay4,datay5,datay6,datay7,datay8,datay9,datay10];
+
+
+    const ctx3 = document.getElementById('myChart3');
+
+new Chart(ctx3, {
+    type: 'line',
+    data: {
+        labels: datasy,
+        datasets: [{
+            label: 'Heart Rate',
+            data: datas,
+        },
+       ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Data Patient'
+            }
+        }
+    },
+});
+
+});
+
+
     const ctx = document.getElementById('myChart');
     //const label = Utils.months({count: 7});
 
@@ -757,6 +841,13 @@
 </script>
 
 <script>
+    var userType = @json($userType ?? '');
+    console.log('JavaScript userType:', userType);
+</script>
+
+
+
+<script>
 // Function to display BPM data for today in a chart and open the modal
 function displayBpmDataToday(userType) {
     // Initial chart creation
@@ -804,8 +895,10 @@ function displayBpmDataToday(userType) {
 
     // Make an AJAX request to fetch BPM data for today
     function fetchData() {
-        console.log('AJAX URL:', url); // Add this line for debugging
+        console.log('User Type:', userType);
 
+        // Log the complete URL
+        console.log('AJAX URL:', '/' + userType + '/getBpmData');
         $.ajax({
             url: '/' + userType + '/getBpmData',
             method: 'GET',
@@ -946,12 +1039,6 @@ $('.bpm-modal-trigger').click(function () {
     // Show the content for Today
     $('#today-content').show();
 
-    // Trigger your function to display BPM data for Today
-    displayBpmDataToday('admin');
-    displayBpmDataToday('doctor');
-    displayBpmDataToday('nurse');
-
-
     // Open the modal
     $('#addModal-datapatient').modal('show');
 
@@ -961,7 +1048,18 @@ $('.bpm-modal-trigger').click(function () {
 
     // Trigger a click event on the "Today" dropdown item to make it selected by default
     $('#today-option').click();
+
+    // Determine user type and call the corresponding function
+    if (userType === 2) {
+        displayBpmDataToday('doctor');
+    } else if (userType === 3) {
+        displayBpmDataToday('nurse');
+    } else if (userType === 1) {
+        // Include admin logic if needed
+        displayBpmDataToday('admin');
+    }
 });
+
 
 // Handle dropdown item click events
 $('.bpm-dropdown-item').on('click', function () {
@@ -980,9 +1078,14 @@ $('.bpm-dropdown-item').on('click', function () {
 
     // Handle chart display based on user selection
     if (selectedOptionId === 'today') {
-        displayBpmDataToday('admin');
+        if (userType === 2) {
         displayBpmDataToday('doctor');
+    } else if (userType === 3) {
         displayBpmDataToday('nurse');
+    } else if (userType === 1) {
+        // Include admin logic if needed
+        displayBpmDataToday('admin');
+    }
 
     } else if (selectedOptionId === 'week') {
         displayBpmDataWeek('admin');
@@ -1004,58 +1107,73 @@ $('.bpm-dropdown-item').on('click', function () {
 <!-- display sp02 -->
 <script>
 function displaySpDataToday(userType) {
-    // Make an AJAX request to fetch SpO2 data for today
-    $.ajax({
-        url: '/' + userType + '/getBpmData',
-        method: 'GET',
+    // Initial chart creation for SpO2
+    const ctx = document.getElementById('spChartToday').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'line',
         data: {
-            timePeriod: 'today',
+            labels: [],
+            datasets: [{
+                label: 'SpO2',
+                data: [],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                fill: false,
+            }]
         },
-        success: function (response) {
-            if (response.status === 'success') {
-                var spo2Data = response.data.map(entry => entry.spo2);
-                var dateData = response.data.map(entry => entry.Date_created);
-
-                const ctx = document.getElementById('spChartToday').getContext('2d');
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: dateData,
-                        datasets: [{
-                            label: 'SpO2',
-                            data: spo2Data,
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 2,
-                            fill: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Patient SpO2 Chart (Today)'
-                            }
-                        }
-                    },
-                });
-
-                // Show the modal containing the chart
-                $('#addModal-dataoxygen').modal('show');
-            } else {
-                // Handle error
-                console.error('Error fetching SpO2 data:', response.message);
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Patient SpO2 Chart (Today)'
+                }
             }
         },
-        error: function (xhr, status, error) {
-            // Handle AJAX error
-            console.error('AJAX Error: ' + status, error);
-        }
     });
+
+    // Function to update SpO2 chart data
+    function updateSpChart(response) {
+        if (response.status === 'success') {
+            var spo2Data = response.data.map(entry => entry.spo2);
+            var dateData = response.data.map(entry => entry.Date_created);
+
+            // Update the SpO2 chart data
+            myChart.data.labels = dateData;
+            myChart.data.datasets[0].data = spo2Data;
+            myChart.update();
+        } else {
+            // Handle error
+        }
+    }
+
+    // Make an AJAX request to fetch SpO2 data for today
+    function fetchSpData() {
+        $.ajax({
+            url: '/' + userType + '/getBpmData', // Assuming the endpoint is getSpO2Data
+            method: 'GET',
+            data: {
+                timePeriod: 'today',
+            },
+            success: updateSpChart,
+            error: function (xhr, status, error) {
+                // Handle AJAX error
+                console.error('AJAX Error: ' + status, error);
+            }
+        });
+    }
+
+    // Display initial SpO2 data
+    fetchSpData();
+
+    // Set interval to update the SpO2 chart every second
+    setInterval(fetchSpData, 1000);
+
+    // Show the modal containing the SpO2 chart
+    $('#addModal-dataoxygen').modal('show');
 }
 
 function displaySpDataWeek(userType) {
@@ -1168,8 +1286,6 @@ function displaySpDataMonth(userType) {
     });
 }
 
-
-
 $('.sp-modal-trigger').click(function () {
     // Hide all content
     $('.content').hide();
@@ -1177,10 +1293,14 @@ $('.sp-modal-trigger').click(function () {
     // Show the content for Today
     $('#spo2-today-content').show();
 
-    // Trigger your function to display BPM data for Today
-    displaySpDataToday('admin');
-    displaySpDataToday('doctor');
-    displaySpDataToday('nurse');
+    if (userType === 2) {
+        displaySpDataToday('doctor');
+    } else if (userType === 3) {
+        displaySpDataToday('nurse');
+    } else if (userType === 1) {
+        // Include admin logic if needed
+        displaySpDataToday('admin');
+    }
 
 
     // Open the modal
@@ -1222,9 +1342,14 @@ function handleSpo2DropdownClick(selectedOption) {
 
     // Handle chart display based on user selection
     if (selectedOption === 'today') {
-        displaySpDataToday('admin');
+        if (userType === 2) {
         displaySpDataToday('doctor');
+    } else if (userType === 3) {
         displaySpDataToday('nurse');
+    } else if (userType === 1) {
+        // Include admin logic if needed
+        displaySpDataToday('admin');
+    }
 
     } else if (selectedOption === 'week') {
         displaySpDataWeek('admin');
@@ -1252,59 +1377,75 @@ function capitalizeFirstLetter(string) {
 
 <script>
     function displayPiDataToday(userType) {
-    // Make an AJAX request to fetch SpO2 data for today
-    $.ajax({
-        url: '/' + userType + '/getBpmData',
-        method: 'GET',
+    // Initial chart creation for Pi
+    const ctx = document.getElementById('piChartToday').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'line',
         data: {
-            timePeriod: 'today',
+            labels: [],
+            datasets: [{
+                label: 'Pi',
+                data: [],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                fill: false,
+            }]
         },
-        success: function (response) {
-            if (response.status === 'success') {
-                var piData = response.data.map(entry => entry.pi);
-                var dateData = response.data.map(entry => entry.Date_created);
-
-                const ctx = document.getElementById('piChartToday').getContext('2d');
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: dateData,
-                        datasets: [{
-                            label: 'Pi',
-                            data: piData,
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 2,
-                            fill: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Patient Pi Chart (Today)'
-                            }
-                        }
-                    },
-                });
-
-                // Show the modal containing the chart
-                $('#addModal-dataindex').modal('show');
-            } else {
-                // Handle error
-                console.error('Error fetching Pi data:', response.message);
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Patient Pi Chart (Today)'
+                }
             }
         },
-        error: function (xhr, status, error) {
-            // Handle AJAX error
-            console.error('AJAX Error: ' + status, error);
-        }
     });
+
+    // Function to update Pi chart data
+    function updatePiChart(response) {
+        if (response.status === 'success') {
+            var piData = response.data.map(entry => entry.pi);
+            var dateData = response.data.map(entry => entry.Date_created);
+
+            // Update the Pi chart data
+            myChart.data.labels = dateData;
+            myChart.data.datasets[0].data = piData;
+            myChart.update();
+        } else {
+            // Handle error
+        }
+    }
+
+    // Make an AJAX request to fetch Pi data for today
+    function fetchPiData() {
+        $.ajax({
+            url: '/' + userType + '/getBpmData', // Adjust endpoint based on your server implementation
+            method: 'GET',
+            data: {
+                timePeriod: 'today',
+            },
+            success: updatePiChart,
+            error: function (xhr, status, error) {
+                // Handle AJAX error
+                console.error('AJAX Error: ' + status, error);
+            }
+        });
+    }
+
+    // Display initial Pi data
+    fetchPiData();
+
+    // Set interval to update the Pi chart every second
+    setInterval(fetchPiData, 1000);
+
+    // Show the modal containing the Pi chart
+    $('#addModal-datapi').modal('show');
 }
+
 
 function displayPiDataWeek(userType) {
     // Make an AJAX request to fetch SpO2 data for today
@@ -1423,10 +1564,14 @@ $('.pi-modal-trigger').click(function () {
     // Show the content for Today
     $('#pi-today-content').show();
 
-    // Trigger your function to display BPM data for Today
-    displayPiDataToday('admin');
-    displayPiDataToday('doctor');
-    displayPiDataToday('nurse');
+    if (userType === 2) {
+        displayPiDataToday('doctor');
+    } else if (userType === 3) {
+        displayPiDataToday('nurse');
+    } else if (userType === 1) {
+        // Include admin logic if needed
+        displayPiDataToday('admin');
+    }
 
 
     // Open the modal
@@ -1468,9 +1613,14 @@ function handlePiDropdownClick(selectedOption) {
 
     // Handle chart display based on user selection
     if (selectedOption === 'today') {
-        displayPiDataToday('admin');
+        if (userType === 2) {
         displayPiDataToday('doctor');
+    } else if (userType === 3) {
         displayPiDataToday('nurse');
+    } else if (userType === 1) {
+        // Include admin logic if needed
+        displayPiDataToday('admin');
+    }
 
     } else if (selectedOption === 'week') {
         displayPiDataWeek('admin');
@@ -1493,53 +1643,7 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-
 </script>
-
-<script>
-    function updateBadges(userType) {
-        // Make an AJAX request
-        $.ajax({
-            url: '/' + userType + '/getLatestData',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log("AJAX Success:", response);
-
-                if (response.status === 'success') {
-                    // Update content inside the BPM badge
-                    $('.bpm-badge').text(response.data.latestBpm + ' bpm');
-
-                    // Update content inside the Spo2 badge
-                    $('.sp-badge').text(response.data.latestSpo2 + ' SpO2');
-
-                    $('.stress-badge').text(response.data.latestPi + ' Pi');
-
-                } else {
-                    // Handle error or no data scenario
-                    $('.bpm-badge').text('N/A');
-                    $('.sp-badge').text('N/A');
-                    $('.stress-badge').text('N/A');
-
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                // Handle AJAX error
-                console.error("AJAX Error:", textStatus, errorThrown);
-                console.log("Response Text:", jqXHR.responseText);
-
-              
-            }
-        });
-    }
-
-    // Call the function when needed for different user types
-    updateBadges('admin');
-    updateBadges('doctor');
-    updateBadges('nurse');
-</script>
-
-
 
 
 
