@@ -115,7 +115,9 @@
               <div class="d-flex justify-content-center align-items-center" style="margin-top: -2px">
                 <!-- pic shown here -->
                 <div class="parent-container">
-                  <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }});">
+                  <!-- <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }});"> -->
+                  <div class="pic-holder" style="background-image: url('https://img.freepik.com/premium-vector/aesthetic-cute-muslim-girl-with-hijab-flat-detailed-avatar-vector-illustration-beautiful-muslim_677428-604.jpg?w=2000'); border: 2px solid white;">
+
                   </div>
                 </div>
                 <span class="ml-2">{{ Auth::user()->name }}</span>

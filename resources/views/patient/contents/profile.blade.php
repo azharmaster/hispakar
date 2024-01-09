@@ -45,8 +45,10 @@
                 <div class="card-block d-flex justify-content-center">
                   <!--profile picture -->
                   <div class="parent-container2">
-                    <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
-                    </div>
+                    <!-- <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                    </div> -->
+                    <div class="pic-holder" style="background-image: url('https://img.freepik.com/premium-vector/aesthetic-cute-muslim-girl-with-hijab-flat-detailed-avatar-vector-illustration-beautiful-muslim_677428-604.jpg?w=2000'); border: 2px solid white;"></div>
+
                   </div>
                 </div>
                 
@@ -153,8 +155,11 @@
                     <label for="profilepic">
                       <div class="parent-container2">
                         <!-- profile pic displayed-->
-                        <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/patient/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
-                        </div>
+                        <!-- <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/patient/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                        </div> -->
+
+                        <div class="pic-holder" style="background-image: url('https://img.freepik.com/premium-vector/aesthetic-cute-muslim-girl-with-hijab-flat-detailed-avatar-vector-illustration-beautiful-muslim_677428-604.jpg?w=2000'); border: 2px solid white;"></div>
+
                       </div>
                     </label>
                   </div><!-- /.profilepic -->
