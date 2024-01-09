@@ -92,7 +92,8 @@
                                     
                                    <div class="d-flex flex-column align-items-center text-center mr-10">
                                    <div class="parent-container2 mr-10" style="width: 135px; height: 135px; ">
-                                            <div class="pic-holder" style="background-image: url({{ $patientdetail->image ? asset('storage/profilePic/' . $patientdetail->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;"></div>
+                                            <!-- <div class="pic-holder" style="background-image: url({{ $patientdetail->image ? asset('storage/profilePic/' . $patientdetail->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;"></div> -->
+                                            <div class="pic-holder" style="background-image: url('https://img.freepik.com/premium-vector/aesthetic-cute-muslim-girl-with-hijab-flat-detailed-avatar-vector-illustration-beautiful-muslim_677428-604.jpg?w=2000'); border: 2px solid white;"></div>
                                     </div>                                        
                                         <div class="mt-3">
                                         <h4 class="font-weight-bold" style="margin-left: 5px;">{{ $patientdetail->name }}</h4>
@@ -292,7 +293,7 @@
                                                         <div class="row justify-content-between align-items-center" style="margin-left:-15px;">
                                                             <a href="#" class="bpm-modal-trigger" data-toggle="modal" data-target="#addModal-datapatient">
                                                                 <i class="fas fa-heartbeat text-white" >
-                                                                    <span class="badge data-badge bpm-badge">90 bpm</span>
+                                                                    <span class="badge data-badge bpm-badge"></span>
                                                                 </i>
                                                             </a>
                                                             
@@ -300,7 +301,7 @@
                                                             <a href="#" class="sp-modal-trigger" data-toggle="modal" data-target="#addModal-dataoxygen">
 
                                                                 <i class="fas fa-thumbs-up mb-10" >
-                                                                    <span class="badge data-badge sp-badge">90 SpO2</span>
+                                                                    <span class="badge data-badge sp-badge"></span>
                                                                 </i>
 
                                                                 </a>
@@ -310,13 +311,13 @@
                                                             <a href="" class="pi-modal-trigger" data-toggle="modal" data-target="#addModal-dataindex">
 
                                                             <i class="fas fa-heart mb-10">
-                                                                <span class="badge data-badge stress-badge">50 Pi</span>
+                                                                <span class="badge data-badge stress-badge"></span>
                                                             </i>
                                                             </a>
                                                             </span>
                                                          
                                                         </div>
-                                                        <p class="m-b-0 mt-3 text-white">Heart rate, Oxygen Saturation, Stress Level</p>
+                                                        <p class="m-b-0 mt-2 text-white">Heart rate, Oxygen Saturation, Perfusion Index</p>
 
                                                     </div>
 
@@ -845,8 +846,6 @@ new Chart(ctx3, {
     console.log('JavaScript userType:', userType);
 </script>
 
-
-
 <script>
 // Function to display BPM data for today in a chart and open the modal
 function displayBpmDataToday(userType) {
@@ -865,7 +864,6 @@ function displayBpmDataToday(userType) {
             }]
         },
         options: {
-            responsive: true,
             plugins: {
                 legend: {
                     position: 'top',
@@ -873,6 +871,17 @@ function displayBpmDataToday(userType) {
                 title: {
                     display: true,
                     text: 'Patient BPM Chart (Today)'
+                },
+                zoom: {
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        drag: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
                 }
             }
         },
@@ -1102,6 +1111,7 @@ $('.bpm-dropdown-item').on('click', function () {
     // Open the modal
     $('#addModal-datapatient').modal('show');
 });
+Chart.register(zoomPlugin);
 </script>
 
 <!-- display sp02 -->
@@ -1293,6 +1303,16 @@ $('.sp-modal-trigger').click(function () {
     // Show the content for Today
     $('#spo2-today-content').show();
 
+     // Open the modal
+     $('#addModal-dataoxygen').modal('show');
+
+     // Set the default dropdown option to "Today"
+    $('#spo2-timePeriodDropdown').text('Today');
+    $('#spo2-timePeriodDropdown').data('selected-option-id', 'today');
+
+    // Trigger a click event on the "Today" dropdown item to make it selected by default
+    $('#spo2-today-option').click();
+
     if (userType === 2) {
         displaySpDataToday('doctor');
     } else if (userType === 3) {
@@ -1301,47 +1321,24 @@ $('.sp-modal-trigger').click(function () {
         // Include admin logic if needed
         displaySpDataToday('admin');
     }
-
-
-    // Open the modal
-    $('#addModal-dataoxygen').modal('show');
-
-    // Set the default dropdown option to "Today"
-    $('#spo2-timePeriodDropdown').text('Today');
-    $('#spo2-timePeriodDropdown').data('selected-option-id', 'today');
-
-    // Trigger a click event on the "Today" dropdown item to make it selected by default
-    $('#spo2-today-option').click();
 });
 
-// Handle dropdown item click events
-// SpO2 Today Option Click Event
-$('#spo2-today-option').on('click', function () {
-    handleSpo2DropdownClick('today');
-});
+$('.spo2-dropdown-item').on('click', function () {
+    var selectedText = $(this).text();
+    $('#spo2-timePeriodDropdown').text(selectedText);
 
-// SpO2 Week Option Click Event
-$('#spo2-week-option').on('click', function () {
-    handleSpo2DropdownClick('week');
-});
-
-// SpO2 Month Option Click Event
-$('#spo2-month-option').on('click', function () {
-    handleSpo2DropdownClick('month');
-});
-
-function handleSpo2DropdownClick(selectedOption) {
-    $('#spo2-timePeriodDropdown').text(capitalizeFirstLetter(selectedOption));
-    $('#spo2-timePeriodDropdown').data('selected-option-id', selectedOption);
+    // Store the selected option ID in the data attribute
+    var selectedOptionId = $(this).attr('id').replace('-option', '');
+    $('#spo2-timePeriodDropdown').data('selected-option-id', selectedOptionId);
 
     // Hide all content
     $('.content').hide();
 
     // Show the appropriate content based on the selected option
-    $('#spo2-' + selectedOption + '-content').show();
+    $('#' + selectedOptionId + '-content').show();
 
-    // Handle chart display based on user selection
-    if (selectedOption === 'today') {
+       // Handle chart display based on user selection
+    if (selectedOptionId === 'spo-today') {
         if (userType === 2) {
         displaySpDataToday('doctor');
     } else if (userType === 3) {
@@ -1350,29 +1347,23 @@ function handleSpo2DropdownClick(selectedOption) {
         // Include admin logic if needed
         displaySpDataToday('admin');
     }
-
-    } else if (selectedOption === 'week') {
+    } else if (selectedOptionId === 'spo2-week') {
         displaySpDataWeek('admin');
         displaySpDataWeek('doctor');
         displaySpDataWeek('nurse');
+    }
 
-    } else if (selectedOption === 'month') {
+    else if (selectedOptionId === 'spo-month') {
         displaySpDataMonth('admin');
         displaySpDataMonth('doctor');
         displaySpDataMonth('nurse');
 
     }
 
+
     // Open the modal
     $('#addModal-dataoxygen').modal('show');
-}
-
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-
+});
 </script>
 
 <script>
@@ -1564,6 +1555,16 @@ $('.pi-modal-trigger').click(function () {
     // Show the content for Today
     $('#pi-today-content').show();
 
+     // Open the modal
+     $('#addModal-dataindex').modal('show');
+
+     // Set the default dropdown option to "Today"
+    $('#pi-timePeriodDropdown').text('Today');
+    $('#pi-timePeriodDropdown').data('selected-option-id', 'today');
+
+    // Trigger a click event on the "Today" dropdown item to make it selected by default
+    $('#pi-today-option').click();
+
     if (userType === 2) {
         displayPiDataToday('doctor');
     } else if (userType === 3) {
@@ -1572,47 +1573,24 @@ $('.pi-modal-trigger').click(function () {
         // Include admin logic if needed
         displayPiDataToday('admin');
     }
-
-
-    // Open the modal
-    $('#addModal-dataindex').modal('show');
-
-    // Set the default dropdown option to "Today"
-    $('#pi-timePeriodDropdown').text('Today');
-    $('#pi-timePeriodDropdown').data('selected-option-id', 'today');
-
-    // Trigger a click event on the "Today" dropdown item to make it selected by default
-    $('#pi-today-option').click();
 });
 
-// Handle dropdown item click events
-// SpO2 Today Option Click Event
-$('#pi-today-option').on('click', function () {
-    handlePiDropdownClick('today');
-});
+$('.pi-dropdown-item').on('click', function () {
+    var selectedText = $(this).text();
+    $('#pi-timePeriodDropdown').text(selectedText);
 
-// SpO2 Week Option Click Event
-$('#pi-week-option').on('click', function () {
-    handlePiDropdownClick('week');
-});
-
-// SpO2 Month Option Click Event
-$('#pi-month-option').on('click', function () {
-    handlePiDropdownClick('month');
-});
-
-function handlePiDropdownClick(selectedOption) {
-    $('#pi-timePeriodDropdown').text(capitalizeFirstLetter(selectedOption));
-    $('#pi-timePeriodDropdown').data('selected-option-id', selectedOption);
+    // Store the selected option ID in the data attribute
+    var selectedOptionId = $(this).attr('id').replace('-option', '');
+    $('#pi-timePeriodDropdown').data('selected-option-id', selectedOptionId);
 
     // Hide all content
     $('.content').hide();
 
     // Show the appropriate content based on the selected option
-    $('#pi-' + selectedOption + '-content').show();
+    $('#' + selectedOptionId + '-content').show();
 
-    // Handle chart display based on user selection
-    if (selectedOption === 'today') {
+       // Handle chart display based on user selection
+    if (selectedOptionId === 'pi-today') {
         if (userType === 2) {
         displayPiDataToday('doctor');
     } else if (userType === 3) {
@@ -1621,28 +1599,78 @@ function handlePiDropdownClick(selectedOption) {
         // Include admin logic if needed
         displayPiDataToday('admin');
     }
-
-    } else if (selectedOption === 'week') {
+    } else if (selectedOptionId === 'pi-week') {
         displayPiDataWeek('admin');
         displayPiDataWeek('doctor');
         displayPiDataWeek('nurse');
+    }
 
-    } else if (selectedOption === 'month') {
+    else if (selectedOptionId === 'pi-month') {
         displayPiDataMonth('admin');
         displayPiDataMonth('doctor');
         displayPiDataMonth('nurse');
 
     }
 
+
     // Open the modal
     $('#addModal-dataindex').modal('show');
+});
+
+</script>
+
+<script>
+ function updateBadges(userType) {
+    // Make an AJAX request
+    console.log('AJAX URL:', '/' + userType + '/getLatestData');
+
+    $.ajax({
+        url: '/' + userType + '/getLatestData',
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            console.log("AJAX Success:", response);
+
+            if (response.status === 'success') {
+                // Update content inside the BPM badge
+                $('.bpm-badge').text(response.data.latestBpm + ' bpm');
+
+                // Update content inside the Spo2 badge
+                $('.sp-badge').text(response.data.latestSpo2 + ' SpO2');
+
+                $('.stress-badge').text(response.data.latestPi + ' Pi');
+
+            } else {
+                // Handle error or no data scenario
+                $('.bpm-badge').text('N/A');
+                $('.sp-badge').text('N/A');
+                $('.stress-badge').text('N/A');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // Handle AJAX error
+            console.error("AJAX Error:", textStatus, errorThrown);
+            console.log("Response Text:", jqXHR.responseText);
+        }
+    });
+
+    // Set interval to update badges every 5 seconds (adjust as needed)
+    setInterval(function() {
+        updateBadges(userType);
+    }, 1000);
 }
 
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+// Call the function when needed for different user types
+if (userType === 2) {
+    updateBadges('doctor');
+} else if (userType === 3) {
+    updateBadges('nurse');
+} else if (userType === 1) {
+    // Include admin logic if needed
+    updateBadges('admin');
 }
 
+    
 </script>
 
 

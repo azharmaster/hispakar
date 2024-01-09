@@ -156,8 +156,11 @@
                                 <h6 class="m-b-25">Your Doctor</h6>
                                 <div class="row align-items-center">
                                   <div class="col-auto">
-                                    <img src="{{ $listDoctor->image ? asset('storage/profilePic/' . $listDoctor->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" class="img-radius" style="width: 90px; height: 90px;">
+                                    <!-- <img src="{{ $listDoctor->image ? asset('storage/profilePic/' . $listDoctor->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" class="img-radius" style="width: 90px; height: 90px;"> -->
                                     <!-- <img src="{{ asset('storage/profilePic/avatar-4-1.jpg') }}" class="img-radius" style="width: 90px; height: 90px;"> -->
+                                    <img src="https://png.pngtree.com/png-vector/20230903/ourmid/pngtree-man-avatar-isolated-png-image_9935818.png" class="img-radius" style="width: 90px; height: 90px;">
+
+                                    
                                   </div>
                                   <div class="col">
                                     <h6 class="m-b-5">{{$listDoctor->name}} </h6>
