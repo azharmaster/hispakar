@@ -227,18 +227,18 @@
                                 <h6 class="m-b-25">Live Data</h6>
                                 <div class="row align-items-center">
                                   <div class="col">
-                                  <h6 class="m-b-5"><span class="data-label">Sp02</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge">96%</span></span></h6>
+                                  <h6 class="m-b-5"><span class="data-label">Sp02</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge" id="spo2Span">%</span></span></h6>
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5"><span class="data-label">Heart Rate</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge">80</span></span></h6>
+                                    <h6 class="m-b-5"><span class="data-label">Heart Rate</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge" id="bpmSpan"></span></span></h6>
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5"><span class="data-label">Stress</span><br> <span class="font-weight-bold"><span class="badge data-badge badge-warning">43 Normal </span></span></h6>
+                                    <h6 class="m-b-5"><span class="data-label">PI</span><br> <span class="font-weight-bold"><span class="badge data-badge badge-warning" id="piSpan"></span></span></h6>
                                   
-                                    <span id="bpmSpan"></span><br>
+                                    <!-- <span id="bpmSpan"></span><br>
 <span id="spo2Span"></span><br>
 <span id="piSpan"></span><br>
-<span id="dateSpan"></span><br>
+<span id="dateSpan"></span><br> -->
                                   </div>
                                   
                                  
