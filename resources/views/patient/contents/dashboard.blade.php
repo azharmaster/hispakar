@@ -234,6 +234,11 @@
                                   </div>
                                   <div class="col">
                                     <h6 class="m-b-5"><span class="data-label">Stress</span><br> <span class="font-weight-bold"><span class="badge data-badge badge-warning">43 Normal </span></span></h6>
+                                  
+                                    <span id="bpmSpan"></span><br>
+<span id="spo2Span"></span><br>
+<span id="piSpan"></span><br>
+<span id="dateSpan"></span><br>
                                   </div>
                                   
                                  
@@ -599,16 +604,29 @@
             var piData = latestData.map(entry => entry.pi);
             var datasy = latestData.map(entry => entry.Date_created);
 
+            var latestDatas = response.data.slice(-1)[0];
+        var bpmDatas = latestDatas.bpm;
+        var spo2Datas = latestDatas.spo2;
+        var piDatas = latestDatas.pi;
+        var datasys = latestDatas.Date_created;
+
+
             // Update the chart data
             myChart.data.labels = datasy;
             myChart.data.datasets[0].data = bpmData;
             myChart.data.datasets[1].data = spo2Data;
             myChart.data.datasets[2].data = piData;
             myChart.update();
+
+            document.getElementById('bpmSpan').innerText = 'BPM: ' + bpmDatas;
+        document.getElementById('spo2Span').innerText = 'SPO2: ' + spo2Datas;
+        document.getElementById('piSpan').innerText = 'PI: ' + piDatas;
+        document.getElementById('dateSpan').innerText = 'Date: ' + datasys;
         } else {
             // Handle error
         }
     }
+    
 
     // Make an AJAX request to fetch BPM data for today
     function fetchData() {
