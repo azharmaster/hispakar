@@ -38,7 +38,10 @@
                                         <div class="col-6 mx-auto d-block col-sm-4">
                                             <!--profile picture -->
                                             <div class="parent-container2" style="width: 140px; height: 140px;">
-                                                <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                                                <!-- <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                                                </div> -->
+
+                                                <div class="pic-holder" style="background-image: url('https://png.pngtree.com/png-vector/20230903/ourmid/pngtree-man-avatar-isolated-png-image_9935818.png'); border: 2px solid white;">
                                                 </div>
                                             </div>
                                             <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#editProfileModal" style="width: 140px;">Edit Profile</button>

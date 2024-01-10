@@ -23,7 +23,7 @@
 
   <div class="navbar-wrapper">
     <div class="navbar-logo">
-      <a href="{{ url('index.php') }}">
+      <a href="{{ url('doctor/dashboard') }}">
         <img class="img-fluid" src="{{ asset('files/assets/images/pakar3.png') }}" width="150px" alt="Theme-Logo">
       </a>
       <a class="mobile-menu" id="mobile-collapse" href="#!">
@@ -115,7 +115,10 @@
               <div class="d-flex justify-content-center align-items-center" style="margin-top: -2px">
                 <!-- pic shown here -->
                 <div class="parent-container">
-                  <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }});">
+                  <!-- <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }});">
+                  </div> -->
+
+                  <div class="pic-holder" style="background-image: url('https://png.pngtree.com/png-vector/20230903/ourmid/pngtree-man-avatar-isolated-png-image_9935818.png'); border: 2px solid white;">
                   </div>
                 </div>
                 <span class="ml-2">{{ Auth::user()->name }}</span>
