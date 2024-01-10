@@ -230,18 +230,23 @@
                                 <h6 class="m-b-25">Live Data</h6>
                                 <div class="row align-items-center">
                                   <div class="col">
-                                  <h6 class="m-b-5"><span class="data-label">Sp02</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge" id="spo2Span">%</span></span></h6>
+                                  <h6 class="m-b-5"><span class="data-label">Sp02</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge" id="spo2Span"></span></span></h6>
                                   </div>
                                   <div class="col">
                                     <h6 class="m-b-5"><span class="data-label">Heart Rate</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge" id="bpmSpan"></span></span></h6>
                                   </div>
                                   <div class="col">
                                     <h6 class="m-b-5"><span class="data-label">PI</span><br> <span class="font-weight-bold"><span class="badge data-badge badge-warning" id="piSpan"></span></span></h6>
-                                  
-                                    <!-- <span id="bpmSpan"></span><br>
-<span id="spo2Span"></span><br>
-<span id="piSpan"></span><br>
-<span id="dateSpan"></span><br> -->
+                                  </div>
+
+                                  <div class="col">
+                                  <h6 class="m-b-5"><span class="data-label">Value1</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge" id="value1Span"></span></span></h6>
+                                  </div>
+                                  <div class="col">
+                                    <h6 class="m-b-5"><span class="data-label">Value2</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge" id="value2Span"></span></span></h6>
+                                  </div>
+                                  <div class="col">
+                                    <h6 class="m-b-5"><span class="data-label">Value3</span><br> <span class="font-weight-bold"><span class="badge data-badge badge-warning" id="value3Span"></span></span></h6>
                                   </div>
                                   
                                  
@@ -608,11 +613,13 @@
             var datasy = latestData.map(entry => entry.Date_created);
 
             var latestDatas = response.data.slice(-1)[0];
-        var bpmDatas = latestDatas.bpm;
-        var spo2Datas = latestDatas.spo2;
-        var piDatas = latestDatas.pi;
-        var datasys = latestDatas.Date_created;
-
+            var bpmDatas = latestDatas.bpm;
+            var spo2Datas = latestDatas.spo2;
+            var piDatas = latestDatas.pi;
+            var value1s = latestDatas.Value1;
+            var value2s = latestDatas.Value2;
+            var value3s = latestDatas.Value3;
+            var datasys = latestDatas.Date_created;
 
             // Update the chart data
             myChart.data.labels = datasy;
@@ -621,9 +628,22 @@
             myChart.data.datasets[2].data = piData;
             myChart.update();
 
-            document.getElementById('bpmSpan').innerText = 'BPM: ' + bpmDatas;
+        document.getElementById('bpmSpan').innerText = 'BPM: ' + bpmDatas;
         document.getElementById('spo2Span').innerText = 'SPO2: ' + spo2Datas;
         document.getElementById('piSpan').innerText = 'PI: ' + piDatas;
+        
+        var value1Span = document.getElementById('value1Span');
+        if (value1s >= 0 && value1s <= 35) {
+            value1Span.innerText = 'Value 1: Poor';
+        } else if (value1s > 35 && value1s <= 65) {
+            value1Span.innerText = 'Value 1: Fair';
+        } else if (value1s > 65 && value1s <= 100) {
+            value1Span.innerText = 'Value 1: Good';
+        }
+
+
+        document.getElementById('value2Span').innerText = 'Value 2: ' + value2s;
+        document.getElementById('value3Span').innerText = 'Value 3: ' + value3s;
         document.getElementById('dateSpan').innerText = 'Date: ' + datasys;
         } else {
             // Handle error
