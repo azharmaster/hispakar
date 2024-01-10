@@ -641,9 +641,26 @@
             value1Span.innerText = 'Value 1: Good';
         }
 
+        var value2Span = document.getElementById('value2Span');
+        if (value2s >= 0 && value2s <= 35) {
+          value2Span.innerText = 'Value 2: Poor';
+        } else if (value2s > 35 && value2s <= 65) {
+          value2Span.innerText = 'Value 2: Fair';
+        } else if (value2s > 65 && value2s <= 100) {
+          value2Span.innerText = 'Value 2: Good';
+        }
 
-        document.getElementById('value2Span').innerText = 'Value 2: ' + value2s;
-        document.getElementById('value3Span').innerText = 'Value 3: ' + value3s;
+        var value3Span = document.getElementById('value3Span');
+        if (value3s >= 0 && value3s <= 35) {
+          value3Span.innerText = 'Value 3: Poor';
+        } else if (value3s > 35 && value3s <= 65) {
+          value3Span.innerText = 'Value 3: Fair';
+        } else if (value3s > 65 && value3s <= 100) {
+          value3Span.innerText = 'Value 3: Good';
+        }
+ 
+
+        // document.getElementById('value3Span').innerText = 'Value 3: ' + value3s;
         document.getElementById('dateSpan').innerText = 'Date: ' + datasys;
         } else {
             // Handle error
