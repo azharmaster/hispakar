@@ -102,7 +102,9 @@
                                         <div class="col-12 col-sm-12 mx-auto d-block d-flex justify-content-center ">
                                             <!--profile picture -->
                                             <div class="parent-container2 " style="width: 140px; height: 140px;">
-                                                <div class="pic-holder" style="background-image: url({{ $nursedetail->image ? asset('storage/profilePic/' . $nursedetail->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                                                <!-- <div class="pic-holder" style="background-image: url({{ $nursedetail->image ? asset('storage/profilePic/' . $nursedetail->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                                                </div> -->
+                                                <div class="pic-holder" style="background-image: url('https://cdn4.iconfinder.com/data/icons/circle-avatars-1/128/012_girl_avatar_profile_woman_nurse_hat-2-512.png'); border: 2px solid white;">
                                                 </div>
                                             </div>
                                         </div>
