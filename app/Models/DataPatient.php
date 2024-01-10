@@ -21,5 +21,5 @@ class DataPatient extends Model
         'Value3',
     ];
 
-    public $timestamps = false;
+
 }
