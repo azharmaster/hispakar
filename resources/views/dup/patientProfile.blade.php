@@ -807,7 +807,7 @@ function displayBpmDataToday(userType) {
 // Function to display BPM data for the current week in a chart and open the modal
 function displayBpmDataWeek(userType) {
    // Use the BPM data directly in JavaScript
-    const resultbpm = JSON.parse('{!! isset($resultbpm) ? $resultbpm : '[]' !!}');
+   const datas = JSON.parse('{!! isset($datas) ? $datas : '[]' !!}');
     const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
 
     const ctx = document.getElementById('bpmChartWeek').getContext('2d');
