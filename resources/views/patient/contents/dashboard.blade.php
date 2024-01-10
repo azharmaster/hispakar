@@ -240,13 +240,13 @@
                                   </div>
 
                                   <div class="col">
-                                  <h6 class="m-b-5"><span class="data-label">Value1</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge" id="value1Span"></span></span></h6>
+                                  <h6 class="m-b-5"><span class="data-label"> BPM and PI</span><br> <span class="font-weight-bold"><span class="badge data-badge blood-badge" id="value1Span"></span></span></h6>
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5"><span class="data-label">Value2</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge" id="value2Span"></span></span></h6>
+                                    <h6 class="m-b-5"><span class="data-label">BPM and SpO2</span><br> <span class="font-weight-bold"><span class="badge data-badge height-badge" id="value2Span"></span></span></h6>
                                   </div>
                                   <div class="col">
-                                    <h6 class="m-b-5"><span class="data-label">Value3</span><br> <span class="font-weight-bold"><span class="badge data-badge badge-warning" id="value3Span"></span></span></h6>
+                                    <h6 class="m-b-5"><span class="data-label">SpO2 and PI</span><br> <span class="font-weight-bold"><span class="badge data-badge badge-warning" id="value3Span"></span></span></h6>
                                   </div>
                                   
                                  
