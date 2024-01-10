@@ -45,7 +45,9 @@
                 <div class="card-block d-flex justify-content-center">
                   <!--profile picture -->
                   <div class="parent-container2">
-                    <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                    <!-- <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}); border: 2px solid white;">
+                    </div> -->
+                    <div class="pic-holder" style="background-image: url('https://cdn-icons-png.flaticon.com/512/2206/2206368.png'); border: 2px solid white;">
                     </div>
                   </div>
                 </div>
