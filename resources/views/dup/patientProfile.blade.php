@@ -300,7 +300,7 @@
 
                                                             
                                                             <span>
-                                                                <a href="#" class="sp-modal-trigger" data-toggle="modal" data-target="#addModal-dataoxygen">
+                                                                <a href="" class="sp-modal-trigger" data-toggle="modal" data-target="#addModal-dataoxygen">
                                                                     <div style="text-align: center;">
                                                                         <i class="fas fa-thumbs-up mb-10" style="font-size: 30px; display: inline-block;">
                                                                         </i>
@@ -516,9 +516,9 @@
                     Today 
                     </button>
                     <div class="dropdown-menu" aria-labelledby="timePeriodDropdown">
-                    <a class="dropdown-item bpm-dropdown-item" href="#" id="today-option">Today</a>
-                    <a class="dropdown-item bpm-dropdown-item" href="#" id="week-option">This Week</a>
-                    <a class="dropdown-item bpm-dropdown-item" href="#" id="month-option">This Month</a>
+                    <a class="dropdown-item bpm-dropdown-item" href="javascript:void(0)" id="today-option">Today</a>
+                    <a class="dropdown-item bpm-dropdown-item" href="javascript:void(0)" id="week-option">This Week</a>
+                    <a class="dropdown-item bpm-dropdown-item" href="javascript:void(0)" id="month-option">This Month</a>
                     </div>
                 </div>
 
@@ -561,9 +561,9 @@
                     Today 
                     </button>
                     <div class="dropdown-menu" aria-labelledby="spo2-timePeriodDropdown">
-                    <a class="dropdown-item spo2-dropdown-item" href="#" id="spo2-today-option">Today</a>
-                    <a class="dropdown-item spo2-dropdown-item" href="#" id="spo2-week-option">This Week</a>
-                    <a class="dropdown-item spo2-dropdown-item" href="#" id="spo2-month-option">This Month</a>
+                    <a class="dropdown-item spo2-dropdown-item" href="javascript:void(0)" id="spo2-today-option">Today</a>
+                    <a class="dropdown-item spo2-dropdown-item" href="javascript:void(0)" id="spo2-week-option">This Week</a>
+                    <a class="dropdown-item spo2-dropdown-item" href="javascript:void(0)" id="spo2-month-option">This Month</a>
                     </div>
                 </div>
                 <!-- Content for Today -->
@@ -604,9 +604,9 @@
                     Today 
                     </button>
                     <div class="dropdown-menu" aria-labelledby="spo2-timePeriodDropdown">
-                    <a class="dropdown-item pi-dropdown-item" href="#" id="pi-today-option">Today</a>
-                    <a class="dropdown-item pi-dropdown-item" href="#" id="pi-week-option">This Week</a>
-                    <a class="dropdown-item pi-dropdown-item" href="#" id="pi-month-option">This Month</a>
+                    <a class="dropdown-item pi-dropdown-item" href="javascript:void(0)" id="pi-today-option">Today</a>
+                    <a class="dropdown-item pi-dropdown-item" href="javascript:void(0)" id="pi-week-option">This Week</a>
+                    <a class="dropdown-item pi-dropdown-item" href="javascript:void(0)" id="pi-month-option">This Month</a>
                     </div>
                 </div>
                 <!-- Content for Today -->
