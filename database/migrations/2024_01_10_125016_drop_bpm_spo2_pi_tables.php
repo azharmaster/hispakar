@@ -9,13 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('pi', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('Value', 50)->nullable();
-            $table->string('Date_created', 50)->nullable();
-        });
+        Schema::dropIfExists('bpm');
+        Schema::dropIfExists('spo2');
+        Schema::dropIfExists('pi');
+        Schema::dropIfExists('fuzzyres');
     }
 
     /**
@@ -23,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pi');
+        //
     }
 };

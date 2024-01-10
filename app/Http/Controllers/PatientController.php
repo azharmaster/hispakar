@@ -657,7 +657,7 @@ class PatientController extends Controller
             }
 
             // Select 'Date_created', 'bpm', and 'spo2' columns
-            $result = $query->select('Date_created', 'bpm', 'spo2', 'pi')->get();
+            $result = $query->select('Date_created', 'bpm', 'spo2', 'pi', 'Value1', 'Value2', 'Value3')->get();
 
             return response()->json([
                 'status' => 'success',

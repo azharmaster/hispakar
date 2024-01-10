@@ -16,6 +16,9 @@ class DataPatient extends Model
         'bpm',
         'spo2',
         'pi', 
+        'Value1',
+        'Value2',
+        'Value3',
     ];
 
     public $timestamps = false;
