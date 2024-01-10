@@ -555,7 +555,7 @@ class AdminController extends Controller
        
     }
 
-    public function viewPatientProfile($id) //profile doctor
+    public function viewPatientProfile(Request $request, $id) //profile doctor
     {
 
         $patientdetails = Patient::where('patient.id', $id)
@@ -622,6 +622,42 @@ class AdminController extends Controller
             $currentDate->subMonth(); // Use subMonth() to move back in time
         }
 
+        $timePeriod = $request->input('timePeriod');
+
+        // Start with the DataPatient model
+        $query = DataPatient::query();
+
+        // Filter data based on the selected time period
+        if ($timePeriod === 'today') {
+            $query->whereDate('Date_created', now()->toDateString());
+
+        } elseif ($timePeriod === 'week') {
+            $query->whereBetween('Date_created', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($timePeriod === 'month') {
+            $query->whereMonth('Date_created', now()->month);
+        }
+
+        // Select 'Date_created', 'bpm', 'spo2', and 'pi' columns
+        $result = $query->select('Date_created', 'bpm', 'spo2', 'pi')->get();
+
+        // Retrieve BPM data
+        $datas = $result->pluck('bpm')->toJson();
+        $dataspo2 = $result->pluck('spo2') -> toJson();
+        $datapi = $result->pluck('pi') -> toJson();
+
+        $datasy = $result->pluck('Date_created')->toJson();
+
+        $resultpi = $query->whereDate('Date_created', now()->toDateString())
+        ->pluck('pi')
+        ->toJson();
+
+        $resultspo2 = $query->whereDate('Date_created', now()->toDateString())
+        ->pluck('spo2')
+        ->toJson();
+
+        $resultbpm = $query->whereDate('Date_created', now()->toDateString())
+        ->pluck('bpm')
+        ->toJson();
       
 
         // Reverse the order of the arrays
@@ -631,7 +667,7 @@ class AdminController extends Controller
         /////////////////////////////
 
 
-        return view('admin.contents.patientProfile', compact('patientdetails','totaloperation','totalapt','doctors','appointments','listmedicines', 'labels', 'heartrateData', 'totalPastAppointments', 'medRecords', 'doctorNames'));
+        return view('admin.contents.patientProfile', compact('patientdetails', 'totaloperation', 'totalapt', 'doctors', 'appointments', 'listmedicines', 'labels', 'heartrateData', 'totalPastAppointments', 'medRecords', 'doctorNames', 'datas', 'dataspo2', 'datapi', 'resultpi', 'datasy', 'resultspo2', 'resultbpm'));
        
     }
 
@@ -1544,18 +1580,20 @@ class AdminController extends Controller
               }
       
               // Select 'Date_created', 'bpm', and 'spo2' columns
-              $result = $query->select('Date_created', 'bpm', 'spo2', 'pi')->get();
-      
-              return response()->json([
-                  'status' => 'success',
-                  'data' => $result,
-              ]);
+             // Select 'Date_created', 'bpm', 'spo2', and 'pi' columns
+            $result = $query->select('Date_created', 'bpm', 'spo2', 'pi')->get();
+
+            return view('admin.contents.patientProfile', [
+                'status' => 'success',
+                'datas' => $result->pluck('bpm')->toJson(),
+                'datasy' => $result->pluck('Date_created')->toJson(),
+            ]);
           } catch (\Exception $e) {
               // Handle exceptions
-              return response()->json([
-                  'status' => 'error',
-                  'message' => 'Internal Server Error',
-              ], 500);
+              return view('admin.contents.patientProfile', [
+                'status' => 'error',
+                'message' => 'Internal Server Error',
+            ]);
           }
       }
 
