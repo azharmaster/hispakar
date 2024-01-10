@@ -115,7 +115,10 @@
               <div class="d-flex justify-content-center align-items-center" style="margin-top: -2px">
                 <!-- pic shown here -->
                 <div class="parent-container">
-                  <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }});">
+                  <!-- <div class="pic-holder" style="background-image: url({{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }});">
+                  </div> -->
+                  <div class="pic-holder" style="background-image: url('https://cdn-icons-png.flaticon.com/512/2206/2206368.png'); border: 2px solid white;">
+
                   </div>
                 </div>
                 <span class="ml-2">{{ Auth::user()->name }}</span>
