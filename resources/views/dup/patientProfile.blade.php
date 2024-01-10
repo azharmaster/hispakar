@@ -194,7 +194,7 @@
 
                                 </div>
 
-                                <div class="col-6" >
+                                <!-- <div class="col-6" >
                                     <a data-toggle="modal" data-target="#todayAppointmentModal">
                                         <div class="card comp-card bg-c-blue doc-pro-right " style="height:203px;">
                                             <div class="card-body">
@@ -229,22 +229,22 @@
                                             </div>
                                         </div>
                                     </a>
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#totalpatientModal">
-                                        <div class="card comp-card bg-c-blue doc-pro-right" style="height:170px">
+                                        <div class="card comp-card bg-c-green doc-pro-right" style="height:203px">
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col">
                                                         <h6 class="m-b-20 f-w-600 text-white ">Past Appointments</h6>
 
                                                         <div class="row d-flex justify-content-between mt-4">
-                                                            <h2 class="f-w-700 text-white ml-3">{{ $totalPastAppointments  }}</h2>
-                                                            <a type="button"  class="past-appt-modal-trigger" data-toggle="modal" data-target="#addModal-pastappt"><i class="fas fa-file-alt bg-c-white text-primary d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i></a>
+                                                            <h2 class="f-w-700 text-white ml-3" style="margin-top: 15px;">{{ $totalPastAppointments  }}</h2>
+                                                            <a type="button"  class="past-appt-modal-trigger" data-toggle="modal" data-target="#addModal-pastappt"><i class="fas fa-file-alt bg-c-white text-success d-none d-sm-block" style="margin-top: 10px; margin-right: -18px"></i></a>
                                                         </div>
 
-                                                        <p class="m-b-0 mt-3 text-white">Total Past Appointments</p>
+                                                        <p class="m-b-0 mt-3 text-white" style="margin-top: 30px !important;">Total Past Appointments</p>
 
                                                     </div>
 
@@ -282,42 +282,46 @@
                                     </a>
                                 </div>
                                 <!-- ./card -->
-                                <div class="col-6">
+                                <div class="col-12">
                                     <a data-toggle="modal" data-target="#medicalrecordModal">
-                                        <div class="card comp-card bg-c-green doc-pro-right" style="height:170px">
+                                        <div class="card comp-card bg-c-blue doc-pro-right" style="height:170px">
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col">
                                                         <h6 class="m-b-20 f-w-600 text-white mb-0">Health Status</h6>
 
-                                                        <div class="row justify-content-between align-items-center" style="margin-left:-15px;">
-                                                            <a href="#" class="bpm-modal-trigger" data-toggle="modal" data-target="#addModal-datapatient">
-                                                                <i class="fas fa-heartbeat text-white" >
-                                                                    <span class="badge data-badge bpm-badge"></span>
-                                                                </i>
-                                                            </a>
+                                                        <div class="row d-flex justify-content-between align-items-center" style="margin-right:30px;">
+                                                        <a href="" class="bpm-modal-trigger" data-toggle="modal" data-target="#addModal-datapatient">
+                                                            <div style="text-align: center;">
+                                                                <i class="fas fa-heartbeat text-white" style="font-size: 30px; display: inline-block;"></i>
+                                                                <span class="badge data-badge bpm-badge" style="font-size: 20px; display: block; margin-top: 5px;"></span>
+                                                            </div>
+                                                        </a>
+
                                                             
                                                             <span>
-                                                            <a href="#" class="sp-modal-trigger" data-toggle="modal" data-target="#addModal-dataoxygen">
-
-                                                                <i class="fas fa-thumbs-up mb-10" >
-                                                                    <span class="badge data-badge sp-badge"></span>
-                                                                </i>
-
+                                                                <a href="#" class="sp-modal-trigger" data-toggle="modal" data-target="#addModal-dataoxygen">
+                                                                    <div style="text-align: center;">
+                                                                        <i class="fas fa-thumbs-up mb-10" style="font-size: 30px; display: inline-block;">
+                                                                        </i>
+                                                                        <span class="badge data-badge sp-badge" style="font-size: 20px; display: block; margin-top: 5px;"></span>
+                                                                    </div>
                                                                 </a>
                                                             </span>
 
-                                                            <span>
-                                                            <a href="" class="pi-modal-trigger" data-toggle="modal" data-target="#addModal-dataindex">
 
-                                                            <i class="fas fa-heart mb-10">
-                                                                <span class="badge data-badge stress-badge"></span>
-                                                            </i>
-                                                            </a>
+                                                            <span>
+                                                                <a href="" class="pi-modal-trigger" data-toggle="modal" data-target="#addModal-dataindex">
+                                                                    <div style="text-align: center;">
+                                                                        <i class="fas fa-heart mb-10" style="font-size: 30px; display: inline-block;">
+                                                                        </i>
+                                                                        <span class="badge data-badge stress-badge" style="font-size: 20px; display: block; margin-top: 5px;"></span>
+                                                                    </div>
+                                                                </a>
                                                             </span>
+
                                                          
                                                         </div>
-                                                        <p class="m-b-0 mt-2 text-white">Heart rate, Oxygen Saturation, Perfusion Index</p>
 
                                                     </div>
 
@@ -890,8 +894,8 @@ function displayBpmDataToday(userType) {
     // Function to update chart data
     function updateChart(response) {
         if (response.status === 'success') {
-            var datas = response.data.map(entry => entry.bpm);
-            var datasy = response.data.map(entry => entry.Date_created);
+            var datas = response.data.slice(-20).map(entry => entry.bpm);
+            var datasy = response.data.slice(-20).map(entry => entry.Date_created);
 
             // Update the chart data
             myChart.data.labels = datasy;
@@ -1053,7 +1057,7 @@ $('.bpm-modal-trigger').click(function () {
 
     // Set the default dropdown option to "Today"
     $('#timePeriodDropdown').text('Today');
-    $('#timePeriodDropdown').data('selected-option-id', 'today');
+    $('#timePeriodDropdown').data('selected-option-id', 'bpm-today-option');
 
     // Trigger a click event on the "Today" dropdown item to make it selected by default
     $('#today-option').click();
@@ -1148,8 +1152,8 @@ function displaySpDataToday(userType) {
     // Function to update SpO2 chart data
     function updateSpChart(response) {
         if (response.status === 'success') {
-            var spo2Data = response.data.map(entry => entry.spo2);
-            var dateData = response.data.map(entry => entry.Date_created);
+            var spo2Data = response.data.slice(-20).map(entry => entry.spo2);
+            var dateData = response.data.slice(-20).map(entry => entry.Date_created);
 
             // Update the SpO2 chart data
             myChart.data.labels = dateData;
@@ -1306,9 +1310,9 @@ $('.sp-modal-trigger').click(function () {
      // Open the modal
      $('#addModal-dataoxygen').modal('show');
 
-     // Set the default dropdown option to "Today"
+    // Set the default dropdown option to "Today"
     $('#spo2-timePeriodDropdown').text('Today');
-    $('#spo2-timePeriodDropdown').data('selected-option-id', 'today');
+    $('#spo2-timePeriodDropdown').data('selected-option-id', 'spo2-today-option');
 
     // Trigger a click event on the "Today" dropdown item to make it selected by default
     $('#spo2-today-option').click();
@@ -1399,8 +1403,8 @@ $('.spo2-dropdown-item').on('click', function () {
     // Function to update Pi chart data
     function updatePiChart(response) {
         if (response.status === 'success') {
-            var piData = response.data.map(entry => entry.pi);
-            var dateData = response.data.map(entry => entry.Date_created);
+            var piData = response.data.slice(-20).map(entry => entry.pi);
+            var dateData = response.data.slice(-20).map(entry => entry.Date_created);
 
             // Update the Pi chart data
             myChart.data.labels = dateData;
@@ -1495,6 +1499,8 @@ function displayPiDataWeek(userType) {
 
 function displayPiDataMonth(userType) {
     // Make an AJAX request to fetch SpO2 data for today
+    console.log('AJAX URL:', '/' + userType + '/getBpmData');
+
     $.ajax({
         url: '/' + userType + '/getBpmData',
         method: 'GET',
@@ -1558,12 +1564,13 @@ $('.pi-modal-trigger').click(function () {
      // Open the modal
      $('#addModal-dataindex').modal('show');
 
-     // Set the default dropdown option to "Today"
+    // Set the default dropdown option to "Today"
     $('#pi-timePeriodDropdown').text('Today');
-    $('#pi-timePeriodDropdown').data('selected-option-id', 'today');
+    $('#pi-timePeriodDropdown').data('selected-option-id', 'pi-today-option');
 
     // Trigger a click event on the "Today" dropdown item to make it selected by default
     $('#pi-today-option').click();
+
 
     if (userType === 2) {
         displayPiDataToday('doctor');
@@ -1576,6 +1583,7 @@ $('.pi-modal-trigger').click(function () {
 });
 
 $('.pi-dropdown-item').on('click', function () {
+    
     var selectedText = $(this).text();
     $('#pi-timePeriodDropdown').text(selectedText);
 
