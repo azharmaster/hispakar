@@ -206,7 +206,9 @@
                                     <tr>
                                       <td class="name-cell">
                                         <div class="profile-info">
-                                          <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                          <!-- <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15"> -->
+                                          <img src="https://img.freepik.com/premium-vector/aesthetic-cute-muslim-girl-with-hijab-flat-detailed-avatar-vector-illustration-beautiful-muslim_677428-604.jpg?w=2000" class="img-radius img-40 align-top m-r-15">
+
                                           <span>{{ $aptD->name }}</span>
                                         </div>
                                       </td>
