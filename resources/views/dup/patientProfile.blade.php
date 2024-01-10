@@ -300,7 +300,7 @@
 
                                                             
                                                             <span>
-                                                                <a href="#" class="sp-modal-trigger" data-toggle="modal" data-target="#addModal-dataoxygen">
+                                                                <a href="" class="sp-modal-trigger" data-toggle="modal" data-target="#addModal-dataoxygen">
                                                                     <div style="text-align: center;">
                                                                         <i class="fas fa-thumbs-up mb-10" style="font-size: 30px; display: inline-block;">
                                                                         </i>
@@ -516,9 +516,9 @@
                     Today 
                     </button>
                     <div class="dropdown-menu" aria-labelledby="timePeriodDropdown">
-                    <a class="dropdown-item bpm-dropdown-item" href="#" id="today-option">Today</a>
-                    <a class="dropdown-item bpm-dropdown-item" href="#" id="week-option">This Week</a>
-                    <a class="dropdown-item bpm-dropdown-item" href="#" id="month-option">This Month</a>
+                    <a class="dropdown-item bpm-dropdown-item" href="javascript:void(0)" id="today-option">Today</a>
+                    <a class="dropdown-item bpm-dropdown-item" href="javascript:void(0)" id="week-option">This Week</a>
+                    <a class="dropdown-item bpm-dropdown-item" href="javascript:void(0)" id="month-option">This Month</a>
                     </div>
                 </div>
 
@@ -561,9 +561,9 @@
                     Today 
                     </button>
                     <div class="dropdown-menu" aria-labelledby="spo2-timePeriodDropdown">
-                    <a class="dropdown-item spo2-dropdown-item" href="#" id="spo2-today-option">Today</a>
-                    <a class="dropdown-item spo2-dropdown-item" href="#" id="spo2-week-option">This Week</a>
-                    <a class="dropdown-item spo2-dropdown-item" href="#" id="spo2-month-option">This Month</a>
+                    <a class="dropdown-item spo2-dropdown-item" href="javascript:void(0)" id="spo2-today-option">Today</a>
+                    <a class="dropdown-item spo2-dropdown-item" href="javascript:void(0)" id="spo2-week-option">This Week</a>
+                    <a class="dropdown-item spo2-dropdown-item" href="javascript:void(0)" id="spo2-month-option">This Month</a>
                     </div>
                 </div>
                 <!-- Content for Today -->
@@ -604,9 +604,9 @@
                     Today 
                     </button>
                     <div class="dropdown-menu" aria-labelledby="spo2-timePeriodDropdown">
-                    <a class="dropdown-item pi-dropdown-item" href="#" id="pi-today-option">Today</a>
-                    <a class="dropdown-item pi-dropdown-item" href="#" id="pi-week-option">This Week</a>
-                    <a class="dropdown-item pi-dropdown-item" href="#" id="pi-month-option">This Month</a>
+                    <a class="dropdown-item pi-dropdown-item" href="javascript:void(0)" id="pi-today-option">Today</a>
+                    <a class="dropdown-item pi-dropdown-item" href="javascript:void(0)" id="pi-week-option">This Week</a>
+                    <a class="dropdown-item pi-dropdown-item" href="javascript:void(0)" id="pi-month-option">This Month</a>
                     </div>
                 </div>
                 <!-- Content for Today -->
@@ -679,91 +679,6 @@
 @include('doctor.includes.dtScripts')
 
 <script>
-
-// $.ajax({
-//   url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
-//   crossDomain: true,
-//   headers: {
-//     'accept': 'application/json',
-//     'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd3JlcyB3bG9jIiwiZXhwIjoxNjk3NjQ2NDg0LCJpYXQiOjE2OTc1NjAwODR9.DBzPrnSoU8pnSec72rerOkUfhHegvPzZRVfzilDhUgM'
-//   }
-// }).done(function(response) {
-//   console.log(response);
-// });
-
-var d = (new Date()).toISOString().split('T')[0];
-console.log(d);
-$.ajax({
-  url: 'https://api.fitbit.com/1/user/-/activities/heart/date/2023-10-17/1d.json',
-  crossDomain: true,
-  headers: {
-    'accept': 'application/json',
-    'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjdHNUwiLCJzdWIiOiJCUkRERzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd2VjZyB3c29jIHdhY3Qgd294eSB3dGVtIHd3ZWkgd2NmIHdzZXQgd2xvYyB3cmVzIiwiZXhwIjoxNzAyNTI2NzYyLCJpYXQiOjE3MDI0NDAzNjJ9.q_tdbcegG1VwQlFsGqtgcyRJtNjlyqIz3fGO4HNp5Zs'
-  }
-}).done(function(response) {
-
-    
-  var data1 = response['activities-heart-intraday']['dataset'];
-  data1 = data1.slice(-10);
-  console.log(data1);
-  
-  console.log(data1[data1.length-1]['time']);
-
-  var datax1 = data1[0]['value'];
-  var datax2 = data1[1]['value'];
-  var datax3 = data1[2]['value'];
-  var datax4 = data1[3]['value'];
-  var datax5 = data1[4]['value'];
-  var datax6 = data1[5]['value'];
-  var datax7 = data1[6]['value'];
-  var datax8 = data1[7]['value'];
-  var datax9 = data1[8]['value'];
-  var datax10 = data1[9]['value'];
-
-  var datay1 = data1[0]['time'];
-  var datay2 = data1[1]['time'];
-  var datay3 = data1[2]['time'];
-  var datay4 = data1[3]['time'];
-  var datay5 = data1[4]['time'];
-  var datay6 = data1[5]['time'];
-  var datay7 = data1[6]['time'];
-  var datay8 = data1[7]['time'];
-  var datay9 = data1[8]['time'];
-  var datay10 = data1[9]['time'];
-    
-    var datas = [datax1,datax2,datax3,datax4,datax5,datax6,datax7,datax8,datax9,datax10];
-    var datasy = [datay1,datay2,datay3,datay4,datay5,datay6,datay7,datay8,datay9,datay10];
-
-
-    const ctx3 = document.getElementById('myChart3');
-
-new Chart(ctx3, {
-    type: 'line',
-    data: {
-        labels: datasy,
-        datasets: [{
-            label: 'Heart Rate',
-            data: datas,
-        },
-       ]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'Data Patient'
-            }
-        }
-    },
-});
-
-});
-
-
     const ctx = document.getElementById('myChart');
     //const label = Utils.months({count: 7});
 
@@ -853,195 +768,108 @@ new Chart(ctx3, {
 <script>
 // Function to display BPM data for today in a chart and open the modal
 function displayBpmDataToday(userType) {
-    // Initial chart creation
-    const ctx = document.getElementById('bpmChartToday').getContext('2d');
-    const myChart = new Chart(ctx, {
+    // Use the BPM data directly in JavaScript
+    const resultbpm = JSON.parse('{!! isset($resultbpm) ? $resultbpm : '[]' !!}');
+    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+        const slicedResult = resultbpm.slice(-20);
+        const slicedDatasy = datasy.slice(-20);
+
+        const ctx = document.getElementById('bpmChartToday').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: slicedDatasy,
+                datasets: [{
+                    label: 'Heart Rate',
+                    data: slicedResult,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Patient BPM Chart (Today)' // Update the chart title
+                    }
+                }
+            },
+        });
+}
+
+// Function to display BPM data for the current week in a chart and open the modal
+function displayBpmDataWeek(userType) {
+   // Use the BPM data directly in JavaScript
+   const datas = JSON.parse('{!! isset($datas) ? $datas : '[]' !!}');
+    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+    const ctx = document.getElementById('bpmChartWeek').getContext('2d');
+
+    new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [],
+            labels: datasy,
             datasets: [{
                 label: 'Heart Rate',
-                data: [],
-                borderColor: 'rgba(75, 192, 192, 1)',
+                data: datas,
+                borderColor: 'rgba(0, 123, 255, 1)',
                 borderWidth: 2,
                 fill: false,
             }]
         },
         options: {
+            responsive: true,
             plugins: {
                 legend: {
                     position: 'top',
                 },
                 title: {
                     display: true,
-                    text: 'Patient BPM Chart (Today)'
-                },
-                zoom: {
-                    zoom: {
-                        wheel: {
-                            enabled: true,
-                        },
-                        drag: {
-                            enabled: true
-                        },
-                        mode: 'xy',
-                    }
+                    text: 'Patient BPM Chart (This Week)'
                 }
             }
         },
     });
-
-    // Function to update chart data
-    function updateChart(response) {
-        if (response.status === 'success') {
-            var datas = response.data.slice(-20).map(entry => entry.bpm);
-            var datasy = response.data.slice(-20).map(entry => entry.Date_created);
-
-            // Update the chart data
-            myChart.data.labels = datasy;
-            myChart.data.datasets[0].data = datas;
-            myChart.update();
-        } else {
-            // Handle error
-        }
-    }
-
-    // Make an AJAX request to fetch BPM data for today
-    function fetchData() {
-        console.log('User Type:', userType);
-
-        // Log the complete URL
-        console.log('AJAX URL:', '/' + userType + '/getBpmData');
-        $.ajax({
-            url: '/' + userType + '/getBpmData',
-            method: 'GET',
-            data: {
-                timePeriod: 'today',
-            },
-            success: updateChart,
-            error: function (xhr, status, error) {
-                // Handle AJAX error
-                console.error('AJAX Error: ' + status, error);
-            }
-        });
-    }
-
-    // Display initial data
-    fetchData();
-
-    // Set interval to update the chart every second
-    setInterval(fetchData, 1000);
-
-    // Show the modal containing the chart
-    $('#addModal-datapatient').modal('show');
-}
-
-// Function to display BPM data for the current week in a chart and open the modal
-function displayBpmDataWeek(userType) {
-    // Make an AJAX request to fetch BPM data for the current week
-    $.ajax({
-        url: '/' + userType + '/getBpmData', // Assuming the user type is passed as a parameter
-        method: 'GET',
-        data: {
-            timePeriod: 'week',
-        },
-        success: function (response) {
-            if (response.status === 'success') {
-                var datas = response.data.map(entry => entry.bpm);
-                var datasy = response.data.map(entry => entry.Date_created);
-
-                const ctx = document.getElementById('bpmChartWeek').getContext('2d');
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: datasy,
-                        datasets: [{
-                            label: 'Heart Rate',
-                            data: datas,
-                            borderColor: 'rgba(0, 123, 255, 1)', // Change color to primary (blue)
-                            borderWidth: 2,
-                            fill: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Patient BPM Chart (This Week)'
-                            }
-                        }
-                    },
-                });
-
-                // Show the modal containing the chart
-                $('#addModal-datapatient').modal('show');
-            } else {
-                
-            }
-        },
-        error: function (xhr, status, error) {
-            // Handle AJAX error
-            console.error('AJAX Error: ' + status, error);
-        }
-    });
 }
 
 function displayBpmDataMonth(userType) {
-    // Make an AJAX request to fetch BPM data for the current week
-    $.ajax({
-        url: '/' + userType + '/getBpmData', // Assuming the user type is passed as a parameter
-        method: 'GET',
+    // Use the BPM data directly in JavaScript
+    const datas = JSON.parse('{!! isset($datas) ? $datas : '[]' !!}');
+    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+    const ctx = document.getElementById('bpmChartMonth').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
         data: {
-            timePeriod: 'month',
+            labels: datasy,
+            datasets: [{
+                label: 'Heart Rate',
+                data: datas,
+                borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
+                borderWidth: 2,
+                fill: false,
+            }]
         },
-        success: function (response) {
-            if (response.status === 'success') {
-                var datas = response.data.map(entry => entry.bpm);
-                var datasy = response.data.map(entry => entry.Date_created);
-
-                const ctx = document.getElementById('bpmChartMonth').getContext('2d');
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: datasy,
-                        datasets: [{
-                            label: 'Heart Rate',
-                            data: datas,
-                            borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
-                            borderWidth: 2,
-                            fill: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Patient BPM Chart (This Month)'
-                            }
-                        }
-                    },
-                });
-
-                // Show the modal containing the chart
-                $('#addModal-datapatient').modal('show');
-            } else {
-              
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Patient BPM Chart (This Month)' // Update the chart title
+                }
             }
         },
-        error: function (xhr, status, error) {
-            // Handle AJAX error
-            console.error('AJAX Error: ' + status, error);
-        }
     });
 }
 
@@ -1115,22 +943,63 @@ $('.bpm-dropdown-item').on('click', function () {
     // Open the modal
     $('#addModal-datapatient').modal('show');
 });
-Chart.register(zoomPlugin);
+
 </script>
 
 <!-- display sp02 -->
 <script>
 function displaySpDataToday(userType) {
-    // Initial chart creation for SpO2
-    const ctx = document.getElementById('spChartToday').getContext('2d');
-    const myChart = new Chart(ctx, {
+   // Use the BPM data directly in JavaScript
+   const resultspo2 = JSON.parse('{!! isset($resultspo2) ? $resultspo2 : '[]' !!}');
+    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+        const slicedResult = resultspo2.slice(-20);
+        const slicedDatasy = datasy.slice(-20);
+
+        const ctx = document.getElementById('spChartToday').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: slicedDatasy,
+                datasets: [{
+                    label: 'SpO2',
+                    data: slicedResult,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Patient SpO2 Chart (Today)' // Update the chart title
+                    }
+                }
+            },
+        });
+}
+
+function displaySpDataWeek(userType) {
+    // Use the BPM data directly in JavaScript
+    const dataspo2 = JSON.parse('{!! isset($dataspo2) ? $dataspo2 : '[]' !!}');
+    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+    const ctx = document.getElementById('spChartWeek').getContext('2d');
+
+    new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [],
+            labels: datasy,
             datasets: [{
                 label: 'SpO2',
-                data: [],
-                borderColor: 'rgba(75, 192, 192, 1)',
+                data: dataspo2,
+                borderColor: 'rgba(0, 123, 255, 1)',
                 borderWidth: 2,
                 fill: false,
             }]
@@ -1143,160 +1012,44 @@ function displaySpDataToday(userType) {
                 },
                 title: {
                     display: true,
-                    text: 'Patient SpO2 Chart (Today)'
+                    text: 'Patient SpO2 Chart (This Week)'
                 }
             }
         },
     });
-
-    // Function to update SpO2 chart data
-    function updateSpChart(response) {
-        if (response.status === 'success') {
-            var spo2Data = response.data.slice(-20).map(entry => entry.spo2);
-            var dateData = response.data.slice(-20).map(entry => entry.Date_created);
-
-            // Update the SpO2 chart data
-            myChart.data.labels = dateData;
-            myChart.data.datasets[0].data = spo2Data;
-            myChart.update();
-        } else {
-            // Handle error
-        }
-    }
-
-    // Make an AJAX request to fetch SpO2 data for today
-    function fetchSpData() {
-        $.ajax({
-            url: '/' + userType + '/getBpmData', // Assuming the endpoint is getSpO2Data
-            method: 'GET',
-            data: {
-                timePeriod: 'today',
-            },
-            success: updateSpChart,
-            error: function (xhr, status, error) {
-                // Handle AJAX error
-                console.error('AJAX Error: ' + status, error);
-            }
-        });
-    }
-
-    // Display initial SpO2 data
-    fetchSpData();
-
-    // Set interval to update the SpO2 chart every second
-    setInterval(fetchSpData, 1000);
-
-    // Show the modal containing the SpO2 chart
-    $('#addModal-dataoxygen').modal('show');
-}
-
-function displaySpDataWeek(userType) {
-    // Make an AJAX request to fetch SpO2 data for today
-    $.ajax({
-        url: '/' + userType + '/getBpmData',
-        method: 'GET',
-        data: {
-            timePeriod: 'week',
-        },
-        success: function (response) {
-            if (response.status === 'success') {
-                var spo2Data = response.data.map(entry => entry.spo2);
-                var dateData = response.data.map(entry => entry.Date_created);
-
-                const ctx = document.getElementById('spChartWeek').getContext('2d');
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: dateData,
-                        datasets: [{
-                            label: 'SpO2',
-                            data: spo2Data,
-                            borderColor: 'rgba(0, 123, 255, 1)', // Change color to primary (blue)
-                            borderWidth: 2,
-                            fill: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Patient SpO2 Chart (This Week)'
-                            }
-                        }
-                    },
-                });
-
-                // Show the modal containing the chart
-                $('#addModal-dataoxygen').modal('show');
-            } else {
-                // Handle error
-                console.error('Error fetching SpO2 data:', response.message);
-            }
-        },
-        error: function (xhr, status, error) {
-            // Handle AJAX error
-            console.error('AJAX Error: ' + status, error);
-        }
-    });
 }
 
 function displaySpDataMonth(userType) {
-    // Make an AJAX request to fetch SpO2 data for today
-    $.ajax({
-        url: '/' + userType + '/getBpmData',
-        method: 'GET',
+     // Use the BPM data directly in JavaScript
+    const dataspo2 = JSON.parse('{!! isset($dataspo2) ? $dataspo2 : '[]' !!}');
+    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+    const ctx = document.getElementById('spChartMonth').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
         data: {
-            timePeriod: 'month',
+            labels: datasy,
+            datasets: [{
+                label: 'SpO2',
+                data: dataspo2,
+                borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
+                borderWidth: 2,
+                fill: false,
+            }]
         },
-        success: function (response) {
-            if (response.status === 'success') {
-                var spo2Data = response.data.map(entry => entry.spo2);
-                var dateData = response.data.map(entry => entry.Date_created);
-
-                const ctx = document.getElementById('spChartMonth').getContext('2d');
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: dateData,
-                        datasets: [{
-                            label: 'SpO2',
-                            data: spo2Data,
-                            borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
-                            borderWidth: 2,
-                            fill: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Patient SpO2 Chart (This Month)'
-                            }
-                        }
-                    },
-                });
-
-                // Show the modal containing the chart
-                $('#addModal-dataoxygen').modal('show');
-            } else {
-                // Handle error
-                console.error('Error fetching SpO2 data:', response.message);
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Patient SpO2 Chart (This Month)' // Update the chart title
+                }
             }
         },
-        error: function (xhr, status, error) {
-            // Handle AJAX error
-            console.error('AJAX Error: ' + status, error);
-        }
     });
 }
 
@@ -1342,7 +1095,7 @@ $('.spo2-dropdown-item').on('click', function () {
     $('#' + selectedOptionId + '-content').show();
 
        // Handle chart display based on user selection
-    if (selectedOptionId === 'spo-today') {
+    if (selectedOptionId === 'spo2-today') {
         if (userType === 2) {
         displaySpDataToday('doctor');
     } else if (userType === 3) {
@@ -1357,7 +1110,7 @@ $('.spo2-dropdown-item').on('click', function () {
         displaySpDataWeek('nurse');
     }
 
-    else if (selectedOptionId === 'spo-month') {
+    else if (selectedOptionId === 'spo2-month') {
         displaySpDataMonth('admin');
         displaySpDataMonth('doctor');
         displaySpDataMonth('nurse');
@@ -1372,16 +1125,58 @@ $('.spo2-dropdown-item').on('click', function () {
 
 <script>
     function displayPiDataToday(userType) {
-    // Initial chart creation for Pi
-    const ctx = document.getElementById('piChartToday').getContext('2d');
-    const myChart = new Chart(ctx, {
+        // Use the BPM data directly in JavaScript
+        const resultpi = JSON.parse('{!! isset($resultpi) ? $resultpi : '[]' !!}');
+        const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+        const slicedResult = resultpi.slice(-20);
+        const slicedDatasy = datasy.slice(-20);
+
+        const ctx = document.getElementById('piChartToday').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: slicedDatasy,
+                datasets: [{
+                    label: 'Pi',
+                    data: slicedResult,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Patient Pi Chart (Today)' // Update the chart title
+                    }
+                }
+            },
+        });
+}
+
+
+function displayPiDataWeek(userType) {
+    // Use the BPM data directly in JavaScript
+    const datapi = JSON.parse('{!! isset($datapi) ? $datapi : '[]' !!}');
+    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+    const ctx = document.getElementById('piChartWeek').getContext('2d');
+
+    new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [],
+            labels: datasy,
             datasets: [{
                 label: 'Pi',
-                data: [],
-                borderColor: 'rgba(75, 192, 192, 1)',
+                data: datapi,
+                borderColor: 'rgba(0, 123, 255, 1)',
                 borderWidth: 2,
                 fill: false,
             }]
@@ -1394,163 +1189,44 @@ $('.spo2-dropdown-item').on('click', function () {
                 },
                 title: {
                     display: true,
-                    text: 'Patient Pi Chart (Today)'
+                    text: 'Patient Pi Chart (This Week)'
                 }
             }
         },
     });
-
-    // Function to update Pi chart data
-    function updatePiChart(response) {
-        if (response.status === 'success') {
-            var piData = response.data.slice(-20).map(entry => entry.pi);
-            var dateData = response.data.slice(-20).map(entry => entry.Date_created);
-
-            // Update the Pi chart data
-            myChart.data.labels = dateData;
-            myChart.data.datasets[0].data = piData;
-            myChart.update();
-        } else {
-            // Handle error
-        }
-    }
-
-    // Make an AJAX request to fetch Pi data for today
-    function fetchPiData() {
-        $.ajax({
-            url: '/' + userType + '/getBpmData', // Adjust endpoint based on your server implementation
-            method: 'GET',
-            data: {
-                timePeriod: 'today',
-            },
-            success: updatePiChart,
-            error: function (xhr, status, error) {
-                // Handle AJAX error
-                console.error('AJAX Error: ' + status, error);
-            }
-        });
-    }
-
-    // Display initial Pi data
-    fetchPiData();
-
-    // Set interval to update the Pi chart every second
-    setInterval(fetchPiData, 1000);
-
-    // Show the modal containing the Pi chart
-    $('#addModal-datapi').modal('show');
-}
-
-
-function displayPiDataWeek(userType) {
-    // Make an AJAX request to fetch SpO2 data for today
-    $.ajax({
-        url: '/' + userType + '/getBpmData',
-        method: 'GET',
-        data: {
-            timePeriod: 'week',
-        },
-        success: function (response) {
-            if (response.status === 'success') {
-                var piData = response.data.map(entry => entry.pi);
-                var dateData = response.data.map(entry => entry.Date_created);
-
-                const ctx = document.getElementById('piChartWeek').getContext('2d');
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: dateData,
-                        datasets: [{
-                            label: 'Pi',
-                            data: piData,
-                            borderColor: 'rgba(0, 123, 255, 1)', // Change color to primary (blue)
-                            borderWidth: 2,
-                            fill: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Patient Pi Chart (This Week)'
-                            }
-                        }
-                    },
-                });
-
-                // Show the modal containing the chart
-                $('#addModal-dataindex').modal('show');
-            } else {
-                // Handle error
-                console.error('Error fetching Pi data:', response.message);
-            }
-        },
-        error: function (xhr, status, error) {
-            // Handle AJAX error
-            console.error('AJAX Error: ' + status, error);
-        }
-    });
 }
 
 function displayPiDataMonth(userType) {
-    // Make an AJAX request to fetch SpO2 data for today
-    console.log('AJAX URL:', '/' + userType + '/getBpmData');
+    // Use the BPM data directly in JavaScript
+    const datapi = JSON.parse('{!! isset($datapi) ? $datapi : '[]' !!}');
+    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
 
-    $.ajax({
-        url: '/' + userType + '/getBpmData',
-        method: 'GET',
+    const ctx = document.getElementById('piChartMonth').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
         data: {
-            timePeriod: 'month',
+            labels: datasy,
+            datasets: [{
+                label: 'Pi',
+                data: datapi,
+                borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
+                borderWidth: 2,
+                fill: false,
+            }]
         },
-        success: function (response) {
-            if (response.status === 'success') {
-                var piData = response.data.map(entry => entry.pi);
-                var dateData = response.data.map(entry => entry.Date_created);
-
-                const ctx = document.getElementById('piChartMonth').getContext('2d');
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: dateData,
-                        datasets: [{
-                            label: 'Pi',
-                            data: piData,
-                            borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
-                            borderWidth: 2,
-                            fill: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Patient Pi Chart (This Month)'
-                            }
-                        }
-                    },
-                });
-
-                // Show the modal containing the chart
-                $('#addModal-dataindex').modal('show');
-            } else {
-                // Handle error
-                console.error('Error fetching Pi data:', response.message);
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Patient Pi Chart (This Month)' // Update the chart title
+                }
             }
         },
-        error: function (xhr, status, error) {
-            // Handle AJAX error
-            console.error('AJAX Error: ' + status, error);
-        }
     });
 }
 
@@ -1566,20 +1242,14 @@ $('.pi-modal-trigger').click(function () {
 
     // Set the default dropdown option to "Today"
     $('#pi-timePeriodDropdown').text('Today');
-    $('#pi-timePeriodDropdown').data('selected-option-id', 'pi-today-option');
+    $('#pi-timePeriodDropdown').data('selected-option-id', 'today');
 
     // Trigger a click event on the "Today" dropdown item to make it selected by default
     $('#pi-today-option').click();
-
-
-    if (userType === 2) {
-        displayPiDataToday('doctor');
-    } else if (userType === 3) {
-        displayPiDataToday('nurse');
-    } else if (userType === 1) {
-        // Include admin logic if needed
-        displayPiDataToday('admin');
-    }
+    
+    displayPiDataToday('admin');
+    displayPiDataToday('doctor');
+    displayPiDataToday('nurse');
 });
 
 $('.pi-dropdown-item').on('click', function () {
@@ -1599,14 +1269,10 @@ $('.pi-dropdown-item').on('click', function () {
 
        // Handle chart display based on user selection
     if (selectedOptionId === 'pi-today') {
-        if (userType === 2) {
-        displayPiDataToday('doctor');
-    } else if (userType === 3) {
-        displayPiDataToday('nurse');
-    } else if (userType === 1) {
-        // Include admin logic if needed
         displayPiDataToday('admin');
-    }
+        displayPiDataToday('doctor');
+        displayPiDataToday('nurse');
+        
     } else if (selectedOptionId === 'pi-week') {
         displayPiDataWeek('admin');
         displayPiDataWeek('doctor');
