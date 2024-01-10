@@ -221,7 +221,9 @@
                                             <div class="align-middle m-b-25">
                                                 <!-- if apt status = 2 (cancel), button add apt record takde -->
                                                 @if ($aptD->appointment_status == '2')
-                                                    <img src="{{ $aptD->patient_image ? asset('storage/profilePic/' . $aptD->patient_image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                                    <!-- <img src="{{ $aptD->patient_image ? asset('storage/profilePic/' . $aptD->patient_image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15"> -->
+                                                    <img src="https://img.freepik.com/premium-vector/aesthetic-cute-muslim-girl-with-hijab-flat-detailed-avatar-vector-illustration-beautiful-muslim_677428-604.jpg?w=2000" class="img-radius img-40 align-top m-r-15">
+
                                                     <div class="d-inline-block">
                                                         <h6>{{ $aptD->name }}</h6>
                                                         <p class="text-muted m-b-0">Consultation</p>
@@ -262,7 +264,9 @@
 
                                                 <!-- if medrecord status = 1 (done), Dr dah siap isi medical record & akan keluar badge done -->
                                                 @elseif ($aptD->medrecord_status == '1')
-                                                    <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                                    <!-- <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15"> -->
+                                                    <img src="https://img.freepik.com/premium-vector/aesthetic-cute-muslim-girl-with-hijab-flat-detailed-avatar-vector-illustration-beautiful-muslim_677428-604.jpg?w=2000" class="img-radius img-40 align-top m-r-15">
+
                                                         <div class="d-inline-block">
                                                             <h6>{{ $aptD->name }}</h6>
                                                             <p class="text-muted m-b-0">Consultation</p>
@@ -273,7 +277,9 @@
 
                                                 @else
                                                     <a href="/doctor/appointmentReport/{{ $aptD->appointment_id }}">
-                                                    <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15">
+                                                    <!-- <img src="{{ Auth::user()->image ? asset('storage/profilePic/' . Auth::user()->image) : asset('files/assets/images/profilePic/unknown.jpg') }}" alt="user image" class="img-radius img-40 align-top m-r-15"> -->
+                                                    <img src="https://img.freepik.com/premium-vector/aesthetic-cute-muslim-girl-with-hijab-flat-detailed-avatar-vector-illustration-beautiful-muslim_677428-604.jpg?w=2000" class="img-radius img-40 align-top m-r-15">
+
                                                         <div class="d-inline-block">
                                                             <h6>{{ $aptD->name }}</h6>
                                                             <p class="text-muted m-b-0">Consultation</p>

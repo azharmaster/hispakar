@@ -1296,14 +1296,11 @@ $('.pi-dropdown-item').on('click', function () {
 <script>
  function updateBadges(userType) {
     // Make an AJAX request
-    console.log('AJAX URL:', '/' + userType + '/getLatestData');
-
     $.ajax({
         url: '/' + userType + '/getLatestData',
         type: 'GET',
         dataType: 'json',
         success: function(response) {
-            console.log("AJAX Success:", response);
 
             if (response.status === 'success') {
                 // Update content inside the BPM badge
@@ -1322,9 +1319,7 @@ $('.pi-dropdown-item').on('click', function () {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            // Handle AJAX error
-            console.error("AJAX Error:", textStatus, errorThrown);
-            console.log("Response Text:", jqXHR.responseText);
+           
         }
     });
 
