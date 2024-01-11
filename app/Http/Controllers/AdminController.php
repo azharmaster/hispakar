@@ -58,12 +58,6 @@ class AdminController extends Controller
 
         $totalservice = MedService::all()->count();
         $totalservice2 = MedService::whereBetween('created_at', [$firstDay, $now])->count();
-
-        $newborns = Patient::where('age', '<=', 1)->count(); // Assuming newborns are age 1 or below
-        $infants = Patient::whereBetween('age', [2, 5])->count(); // Assuming infants are between ages 2 and 5
-        $children = Patient::whereBetween('age', [6, 12])->count(); // Assuming children are between ages 6 and 12
-        $adolescents = Patient::whereBetween('age', [13, 18])->count(); // Assuming adolescents are between ages 13 and 18
-        $oldAge = Patient::where('age', '>=', 60)->count(); // Assuming old age starts from age 60
         
 
         $medicines = Medicine::all();
@@ -247,7 +241,12 @@ class AdminController extends Controller
         // print_r($maleData);
         // print_r($femaleData);
 
-        
+        $newborns = Patient::where('age', '<=', 1)->count();
+        $infants = Patient::whereBetween('age', [2, 5])->count();
+        $children = Patient::whereBetween('age', [6, 12])->count();
+        $adolescents = Patient::whereBetween('age', [13, 18])->count();
+        $oldAge =  Patient::whereBetween('age', [19, 60])->count();
+
 
         return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totaldept',
         'totalnurse','totalpatient','totalmedicine','medicines','nurses','doctors','totalapt2','totaldoc2',
@@ -257,28 +256,7 @@ class AdminController extends Controller
         'calendarEvents', 'labels', 'maleData', 'femaleData'));
     }
 
-    public function getLiveData()
-    {
-        // Fetch data from the 'bpm' table
-        $bpmData = Bpm::select('id', 'Value', 'Date_created')
-            ->orderBy('Date_created', 'desc')
-            ->limit(20)
-            ->get();
-
-        // Fetch data from the 'spo2' table
-        $spo2Data = Spo2::select('id', 'Value', 'Date_created')
-            ->orderBy('Date_created', 'desc')
-            ->limit(20)
-            ->get();
-
-        // Fetch data from the 'pi' table
-        $piData = Pi::select('id', 'Value', 'Date_created')
-            ->orderBy('Date_created', 'desc')
-            ->limit(20)
-            ->get();
-
-        return response()->json(['bpm' => $bpmData, 'spo2' => $spo2Data, 'pi' => $piData]);
-    }
+    
 
     public function viewProfile() //profile admin
     {

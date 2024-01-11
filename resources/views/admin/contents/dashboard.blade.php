@@ -552,29 +552,28 @@
     });
     
     const ctx2 = document.getElementById('myChart2');
-    
-    new Chart(ctx2, {
-        type: 'bar',
-        data: {
-            labels: ['Newborn', 'Infant', 'Child', 'Adolescent', 'Old Age'],
-            datasets: [{
-                    data: [{{$newborns}}, {{$infants}}, {{$children}}, {{$adolescents}}, {{$oldAge}}],
-                    borderWidth: 1,
-                    backgroundColor: ['#FFB1C1', '#7FB5B5', '#EC7C26', '#3E5F8A', '#1E5945', '#57A639'],
-                },
-    
-            ]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+
+new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: ['Newborn', 'Infant', 'Child', 'Adolescent', 'Old Age'],
+        datasets: [{
+            label: '#',
+            data: [{{ $newborns }}, {{ $infants }}, {{ $children }}, {{ $adolescents }}, {{ $oldAge }}],
+            borderWidth: 1,
+            backgroundColor: ['#FFB1C1', '#7FB5B5', '#EC7C26', '#3E5F8A', '#1E5945'],
+        }],
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
             },
-            responsive: true,
-            maintainAspectRatio: true,
-        }
-    });
+        },
+        responsive: true,
+        maintainAspectRatio: true,
+    },
+});
     
     const ctx3 = document.getElementById('myChart3');
 
