@@ -58,6 +58,8 @@ class PatientController extends Controller
         ->select('appointment.id as appointment_id', 'patient.id as patient_id', 'appointment.*', 'patient.*', 'attendance.queueid', 'room.name as room_name' ) 
         ->where('patient.email', $email)
         ->whereDate('appointment.date', $todayDate)
+        ->orderByDesc('attendance.queueid')  // Order by queueid in descending order
+
         ->get();
         
     

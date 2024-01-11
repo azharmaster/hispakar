@@ -52,47 +52,43 @@
                     <div class="col-md-4">
                           <div class="card comp-card" style="height:140px">
                             <div class="card-body">
-                              <div class="row align-items-center">
+                            <div class="row align-items-center">
                                 <div class="col">
-                                  <h6 class="m-b-25"> Queue No.</h6>
-                                @if ($aptDs->isEmpty())
-                                    <h4 class="f-w-700 text-c-green">N/A</h4>
-                                @else
-                                    @foreach ($aptDs as $aptD)
-                                        <h4 class="f-w-700 text-c-green">{{ $aptD->queueid }}</h4>
-                                    @endforeach
-                                @endif
-
+                                    <h6 class="m-b-25"> Queue No.</h6>
+                                    @if ($aptDs->isEmpty())
+                                        <h4 class="f-w-700 text-c-green">N/A</h4>
+                                    @else
+                                        @php $lastAptD = $aptDs->first(); @endphp
+                                        <h4 class="f-w-700 text-c-green">{{ $lastAptD->queueid ?? 'N/A' }}</h4>
+                                    @endif
                                 </div>
                                 <div class="col-auto">
-                                  <i class="fas fa-user-friends bg-c-green" style="margin-top: 22px;"></i>
+                                    <i class="fas fa-user-friends bg-c-green" style="margin-top: 22px;"></i>
                                 </div>
-                              </div>
+                            </div>
                             </div>
                           </div>
                       </div>
 
                       <div class="col-md-4" >
-                          <div class="card comp-card">
+                        <div class="card comp-card" style="height:140px">
                             <div class="card-body">
-                              <div class="row align-items-center">
+                                <div class="row align-items-center">
                                 <div class="col">
-                                  <h6 class="m-b-25">Room</h6>
-                                  @if ($aptDs->isEmpty())
-                                    <h4 class="f-w-700 text-c-green">N/A</h4>
-                                  @else
-                                  @foreach ($aptDs as $aptD)
-                                      <h4 class="f-w-700 text-c-yellow">{{ $aptD->room_name ?? 'N/A' }}</h4>
+                                    <h6 class="m-b-25">Room</h6>
+                                    @if ($aptDs->isEmpty() || is_null($lastAptD->queueid))
+                                        <h4 class="f-w-700 text-c-yellow">N/A</h4>
+                                    @else
+                                        <h4 class="f-w-700 text-c-yellow">{{ $lastAptD->room_name ?? 'N/A' }}</h4>
+                                    @endif
+                                </div>
 
-                                  @endforeach
-                                  @endif
+                                    <div class="col-auto" style="margin-top: 8px;">
+                                        <i class="fas fa-door-open bg-c-yellow"></i>
+                                    </div>
                                 </div>
-                                <div class="col-auto">
-                                  <i class="fas fa-door-open bg-c-yellow"></i>
-                                </div>
-                              </div>
                             </div>
-                          </div>
+                        </div>
                       </div>
 
                       <div class="col-md-4">
