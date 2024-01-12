@@ -240,7 +240,7 @@
     function updateBpm() {
         // Make an AJAX request
         $.ajax({
-            url: '/admin/getLatestData',
+            url: '/doctor/getLatestData',
             type: 'GET',
             dataType: 'json',
             success: function (response) {
