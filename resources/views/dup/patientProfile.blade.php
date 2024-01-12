@@ -444,6 +444,109 @@
                             </div>
                         </div>
 
+                        <!-- <div class="col-md-12">
+                            <div class="card table-card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="chartDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            This Week
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="chartDropdown">
+                                            <a class="dropdown-item" href="javascript:void(0)" data-chart="bpmChart2">This Week</a>
+                                            <a class="dropdown-item" href="javascript:void(0)" data-chart="bpmChart3">This Month</a>
+                                        </div>
+                                    </div>
+                                    
+                                    <button id="resetChartButton" class="btn btn-primary">Reset Chart</button>
+                                </div>
+                                
+                                <div class="card-body">
+                                    <canvas id="bpmChart" width="680" height="340"></canvas>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="col-md-12">
+                            <div class="card table-card" style="height: 580px;"> <!-- Adjust the height as needed -->
+                                
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">BPM Chart</h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" id="chartDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                This Week
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="chartDropdown">
+                                                <a class="dropdown-item bpm-item" href="javascript:void(0)" data-chart="bpmChart2">This Week</a>
+                                                <a class="dropdown-item bpm-item" href="javascript:void(0)" data-chart="bpmChart3">This Month</a>
+                                            </div>
+                                        </div>
+                                        
+                                        <button id="resetChartButton" class="btn btn-secondary ml-2">Reset Zoom</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-body"> <!-- Adjust the height as needed -->
+                                    <canvas id="bpmChart" width="680" height="350px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="card table-card" style="height: 580px;"> <!-- Adjust the height as needed -->
+                                
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">SpO2 Chart</h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" id="chartDropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                This Week
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="chartDropdown2">
+                                                <a class="dropdown-item sp-item" href="javascript:void(0)" data-chart="spChart2">This Week</a>
+                                                <a class="dropdown-item sp-item" href="javascript:void(0)" data-chart="spChart3">This Month</a>
+                                            </div>
+                                        </div>
+                                        
+                                        <button id="resetChartButton2" class="btn btn-secondary ml-2">Reset Zoom</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-body"> <!-- Adjust the height as needed -->
+                                    <canvas id="spChart" width="680" height="350px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="card table-card" style="height: 580px;"> <!-- Adjust the height as needed -->
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">Pi Chart</h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" id="chartDropdown3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                This Week
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="chartDropdown3">
+                                                <a class="dropdown-item pi-item" href="javascript:void(0)" data-chart="piChart2">This Week</a>
+                                                <a class="dropdown-item pi-item" href="javascript:void(0)" data-chart="piChart3">This Month</a>
+                                            </div>
+                                        </div>
+                                        
+                                        <button id="resetChartButton3" class="btn btn-secondary ml-2">Reset Zoom</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-body"> <!-- Adjust the height as needed -->
+                                    <canvas id="piChart" width="680" height="350px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+
 
                     </div>
                 </div>
@@ -500,7 +603,7 @@
 
 <!-- Add Patient Modal -->
 <div class="modal fade" id="addModal-datapatient" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Patient BPM</h5>
@@ -545,7 +648,7 @@
 <!-- end Add Patient Modal -->
 
 <div class="modal fade" id="addModal-dataoxygen" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Patient SpO2</h5>
@@ -588,7 +691,7 @@
 </div>
 
 <div class="modal fade" id="addModal-dataindex" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Patient PI</h5>
@@ -689,17 +792,16 @@
             datasets: [{
                     label: "New",
                     data: [12, 19, 3, 5, 2, 3],
-                    borderColor: '#4099ff',
-                    backgroundColor: '#4099ff'
+                    
                 },
 
             ]
         }
     })
 
-    const ctx2 = document.getElementById('myChart2');
+    const ctx0 = document.getElementById('myChart2');
 
-    new Chart(ctx2, {
+    new Chart(ctx0, {
         type: 'bar',
         data: {
             labels: ['Newborn', 'Infant', 'Child', 'Adolescent', 'Old Age'],
@@ -712,10 +814,359 @@
             ]
         }
     })
-
-    
-
 </script>
+
+<!-- bpm zoom chart -->
+<script>
+    // Initial chart data
+    const datas = JSON.parse('{!! isset($datas) ? $datas : '[]' !!}');
+    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+    // Initial chart configurations
+    const config2 = {
+        type: 'line',
+        data: {
+            labels: datasy,
+            datasets: [{
+                label: 'Heart Rate',
+                data: datas,
+                borderColor: 'rgba(0, 123, 255, 1)',
+                borderWidth: 2,
+                tension: 0.1
+            }]
+        },
+        options: {
+            plugins: {
+                responsive: true,
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Patient BPM Chart (This Week)'
+                },
+
+            }
+        },
+    };
+
+    const config3 = {
+        type: 'line',
+        data: {
+            labels: datasy,
+            datasets: [{
+                label: 'Heart Rate',
+                data: datas,
+                borderColor: 'rgba(40, 167, 69, 1)',
+                borderWidth: 2,
+                tension: 0.1
+            }]
+        },
+        options: {
+            plugins: {
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Patient BPM Chart (This Month)'
+                }
+            }
+        },
+    };
+
+    // Initial chart instance
+    var bpmChart = new Chart(document.getElementById('bpmChart').getContext('2d'), config2);
+
+    // Dropdown change event handler
+    $('.bpm-item').on('click', function (e) {
+        e.preventDefault();
+
+        // Get the selected chart ID from data attribute
+        var chartId = $(this).data('chart');
+
+        // Destroy the existing chart instance
+        bpmChart.destroy();
+
+        // Create a new chart instance based on the selected dropdown item
+        if (chartId === 'bpmChart2') {
+            bpmChart = new Chart(document.getElementById('bpmChart').getContext('2d'), config2);
+            $('#chartDropdown').text('This Week');
+
+        } else if (chartId === 'bpmChart3') {
+            bpmChart = new Chart(document.getElementById('bpmChart').getContext('2d'), config3);
+            $('#chartDropdown').text('This Month');
+
+        }
+
+        // Reinitialize the zoom plugin
+        Chart.register(ChartZoom);
+        bpmChart.zoom.reset();
+    });
+
+     // Reset button click event handler
+     $('#resetChartButton').on('click', function () {
+        // Reset the chart to its original state
+        bpmChart.resetZoom();
+    });
+    
+</script>
+
+<!-- spo2 zoom chart -->
+<script>
+    // Initial chart data for SpO2
+    const dataspo2 = JSON.parse('{!! isset($dataspo2) ? $dataspo2 : '[]' !!}');
+
+    // Initial chart configurations for SpO2
+    const configsp2 = {
+        type: 'line',
+        data: {
+            labels: datasy,
+            datasets: [{
+                label: 'SpO2',
+                data: dataspo2,
+                borderColor: 'rgba(0, 123, 255, 1)',
+                borderWidth: 2,
+                tension: 0.1
+            }]
+        },
+        options: {
+            plugins: {
+                responsive: true,
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Patient SpO2 Chart (This Week)'
+                }
+            }
+        },
+    };
+
+    const configsp3 = {
+        type: 'line',
+        data: {
+            labels: datasy,
+            datasets: [{
+                label: 'SpO2',
+                data: dataspo2,
+                borderColor: 'rgba(40, 167, 69, 1)',
+                borderWidth: 2,
+                tension: 0.1
+            }]
+        },
+        options: {
+            plugins: {
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Patient SpO2 Chart (This Month)'
+                }
+            }
+        },
+    };
+
+    // Initial chart instance for SpO2
+    var spChart = new Chart(document.getElementById('spChart').getContext('2d'), configsp2);
+
+    // Dropdown change event handler for SpO2
+    $('.sp-item').on('click', function (e) {
+        e.preventDefault();
+
+        // Get the selected chart ID from data attribute
+        var chartId2 = $(this).data('chart');
+
+        // Destroy the existing SpO2 chart instance
+        spChart.destroy();
+
+        // Create a new SpO2 chart instance based on the selected dropdown item
+        if (chartId2 === 'spChart2') {
+            spChart = new Chart(document.getElementById('spChart').getContext('2d'), configsp2);
+            $('#chartDropdown2').text('This Week');
+        } else if (chartId2 === 'spChart3') {
+            spChart = new Chart(document.getElementById('spChart').getContext('2d'), configsp3);
+            $('#chartDropdown2').text('This Month');
+        }
+
+        // Reinitialize the zoom plugin for SpO2
+        Chart.register(ChartZoom);
+        spChart.zoom.reset();
+    });
+
+    // Reset button click event handler for SpO2
+    $('#resetChartButton2').on('click', function () {
+        // Reset the SpO2 chart to its original state
+        spChart.resetZoom();
+    });
+</script>
+
+<!-- pi zoom chart -->
+<script>
+    // Initial chart data for SpO2
+    const datapi = JSON.parse('{!! isset($datapi) ? $datapi : '[]' !!}');
+
+    // Initial chart configurations for SpO2
+    const configpi2 = {
+        type: 'line',
+        data: {
+            labels: datapi,
+            datasets: [{
+                label: 'Pi',
+                data: datapi,
+                borderColor: 'rgba(0, 123, 255, 1)',
+                borderWidth: 2,
+                tension: 0.1
+            }]
+        },
+        options: {
+            plugins: {
+                responsive: true,
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Patient Pi Chart (This Week)'
+                }
+            }
+        },
+    };
+
+    const configpi3 = {
+        type: 'line',
+        data: {
+            labels: datasy,
+            datasets: [{
+                label: 'Pi',
+                data: datapi,
+                borderColor: 'rgba(40, 167, 69, 1)',
+                borderWidth: 2,
+                tension: 0.1
+            }]
+        },
+        options: {
+            plugins: {
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Patient Pi Chart (This Month)'
+                }
+            }
+        },
+    };
+
+    // Initial chart instance for SpO2
+    var piChart = new Chart(document.getElementById('piChart').getContext('2d'), configpi2);
+
+    // Dropdown change event handler for SpO2
+    $('.pi-item').on('click', function (e) {
+        e.preventDefault();
+
+        // Get the selected chart ID from data attribute
+        var chartId3 = $(this).data('chart');
+
+        // Destroy the existing SpO2 chart instance
+        piChart.destroy();
+
+        // Create a new SpO2 chart instance based on the selected dropdown item
+        if (chartId3 === 'piChart2') {
+            piChart = new Chart(document.getElementById('piChart').getContext('2d'), configpi2);
+            $('#chartDropdown3').text('This Week');
+        } else if (chartId3 === 'piChart3') {
+            piChart = new Chart(document.getElementById('piChart').getContext('2d'), configpi3);
+            $('#chartDropdown3').text('This Month');
+        }
+
+        // Reinitialize the zoom plugin for SpO2
+        Chart.register(ChartZoom);
+        piChart.zoom.reset();
+    });
+
+    // Reset button click event handler for SpO2
+    $('#resetChartButton3').on('click', function () {
+        // Reset the SpO2 chart to its original state
+        piChart.resetZoom();
+    });
+</script>
+
+
 
 @php
     $titles = [
@@ -762,29 +1213,111 @@
 
 <script>
     var userType = @json($userType ?? '');
-    console.log('JavaScript userType:', userType);
 </script>
 
+<!-- display bpm -->
 <script>
-// Function to display BPM data for today in a chart and open the modal
-function displayBpmDataToday(userType) {
-    // Use the BPM data directly in JavaScript
-    const resultbpm = JSON.parse('{!! isset($resultbpm) ? $resultbpm : '[]' !!}');
-    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+    // Function to display BPM data for today in a chart and open the modal
+    function displayBpmDataToday(userType) {
+        // Use the BPM data directly in JavaScript
+        const resultbpm = JSON.parse('{!! isset($resultbpm) ? $resultbpm : '[]' !!}');
+        const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
 
-        const slicedResult = resultbpm.slice(-20);
-        const slicedDatasy = datasy.slice(-20);
+            const slicedResult = resultbpm.slice(-20);
+            const slicedDatasy = datasy.slice(-20);
 
-        const ctx = document.getElementById('bpmChartToday').getContext('2d');
+            const ctx = document.getElementById('bpmChartToday').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: slicedDatasy,
+                    datasets: [{
+                        label: 'Heart Rate',
+                        data: slicedResult,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Patient BPM Chart (Today)' // Update the chart title
+                        }
+                    }
+                },
+            });
+    }
+
+    // Function to display BPM data for the current week in a chart and open the modal
+    function displayBpmDataWeek() {
+        // Get the canvas element
+        const datas = JSON.parse('{!! isset($datas) ? $datas : '[]' !!}');
+        const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+        const ctx1 = document.getElementById('bpmChartWeek').getContext('2d');
+
+        const config1 = {
+            type: 'line',
+            data: {
+                labels: datasy,
+                datasets: [{
+                    label: 'Heart Rate',
+                    data: datas,
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 2,
+                    tension:0.1
+                }]
+            },
+            options: {
+                plugins: {
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'xy',
+                        },
+                        zoom: {
+                            wheel: {
+                                enabled: true,
+                            },
+                            pinch: {
+                                enabled: true
+                            },
+                            mode: 'xy',
+                        }
+                    },
+                
+                    title: {
+                        display: true,
+                        text: 'Patient BPM Chart (This Week)'
+                    }
+                }
+            },
+        };
+        var bpmChartWeek = new Chart(ctx1, config1);
+    }
+
+    function displayBpmDataMonth() {
+        // Use the BPM data directly in JavaScript
+        const datas = JSON.parse('{!! isset($datas) ? $datas : '[]' !!}');
+        const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+        const ctx = document.getElementById('bpmChartMonth').getContext('2d');
 
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: slicedDatasy,
+                labels: datasy,
                 datasets: [{
                     label: 'Heart Rate',
-                    data: slicedResult,
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    data: datas,
+                    borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
                     borderWidth: 2,
                     fill: false,
                 }]
@@ -797,175 +1330,134 @@ function displayBpmDataToday(userType) {
                     },
                     title: {
                         display: true,
-                        text: 'Patient BPM Chart (Today)' // Update the chart title
+                        text: 'Patient BPM Chart (This Month)' // Update the chart title
                     }
                 }
             },
         });
-}
-
-// Function to display BPM data for the current week in a chart and open the modal
-function displayBpmDataWeek(userType) {
-   // Use the BPM data directly in JavaScript
-   const datas = JSON.parse('{!! isset($datas) ? $datas : '[]' !!}');
-    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
-
-    const ctx = document.getElementById('bpmChartWeek').getContext('2d');
-
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: datasy,
-            datasets: [{
-                label: 'Heart Rate',
-                data: datas,
-                borderColor: 'rgba(0, 123, 255, 1)',
-                borderWidth: 2,
-                fill: false,
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Patient BPM Chart (This Week)'
-                }
-            }
-        },
-    });
-}
-
-function displayBpmDataMonth(userType) {
-    // Use the BPM data directly in JavaScript
-    const datas = JSON.parse('{!! isset($datas) ? $datas : '[]' !!}');
-    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
-
-    const ctx = document.getElementById('bpmChartMonth').getContext('2d');
-
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: datasy,
-            datasets: [{
-                label: 'Heart Rate',
-                data: datas,
-                borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
-                borderWidth: 2,
-                fill: false,
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Patient BPM Chart (This Month)' // Update the chart title
-                }
-            }
-        },
-    });
-}
-
-$('.bpm-modal-trigger').click(function () {
-    // Hide all content
-    $('.content').hide();
-
-    // Show the content for Today
-    $('#today-content').show();
-
-    // Open the modal
-    $('#addModal-datapatient').modal('show');
-
-    // Set the default dropdown option to "Today"
-    $('#timePeriodDropdown').text('Today');
-    $('#timePeriodDropdown').data('selected-option-id', 'bpm-today-option');
-
-    // Trigger a click event on the "Today" dropdown item to make it selected by default
-    $('#today-option').click();
-
-    // Determine user type and call the corresponding function
-    if (userType === 2) {
-        displayBpmDataToday('doctor');
-    } else if (userType === 3) {
-        displayBpmDataToday('nurse');
-    } else if (userType === 1) {
-        // Include admin logic if needed
-        displayBpmDataToday('admin');
     }
-});
 
+    $('.bpm-modal-trigger').click(function () {
+        // Hide all content
+        $('.content').hide();
 
-// Handle dropdown item click events
-$('.bpm-dropdown-item').on('click', function () {
-    var selectedText = $(this).text();
-    $('#timePeriodDropdown').text(selectedText);
+        // Show the content for Today
+        $('#today-content').show();
 
-    // Store the selected option ID in the data attribute
-    var selectedOptionId = $(this).attr('id').replace('-option', '');
-    $('#timePeriodDropdown').data('selected-option-id', selectedOptionId);
+        // Open the modal
+        $('#addModal-datapatient').modal('show');
 
-    // Hide all content
-    $('.content').hide();
+        // Set the default dropdown option to "Today"
+        $('#timePeriodDropdown').text('Today');
+        $('#timePeriodDropdown').data('selected-option-id', 'bpm-today-option');
 
-    // Show the appropriate content based on the selected option
-    $('#' + selectedOptionId + '-content').show();
+        // Trigger a click event on the "Today" dropdown item to make it selected by default
+        $('#today-option').click();
 
-    // Handle chart display based on user selection
-    if (selectedOptionId === 'today') {
+        // Determine user type and call the corresponding function
         if (userType === 2) {
-        displayBpmDataToday('doctor');
-    } else if (userType === 3) {
-        displayBpmDataToday('nurse');
-    } else if (userType === 1) {
-        // Include admin logic if needed
-        displayBpmDataToday('admin');
-    }
+            displayBpmDataToday('doctor');
+        } else if (userType === 3) {
+            displayBpmDataToday('nurse');
+        } else if (userType === 1) {
+            // Include admin logic if needed
+            displayBpmDataToday('admin');
+        }
+    });
 
-    } else if (selectedOptionId === 'week') {
-        displayBpmDataWeek('admin');
-        displayBpmDataWeek('doctor');
-        displayBpmDataWeek('nurse');
 
-    } else if (selectedOptionId === 'month') {
-        displayBpmDataMonth('admin');
-        displayBpmDataMonth('doctor');
-        displayBpmDataMonth('nurse');
+    // Handle dropdown item click events
+    $('.bpm-dropdown-item').on('click', function () {
+        var selectedText = $(this).text();
+        $('#timePeriodDropdown').text(selectedText);
 
-    }
+        // Store the selected option ID in the data attribute
+        var selectedOptionId = $(this).attr('id').replace('-option', '');
+        $('#timePeriodDropdown').data('selected-option-id', selectedOptionId);
 
-    // Open the modal
-    $('#addModal-datapatient').modal('show');
-});
+        // Hide all content
+        $('.content').hide();
+
+        // Show the appropriate content based on the selected option
+        $('#' + selectedOptionId + '-content').show();
+
+        // Handle chart display based on user selection
+        if (selectedOptionId === 'today') {
+            if (userType === 2) {
+            displayBpmDataToday('doctor');
+        } else if (userType === 3) {
+            displayBpmDataToday('nurse');
+        } else if (userType === 1) {
+            // Include admin logic if needed
+            displayBpmDataToday('admin');
+        }
+
+        } else if (selectedOptionId === 'week') {
+            displayBpmDataWeek();
+        } else if (selectedOptionId === 'month') {
+            displayBpmDataMonth();
+        }
+
+        // Open the modal
+        $('#addModal-datapatient').modal('show');
+    });
 
 </script>
 
 <!-- display sp02 -->
 <script>
-function displaySpDataToday(userType) {
-   // Use the BPM data directly in JavaScript
-   const resultspo2 = JSON.parse('{!! isset($resultspo2) ? $resultspo2 : '[]' !!}');
-    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+    function displaySpDataToday(userType) {
+    // Use the BPM data directly in JavaScript
+    const resultspo2 = JSON.parse('{!! isset($resultspo2) ? $resultspo2 : '[]' !!}');
+        const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
 
-        const slicedResult = resultspo2.slice(-20);
-        const slicedDatasy = datasy.slice(-20);
+            const slicedResult = resultspo2.slice(-20);
+            const slicedDatasy = datasy.slice(-20);
 
-        const ctx = document.getElementById('spChartToday').getContext('2d');
+            const ctx = document.getElementById('spChartToday').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: slicedDatasy,
+                    datasets: [{
+                        label: 'SpO2',
+                        data: slicedResult,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Patient SpO2 Chart (Today)' // Update the chart title
+                        }
+                    }
+                },
+            });
+    }
+
+    function displaySpDataWeek() {
+        // Use the BPM data directly in JavaScript
+        const dataspo2 = JSON.parse('{!! isset($dataspo2) ? $dataspo2 : '[]' !!}');
+        const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+
+        const ctx = document.getElementById('spChartWeek').getContext('2d');
 
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: slicedDatasy,
+                labels: datasy,
                 datasets: [{
                     label: 'SpO2',
-                    data: slicedResult,
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    data: dataspo2,
+                    borderColor: 'rgba(0, 123, 255, 1)',
                     borderWidth: 2,
                     fill: false,
                 }]
@@ -978,151 +1470,113 @@ function displaySpDataToday(userType) {
                     },
                     title: {
                         display: true,
-                        text: 'Patient SpO2 Chart (Today)' // Update the chart title
+                        text: 'Patient SpO2 Chart (This Week)'
                     }
                 }
             },
         });
-}
-
-function displaySpDataWeek(userType) {
-    // Use the BPM data directly in JavaScript
-    const dataspo2 = JSON.parse('{!! isset($dataspo2) ? $dataspo2 : '[]' !!}');
-    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
-
-    const ctx = document.getElementById('spChartWeek').getContext('2d');
-
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: datasy,
-            datasets: [{
-                label: 'SpO2',
-                data: dataspo2,
-                borderColor: 'rgba(0, 123, 255, 1)',
-                borderWidth: 2,
-                fill: false,
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Patient SpO2 Chart (This Week)'
-                }
-            }
-        },
-    });
-}
-
-function displaySpDataMonth(userType) {
-     // Use the BPM data directly in JavaScript
-    const dataspo2 = JSON.parse('{!! isset($dataspo2) ? $dataspo2 : '[]' !!}');
-    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
-
-    const ctx = document.getElementById('spChartMonth').getContext('2d');
-
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: datasy,
-            datasets: [{
-                label: 'SpO2',
-                data: dataspo2,
-                borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
-                borderWidth: 2,
-                fill: false,
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Patient SpO2 Chart (This Month)' // Update the chart title
-                }
-            }
-        },
-    });
-}
-
-$('.sp-modal-trigger').click(function () {
-    // Hide all content
-    $('.content').hide();
-
-    // Show the content for Today
-    $('#spo2-today-content').show();
-
-     // Open the modal
-     $('#addModal-dataoxygen').modal('show');
-
-    // Set the default dropdown option to "Today"
-    $('#spo2-timePeriodDropdown').text('Today');
-    $('#spo2-timePeriodDropdown').data('selected-option-id', 'spo2-today-option');
-
-    // Trigger a click event on the "Today" dropdown item to make it selected by default
-    $('#spo2-today-option').click();
-
-    if (userType === 2) {
-        displaySpDataToday('doctor');
-    } else if (userType === 3) {
-        displaySpDataToday('nurse');
-    } else if (userType === 1) {
-        // Include admin logic if needed
-        displaySpDataToday('admin');
     }
-});
 
-$('.spo2-dropdown-item').on('click', function () {
-    var selectedText = $(this).text();
-    $('#spo2-timePeriodDropdown').text(selectedText);
+    function displaySpDataMonth() {
+        // Use the BPM data directly in JavaScript
+        const dataspo2 = JSON.parse('{!! isset($dataspo2) ? $dataspo2 : '[]' !!}');
+        const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
 
-    // Store the selected option ID in the data attribute
-    var selectedOptionId = $(this).attr('id').replace('-option', '');
-    $('#spo2-timePeriodDropdown').data('selected-option-id', selectedOptionId);
+        const ctx = document.getElementById('spChartMonth').getContext('2d');
 
-    // Hide all content
-    $('.content').hide();
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: datasy,
+                datasets: [{
+                    label: 'SpO2',
+                    data: dataspo2,
+                    borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
+                    borderWidth: 2,
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Patient SpO2 Chart (This Month)' // Update the chart title
+                    }
+                }
+            },
+        });
+    }
 
-    // Show the appropriate content based on the selected option
-    $('#' + selectedOptionId + '-content').show();
+    $('.sp-modal-trigger').click(function () {
+        // Hide all content
+        $('.content').hide();
 
-       // Handle chart display based on user selection
-    if (selectedOptionId === 'spo2-today') {
+        // Show the content for Today
+        $('#spo2-today-content').show();
+
+        // Open the modal
+        $('#addModal-dataoxygen').modal('show');
+
+        // Set the default dropdown option to "Today"
+        $('#spo2-timePeriodDropdown').text('Today');
+        $('#spo2-timePeriodDropdown').data('selected-option-id', 'spo2-today-option');
+
+        // Trigger a click event on the "Today" dropdown item to make it selected by default
+        $('#spo2-today-option').click();
+
         if (userType === 2) {
-        displaySpDataToday('doctor');
-    } else if (userType === 3) {
-        displaySpDataToday('nurse');
-    } else if (userType === 1) {
-        // Include admin logic if needed
-        displaySpDataToday('admin');
-    }
-    } else if (selectedOptionId === 'spo2-week') {
-        displaySpDataWeek('admin');
-        displaySpDataWeek('doctor');
-        displaySpDataWeek('nurse');
-    }
+            displaySpDataToday('doctor');
+        } else if (userType === 3) {
+            displaySpDataToday('nurse');
+        } else if (userType === 1) {
+            // Include admin logic if needed
+            displaySpDataToday('admin');
+        }
+    });
 
-    else if (selectedOptionId === 'spo2-month') {
-        displaySpDataMonth('admin');
-        displaySpDataMonth('doctor');
-        displaySpDataMonth('nurse');
+    $('.spo2-dropdown-item').on('click', function () {
+        var selectedText = $(this).text();
+        $('#spo2-timePeriodDropdown').text(selectedText);
 
-    }
+        // Store the selected option ID in the data attribute
+        var selectedOptionId = $(this).attr('id').replace('-option', '');
+        $('#spo2-timePeriodDropdown').data('selected-option-id', selectedOptionId);
 
+        // Hide all content
+        $('.content').hide();
 
-    // Open the modal
-    $('#addModal-dataoxygen').modal('show');
-});
+        // Show the appropriate content based on the selected option
+        $('#' + selectedOptionId + '-content').show();
+
+        // Handle chart display based on user selection
+        if (selectedOptionId === 'spo2-today') {
+            if (userType === 2) {
+            displaySpDataToday('doctor');
+        } else if (userType === 3) {
+            displaySpDataToday('nurse');
+        } else if (userType === 1) {
+            // Include admin logic if needed
+            displaySpDataToday('admin');
+        }
+        } else if (selectedOptionId === 'spo2-week') {
+            displaySpDataWeek();
+        
+        }
+
+        else if (selectedOptionId === 'spo2-month') {
+            displaySpDataMonth();
+        }
+
+        // Open the modal
+        $('#addModal-dataoxygen').modal('show');
+    });
 </script>
 
+<!-- display pi -->
 <script>
     function displayPiDataToday(userType) {
         // Use the BPM data directly in JavaScript
@@ -1159,188 +1613,177 @@ $('.spo2-dropdown-item').on('click', function () {
                 }
             },
         });
-}
+    }
 
+    function displayPiDataWeek() {
+        // Use the BPM data directly in JavaScript
+        const datapi = JSON.parse('{!! isset($datapi) ? $datapi : '[]' !!}');
+        const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
 
-function displayPiDataWeek(userType) {
-    // Use the BPM data directly in JavaScript
-    const datapi = JSON.parse('{!! isset($datapi) ? $datapi : '[]' !!}');
-    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+        const ctx = document.getElementById('piChartWeek').getContext('2d');
 
-    const ctx = document.getElementById('piChartWeek').getContext('2d');
-
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: datasy,
-            datasets: [{
-                label: 'Pi',
-                data: datapi,
-                borderColor: 'rgba(0, 123, 255, 1)',
-                borderWidth: 2,
-                fill: false,
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Patient Pi Chart (This Week)'
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: datasy,
+                datasets: [{
+                    label: 'Pi',
+                    data: datapi,
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Patient Pi Chart (This Week)'
+                    }
                 }
-            }
-        },
-    });
-}
+            },
+        });
+    }
 
-function displayPiDataMonth(userType) {
-    // Use the BPM data directly in JavaScript
-    const datapi = JSON.parse('{!! isset($datapi) ? $datapi : '[]' !!}');
-    const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+    function displayPiDataMonth() {
+        // Use the BPM data directly in JavaScript
+        const datapi = JSON.parse('{!! isset($datapi) ? $datapi : '[]' !!}');
+        const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
 
-    const ctx = document.getElementById('piChartMonth').getContext('2d');
+        const ctx = document.getElementById('piChartMonth').getContext('2d');
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: datasy,
-            datasets: [{
-                label: 'Pi',
-                data: datapi,
-                borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
-                borderWidth: 2,
-                fill: false,
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Patient Pi Chart (This Month)' // Update the chart title
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: datasy,
+                datasets: [{
+                    label: 'Pi',
+                    data: datapi,
+                    borderColor: 'rgba(40, 167, 69, 1)', // Change color to success/green
+                    borderWidth: 2,
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Patient Pi Chart (This Month)' // Update the chart title
+                    }
                 }
-            }
-        },
-    });
-}
+            },
+        });
+    }
 
-$('.pi-modal-trigger').click(function () {
-    // Hide all content
-    $('.content').hide();
+    $('.pi-modal-trigger').click(function () {
+        // Hide all content
+        $('.content').hide();
 
-    // Show the content for Today
-    $('#pi-today-content').show();
+        // Show the content for Today
+        $('#pi-today-content').show();
 
-     // Open the modal
-     $('#addModal-dataindex').modal('show');
+        // Open the modal
+        $('#addModal-dataindex').modal('show');
 
-    // Set the default dropdown option to "Today"
-    $('#pi-timePeriodDropdown').text('Today');
-    $('#pi-timePeriodDropdown').data('selected-option-id', 'today');
+        // Set the default dropdown option to "Today"
+        $('#pi-timePeriodDropdown').text('Today');
+        $('#pi-timePeriodDropdown').data('selected-option-id', 'today');
 
-    // Trigger a click event on the "Today" dropdown item to make it selected by default
-    $('#pi-today-option').click();
-    
-    displayPiDataToday('admin');
-    displayPiDataToday('doctor');
-    displayPiDataToday('nurse');
-});
-
-$('.pi-dropdown-item').on('click', function () {
-    
-    var selectedText = $(this).text();
-    $('#pi-timePeriodDropdown').text(selectedText);
-
-    // Store the selected option ID in the data attribute
-    var selectedOptionId = $(this).attr('id').replace('-option', '');
-    $('#pi-timePeriodDropdown').data('selected-option-id', selectedOptionId);
-
-    // Hide all content
-    $('.content').hide();
-
-    // Show the appropriate content based on the selected option
-    $('#' + selectedOptionId + '-content').show();
-
-       // Handle chart display based on user selection
-    if (selectedOptionId === 'pi-today') {
+        // Trigger a click event on the "Today" dropdown item to make it selected by default
+        $('#pi-today-option').click();
+        
         displayPiDataToday('admin');
         displayPiDataToday('doctor');
         displayPiDataToday('nurse');
+    });
+
+    $('.pi-dropdown-item').on('click', function () {
         
-    } else if (selectedOptionId === 'pi-week') {
-        displayPiDataWeek('admin');
-        displayPiDataWeek('doctor');
-        displayPiDataWeek('nurse');
-    }
+        var selectedText = $(this).text();
+        $('#pi-timePeriodDropdown').text(selectedText);
 
-    else if (selectedOptionId === 'pi-month') {
-        displayPiDataMonth('admin');
-        displayPiDataMonth('doctor');
-        displayPiDataMonth('nurse');
+        // Store the selected option ID in the data attribute
+        var selectedOptionId = $(this).attr('id').replace('-option', '');
+        $('#pi-timePeriodDropdown').data('selected-option-id', selectedOptionId);
 
-    }
+        // Hide all content
+        $('.content').hide();
 
+        // Show the appropriate content based on the selected option
+        $('#' + selectedOptionId + '-content').show();
 
-    // Open the modal
-    $('#addModal-dataindex').modal('show');
-});
+        // Handle chart display based on user selection
+        if (selectedOptionId === 'pi-today') {
+            displayPiDataToday('admin');
+            displayPiDataToday('doctor');
+            displayPiDataToday('nurse');
+            
+        } else if (selectedOptionId === 'pi-week') {
+            displayPiDataWeek();
+        }
+
+        else if (selectedOptionId === 'pi-month') {
+            displayPiDataMonth();
+            displayPiDataMonth();
+            displayPiDataMonth();
+
+        }
+
+        // Open the modal
+        $('#addModal-dataindex').modal('show');
+    });
 
 </script>
 
+<!-- update badges health status -->
 <script>
- function updateBadges(userType) {
-    // Make an AJAX request
-    $.ajax({
-        url: '/' + userType + '/getLatestData',
-        type: 'GET',
-        dataType: 'json',
-        success: function(response) {
+    function updateBadges(userType) {
+        // Make an AJAX request
+        $.ajax({
+            url: '/' + userType + '/getLatestData',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Update content inside the BPM badge
+                    $('.bpm-badge').text(response.data.latestBpm + ' bpm');
 
-            if (response.status === 'success') {
-                // Update content inside the BPM badge
-                $('.bpm-badge').text(response.data.latestBpm + ' bpm');
+                    // Update content inside the Spo2 badge
+                    $('.sp-badge').text(response.data.latestSpo2 + ' SpO2');
 
-                // Update content inside the Spo2 badge
-                $('.sp-badge').text(response.data.latestSpo2 + ' SpO2');
-
-                $('.stress-badge').text(response.data.latestPi + ' Pi');
-
-            } else {
-                // Handle error or no data scenario
-                $('.bpm-badge').text('N/A');
-                $('.sp-badge').text('N/A');
-                $('.stress-badge').text('N/A');
+                    $('.stress-badge').text(response.data.latestPi + ' Pi');
+                } else {
+                    // Handle error if needed
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle AJAX error if needed
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-           
-        }
-    });
+        });
+    }
 
     // Set interval to update badges every 5 seconds (adjust as needed)
     setInterval(function() {
-        updateBadges(userType);
-    }, 1000);
-}
-
-// Call the function when needed for different user types
-if (userType === 2) {
-    updateBadges('doctor');
-} else if (userType === 3) {
-    updateBadges('nurse');
-} else if (userType === 1) {
-    // Include admin logic if needed
-    updateBadges('admin');
-}
-
-    
+    // Call the function when needed for different user types
+    if (userType === 2) {
+        updateBadges('doctor');
+    } else if (userType === 3) {
+        updateBadges('nurse');
+    } else if (userType === 1) {
+        // Include admin logic if needed
+        updateBadges('admin');
+    }}, 1000); // 5000 milliseconds = 5 seconds
 </script>
+
+
 
 
 
