@@ -1,5 +1,7 @@
 <!---- this is for chart at profile ------>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js" integrity="sha512-wUYbRPLV5zs6IqvWd88HIqZU/b8TBx+I8LEioQ/UC0t5EMCLApqhIAnUg7EsAzdbhhdgW07TqYDdH3QEXRcPOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <!---- dtScripts ------>
 <script type="text/javascript" src="{{ asset('files/bower_components/jquery/js/jquery.min-1.js') }}"></script>
@@ -44,6 +46,25 @@
 
 <script type="text/javascript" src="{{ asset('files/assets/printScript.js') }}"></script>
 
+<script src="{{ asset('files/assets/pages/widget/amchart/amcharts-1.js') }}"></script>
+<script src="{{ asset('files/assets/pages/widget/amchart/gauge-1.js') }}"></script>
+<script src="{{ asset('files/assets/pages/widget/amchart/serial-1.js') }}"></script>
+<script src="{{ asset('files/assets/pages/widget/amchart/light-1.js') }}"></script>
+<script src="{{ asset('files/assets/pages/widget/amchart/pie.min-1.js') }}"></script>
+<script src="{{ asset('files/assets/pages/widget/amchart/ammap.min-1.js') }}"></script>
+<script src="{{ asset('files/assets/pages/widget/amchart/usaLow-1.js') }}"></script>
+
+<script src="{{ asset('files/assets/pages/chart/chartjs/chart.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+<script src="{{ asset('files/assets/pages/data-table/js/chartjs-plugin-zoom.min.js') }}"></script>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+
 
