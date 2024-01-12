@@ -212,7 +212,7 @@
                                                                 {{ $bmiCategory }}
 
                                                             </td>
-                                                            <td>90</td>
+                                                            <td id="latestBpmTd"></td>
                                                             
                                                             <td>
                                                                 <a href="/admin/patientProfile/{{ $patient->id }}" title="View Patient">
@@ -236,6 +236,32 @@
     </div>
 </div>
 
+<script>
+    function updateBpm() {
+        // Make an AJAX request
+        $.ajax({
+            url: '/admin/getLatestData',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+                    // Update the content of the h2 element with the latest BPM
+                    $('#latestBpmTd').text(response.data.latestBpm);
+                } else {
+                    // Handle error if needed
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle AJAX error if needed
+            }
+        });
+    }
+
+    // Set interval to update badges every 5 seconds (adjust as needed)
+    setInterval(function () {
+        updateBpm();
+    }, 1000); 
+</script>
 @endsection
 
 
