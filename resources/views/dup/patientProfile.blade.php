@@ -475,9 +475,10 @@
                                     <div class="d-flex align-items-center">
                                         <div class="dropdown">
                                             <button class="btn btn-primary dropdown-toggle" type="button" id="chartDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                This Week
+                                                Today
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="chartDropdown">
+                                                <a class="dropdown-item bpm-item" href="javascript:void(0)" data-chart="bpmChart1">Today</a>
                                                 <a class="dropdown-item bpm-item" href="javascript:void(0)" data-chart="bpmChart2">This Week</a>
                                                 <a class="dropdown-item bpm-item" href="javascript:void(0)" data-chart="bpmChart3">This Month</a>
                                             </div>
@@ -502,9 +503,10 @@
                                     <div class="d-flex align-items-center">
                                         <div class="dropdown">
                                             <button class="btn btn-primary dropdown-toggle" type="button" id="chartDropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                This Week
+                                                Today
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="chartDropdown2">
+                                                <a class="dropdown-item sp-item" href="javascript:void(0)" data-chart="spChart1">Today</a>
                                                 <a class="dropdown-item sp-item" href="javascript:void(0)" data-chart="spChart2">This Week</a>
                                                 <a class="dropdown-item sp-item" href="javascript:void(0)" data-chart="spChart3">This Month</a>
                                             </div>
@@ -531,6 +533,7 @@
                                                 This Week
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="chartDropdown3">
+                                                <a class="dropdown-item pi-item" href="javascript:void(0)" data-chart="piChart1">Today</a>
                                                 <a class="dropdown-item pi-item" href="javascript:void(0)" data-chart="piChart2">This Week</a>
                                                 <a class="dropdown-item pi-item" href="javascript:void(0)" data-chart="piChart3">This Month</a>
                                             </div>
@@ -821,6 +824,51 @@
     // Initial chart data
     const datas = JSON.parse('{!! isset($datas) ? $datas : '[]' !!}');
     const datasy = JSON.parse('{!! isset($datasy) ? $datasy : '[]' !!}');
+    const resultbpm = JSON.parse('{!! isset($resultbpm) ? $resultbpm : '[]' !!}');
+
+    const slicedResult = resultbpm.slice(-20);
+    const slicedDatasy = datasy.slice(-20);
+
+     // Initial chart configurations
+     const config01 = {
+        type: 'line',
+        data: {
+            labels: slicedDatasy,
+            datasets: [{
+                label: 'Heart Rate',
+                data: slicedResult,
+                borderColor: 'rgba(173, 82, 217, 0.8)',
+                borderWidth: 2,
+                tension: 0.1
+            }]
+        },
+        options: {
+            plugins: {
+                responsive: true,
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Patient BPM Chart (Today)'
+                },
+
+            }
+        },
+    };
+
 
     // Initial chart configurations
     const config2 = {
@@ -900,7 +948,7 @@
     };
 
     // Initial chart instance
-    var bpmChart = new Chart(document.getElementById('bpmChart').getContext('2d'), config2);
+    var bpmChart = new Chart(document.getElementById('bpmChart').getContext('2d'), config01);
 
     // Dropdown change event handler
     $('.bpm-item').on('click', function (e) {
@@ -913,18 +961,28 @@
         bpmChart.destroy();
 
         // Create a new chart instance based on the selected dropdown item
-        if (chartId === 'bpmChart2') {
+
+        if (chartId === 'bpmChart1'){
+            Chart.register(ChartZoom);
+
+            bpmChart = new Chart(document.getElementById('bpmChart').getContext('2d'), config01);
+            $('#chartDropdown').text('Today');
+        }
+        else if (chartId === 'bpmChart2') {
+            Chart.register(ChartZoom);
+
             bpmChart = new Chart(document.getElementById('bpmChart').getContext('2d'), config2);
             $('#chartDropdown').text('This Week');
 
         } else if (chartId === 'bpmChart3') {
+            Chart.register(ChartZoom);
+
             bpmChart = new Chart(document.getElementById('bpmChart').getContext('2d'), config3);
             $('#chartDropdown').text('This Month');
 
-        }
+        } 
 
         // Reinitialize the zoom plugin
-        Chart.register(ChartZoom);
         bpmChart.zoom.reset();
     });
 
@@ -940,8 +998,50 @@
 <script>
     // Initial chart data for SpO2
     const dataspo2 = JSON.parse('{!! isset($dataspo2) ? $dataspo2 : '[]' !!}');
+    const resultspo2 = JSON.parse('{!! isset($resultspo2) ? $resultspo2 : '[]' !!}');
+
+    const slicedResultspo2 = resultspo2.slice(-20);
 
     // Initial chart configurations for SpO2
+
+    const configsp1 = {
+        type: 'line',
+        data: {
+            labels: slicedDatasy,
+            datasets: [{
+                label: 'SpO2',
+                data: slicedResultspo2,
+                borderColor: 'rgba(173, 82, 217, 0.8)',
+                borderWidth: 2,
+                tension: 0.1
+            }]
+        },
+        options: {
+            plugins: {
+                responsive: true,
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Patient SpO2 Chart (Today)'
+                }
+            }
+        },
+    };
+
     const configsp2 = {
         type: 'line',
         data: {
@@ -1018,7 +1118,7 @@
     };
 
     // Initial chart instance for SpO2
-    var spChart = new Chart(document.getElementById('spChart').getContext('2d'), configsp2);
+    var spChart = new Chart(document.getElementById('spChart').getContext('2d'), configsp1);
 
     // Dropdown change event handler for SpO2
     $('.sp-item').on('click', function (e) {
@@ -1031,16 +1131,24 @@
         spChart.destroy();
 
         // Create a new SpO2 chart instance based on the selected dropdown item
-        if (chartId2 === 'spChart2') {
+        if (chartId2 === 'spChart1'){
+            Chart.register(ChartZoom);
+
+            spChart = new Chart(document.getElementById('spChart').getContext('2d'), configsp1);
+            $('#chartDropdown2').text('Today');
+        }
+        else if (chartId2 === 'spChart2') {
+            Chart.register(ChartZoom);
+
             spChart = new Chart(document.getElementById('spChart').getContext('2d'), configsp2);
             $('#chartDropdown2').text('This Week');
         } else if (chartId2 === 'spChart3') {
+            Chart.register(ChartZoom);
+
             spChart = new Chart(document.getElementById('spChart').getContext('2d'), configsp3);
             $('#chartDropdown2').text('This Month');
         }
 
-        // Reinitialize the zoom plugin for SpO2
-        Chart.register(ChartZoom);
         spChart.zoom.reset();
     });
 
@@ -1055,12 +1163,53 @@
 <script>
     // Initial chart data for SpO2
     const datapi = JSON.parse('{!! isset($datapi) ? $datapi : '[]' !!}');
+    const resultpi = JSON.parse('{!! isset($resultpi) ? $resultpi : '[]' !!}');
+
+    const slicedResultPi = resultpi.slice(-20);
 
     // Initial chart configurations for SpO2
+    const configpi1 = {
+        type: 'line',
+        data: {
+            labels: slicedDatasy,
+            datasets: [{
+                label: 'Pi',
+                data: slicedResultPi,
+                borderColor: 'rgba(173, 82, 217, 0.8)',
+                borderWidth: 2,
+                tension: 0.1
+            }]
+        },
+        options: {
+            plugins: {
+                responsive: true,
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Patient Pi Chart (This Week)'
+                }
+            }
+        },
+    };
+
     const configpi2 = {
         type: 'line',
         data: {
-            labels: datapi,
+            labels: datasy,
             datasets: [{
                 label: 'Pi',
                 data: datapi,
@@ -1133,7 +1282,7 @@
     };
 
     // Initial chart instance for SpO2
-    var piChart = new Chart(document.getElementById('piChart').getContext('2d'), configpi2);
+    var piChart = new Chart(document.getElementById('piChart').getContext('2d'), configpi1);
 
     // Dropdown change event handler for SpO2
     $('.pi-item').on('click', function (e) {
@@ -1146,16 +1295,25 @@
         piChart.destroy();
 
         // Create a new SpO2 chart instance based on the selected dropdown item
-        if (chartId3 === 'piChart2') {
+        if (chartId3 === 'piChart1'){
+            Chart.register(ChartZoom);
+
+            piChart = new Chart(document.getElementById('piChart').getContext('2d'), configpi1);
+            $('#chartDropdown3').text('Today');
+        }
+        else if (chartId3 === 'piChart2') {
+            Chart.register(ChartZoom);
+
             piChart = new Chart(document.getElementById('piChart').getContext('2d'), configpi2);
             $('#chartDropdown3').text('This Week');
         } else if (chartId3 === 'piChart3') {
+            Chart.register(ChartZoom);
+
             piChart = new Chart(document.getElementById('piChart').getContext('2d'), configpi3);
             $('#chartDropdown3').text('This Month');
         }
 
         // Reinitialize the zoom plugin for SpO2
-        Chart.register(ChartZoom);
         piChart.zoom.reset();
     });
 
