@@ -13,6 +13,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
 
           <!-- Start Dashboard -->
           <div class="pcoded-content">
@@ -311,16 +313,18 @@
                       </div>
                       <!-- End Calendar -->
 
-                      <div class="col-xl-8 col-md-12 ">
-                            <div class="card sale-card">
-                                <div class="card-header">
-                                    <h5>Data Patient</h5>
-                                </div>
-                                <div class="card-block">
-                                <canvas id="bpmChartToday"></canvas>
-                                </div>
-                            </div>
-                        </div>
+                      <div class="col-xl-8 col-md-12">
+                          <div class="card sale-card">
+                              <div class="card-header d-flex justify-content-between align-items-center">
+                                  <h5>Data Patient</h5>
+                                  <button id="resetChartButton" class="btn btn-secondary ml-2">Reset Zoom</button>
+                              </div>
+                              <div class="card-block">
+                                  <canvas id="bpmChartToday"></canvas>
+                              </div>
+                          </div>
+                      </div>
+
 
                       <!-- Latest Activity -->
                       <div class="col-xl-4 col-md-6">
@@ -550,7 +554,6 @@
 
 </script>
 
-
 <script>
     // Function to display BPM data for today in a chart and open the modal
 
@@ -593,6 +596,21 @@
                 title: {
                     display: true,
                     text: 'Live Data Patient'
+                },
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
                 }
             }
         },
@@ -685,6 +703,17 @@
 
     // Set interval to update the chart every second
     setInterval(fetchData, 1000);
+
+    function resetChart() {
+      myChart.resetZoom();
+    }
+
+
+     // Event handler for the reset chart button
+     $('#resetChartButton').on('click', function () {
+        // Call the resetChart function when the button is clicked
+        resetChart();
+    });
 </script>
 
 @endsection
