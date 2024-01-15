@@ -91,7 +91,7 @@
                                                             <td>{{ $medrc->medservice->type }}</td>
                                                             <td>{{ $medrc->desc }}</td>
                                                             <td class="center">{{ $medrc->datetime }}</td>
-                                                            <td>{{ $medrc->visit_duration }}</td>
+                                                            <td class="center">{{ $medrc->visit_duration }}</td>
                                                             <td>RM {{ number_format($medrc->medinvoice->totalcost, 2) }}</td>
                                                             <td>{{ $medrc->attendingDoctor->name }}</td>
                                                             <td class="center"> 
