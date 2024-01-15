@@ -170,10 +170,10 @@
                                                     <th>IC</th>
                                                     <th>Age</th>
                                                     <th>Gender</th>
-                                                    <th>Height</th>
-                                                    <th>Weight</th>
                                                     <th>BMI</th>
                                                     <th>BPM</th>
+                                                    <th>SpO2</th>
+                                                    <th>Pi</th>
                                                     <th style="width: 80px;">Action</th>
                                                 </tr>
                                             </thead>
@@ -190,8 +190,6 @@
                                                             <td>{{ $patient->ic }}</td>
                                                             <td>{{ $patient->age }}</td>
                                                             <td>{{ ucfirst($patient->gender) }}</td>
-                                                            <td>{{ $patient->height }}</td>
-                                                            <td>{{ $patient->weight }}</td>
                                                             <td>
                                                                 @php
                                                                     $bmi = $patient->weight / (($patient->height / 100) ** 2);
@@ -213,6 +211,9 @@
 
                                                             </td>
                                                             <td id="latestBpmTd"></td>
+                                                            <td id="latestSpTd"></td>
+                                                            <td id="latestPiTd"></td>
+
                                                             
                                                             <td>
                                                                 <a href="/nurse/patientProfile/{{ $patient->id }}" title="View Patient">
@@ -247,6 +248,9 @@
                 if (response.status === 'success') {
                     // Update the content of the h2 element with the latest BPM
                     $('#latestBpmTd').text(response.data.latestBpm);
+                    $('#latestSpTd').text(response.data.latestSpo2);
+                    $('#latestPiTd').text(response.data.latestPi);
+
                 } else {
                     // Handle error if needed
                 }
