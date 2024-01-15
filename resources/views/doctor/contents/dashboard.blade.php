@@ -340,7 +340,7 @@
                                     <h5>Appointment Attendance Statistics</h5>
                                 </div>
                                 <div class="card-block p-4">
-                                    <div style="width: 440px; height: 280px; margin: auto;">
+                                    <div style="width: 410px; height: 280px; margin: auto;">
                                         <canvas id="chartAttendance"></canvas>
                                     </div>
                                 </div>
