@@ -451,8 +451,13 @@ class NurseController extends Controller
         $medrcs = MedRecord::with(['appointment' => function ($query) use ($deptId) {
             $query->where('deptid', '=', $deptId);
         }, 'patient', 'attendingDoctor', 'medInvoice'])
-        ->get();    
-
+        ->selectRaw('medrecord.*, CONCAT(
+            TIMESTAMPDIFF(MINUTE, CONCAT(CURDATE(), " ", appointment.time), medrecord.datetime),
+            " min"
+        ) AS visit_duration')    
+        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->get();
+        
         return view('nurse.contents.medrecordList', compact('medrcs'));
     }
 

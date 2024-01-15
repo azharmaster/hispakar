@@ -590,8 +590,15 @@ class DoctorController extends Controller
         $doctor = Doctor::where('email', Auth::user()->email)->first();
         $doctorId = $doctor->id;
 
-        $medrcs = MedRecord::where('docid', $doctorId)
-        ->with('appointment', 'patient', 'attendingDoctor', 'medInvoice')->get();
+        $medrcs = MedRecord::where('medrecord.docid', $doctorId)
+        ->with('appointment', 'patient', 'attendingDoctor', 'medInvoice')
+        ->selectRaw('medrecord.*, CONCAT(
+            TIMESTAMPDIFF(MINUTE, CONCAT(CURDATE(), " ", appointment.time), medrecord.datetime),
+            " min"
+        ) AS visit_duration')    
+        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->get();
+    
         
         return view('doctor.contents.medrecord', compact('medrcs'));
     }

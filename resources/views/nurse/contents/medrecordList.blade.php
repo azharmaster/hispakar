@@ -32,12 +32,12 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="index.html">
+                            <a href="/nurse/dashboard">
                                 <i class="feather icon-home"></i>
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="doctor.php">Medical Record</a>
+                            <a href="/nurse/medrecordList">Medical Record</a>
                         </li>
                     </ul>
                 </div>
@@ -71,6 +71,7 @@
                                                     <th>Service Type</th>
                                                     <th>Description</th>
                                                     <th>Date Time</th>
+                                                    <th>Visit Duration</th>
                                                     <th>Total Cost</th>
                                                     <th>Doctor</th>
                                                     <th>Action</th>
@@ -90,6 +91,7 @@
                                                             <td>{{ $medrc->medservice->type }}</td>
                                                             <td>{{ $medrc->desc }}</td>
                                                             <td class="center">{{ $medrc->datetime }}</td>
+                                                            <td>{{ $medrc->visit_duration }}</td>
                                                             <td>RM {{ number_format($medrc->medinvoice->totalcost, 2) }}</td>
                                                             <td>{{ $medrc->attendingDoctor->name }}</td>
                                                             <td class="center"> 

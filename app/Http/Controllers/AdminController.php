@@ -793,8 +793,14 @@ class AdminController extends Controller
 
     public function viewMedRecord()
     {
-        $medrcs = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medInvoice')->get();
-        
+        $medrcs = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medInvoice')
+        ->selectRaw('medrecord.*, CONCAT(
+            TIMESTAMPDIFF(MINUTE, CONCAT(CURDATE(), " ", appointment.time), medrecord.datetime),
+            " min"
+        ) AS visit_duration')    
+        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->get();
+                
         return view('admin.contents.medrecord', compact('medrcs'));
     }
 
