@@ -7,6 +7,13 @@
         alert("{{ session()->get('success') }}");
     </script>
 @endif
+
+@if(session()->has('error'))
+    <script>
+        alert("{{ session()->get('error') }}");
+    </script>
+@endif
+
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">

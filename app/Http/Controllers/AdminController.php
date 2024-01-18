@@ -795,9 +795,9 @@ class AdminController extends Controller
     {
         $medrcs = MedRecord::with('appointment', 'patient', 'attendingDoctor', 'medInvoice')
         ->selectRaw('medrecord.*, CONCAT(
-            TIMESTAMPDIFF(MINUTE, CONCAT(CURDATE(), " ", appointment.time), medrecord.datetime),
+            TIMESTAMPDIFF(MINUTE, CONCAT(appointment.date, " ", appointment.time), medrecord.datetime),
             " min"
-        ) AS visit_duration')    
+        ) AS visit_duration')
         ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
         ->get();
                 
@@ -1415,6 +1415,13 @@ class AdminController extends Controller
 
         public function AddMedicine(Request $request)
         {
+            // Check if a room with the same name already exists
+            $existingMedicine = Medicine::where('name', $request->name)->first();
+
+            if ($existingMedicine) {
+                // Room with the same name already exists, display an alert or return an error message
+                return redirect('/admin/medicineList')->with('error', 'Medicine already exists');
+            }
          
             //insert data into nurse table
             $medicine = new Medicine();
@@ -1507,6 +1514,13 @@ class AdminController extends Controller
 
       public function AddServices(Request $request)
       {
+         // Check if a room with the same name already exists
+         $existingService = MedService::where('type', $request->type)->first();
+
+         if ($existingService) {
+            // Room with the same name already exists, display an alert or return an error message
+            return redirect('/admin/serviceList')->with('error', 'Service already exists');
+         }
        
           //insert data into nurse table
           $service = new MedService();

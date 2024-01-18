@@ -593,11 +593,12 @@ class DoctorController extends Controller
         $medrcs = MedRecord::where('medrecord.docid', $doctorId)
         ->with('appointment', 'patient', 'attendingDoctor', 'medInvoice')
         ->selectRaw('medrecord.*, CONCAT(
-            TIMESTAMPDIFF(MINUTE, CONCAT(CURDATE(), " ", appointment.time), medrecord.datetime),
+            TIMESTAMPDIFF(MINUTE, CONCAT(appointment.date, " ", appointment.time), medrecord.datetime),
             " min"
-        ) AS visit_duration')    
+        ) AS visit_duration')
         ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
         ->get();
+
     
         
         return view('doctor.contents.medrecord', compact('medrcs'));
@@ -1102,6 +1103,14 @@ class DoctorController extends Controller
     //Manage medicine
     public function AddMedicine(Request $request) // Add medicine
     {
+        // Check if a room with the same name already exists
+        $existingMedicine = Medicine::where('name', $request->name)->first();
+
+        if ($existingMedicine) {
+            // Room with the same name already exists, display an alert or return an error message
+            return redirect('/doctor/medicineList')->with('error', 'Medicine already exists');
+        }
+
         //create new medicine record
         $medicine = new Medicine();
         $medicine->name = $request->input('name');
