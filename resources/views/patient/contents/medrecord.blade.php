@@ -33,12 +33,12 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="index.html">
+                            <a href="/patient/dashboard">
                                 <i class="feather icon-home"></i>
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="doctor.php">Medical History</a>
+                            <a href="/patient/medrecord">Medical History</a>
                         </li>
                     </ul>
                 </div>
@@ -88,7 +88,7 @@
                                                             <td>{{ $loop->iteration }}</td>
                                                             
                                                             <td>{{ $medrc->service_type }}</td>
-                                                            <td>{{ $medrc->desc }}</td>
+                                                            <td>{{ ucfirst($medrc->desc) }}</td>
                                                             <td>{{ $medrc->datetime }}</td>
                                                             <td>{{ $medrc->doctor_name }}</td>
                                                             <td> 

@@ -87,9 +87,8 @@
                                                         @foreach($medrcs as $medrc)
                                                         <tr class="left">
                                                             <td>{{ $loop->iteration }}</td>
-                                                            
                                                             <td>{{ $medrc->medservice->type }}</td>
-                                                            <td>{{ $medrc->desc }}</td>
+                                                            <td>{{ ucfirst($medrc->desc) }}</td>
                                                             <td class="center">{{ $medrc->datetime }}</td>
                                                             <td class="center">{{ $medrc->visit_duration }}</td>
                                                             <td>RM {{ number_format($medrc->medinvoice->totalcost, 2) }}</td>

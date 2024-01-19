@@ -1273,11 +1273,15 @@ class DoctorController extends Controller
         $medRec = MedRecord::where('aptid', $id)->first();
 
         if ($medRec) {
+            // Store the original datetime
+            $originalDatetime = $medRec->datetime;
+
             $medRec->aptid = $id;
             $medRec->status = 1;
             $medRec->serviceid = $request->input('serviceid');
             $medRec->desc = $request->input('desc')['med_record'];
-            $medRec->datetime = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            // $medRec->datetime = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            $medRec->datetime = $originalDatetime;
             $medRec->patientid = $request->input('patientid');
             $medRec->refnum = random_int(1000000, 9999999);
             $medRec->docid = $doctor->id;
