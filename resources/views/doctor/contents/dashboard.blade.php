@@ -84,7 +84,10 @@
                                             
                                             <div class="row d-flex justify-content-between ">
                                                 <h2 class="f-w-700 text-c-green ml-3">{{ $totalPatient }}</h2>
-                                                <i class="fas fa-hospital-user bg-c-green" style="margin-top: -8px; margin-right: -18px"></i>
+                                                    <a type="button" class="past-appt-modal-trigger" data-toggle="modal" data-target="#addModal-patient">
+                                                        <i class="fas fa-hospital-user bg-c-green d-none d-sm-block" style="margin-top:-8px; margin-right:-18px;"></i>
+                                                    </a>
+
                                             </div>
                                             
                                             <p class="m-b-0 mt-2">Last Updated: {{ $timePDifference }}</p>
@@ -106,7 +109,9 @@
                                             
                                             <div class="row d-flex justify-content-between ">
                                                 <h2 class="f-w-700 text-c-red ml-3">{{ $totalNurse }}</h2>
-                                                <i class="fas fa-stethoscope bg-c-red" style="margin-top: -8px; margin-right: -18px"></i>
+                                                <a type="button" class="past-appt-modal-trigger" data-toggle="modal" data-target="#addModal-nurse">
+                                                    <i class="fas fa-stethoscope bg-c-red d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i>
+                                                </a>
                                             </div>
                                             
                                             <p class="m-b-0 mt-2">Last Updated: {{ $timeNDifference }}</p>
@@ -455,7 +460,7 @@
                        
                         <!-- Calendar -->
                         <div class="col-xl-8 col-md-12 ">
-                            <div class="card" style="min-height: 600px">
+                            <div class="card" style="min-height: 750px; overflow-x: auto;">
                                 <div class="card-header">
                                     <h5 class="m-b-5">Calendar</h5>
                                     <div class="card-block p-b-0">
@@ -473,6 +478,94 @@
                     </div>
     
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal for patient -->
+<div class="modal fade" id="addModal-patient" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">Patients</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-1" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Service</th>
+                            <th>DateTime</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($patientData as $patient)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$patient->name}}</td>
+                                    <td>{{ ucfirst($patient->description) }}</td>
+                                    <td>{{$patient->service}}</td>
+                                    <td>{{$patient->datetime}}</td>
+
+                            </tr>
+                            @endforeach
+
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal for nurse -->
+<div class="modal fade" id="addModal-nurse" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">List of Nurses</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-2" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone No</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($totalNurseData as $nurse)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ucfirst($nurse->name)}}</td>
+                                    <td>{{$nurse->email}}</td>
+                                    <td>{{$nurse->phoneno}}</td>
+
+                            </tr>
+                            @endforeach
+
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
             </div>
         </div>
     </div>
@@ -597,6 +690,53 @@
   </div>
 @endforeach
 <!-- bbh -->
+@include('doctor.includes.dtScripts')
+
+@php
+    $titles = [
+        1 => "Patients",
+        2 => "List of Nurses",
+    ];
+@endphp
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        @for ($i = 1; $i <= 4; $i++)
+            @if (isset($titles[$i]))
+                var title = "{{ $titles[$i] }}";
+
+                var table = $('#dataTable-{{ $i }}').DataTable({
+                    responsive: true,
+                    autoWidth: true,
+                    "dom": 'Bfrtip',
+                    "buttons": [
+                        {
+                            extend: 'print',
+                            title: title,
+                            customize: function(win) {
+                                $(win.document.body).find('h1').css('text-align', 'center');
+                                $(win.document.body).find('h1').css('margin', '50px 0');
+                                $(win.document.body).find('h1').css('font-size', '30px');
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            title: title
+                        },
+                        {
+                            extend: 'excel',
+                            title: title
+                        },
+                    ],
+                });
+
+                table.buttons().container().appendTo('#breezeBasicTable .row.col-md-6:eq(0)');
+            @endif
+        @endfor
+    });
+</script>
+
+
 
 <script>
   //Chart Attendance Statistic
@@ -744,7 +884,10 @@
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
+            aspectRatio: 1.25, // Adjust this value as needed
+
             events: @json($calendarEvents) // Add the events here
+            
         });
         calendar.render();
     });

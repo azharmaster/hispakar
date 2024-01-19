@@ -71,6 +71,12 @@ class DoctorController extends Controller
                     ->where('medrecord.docid', $doctor->id)
                     ->count();
 
+        $patientData = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
+            ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+            ->where('medrecord.docid', $doctor->id)
+            ->select('patient.name as name', 'medrecord.desc as description', 'medservice.type as service', 'medrecord.datetime as datetime')
+            ->get();
+
         // Get the most recent patient's created_at timestamp
         $latestPatient = Patient::orderBy('created_at', 'desc')->first();
 
@@ -82,6 +88,11 @@ class DoctorController extends Controller
         ->where('doctor.id', $doctorId)
         ->select('nurse.*')
         ->count();
+
+        $totalNurseData = Nurse::join('doctor', 'nurse.deptid', '=', 'doctor.deptid')
+        ->where('doctor.id', $doctorId)
+        ->select('nurse.name', 'nurse.phoneno', 'nurse.email')
+        ->get();
 
         // Get the most recent nurse's created_at timestamp
         $latestNurse = Nurse::orderBy('created_at', 'desc')->first();
@@ -313,7 +324,7 @@ class DoctorController extends Controller
         //age
         'children', 'teenage', 'adult', 'older',
         //calendar
-        'calendarEvents'
+        'calendarEvents', 'patientData', 'totalNurseData'
         ));
     }
 
