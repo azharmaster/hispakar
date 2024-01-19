@@ -19,7 +19,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
 
-
 <!-- Start Dashboard -->
 <div class="pcoded-content mb-4 position-relative" id="content">
     <div class="page-header card">
@@ -690,7 +689,9 @@
   </div>
 @endforeach
 <!-- bbh -->
-@include('doctor.includes.dtScripts')
+
+<script type="text/javascript" src="{{ asset('files/assets/printScript.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 @php
     $titles = [
