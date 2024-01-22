@@ -1294,14 +1294,13 @@ $('.pi-dropdown-item').on('click', function () {
 </script>
 
 <script>
- function updateBadges(userType) {
+function updateBadges(userType) {
     // Make an AJAX request
     $.ajax({
         url: '/' + userType + '/getLatestData',
         type: 'GET',
         dataType: 'json',
         success: function(response) {
-
             if (response.status === 'success') {
                 // Update content inside the BPM badge
                 $('.bpm-badge').text(response.data.latestBpm + ' bpm');
@@ -1310,25 +1309,18 @@ $('.pi-dropdown-item').on('click', function () {
                 $('.sp-badge').text(response.data.latestSpo2 + ' SpO2');
 
                 $('.stress-badge').text(response.data.latestPi + ' Pi');
-
             } else {
-                // Handle error or no data scenario
-                $('.bpm-badge').text('N/A');
-                $('.sp-badge').text('N/A');
-                $('.stress-badge').text('N/A');
+                // Handle error if needed
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-           
+            // Handle AJAX error if needed
         }
     });
-
-    // Set interval to update badges every 5 seconds (adjust as needed)
-    setInterval(function() {
-        updateBadges(userType);
-    }, 1000);
 }
 
+// Set interval to update badges every 5 seconds (adjust as needed)
+setInterval(function() {
 // Call the function when needed for different user types
 if (userType === 2) {
     updateBadges('doctor');
@@ -1337,9 +1329,7 @@ if (userType === 2) {
 } else if (userType === 1) {
     // Include admin logic if needed
     updateBadges('admin');
-}
-
-    
+}}, 1000); // 5000 milliseconds = 5 seconds
 </script>
 
 
