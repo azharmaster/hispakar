@@ -130,9 +130,7 @@
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col">
-                                                        <h6 class="m-b-20 f-w-600 text-white ">Average BPM
-
-                                                        </h6>
+                                                        <h6 class="m-b-20 f-w-600 text-white ">Average BPM</h6>
 
                                                         <div class="row d-flex justify-content-between mt-4">
                                                             <h2 class="f-w-700 text-white ml-3">90</h2>
@@ -170,10 +168,10 @@
                                                     <th>IC</th>
                                                     <th>Age</th>
                                                     <th>Gender</th>
-                                                    <th>Height</th>
-                                                    <th>Weight</th>
                                                     <th>BMI</th>
                                                     <th>BPM</th>
+                                                    <th>SpO2</th>
+                                                    <th>Pi</th>
                                                     <th style="width: 80px;">Action</th>
                                                 </tr>
                                             </thead>
@@ -190,8 +188,6 @@
                                                             <td>{{ $patient->ic }}</td>
                                                             <td>{{ $patient->age }}</td>
                                                             <td>{{ ucfirst($patient->gender) }}</td>
-                                                            <td>{{ $patient->height }}</td>
-                                                            <td>{{ $patient->weight }}</td>
                                                             <td>
                                                                 @php
                                                                     $bmi = $patient->weight / (($patient->height / 100) ** 2);
@@ -212,7 +208,9 @@
                                                                 {{ $bmiCategory }}
 
                                                             </td>
-                                                            <td>90</td>
+                                                            <td id="latestBpmTd"></td>
+                                                            <td id="latestSpTd"></td>
+                                                            <td id="latestPiTd"></td>
                                                             
                                                             <td>
                                                                 <a href="/admin/patientProfile/{{ $patient->id }}" title="View Patient">
@@ -235,6 +233,36 @@
         </div>
     </div>
 </div>
+
+<script>
+    function updateBpm() {
+        // Make an AJAX request
+        $.ajax({
+            url: '/admin/getLatestData',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+                    // Update the content of the h2 element with the latest BPM
+                    $('#latestBpmTd').text(response.data.latestBpm);
+                    $('#latestSpTd').text(response.data.latestSpo2);
+                    $('#latestPiTd').text(response.data.latestPi);
+                } else {
+                    // Handle error if needed
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle AJAX error if needed
+            }
+        });
+    }
+
+    // Set interval to update badges every 5 seconds (adjust as needed)
+    setInterval(function () {
+        updateBpm();
+    }, 1000); 
+</script>
+
 
 @endsection
 

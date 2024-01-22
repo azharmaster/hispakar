@@ -13,6 +13,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
 
           <!-- Start Dashboard -->
           <div class="pcoded-content">
@@ -52,47 +54,43 @@
                     <div class="col-md-4">
                           <div class="card comp-card" style="height:140px">
                             <div class="card-body">
-                              <div class="row align-items-center">
+                            <div class="row align-items-center">
                                 <div class="col">
-                                  <h6 class="m-b-25"> Queue No.</h6>
-                                @if ($aptDs->isEmpty())
-                                    <h4 class="f-w-700 text-c-green">N/A</h4>
-                                @else
-                                    @foreach ($aptDs as $aptD)
-                                        <h4 class="f-w-700 text-c-green">{{ $aptD->queueid }}</h4>
-                                    @endforeach
-                                @endif
-
+                                    <h6 class="m-b-25"> Queue No.</h6>
+                                    @if ($aptDs->isEmpty())
+                                        <h4 class="f-w-700 text-c-green">N/A</h4>
+                                    @else
+                                        @php $lastAptD = $aptDs->first(); @endphp
+                                        <h4 class="f-w-700 text-c-green">{{ $lastAptD->queueid ?? 'N/A' }}</h4>
+                                    @endif
                                 </div>
                                 <div class="col-auto">
-                                  <i class="fas fa-user-friends bg-c-green" style="margin-top: 22px;"></i>
+                                    <i class="fas fa-user-friends bg-c-green" style="margin-top: 22px;"></i>
                                 </div>
-                              </div>
+                            </div>
                             </div>
                           </div>
                       </div>
 
                       <div class="col-md-4" >
-                          <div class="card comp-card">
+                        <div class="card comp-card" style="height:140px">
                             <div class="card-body">
-                              <div class="row align-items-center">
+                                <div class="row align-items-center">
                                 <div class="col">
-                                  <h6 class="m-b-25">Room</h6>
-                                  @if ($aptDs->isEmpty())
-                                    <h4 class="f-w-700 text-c-green">N/A</h4>
-                                  @else
-                                  @foreach ($aptDs as $aptD)
-                                      <h4 class="f-w-700 text-c-yellow">{{ $aptD->room_name ?? 'N/A' }}</h4>
+                                    <h6 class="m-b-25">Room</h6>
+                                    @if ($aptDs->isEmpty() || is_null($lastAptD->queueid))
+                                        <h4 class="f-w-700 text-c-yellow">N/A</h4>
+                                    @else
+                                        <h4 class="f-w-700 text-c-yellow">{{ $lastAptD->room_name ?? 'N/A' }}</h4>
+                                    @endif
+                                </div>
 
-                                  @endforeach
-                                  @endif
+                                    <div class="col-auto" style="margin-top: 8px;">
+                                        <i class="fas fa-door-open bg-c-yellow"></i>
+                                    </div>
                                 </div>
-                                <div class="col-auto">
-                                  <i class="fas fa-door-open bg-c-yellow"></i>
-                                </div>
-                              </div>
                             </div>
-                          </div>
+                        </div>
                       </div>
 
                       <div class="col-md-4">
@@ -315,16 +313,18 @@
                       </div>
                       <!-- End Calendar -->
 
-                      <div class="col-xl-8 col-md-12 ">
-                            <div class="card sale-card">
-                                <div class="card-header">
-                                    <h5>Data Patient</h5>
-                                </div>
-                                <div class="card-block">
-                                <canvas id="bpmChartToday"></canvas>
-                                </div>
-                            </div>
-                        </div>
+                      <div class="col-xl-8 col-md-12">
+                          <div class="card sale-card">
+                              <div class="card-header d-flex justify-content-between align-items-center">
+                                  <h5>Data Patient</h5>
+                                  <button id="resetChartButton" class="btn btn-secondary ml-2">Reset Zoom</button>
+                              </div>
+                              <div class="card-block">
+                                  <canvas id="bpmChartToday"></canvas>
+                              </div>
+                          </div>
+                      </div>
+
 
                       <!-- Latest Activity -->
                       <div class="col-xl-4 col-md-6">
@@ -554,7 +554,6 @@
 
 </script>
 
-
 <script>
     // Function to display BPM data for today in a chart and open the modal
 
@@ -597,6 +596,21 @@
                 title: {
                     display: true,
                     text: 'Live Data Patient'
+                },
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
                 }
             }
         },
@@ -689,6 +703,17 @@
 
     // Set interval to update the chart every second
     setInterval(fetchData, 1000);
+
+    function resetChart() {
+      myChart.resetZoom();
+    }
+
+
+     // Event handler for the reset chart button
+     $('#resetChartButton').on('click', function () {
+        // Call the resetChart function when the button is clicked
+        resetChart();
+    });
 </script>
 
 @endsection

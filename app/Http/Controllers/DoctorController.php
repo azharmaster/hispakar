@@ -71,6 +71,12 @@ class DoctorController extends Controller
                     ->where('medrecord.docid', $doctor->id)
                     ->count();
 
+        $patientData = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
+            ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+            ->where('medrecord.docid', $doctor->id)
+            ->select('patient.name as name', 'medrecord.desc as description', 'medservice.type as service', 'medrecord.datetime as datetime')
+            ->get();
+
         // Get the most recent patient's created_at timestamp
         $latestPatient = Patient::orderBy('created_at', 'desc')->first();
 
@@ -82,6 +88,11 @@ class DoctorController extends Controller
         ->where('doctor.id', $doctorId)
         ->select('nurse.*')
         ->count();
+
+        $totalNurseData = Nurse::join('doctor', 'nurse.deptid', '=', 'doctor.deptid')
+        ->where('doctor.id', $doctorId)
+        ->select('nurse.name', 'nurse.phoneno', 'nurse.email')
+        ->get();
 
         // Get the most recent nurse's created_at timestamp
         $latestNurse = Nurse::orderBy('created_at', 'desc')->first();
@@ -313,7 +324,7 @@ class DoctorController extends Controller
         //age
         'children', 'teenage', 'adult', 'older',
         //calendar
-        'calendarEvents'
+        'calendarEvents', 'patientData', 'totalNurseData'
         ));
     }
 
@@ -590,8 +601,16 @@ class DoctorController extends Controller
         $doctor = Doctor::where('email', Auth::user()->email)->first();
         $doctorId = $doctor->id;
 
-        $medrcs = MedRecord::where('docid', $doctorId)
-        ->with('appointment', 'patient', 'attendingDoctor', 'medInvoice')->get();
+        $medrcs = MedRecord::where('medrecord.docid', $doctorId)
+        ->with('appointment', 'patient', 'attendingDoctor', 'medInvoice')
+        ->selectRaw('medrecord.*, CONCAT(
+            TIMESTAMPDIFF(MINUTE, CONCAT(appointment.date, " ", appointment.time), medrecord.datetime),
+            " min"
+        ) AS visit_duration')
+        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->get();
+
+    
         
         return view('doctor.contents.medrecord', compact('medrcs'));
     }
@@ -1095,6 +1114,14 @@ class DoctorController extends Controller
     //Manage medicine
     public function AddMedicine(Request $request) // Add medicine
     {
+        // Check if a room with the same name already exists
+        $existingMedicine = Medicine::where('name', $request->name)->first();
+
+        if ($existingMedicine) {
+            // Room with the same name already exists, display an alert or return an error message
+            return redirect('/doctor/medicineList')->with('error', 'Medicine already exists');
+        }
+
         //create new medicine record
         $medicine = new Medicine();
         $medicine->name = $request->input('name');
@@ -1257,11 +1284,15 @@ class DoctorController extends Controller
         $medRec = MedRecord::where('aptid', $id)->first();
 
         if ($medRec) {
+            // Store the original datetime
+            $originalDatetime = $medRec->datetime;
+
             $medRec->aptid = $id;
             $medRec->status = 1;
             $medRec->serviceid = $request->input('serviceid');
             $medRec->desc = $request->input('desc')['med_record'];
-            $medRec->datetime = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            // $medRec->datetime = Carbon::now('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s');
+            $medRec->datetime = $originalDatetime;
             $medRec->patientid = $request->input('patientid');
             $medRec->refnum = random_int(1000000, 9999999);
             $medRec->docid = $doctor->id;

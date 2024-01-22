@@ -32,12 +32,12 @@
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="index.html">
+                            <a href="/doctor/dashboard">
                                 <i class="feather icon-home"></i>
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="doctor.php">Medical Record</a>
+                            <a href="/doctor/medrecord">Medical Record</a>
                         </li>
                     </ul>
                 </div>
@@ -71,6 +71,7 @@
                                                     <th>Service Type</th>
                                                     <th>Description</th>
                                                     <th>Date Time</th>
+                                                    <th>Visit Duration</th>
                                                     <th>Total Cost</th>
                                                     <th>Doctor</th>
                                                     <th>Action</th>
@@ -88,8 +89,9 @@
                                                             <td>{{ $loop->iteration }}</td>
                                                             
                                                             <td>{{ $medrc->medservice->type }}</td>
-                                                            <td>{{ $medrc->desc }}</td>
+                                                            <td>{{ ucfirst($medrc->desc) }}</td>
                                                             <td class="center">{{ $medrc->datetime }}</td>
+                                                            <td class="center">{{ $medrc->visit_duration }}</td>
                                                             <td>RM {{ number_format($medrc->medinvoice->totalcost, 2) }}</td>
                                                             <td>{{ $medrc->attendingDoctor->name }}</td>
                                                             <td class="center"> 

@@ -100,7 +100,7 @@
                                                             <td>{{ $report->aptid }}</td>
                                                             <td>{{ $report->patient_name }}</td>
                                                             <td>{{ $report->service_type }}</td>
-                                                            <td>{{ $report->desc }}</td> <!-- Access 'desc' from the medservice relationship -->
+                                                            <td>{{ ucfirst($report->desc) }}</td> <!-- Access 'desc' from the medservice relationship -->
                                                             <td>{{ $report->datetime }}</td>
                                                         </tr>
                                                     @endforeach

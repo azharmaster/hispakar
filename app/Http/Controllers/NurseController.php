@@ -451,8 +451,13 @@ class NurseController extends Controller
         $medrcs = MedRecord::with(['appointment' => function ($query) use ($deptId) {
             $query->where('deptid', '=', $deptId);
         }, 'patient', 'attendingDoctor', 'medInvoice'])
-        ->get();    
-
+        ->selectRaw('medrecord.*, CONCAT(
+            TIMESTAMPDIFF(MINUTE, CONCAT(appointment.date, " ", appointment.time), medrecord.datetime),
+            " min"
+        ) AS visit_duration')
+        ->join('appointment', 'medrecord.aptid', '=', 'appointment.id')
+        ->get();
+        
         return view('nurse.contents.medrecordList', compact('medrcs'));
     }
 
@@ -912,6 +917,14 @@ class NurseController extends Controller
     
     public function AddMedicine(Request $request) // Add medicine
     {
+        // Check if a room with the same name already exists
+        $existingMedicine = Medicine::where('name', $request->name)->first();
+
+        if ($existingMedicine) {
+            // Room with the same name already exists, display an alert or return an error message
+            return redirect('/nurse/medicineList')->with('error', 'Medicine already exists');
+        }
+
         //create new medicine record
         $medicine = new Medicine();
         $medicine->name = $request->input('name');
