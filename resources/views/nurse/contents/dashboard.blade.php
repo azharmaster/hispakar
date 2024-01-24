@@ -67,7 +67,9 @@
                               
                               <div class="row d-flex justify-content-between ">
                                 <h2 class="f-w-700 ml-3">{{ $totalroom }}</h2>
-                                <i class="fas fas fa-door-open bg-c-yellow" style="margin-top: -8px; margin-right: -18px"></i>
+                                <a type="button" class="room-modal-trigger" data-toggle="modal" data-target="#addModal-room">
+                                  <i class="fas fas fa-door-open bg-c-yellow" style="margin-top: -8px; margin-right: -18px"></i>
+                                </a>
                               </div>
                               
                               <p class="m-b-0 mt-2">Total available rooms</p>
@@ -91,7 +93,9 @@
                               
                               <div class="row d-flex justify-content-between ">
                                 <h2 class="f-w-700 ml-3">{{ $totalpatient }}</h2>
-                                <i class="fas fa-hospital-user bg-c-green" style="margin-top: -8px; margin-right: -18px"></i>
+                                <a type="button" class="room-modal-trigger" data-toggle="modal" data-target="#addModal-patient">
+                                  <i class="fas fa-hospital-user bg-c-green" style="margin-top: -8px; margin-right: -18px"></i>
+                                </a>
                               </div>
                               
                               <p class="m-b-0 mt-2">Total patients</p>
@@ -114,7 +118,9 @@
                               
                               <div class="row d-flex justify-content-between ">
                                 <h2 class="f-w-700 ml-3">{{ $totaldoc }}</h2>
-                                <i class="fas fa-stethoscope bg-c-blue" style="margin-top: -8px; margin-right: -18px"></i>
+                                <a type="button" class="room-modal-trigger" data-toggle="modal" data-target="#addModal-doctor">
+                                  <i class="fas fa-stethoscope bg-c-blue" style="margin-top: -8px; margin-right: -18px"></i>
+                                </a>
                               </div>
                               
                               <p class="m-b-0 mt-2 title-color">Total doctors</p>
@@ -496,6 +502,146 @@
         </div>
       </div>
     </div>
+
+    <!-- modal for room -->
+<div class="modal fade" id="addModal-room" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">Available Rooms</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-1" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>Room Name</th>
+                            <th>Doctor In-Charge</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                          @foreach ($roomDetails as $room)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$room->name}}</td>
+                                    <td>{{ optional($room->doctor)->name ?? 'N/A' }}</td>
+                                    @if ( $room->status == 1)
+                                      <td>Available</td> <!-- available -->
+                                    @else
+                                      <td>Not available</td>
+                                    @endif
+
+                                </tr>
+                          @endforeach
+
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- modal for patients -->
+<div class="modal fade" id="addModal-patient" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">List of Patients</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-2" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Service</th>
+                            <th>DateTime</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($patientData as $patient)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$patient->name}}</td>
+                                    <td>{{ ucfirst($patient->description) }}</td>
+                                    <td>{{$patient->service}}</td>
+                                    <td>{{$patient->datetime}}</td>
+
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal for doctors -->
+<div class="modal fade" id="addModal-doctor" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">List of Doctors</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-3" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Phone No</th>
+                            <th>Email</th>
+                            <th>Specialization</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($doctorDetails as $doctor)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$doctor->name}}</td>
+                                    <td>{{ $doctor->phoneno }}</td>
+                                    <td>{{$doctor->email}}</td>
+                                    <td>{{$doctor->specialization}}</td>
+
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
   <div id="styleSelector"></div>
 
   <!-- attend apt form -->
@@ -669,6 +815,54 @@
     </div>
   @endforeach
   <!-- ./ View Medicine Modal -->
+
+  <script type="text/javascript" src="{{ asset('files/assets/printScript.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+@php
+    $titles = [
+        1 => "Available Rooms",
+        2 => "List of Patients",
+        3 => "List of Doctors",
+    ];
+@endphp
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        @for ($i = 1; $i <= 4; $i++)
+            @if (isset($titles[$i]))
+                var title = "{{ $titles[$i] }}";
+
+                var table = $('#dataTable-{{ $i }}').DataTable({
+                    responsive: true,
+                    autoWidth: true,
+                    "dom": 'Bfrtip',
+                    "buttons": [
+                        {
+                            extend: 'print',
+                            title: title,
+                            customize: function(win) {
+                                $(win.document.body).find('h1').css('text-align', 'center');
+                                $(win.document.body).find('h1').css('margin', '50px 0');
+                                $(win.document.body).find('h1').css('font-size', '30px');
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            title: title
+                        },
+                        {
+                            extend: 'excel',
+                            title: title
+                        },
+                    ],
+                });
+
+                table.buttons().container().appendTo('#breezeBasicTable .row.col-md-6:eq(0)');
+            @endif
+        @endfor
+    });
+</script>
 
 
   <script>

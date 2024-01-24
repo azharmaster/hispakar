@@ -50,6 +50,14 @@ class NurseController extends Controller
         $totalpatient = Patient::all()->count();
         $totalroom = Room::all()->count();
 
+        $roomDetails = Room::all(); // Retrieve all rooms from the database
+
+        $patientData = Patient::join('medrecord', 'patient.id', '=', 'medrecord.patientid')
+        ->join('medservice', 'medrecord.serviceid', '=', 'medservice.id')
+        ->where('medrecord.docid', $nurse->id)
+        ->select('patient.name as name', 'medrecord.desc as description', 'medservice.type as service', 'medrecord.datetime as datetime')
+        ->get();
+
         //gender
         $totalmale = Patient::where('gender', 'male')->count();
         $totalfemale = Patient::where('gender', 'female')->count();
@@ -204,6 +212,11 @@ class NurseController extends Controller
         $patients = Patient::all();
         $rooms = Room::all();
         $doctors = Doctor::all();
+    
+        // Retrieve deptid from the nurse model
+        $deptId = $nurse->deptid;
+
+        $doctorDetails = Doctor::where('deptid', $deptId)->get();
 
         //today's apt table
         // Get the current date in the 'Y-m-d' format
@@ -230,7 +243,8 @@ class NurseController extends Controller
             'children', 'teenage', 'adult', 'older',
 
             'medicines', 'calendarEvents',  
-            'appointments', 'aptDs', 'currentDate'));
+            'appointments', 'aptDs', 'currentDate', 'roomDetails', 'doctors', 'patientData',
+            'doctorDetails'));
     }
 
     public function viewProfile()
