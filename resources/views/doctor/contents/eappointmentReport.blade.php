@@ -2,6 +2,8 @@
 
 @section('content')
 
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
 <!-- Success Alert -->
 @if(session()->has('success'))
     <script>
@@ -74,7 +76,7 @@
                                         <th>Weight</th>
                                         <td>{{ $appointment->patient->weight }} kg</td>
                                         <th>Height</th>
-                                        <td>{{ $appointment->patient->height }} m</td>
+                                        <td>{{ $appointment->patient->height }} cm</td>
                                     </tr>
                                     <tr>
                                         <th>Medical History</th>
@@ -134,9 +136,9 @@
                                 <div class="card-block">
                                     <table class="table table-bordered">
                                         <tr>
-                                            <th>Service Type</th>
+                                            <th style="width:200px">Service Type</th>
                                             <td>
-                                                <select class="form-control" name="serviceid" onchange="updatePrice2(this)" required>
+                                                <select class="js-example-data-array" name="serviceid" onchange="updatePrice2(this)" required style="width:600px">
                                                     <option value="" disabled>Select Service Type</option>
                                                     @foreach ($medservices as $medservice)
                                                         <option value="{{ $medservice->id }}" data-price="{{ $medservice->charge }}"
@@ -147,7 +149,7 @@
                                                 </select>
                                             </td>
                                             <td style="width: 159px">
-                                                <input class="form-control text-right bg-white" type="number" name="serviceTypeCharge" id="serviceTypeCharge" value="{{ $selectedServiceType->isNotEmpty() ? $selectedServiceType[0]->charge : '0.00' }}" readonly>
+                                                <input class="form-control text-right bg-white" type="number" name="serviceTypeCharge" id="serviceTypeCharge" value="{{ $selectedServiceType->isNotEmpty() ? $selectedServiceType[0]->charge : '0.00' }}" style="height:45px" readonly>
                                             </td>
                                         </tr>
                                     </table>
@@ -183,27 +185,25 @@
                                             <tr>
                                                 <td id="itemNo"></td>
                                                 <td>
-                                                <select class="form-control" name="medicines[id][]" onchange="updatePrice(this)" required>
-                                                            @foreach ($medicines as $med)
-                                                                <option value="{{ $med['id'] }}:{{ $med['name'] }}" data-price="{{ $med['price'] }}"
-                                                                    {{ $selectedMedicine['id'] == $med['id'] ? 'selected' : '' }}>
-                                                                    {{ $med['name'] }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </td>
+                                                        <input type="text" name="medicines[id][]" class="form-control rounded-0 bg-white border-0"
+                                                            onchange="updatePrice(this)"
+                                                            value="{{ $selectedMedicine['name'] }}" 
+                                                            data-price="{{ $selectedMedicine['price'] }}" 
+                                                            style="width:190px" readonly>
+                                                </td>
+                                                
                                                 <td>
-                                                    <input type="text" name="desc[med_prescription][]" class="form-control rounded-0"
-                                                        value="{{ $selectedMedicine['desc'] }}" placeholder="Dose suggested details" required>
+                                                    <input type="text" name="desc[med_prescription][]" class="form-control rounded-0 bg-white border-0"
+                                                        value="{{ $selectedMedicine['desc'] }}" placeholder="Dose suggested details" readonly>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="qty[]" class="form-control rounded-0 text-right"
+                                                    <input type="text" name="qty[]" class="form-control rounded-0 text-right bg-white border-0"
                                                         value="{{ $selectedMedicine['qty'] }}"
                                                         oninput="validateQuantity(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                                                        onpaste="return false" ondrop="return false" placeholder="0" required>
+                                                        onpaste="return false" ondrop="return false" placeholder="0" readonly>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="price[]" class="form-control rounded-0 text-right bg-white"
+                                                    <input type="number" name="price[]" class="form-control rounded-0 text-right bg-white border-0"
                                                         value="{{ $selectedMedicine['price'] }}" step="any"
                                                         onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46"
                                                         onpaste="return false" ondrop="return false" placeholder="0.00" readonly>
@@ -211,9 +211,15 @@
                                                 <td>
                                                     <input type="number" name="total[]" value="{{ $selectedMedicine['total'] }}" class="form-control text-right bg-white border-0" readonly>
                                                 </td>
-                                                <td class="text-center"><a class="deleteRow"><i class="fas fa-trash-alt text-danger"></i></a></td>
+                                                <td>
+                                                    <button class="btn btn-icon waves-effect waves-light" onclick="confirmAndSubmit(event, {{ $index }}, {{ $selectedMedicine['id'] }}, {{ $selectedMedicine['aptid'] }})">
+                                                        <i class="fas fa-trash-alt text-danger"></i>
+                                                    </button>
+                                                </td>
+
                                             </tr>
                                         @endforeach
+
                                         </tbody>
                                     </table>
                                     <table class="" style="width: 100%">
@@ -258,10 +264,20 @@
                                             <label class="col-form-label" for="scheduleNext">Schedule Next Appointment</label>
                                         </div>
                                         <div class="col-sm-3">
-                                            <input class="form-control" type="date" id="dateInput" name="date" disabled>
+                                            <!-- <input class="form-control" type="date" id="dateInput" name="date" disabled> -->
+                                            <select class="form-control" style="width:230px;" name="date" id="dateInput" placeholder="" disabled>
+                                                <option value="0" disable selected>Choose Date</option>
+                                                @foreach ($doctorSchedule as $date)
+                                                    <option value="{{ $date }}">{{ $date }}</option>
+                                                @endforeach
+                                            </select>
+
                                         </div>
                                         <div class="col-sm-3">
-                                            <input class="form-control" type="time" id="timeInput" name="time" disabled>
+                                            <!-- <input class="form-control" type="time" id="timeInput" name="time" disabled> -->
+                                            <select class="form-control" style="width:200px;" name="time" id="timeInput" placeholder="" disabled>
+                                                <option value="">Choose Time</option>
+                                            </select>
                                         </div>
                                     </div>
     
@@ -377,7 +393,6 @@
 </div>
 @endif
 
-
 <script>
     // to get medicine price based on selected input
     function updatePrice(selectElement) {
@@ -404,7 +419,6 @@
 </script>
 
 <script>
-
     // Function to update the row count
     function updateRowCount() {
       var table = document.getElementById("itemTable");
@@ -450,34 +464,38 @@
         }
     }
 
-    // Function to delete a row
+    // Inside your JavaScript file or script tag
     function deleteRow(row) {
-      var table = document.getElementById("itemTable");
-      if (table.rows.length > 2) {
-        table.deleteRow(row);
-        updateRowCount(); // Update the row count after deleting a row
-        calculateSubtotal(); // Recalculate the subtotal after deleting a row
-      } else {
-        // Clear input fields of the first row
-        var inputs = table.rows[1].querySelectorAll("input");
-        var selectInput = table.rows[1].querySelector("select");
-        var subtotalInput = document.querySelector("input[name='subtotal']"); // Adjust the selector to target the correct subtotal input field
+        console.log("Delete Row function called");
 
-        inputs.forEach(function(input) {
-          input.value = "";
-        });
-        // Reset the select input to its default value (first option)
-        selectInput.selectedIndex = 0;
+        var table = document.getElementById("itemTable");
+        if (table.rows.length > 2) {
+            table.deleteRow(row);
+            updateRowCount(); // Update the row count after deleting a row
+            calculateSubtotal(); // Recalculate the subtotal after deleting a row
+        } else {
+            // Clear input fields of the first row
+            var inputs = table.rows[1].querySelectorAll("input");
+            var selectInput = table.rows[1].querySelector("select");
+            var subtotalInput = document.querySelector("input[name='subtotal']"); // Adjust the selector to target the correct subtotal input field
 
-        // Clear the subtotal input field if it exists
-        if (subtotalInput) {
-            subtotalInput.value = 0;
+            inputs.forEach(function(input) {
+            input.value = "";
+            });
+            // Reset the select input to its default value (first option)
+            selectInput.selectedIndex = 0;
+
+            // Clear the subtotal input field if it exists
+            if (subtotalInput) {
+                subtotalInput.value = 0;
+            }
+            calculateAmount(row);
+            calculateSubtotal(); // Recalculate the subtotal after clearing the input fields
         }
-        calculateAmount(row);
-        calculateSubtotal(); // Recalculate the subtotal after clearing the input fields
-      }
     }
 
+
+    
     // Function to calculate the amount based on quantity and price
     function calculateAmount(row) {
       var qtyInput = row.querySelector("input[name='qty[]']");
@@ -512,23 +530,23 @@
       var newRow = table.insertRow(table.rows.length);
       var newRowId = table.rows.length - 1; // Assign unique ID based on row index
 
+      // not yet isi, want to delete
       newRow.innerHTML = `
         <td id="itemNo"></td>
         <td>
-        <select class="form-control" name="medicines[id][]" onchange="updatePrice(this)" required>
-                @foreach ($medicines as $med)
-                    <option value="{{ $med['id'] }}:{{ $med['name'] }}" data-price="{{ $med['price'] }}"
-                        {{ $selectedMedicine['id'] == $med['id'] ? 'selected' : '' }}>
-                        {{ $med['name'] }}
-                    </option>
+        <select class="js-example-data-array" name="medicines[id][]" style="width:190px" onchange="updatePrice(this)" required>
+            <option value="" selected disabled>Select Medicine</option>
+                @foreach ($medicines as $medicine)
+            <option value="{{ $medicine->id }}:{{ $medicine->name }}" data-price="{{ $medicine->price }}">{{ $medicine->name }}</option>
                 @endforeach
-            </select>
+        </select>
         </td>
-        <td><input type="text" name="desc[med_prescription][]" class="form-control rounded-0 " placeholder="Dose suggested details" required></td>
-        <td><input type="text" name="qty[]" class="form-control rounded-0 text-right" oninput="validateQuantity(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" ondrop="return false" placeholder="0" required ></td>
-        <td><input type="number" name="price[]" class="form-control rounded-0 text-right bg-white" step="any" oninput="validateFloatInteger(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46" onpaste="return false" ondrop="return false" placeholder="0.00" readonly></td>
-        <td><input type="number" name="total[]" value="0.00" class="form-control text-right bg-white border-0" readonly></td>
-        <td class="text-center"><a class="deleteRow"><i class="fas fa-trash-alt text-danger"></i></a></td>
+        
+        <td><input type="text" name="desc[med_prescription][]" class="form-control rounded-0 " placeholder="Dose suggested" style="height:47px"required></td>
+        <td><input type="text" name="qty[]" class="form-control rounded-0 text-right" oninput="validateQuantity(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" ondrop="return false" placeholder="0" style="height:47px" required ></td>
+        <td><input type="number" name="price[]" class="form-control rounded-0 text-right bg-white" step="any" oninput="validateFloatInteger(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46" onpaste="return false" ondrop="return false" placeholder="0.00" style="height:47px" readonly></td>
+        <td><input type="number" name="total[]" value="0.00" class="form-control text-right bg-white border-0" style="margin-top: 6px;" readonly></td>
+        <td class="text-center"><button class="btn btn-icon waves-effect waves-light deleteRow"><i class="fas fa-trash-alt text-danger" style="margin-top: 11px;"></i></button></td>
       `;
 
       // Set unique ID for the new row
@@ -541,6 +559,9 @@
         deleteRow(rowIndex);
       });
 
+      
+        // Initialize Select2 for the newly added row
+        $(".js-example-data-array").select2();
       updateRowCount(); // Update the row count after adding a new row
     });
 
@@ -595,6 +616,7 @@
     var table = document.getElementById("medTable");
     let medNum = 1;
 
+    // dah isi, and want to delete
     function addMedRow() {
         medNum++;
         var row = table.insertRow(-1);
@@ -656,6 +678,90 @@
         });
     });
 </script>
+
+<!-- delete prescription -->
+<script>
+    function confirmAndSubmit(event, index, id, aptid) {
+        console.log('Inside confirmAndSubmit');
+
+        var table = document.getElementById('itemTable');
+        var rowCount = table.querySelectorAll('tbody tr').length; 
+        console.log('Number of rows:', rowCount);
+        console.log('Number of index:', index);
+
+        // Dynamically create a form
+        var form = document.createElement('form');
+        form.action = "/delete-med-prescription/" + id + "/" + aptid;
+        form.method = 'POST';
+        form.innerHTML = '@csrf' + '<input type="hidden" name="id" value="' + id + '">' + '<input type="hidden" name="aptid" value="' + aptid + '">';
+
+        console.log('Form:', form);
+
+        if (confirm('Are you sure to delete prescription?')) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+
+            // Delete the row based on the index
+            table.deleteRow(index);
+
+            // You may want to recalculate other values like subtotal here
+            updateRowCount(); // Update the row count after deleting a row
+            calculateSubtotal(); // Recalculate the subtotal after deleting a row
+
+            // Append the form to the document body and submit
+            document.body.appendChild(form);
+            form.submit();
+        } else {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+        }
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#dateInput').change(function () {
+            // Selected date
+            var selectedDate = $(this).val();
+
+            // Empty the time dropdown
+            $('#timeInput').find('option').not(':first').remove();
+
+           // AJAX request
+            $.ajax({
+                url: '/doctor/getTimeSlots/' + selectedDate,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+
+                    var len = response.length;
+
+                    if (len > 0) {
+                        // Read data and create <option>
+                        for (var i = 0; i < len; i++) {
+                            var selectedTime = response[i];
+                            var option = "<option value='" + selectedTime + "'>" + selectedTime + "</option>";
+                            $("#timeInput").append(option);
+                        }
+                    } else {
+                        // Handle the case where no time slots are returned
+                        $("#timeInput").append("<option value=''>No time slots available</option>");
+                        // You can also disable the dropdown or take any other action based on your requirements
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching time slots:', error);
+                }
+            });
+
+        });
+    });
+
+</script>
+
+
+
 
 @include('dup.patientModal')
 
