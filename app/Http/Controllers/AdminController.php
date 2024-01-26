@@ -245,15 +245,43 @@ class AdminController extends Controller
         $infants = Patient::whereBetween('age', [2, 5])->count();
         $children = Patient::whereBetween('age', [6, 12])->count();
         $adolescents = Patient::whereBetween('age', [13, 18])->count();
-        $oldAge =  Patient::whereBetween('age', [19, 60])->count();
+        $adults = Patient::whereBetween('age', [19,60])->count();
+        $oldAge = Patient::where('age', '>=', 61)->count();
 
+        $patientDataNewborn = Patient::select('patient.name as name', 'patient.ic as ic', 'patient.age as age', 'patient.gender as gender')
+        ->where('patient.age', '<=', 1)
+        ->get();
+
+        $patientDataInfant = Patient::select('patient.name as name', 'patient.ic as ic', 'patient.age as age', 'patient.gender as gender')
+        ->whereBetween('patient.age', [2, 5])
+        ->get();
+
+        $patientDataChild = Patient::select('patient.name as name', 'patient.ic as ic', 'patient.age as age', 'patient.gender as gender')
+        ->whereBetween('patient.age', [6, 12])
+        ->get();
+
+        $patientDataAdo = Patient::select('patient.name as name', 'patient.ic as ic', 'patient.age as age', 'patient.gender as gender')
+        ->whereBetween('patient.age', [13, 18])
+        ->get();
+
+        $patientDataAdult = Patient::select('patient.name as name', 'patient.ic as ic', 'patient.age as age', 'patient.gender as gender')
+        ->whereBetween('patient.age', [19, 60])
+        ->get();
+
+        $patientDataElder = Patient::select('patient.name as name', 'patient.ic as ic', 'patient.age as age', 'patient.gender as gender')
+        ->where('patient.age', '=>', 61)
+        ->get();
+
+    
 
         return view('admin.contents.dashboard', compact('totalapt','totaldoc','totalroom','totaldept',
         'totalnurse','totalpatient','totalmedicine','medicines','nurses','doctors','totalapt2','totaldoc2',
         'totalnurse2','totalpatient2','totalroom2','totaldept2','totalmedicine2', 'totalservice', 'totalservice2',
-        'newborns','infants','children','adolescents','oldAge',
+        'newborns','infants','children','adolescents','adults','oldAge',
         //calendar
-        'calendarEvents', 'labels', 'maleData', 'femaleData'));
+        'calendarEvents', 'labels', 'maleData', 'femaleData', 
+        'patientDataNewborn', 'patientDataInfant', 'patientDataChild', 'patientDataAdo',
+        'patientDataAdult', 'patientDataElder'));
     }
 
     

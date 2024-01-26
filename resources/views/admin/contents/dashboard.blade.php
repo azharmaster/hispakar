@@ -13,6 +13,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <!-- Start Content -->
 <div class="pcoded-content">
 
@@ -466,6 +468,264 @@
     </div>
 </div>
 
+<!-- modal for newborn -->
+<div class="modal fade" id="addModal-patientNewborn" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">List of Newborn Patients</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-1" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>IC</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($patientDataNewborn as $patient)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$patient->ic}}</td>
+                                    <td>{{$patient->name }}</td>
+                                    <td>{{$patient->age}}</td>
+                                    <td>{{ucfirst($patient->gender)}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal for infant -->
+<div class="modal fade" id="addModal-patientInfant" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">List of Infant Patients</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-2" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>IC</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($patientDataInfant as $patient)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$patient->ic}}</td>
+                                    <td>{{$patient->name }}</td>
+                                    <td>{{$patient->age}}</td>
+                                    <td>{{ucfirst($patient->gender)}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal for children -->
+<div class="modal fade" id="addModal-patientChild" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">List of Children Patients</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-3" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>IC</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($patientDataChild as $patient)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$patient->ic}}</td>
+                                    <td>{{$patient->name }}</td>
+                                    <td>{{$patient->age}}</td>
+                                    <td>{{ucfirst($patient->gender)}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal for adolescent -->
+<div class="modal fade" id="addModal-patientAdolescent" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">List of Adolescent Patients</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-4" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>IC</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($patientDataAdo as $patient)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$patient->ic}}</td>
+                                    <td>{{$patient->name }}</td>
+                                    <td>{{$patient->age}}</td>
+                                    <td>{{ucfirst($patient->gender)}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal for adult -->
+<div class="modal fade" id="addModal-patientAdult" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">List of Adult Patients</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-5" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>IC</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($patientDataAdult as $patient)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$patient->ic}}</td>
+                                    <td>{{$patient->name }}</td>
+                                    <td>{{$patient->age}}</td>
+                                    <td>{{ucfirst($patient->gender)}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal for elderly -->
+<div class="modal fade" id="addModal-patientElderly" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
+            <div class="modal-header hr-0">
+                <h5 class="modal-title">List of Elderly Patients</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <table id="dataTable-6" class="table table-bordered" style="width: 100%">
+                     <thead style="text-align: center;">
+                        <tr>
+                            <th>#</th>
+                            <th>IC</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                        </tr>
+                    </thead>
+                        <tbody style="text-align: center;">
+                            @foreach ($patientDataElder as $patient)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{$patient->ic}}</td>
+                                    <td>{{$patient->name }}</td>
+                                    <td>{{$patient->age}}</td>
+                                    <td>{{ucfirst($patient->gender)}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer hr-0">
+                <button type="button" class="btn btn-primary2 waves-effect " data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="styleSelector">
 </div>
 
@@ -514,6 +774,56 @@
       </div>
   </div>
 @endforeach
+
+<script type="text/javascript" src="{{ asset('files/assets/printScript.js') }}"></script>
+
+@php
+    $titles = [
+        1 => "List of Newborn Patients",
+        2 => "List of Infant Patients",
+        3 => "List of Children Patients",
+        4 => "List of Adolescent Patients",
+        5 => "List of Adult Patients",
+        6 => "List of Elderly Patients",
+    ];
+@endphp
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        @for ($i = 1; $i <= 6; $i++)
+            @if (isset($titles[$i]))
+                var title = "{{ $titles[$i] }}";
+
+                var table = $('#dataTable-{{ $i }}').DataTable({
+                    responsive: true,
+                    autoWidth: true,
+                    "dom": 'Bfrtip',
+                    "buttons": [
+                        {
+                            extend: 'print',
+                            title: title,
+                            customize: function(win) {
+                                $(win.document.body).find('h1').css('text-align', 'center');
+                                $(win.document.body).find('h1').css('margin', '50px 0');
+                                $(win.document.body).find('h1').css('font-size', '30px');
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            title: title
+                        },
+                        {
+                            extend: 'excel',
+                            title: title
+                        },
+                    ],
+                });
+
+                table.buttons().container().appendTo('#breezeBasicTable .row.col-md-6:eq(0)');
+            @endif
+        @endfor
+    });
+</script>
 <!-- ./ View Medicine Modal -->
 
 <!-- Script to render the calendar -->
@@ -537,7 +847,7 @@
         data: {
             labels: ['Neurology', 'Oncology', 'Cardiology', 'Ophtalmology'],
             datasets: [{
-                label: '# of Votes',
+                label: 'Total Patients',
                 data: [12, 19, 3, 5, 2, 3],
                 borderWidth: 1
             }]
@@ -553,27 +863,44 @@
     
     const ctx2 = document.getElementById('myChart2');
 
-new Chart(ctx2, {
-    type: 'bar',
-    data: {
-        labels: ['Newborn', 'Infant', 'Child', 'Adolescent', 'Old Age'],
-        datasets: [{
-            label: '#',
-            data: [{{ $newborns }}, {{ $infants }}, {{ $children }}, {{ $adolescents }}, {{ $oldAge }}],
-            borderWidth: 1,
-            backgroundColor: ['#FFB1C1', '#7FB5B5', '#EC7C26', '#3E5F8A', '#1E5945'],
-        }],
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true,
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+        labels: ['Newborn', 'Infant', 'Child', 'Adolescent', 'Adult', 'Elderly'],
+        datasets: [
+            {
+                label: 'Total Patients',
+                data: [{{ $newborns }}, {{ $infants }}, {{ $children }}, {{ $adolescents }}, {{ $adults }}, {{ $oldAge }}],
+                backgroundColor: ['#FFB1C1', '#7FB5B5', '#EC7C26', '#C1947B', '#3D85C6', '#1E5945'],
+                borderWidth: 1,
+            },
+        ],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+            onHover: function (event, elements) {
+                if (elements && elements.length > 0) {
+                    clickedIndex = elements[0].index;
+                } else {
+                    clickedIndex = -1;
+                }
+            },
+
+            onClick: function (event) {
+                if (clickedIndex !== -1) {
+                    openModal(clickedIndex);
+                }
             },
         },
-        responsive: true,
-        maintainAspectRatio: true,
-    },
-});
+
+
+    });
     
     const ctx3 = document.getElementById('myChart3');
 
@@ -598,11 +925,21 @@ new Chart(ctx2, {
                 },
                 title: {
                     display: true,
-                    text: 'Chart.js Line Chart'
                 }
             }
         },
     });
+</script>
+
+<script>
+    function openModal(index) {
+        // Assuming you have jQuery available, you can trigger the modal display
+        var ageGroups = ['Newborn', 'Infant', 'Child', 'Adolescent', 'Adult', 'Elderly'];
+        var modalId = '#addModal-patient' + ageGroups[index];
+        $(modalId).modal('show');
+        console.log("Bar clicked!", index);
+    }
+
 </script>
 
 @endsection
