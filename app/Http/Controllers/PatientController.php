@@ -66,7 +66,7 @@ class PatientController extends Controller
         $aptlatests =  Appointments::join('doctor', 'appointment.docid', '=', 'doctor.id')
         ->join('department', 'appointment.deptid', '=', 'department.id')
         ->join('patient', 'appointment.patientid', '=', 'patient.id')
-        ->select('appointment.*', 'doctor.name as doctor_name', 'department.name as dept_name')
+        ->select('appointment.*', 'doctor.name as doctor_name', 'doctor.phoneno as doctor_phoneno', 'doctor.specialization as doctor_specialization', 'department.name as dept_name', 'appointment.status as apptstatus')
         ->where('patient.email', $email )
         ->orderByDesc('appointment.id')
         ->limit(1)

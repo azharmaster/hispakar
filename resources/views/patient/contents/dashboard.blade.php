@@ -426,56 +426,115 @@
   </div>
 
   <!-- View Appointment form -->
-  <div class="modal fade" id="viewModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">View Appointment</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-5">
-                <img class="img-fluid" src="{{ asset('files/assets/images/V1375_generated.jpg') }}" width="350px" >
-              </div>
-              <div class="col-7">
-                <table border="0" style="font-size: 25px;">
+<!-- Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">View Appointment Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="row g-0">
+          <div class="col-md-8 border-right">
+            <div class="status p-3">
+              <table class="table table-borderless" style="font-size: 20px;">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="d-flex flex-column">
+                        <span class="font-weight-bold text-secondary">Department:</span>
+                        @foreach($aptlatests as $aptlatest)
+                          @php
+                            $datePassed = \Carbon\Carbon::createFromFormat('Y-m-d', $aptlatest->date)->isPast();
+                          @endphp
+                          <span>{{ $datePassed ? 'N/A' : $aptlatest->dept_name }}</span>
+                        @endforeach
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="d-flex flex-column">
+                        <span class="font-weight-bold text-secondary">Status:</span>
+                        @foreach($aptlatests as $aptlatest)
+                          @php
+                            $statusText = ($aptlatest->apptstatus == 1) ? 'Confirm' : (($aptlatest->apptstatus == 2) ? 'Cancel' : 'Unknown');
+                          @endphp
+                          <span>{{ $datePassed ? 'N/A' : $statusText }}</span>
+                        @endforeach            
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex flex-column">
+                        <span class="font-weight-bold text-secondary">Date:</span>
+                        @foreach($aptlatests as $aptlatest)
+                          @php
+                            $formattedDate = \Carbon\Carbon::createFromFormat('Y-m-d', $aptlatest->date);
+                            $datePassed = $formattedDate->isPast();
+                          @endphp
+                          <span>{{ $datePassed ? 'N/A' : $formattedDate->format('d-m-Y') }}</span>
+                        @endforeach
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="d-flex flex-column">
+                        <span class="font-weight-bold text-secondary">Time:</span>
+                        @foreach($aptlatests as $aptlatest)
+                          @php
+                            $formattedTime = \Carbon\Carbon::createFromFormat('H:i:s', $aptlatest->time)->format('h:i A');
+                            $amPm = \Carbon\Carbon::createFromFormat('H:i:s', $aptlatest->time)->format('a');
+                          @endphp
+                          <span>{{ $datePassed ? 'N/A' : $formattedTime->format('h:i A') }} @if($amPm == 'am') @else @endif</span>
+                        @endforeach
+                      </div>
+                    </td>
+                  </tr>
+              
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2 text-center">
+              <div class="profile">
+                <img src="https://png.pngtree.com/png-vector/20230903/ourmid/pngtree-man-avatar-isolated-png-image_9935818.png" class="img-radius" style="width: 90px; height: 90px;">
                 @foreach($aptlatests as $aptlatest)
-                  <tr>
-                    <td>Doctor </td>
-                    <td>:</td>
-                    <td class="text-uppercase"> {{$aptlatest->doctor_name}}</td>
-                  </tr>
-                  <tr>
-                    <td>Department </td>
-                    <td>:</td>
-                    <td > {{$aptlatest->dept_name}}</td>
-                  </tr>
-                  <tr>
-                    <td>Date </td>
-                    <td>:</td>
-                    <td> {{$aptlatest->date}}</td>
-                  </tr>
-                  <tr>
-                    <td>Time </td>
-                    <td>:</td>
-                    <td> {{$aptlatest->time}}</td>
-                  </tr>
-                  @endforeach
+                  <span class="d-block mt-3 font-weight-bold">Dr. {{$aptlatest->doctor_name}}</span>
+                @endforeach
+              </div>
+              <div class="about-doctor">
+                <table class="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="d-flex flex-column">
+                          <span class="font-weight-bold text-secondary">Contact No</span>
+                          @foreach($aptlatests as $aptlatest)
+                            <span> {{$aptlatest->doctor_phoneno}}</span>
+                          @endforeach
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary waves-effect " data-dismiss="modal">Close</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>
+
   <!-- end view Appointment form -->
 
   <!-- View Medicine Modal -->
