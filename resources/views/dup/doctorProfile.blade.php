@@ -95,7 +95,7 @@
                             <div class="row">
                                 <div class="col-6">                                    
                                     <a data-toggle="modal" data-target="#totalpatientModal"> 
-                                    <div class="card comp-card bg-c-blue doc-pro-right">
+                                    <div class="card comp-card bg-c-blue doc-pro-right equal-height-card">
                                         <div class="card-body">
                                             <div class="row align-items-center">
                                             <div class="col">
@@ -121,18 +121,18 @@
 
                                 <div class="col-6">
                                     <a data-toggle="modal" data-target="#todayAppointmentModal"> 
-                                    <div class="card comp-card bg-c-green doc-pro-right ">
+                                    <div class="card comp-card bg-c-green doc-pro-right equal-height-card"  style="height:171px">
                                         <div class="card-body">
                                             <div class="row align-items-center">
                                             <div class="col">
-                                                <h6 class="m-b-20 f-w-600 text-white">Today's Appointments</h6>
+                                                <h6 class="m-b-20 f-w-600 text-white single-line">Today Appointments</h6>
                                                 
                                                 <div class="row d-flex justify-content-between mt-4">
                                                 <h2 class="f-w-700 text-white ml-3">{{$totalapttoday}}</h2>
                                                 <i class="fas fa-hospital bg-c-white text-success d-none d-sm-block" style="margin-top: -8px; margin-right: -18px"></i>
                                                 </div>
                                                 
-                                                <p class="m-b-0 mt-3 text-white">Total today's Appointments</p>
+                                                <p class="m-b-0 mt-3 text-white" style="margin-bottom: 200px !important;">Today Appointments</p>
                 
                                             </div>
                 
@@ -206,7 +206,7 @@
                                 <h5>Appointment Attendance Statistics</h5>
                                 </div>
                                 <div class="card-block p-4">
-                                <div class="chartAttendance" style="width: 440px; height: 280px; margin: auto;">
+                                <div class="chartAttendance" style="width: 410px; height: 280px; margin: auto;">
                                     <canvas id="chartAttendance"></canvas>
                                 </div>
                                 </div>
@@ -215,7 +215,7 @@
                         <!-- ./card -->
 
                         <div class="col-md-12 col-xl-6">
-                            <div class="card sale-card" style="height: 400px;">
+                            <div class="card sale-card" style="height: 400px; width: 470px">
                                 <div class="card-header">
                                     <h5>Patients by Age</h5>
                                 </div>
@@ -232,7 +232,7 @@
                                                 <label class="label label-inverse-warning">Adult</label>
                                             </div>
                                             <div class="label-main">
-                                                <label class="label label-inverse-info">Older</label>
+                                                <label class="label label-inverse-info">Elder</label>
                                             </div>
                                         </div>
                                         <div class="col-9 ml-3" style="margin-top: 0px">
@@ -383,7 +383,7 @@
                         <div class="col-md-12 col-xl-6">
                             <div class="card table-card" style="height: 450px">
                             <div class="card-header">
-                            <h5>Today's Medical records</h5>
+                            <h5>Today's Medical Records</h5>
                                 <div class="card-header-right">
                                 <ul class="list-unstyled card-option">
                                 <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
@@ -445,7 +445,7 @@
                         <div class="col-md-12 col-xl-6">
                             <div class="card table-card" style="height: 450px">
                             <div class="card-header">
-                            <h5>Today's Appointments</h5>
+                            <h5>Today's Appointment</h5>
                                 <div class="card-header-right">
                                 <ul class="list-unstyled card-option">
                                 <li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
@@ -532,7 +532,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $patient->name }}</td>
                             <td>{{ $patient->age }}</td>
-                            <td>{{ $patient->gender }}</td>
+                            <td>{{ ucfirst($patient->gender) }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -635,7 +635,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content card card-outline card-border-primary custom-thinner-outline">
             <div class="modal-header hr-0">
-                <h5 class="modal-title">Upcoming appointment List</h5>
+                <h5 class="modal-title">Upcoming Appointment List</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -742,7 +742,7 @@
 <script>
     // Chart Patient By Ages
     const pieChartData = {
-      labels: ['0-12', '13-19', '20-64', '65+'],
+      labels: ['0-12', '13-18', '19-60', '61+'],
       datasets: [{
         data: [{{ $children }}, {{ $teenage }}, {{ $adult }}, {{ $older }}],
         backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0'],

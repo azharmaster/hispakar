@@ -374,9 +374,9 @@ class AdminController extends Controller
         //chart for Age
         $ageGroups = MedRecord::select(
             DB::raw('SUM(CASE WHEN age <= 12 THEN 1 ELSE 0 END) as children'),
-            DB::raw('SUM(CASE WHEN age BETWEEN 13 AND 19 THEN 1 ELSE 0 END) as teenage'),
-            DB::raw('SUM(CASE WHEN age BETWEEN 20 AND 64 THEN 1 ELSE 0 END) as adult'),
-            DB::raw('SUM(CASE WHEN age >= 65 THEN 1 ELSE 0 END) as older')
+            DB::raw('SUM(CASE WHEN age BETWEEN 13 AND 18 THEN 1 ELSE 0 END) as teenage'),
+            DB::raw('SUM(CASE WHEN age BETWEEN 19 AND 60 THEN 1 ELSE 0 END) as adult'),
+            DB::raw('SUM(CASE WHEN age >= 61 THEN 1 ELSE 0 END) as older')
         )
         ->join('patient', 'medrecord.patientid', '=', 'patient.id')
         ->where('medrecord.docid', $id)
